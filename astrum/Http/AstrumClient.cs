@@ -20,7 +20,7 @@ namespace Astrum
         public const string XHR = "XMLHttpRequest";
         public const string PUT = "PUT";
 
-        public const int DELAY_LONG = 3000;
+        public const int DELAY_LONG = 2000;
         public const int DELAY_SHORT = 500;
 
         public AstrumClient()
@@ -162,8 +162,22 @@ namespace Astrum
             var stage = JsonConvert.DeserializeObject<Stage>(result);
             printStageInfo(stage);
             delay(DELAY_SHORT);
-            while (!stage.staminaEmpty)
+
+            while (true)
             {
+                if (stage.status.raid != null)
+                {
+                    if (stage.status.raid.find != null && stage.status.raid.find.isNew)
+                    {
+                        RaidBattle(stage.status.raid.find._id);
+                    }
+                    if (stage.status.raid.rescue != null && stage.status.raid.rescue.isNew)
+                    {
+                        RaidBattle(stage.status.raid.rescue._id);
+                    }
+                }
+
+
                 var areaId = stage._id;
                 var values = new Dictionary<string, string>
                 {
@@ -172,6 +186,17 @@ namespace Astrum
                 result = PostXHR("http://astrum.amebagames.com/_/stage", values);
                 stage = JsonConvert.DeserializeObject<Stage>(result);
                 printStageInfo(stage);
+
+                if (stage.staminaEmpty)
+                {
+                    break;
+                }
+
+                if (stage.nextStage != null)
+                {
+                    stage = stage.nextStage;
+                }
+
                 delay(DELAY_LONG);
             }
         }
@@ -195,37 +220,26 @@ namespace Astrum
             if (raidInfo.find != null)
             {
                 var battleInfo = raidInfo.find;
-
-                if (battleInfo.isNew || battleInfo.rare != 0)
-                {
-                    printRaidBattleInfo(battleInfo);
-
-                    RaidBattle(battleInfo._id);
-                }
+                RaidBattle(battleInfo._id);
             }
 
             if (raidInfo.rescue != null)
             {
                 foreach (var battleInfo in raidInfo.rescue.list)
                 {
-                    if (battleInfo.isNew || battleInfo.rare != 0)
-                    {
-                        printRaidBattleInfo(battleInfo);
-
-                        RaidBattle(battleInfo._id);
-                    }
+                    RaidBattle(battleInfo._id);
                 }
             }
         }
 
         public void RaidBattle(string raidId)
         {
-            bool runnable = true;
-            while (runnable)
+            while (true)
             {
                 var result = GetXHR("http://astrum.amebagames.com/_/raid/battle?_id=" + raidId);
                 var battleInfo = JsonConvert.DeserializeObject<RaidBattleInfo>(result);
 
+                printRaidBattleInfo(battleInfo);
                 delay(DELAY_SHORT);
 
                 if (battleInfo.isNew)
@@ -243,11 +257,23 @@ namespace Astrum
 
                     delay(DELAY_LONG);
                 }
+                else if ("find".Equals(battleInfo.type) && !battleInfo.rescue.use) {
+                    RaidRescue(battleInfo._id);
+                }
                 else
                 {
                     break;
                 }
             }
+        }
+
+        public void RaidRescue(string raidId)
+        {
+            var values = new Dictionary<string, string>
+            {
+                { "_id", raidId }
+            };
+            PostXHR("http://astrum.amebagames.com/_/raid/battlerescue", values);
         }
 
         private void printRaidBattleInfo(RaidBattleInfo battleInfo)
@@ -259,8 +285,11 @@ namespace Astrum
 
         private void printRaidBattleResult(RaidBattleResultInfo battleResultInfo)
         {
-            Console.WriteLine("  Result: {0}", battleResultInfo.result.resultType);
-            Console.WriteLine("  BossHP: {0} / {1}", battleResultInfo.result.afterBoss.hp, battleResultInfo.result.afterBoss.maxHp);
+            if (battleResultInfo.result != null)
+            {
+                Console.WriteLine("  Result: {0}", battleResultInfo.result.resultType);
+                Console.WriteLine("  BossHP: {0} / {1}", battleResultInfo.result.afterBoss.hp, battleResultInfo.result.afterBoss.maxHp);
+            }
         }
 
     }

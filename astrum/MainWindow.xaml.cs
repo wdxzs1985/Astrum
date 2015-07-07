@@ -31,8 +31,8 @@ namespace Astrum
             InitializeComponent();
 
             __client = new AstrumClient();
-            __client.Username = "bushing";
-            __client.Password = "wdxzs1985";
+            __client.Username = "";
+            __client.Password = "";
 
             this.DataContext = Client;
             this.PasswordBox.Password = __client.Password;

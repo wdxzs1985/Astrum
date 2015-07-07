@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 
 namespace Astrum.Json.Raid
 {
-    class RaidInfo
+    public class RaidInfo
     {
         public RaidBattleInfo find { get; set; }
 
-        public Rescue rescue { get; set; }
+        public RaidBattleList rescue { get; set; }
 
         public bool isFullRewards { get; set; }
     }
 
-    class Rescue
+    public class RaidBattleList
     {
         public List<RaidBattleInfo> list { get; set; }
     }
 
-    class RaidBattleInfo
+    public class RaidBattleInfo
     {
         public string _id { get; set; }
         public string bossId { get; set; }
@@ -41,10 +41,18 @@ namespace Astrum.Json.Raid
         public bool isLose { get; set; }
         public bool isNew { get; set; }
         public long joinNum { get; set; }
+
+        public RescueInfo rescue { get; set; }
     }
 
-    class RaidBattleResultInfo
+    public class RescueInfo
     {
+        public bool use { get; set; }
+    }
+
+    public class RaidBattleResultInfo
+    {
+        public bool isEnd { get; set; }
         public Result result { get; set; }
     }
 

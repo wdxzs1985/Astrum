@@ -9,7 +9,7 @@ using Astrum.Json.Raid;
 
 namespace Astrum.Json.Stage
 {
-    class Stage
+    public class Stage
     {
         public string _id { get; set; }
         public string name { get; set; }
@@ -21,13 +21,13 @@ namespace Astrum.Json.Stage
         public bool stageClear { get; set; }
         public bool isBossStage { get; set; }
 
-        public RaidBattleInfo raid { get; set; }
         public object limitedraid { get; set; }
         public object furyraid { get; set; }
 
         public Status status { get; set; }
-    }
 
+        public Stage nextStage { get; set; }
+    }
 
     public class Stamina
     {
@@ -71,9 +71,16 @@ namespace Astrum.Json.Stage
         public Tp tp { get; set; }
         public int lilu { get; set; }
         public int gacha { get; set; }
-        //public RaidInfo raid { get; set; }
+        public StageRaidInfo raid { get; set; }
         public Limitedraid limitedraid { get; set; }
         public Furyraid furyraid { get; set; }
         public bool guild { get; set; }
+    }
+
+    public class StageRaidInfo
+    {
+        public RaidBattleInfo find { get; set; }
+
+        public RaidBattleInfo rescue { get; set; }
     }
 }
