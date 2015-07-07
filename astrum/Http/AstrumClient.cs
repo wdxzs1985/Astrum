@@ -220,6 +220,7 @@ namespace Astrum
             if (raidInfo.find != null)
             {
                 var battleInfo = raidInfo.find;
+
                 RaidBattle(battleInfo._id);
             }
 
@@ -257,10 +258,15 @@ namespace Astrum
 
                     delay(DELAY_LONG);
                 }
-                else if ("find".Equals(battleInfo.type) && !battleInfo.rescue.use) {
+                else if (battleInfo.rescue.use) {
                     RaidRescue(battleInfo._id);
                 }
                 else
+                {
+                    break;
+                }
+
+                if (battleInfo.isWin || battleInfo.isLose)
                 {
                     break;
                 }
@@ -278,7 +284,7 @@ namespace Astrum
 
         private void printRaidBattleInfo(RaidBattleInfo battleInfo)
         {
-            Console.WriteLine("   Name: {0} ({1}%)", battleInfo.name, battleInfo.level);
+            Console.WriteLine("   Name: {0} (L{1})", battleInfo.name, battleInfo.level);
             Console.WriteLine("   Rare: {0}", battleInfo.rare);
             Console.WriteLine("     HP: {0} (-{1})", battleInfo.hp, battleInfo.totalDamage);
         }
