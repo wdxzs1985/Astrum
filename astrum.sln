@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astrum", "astrum\Astrum.csproj", "{B0C451EC-682C-4E0D-9647-5A7ED0E0F259}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astrum local", "..\..\..\Projects\Astrum-master Local\astrum\Astrum local.csproj", "{C26BE33D-C520-4A88-9682-89316CF4DFD3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,10 +13,6 @@ Global
 		{B0C451EC-682C-4E0D-9647-5A7ED0E0F259}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0C451EC-682C-4E0D-9647-5A7ED0E0F259}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0C451EC-682C-4E0D-9647-5A7ED0E0F259}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C26BE33D-C520-4A88-9682-89316CF4DFD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C26BE33D-C520-4A88-9682-89316CF4DFD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C26BE33D-C520-4A88-9682-89316CF4DFD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C26BE33D-C520-4A88-9682-89316CF4DFD3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
