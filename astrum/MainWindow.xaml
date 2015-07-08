@@ -17,7 +17,7 @@
             <Grid.Background>
                 <ImageBrush ImageSource="Images/background.jpg"/>
             </Grid.Background>
-
+            <ScrollViewer Name="historyPanel" HorizontalAlignment="Left" Height="193" Margin="31,25,0,0" VerticalAlignment="Top" Width="317" Background="{DynamicResource {x:Static SystemColors.GradientActiveCaptionBrushKey}}" Opacity="0.6"/>
             <Button Name="StartButton" Content="Run" HorizontalAlignment="Left" Margin="400,37,0,0" VerticalAlignment="Top" Width="75" Height="44" Click="StartButton_Click" />
             <CheckBox Name="QuestCheckBox" Content="Quest" IsChecked="{Binding IsQuestEnable}" HorizontalAlignment="Left" Margin="363,230,0,0" VerticalAlignment="Top" Background="White" Foreground="White"/>
             <CheckBox Name="RaidCheckBox" Content="Raid" IsChecked="{Binding IsRaidEnable}" HorizontalAlignment="Left" Margin="363,251,0,0" VerticalAlignment="Top" Foreground="White"/>
