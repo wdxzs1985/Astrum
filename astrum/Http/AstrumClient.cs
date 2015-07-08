@@ -207,7 +207,11 @@ namespace Astrum
                         {
                             if (stage.status.raid.find != null && stage.status.raid.find.isNew)
                             {
-                                RaidBattle(stage.status.raid.find._id);
+                                var loop = true;
+                                while (loop)
+                                {
+                                    loop = RaidBattle(stage.status.raid.find._id);
+                                }
                             }
                             if (stage.status.raid.rescue != null && stage.status.raid.rescue.isNew)
                             {
@@ -245,7 +249,6 @@ namespace Astrum
         public void UseItem(Item item, string type)
         {
             GetXHR("http://astrum.amebagames.com/_/item/common?type=" + type);
-
 
             var values = new Dictionary<string, string>
             {
@@ -306,8 +309,11 @@ namespace Astrum
             if (raidInfo.find != null)
             {
                 var battleInfo = raidInfo.find;
-                RaidBattle(battleInfo._id);
-                RaidBattle(battleInfo._id); //rescue
+                var loop = true;
+                while (loop)
+                {
+                    loop = RaidBattle(battleInfo._id);
+                }
             }
 
             if (raidInfo.rescue != null)
@@ -319,7 +325,23 @@ namespace Astrum
             }
         }
 
-        public void RaidBattle(string raidId)
+        public bool RaidBattle(string raidId)
+        {
+            var battleInfo = BattleInfo(raidId);
+            if (battleInfo.isNew)
+            {
+                RaidBattleFirstAttack(battleInfo._id);
+                return true;
+            }
+            else if (battleInfo.rescue.use)
+            {
+                RaidBattleRescue(battleInfo._id);
+                return true;
+            }
+            return false;
+        }
+
+        private RaidBattleInfo BattleInfo(string raidId)
         {
             var result = GetXHR("http://astrum.amebagames.com/_/raid/battle?_id=" + raidId);
             var battleInfo = JsonConvert.DeserializeObject<RaidBattleInfo>(result);
@@ -327,29 +349,23 @@ namespace Astrum
             PrintRaidBattleInfo(battleInfo);
             Delay(DELAY_SHORT);
 
-            if (battleInfo.isNew)
-            {
-                RaidBattleFirstAttack(battleInfo._id);
-            }
-            else if (battleInfo.rescue.use)
-            {
-                RaidBattleRescue(battleInfo._id);
-            }
+            return battleInfo;
         }
 
         private void RaidBattleFirstAttack(string raidId)
         {
             var values = new Dictionary<string, string>
-                {
-                    { "_id", raidId },
-                    { "attackType", "first" }
-                };
+            {
+                { "_id", raidId },
+                { "attackType", "first" }
+            };
             //first
             var battleResult = PostXHR("http://astrum.amebagames.com/_/raid/battle", values);
             var battleResultInfo = JsonConvert.DeserializeObject<BossBattleResultInfo>(battleResult);
 
             PrintBossBattleResult(battleResultInfo);
             Delay(DELAY_LONG);
+            
         }
 
         private void RaidBattleRescue(string raidId)
@@ -360,7 +376,7 @@ namespace Astrum
             };
             PostXHR("http://astrum.amebagames.com/_/raid/battlerescue", values);
             Delay(DELAY_SHORT);
-
+            
         }
 
         private void PrintMypage(MypageInfo mypage)
@@ -373,7 +389,6 @@ namespace Astrum
             Console.WriteLine("     TP: {0} / {1}", mypage.status.tp_value, mypage.status.tp_max);
             Console.WriteLine("  Guild: {0}, Rank: {1}", mypage.guild.name, mypage.guild.rank);
             Console.WriteLine("  Quest: {0}", mypage.link.quest._id);
-            //Console.WriteLine("   Raid: isNew: {0}, canCombo: {1}", __mypage.link.raid.isNew, __mypage.link.raid.canCombo);
         }
 
         private void PrintStageInfo(StageInfo stage)

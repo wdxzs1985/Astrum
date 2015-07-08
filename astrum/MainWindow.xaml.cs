@@ -38,8 +38,9 @@ namespace Astrum
             this.DataContext = client;
             this.PasswordBox.Password = client.Password;
 
-            LoginPanel.Visibility = System.Windows.Visibility.Visible;
+            LoginPanel.Visibility = Visibility.Visible;
             StatusPanel.Visibility = Visibility.Hidden;
+            LoginButton.IsEnabled = true;
         }
 
         private AstrumClient client;
@@ -70,40 +71,6 @@ namespace Astrum
             }
         }
 
-        private async void QuestButton_Click(object sender, RoutedEventArgs e)
-        {
-            Console.WriteLine("quest start");
-            //QuestButton.IsEnabled = false;
-            //QuestButton.Content = "Runing...";
-
-            
-            var result = await Task.Run(() =>
-            {
-                client.Mypage();
-                client.Quest();
-                return true;
-            });
-            //QuestButton.IsEnabled = true;
-            //QuestButton.Content = "Q";
-            Console.WriteLine("quest end");
-        }
-
-        private async void RaidButton_Click(object sender, RoutedEventArgs e)
-        {
-            Console.WriteLine("raid start");
-            //RaidButton.IsEnabled = false;
-            //RaidButton.Content = "Runing...";
-            var result = await Task.Run(() =>
-            {
-                client.Mypage();
-                client.Raid();
-                return true;
-            });
-            //RaidButton.IsEnabled = true;
-            //RaidButton.Content = "R";
-            Console.WriteLine("raid end");
-        }
-
         private bool isRunning = false;
 
         private async void StartButton_Click(object sender, RoutedEventArgs e)
@@ -112,26 +79,43 @@ namespace Astrum
             {
                 StartButton.Content = "Stop";
                 isRunning = true;
-                await Task.Run(() =>
+                
+                bool result = await Task.Run(() =>
                 {
                     client.Mypage();
                     while (isRunning)
                     {
-                        if (client.IsQuestEnable)
-                        {
-                            client.Quest();
-                        }
+                        try{
+                            if (client.IsQuestEnable)
+                            {
+                                client.Quest();
+                            }
 
-                        if (client.IsRaidEnable)
-                        {
-                            client.Raid();
-                        }
+                            if (client.IsRaidEnable)
+                            {
+                                client.Raid();
+                            }
 
-                        Console.WriteLine("wait 1 minute...");
-                        client.Delay(AstrumClient.MINUTE);
+                            Console.WriteLine("wait 1 minute...");
+                            client.Delay(AstrumClient.MINUTE);
+                        }
+                        catch
+                        {
+                            return false;
+                        }
+                        
                     }
                     return true;
                 });
+
+                isRunning = false;
+
+                if (!result)
+                {
+                    LoginPanel.Visibility = Visibility.Visible;
+                    StatusPanel.Visibility = Visibility.Hidden;
+                    LoginButton.IsEnabled = true;
+                }
             }
             else
             {
