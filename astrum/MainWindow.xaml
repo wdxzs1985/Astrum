@@ -7,11 +7,12 @@
             <Button Name="LoginButton" Content="Login" HorizontalAlignment="Left" Margin="10,63,0,0" VerticalAlignment="Top" Width="200" Click="LoginButton_Click"/>
             <TextBox HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" Text="{Binding Username}" VerticalAlignment="Top" Width="200"/>
             <PasswordBox Name="PasswordBox" HorizontalAlignment="Left" Margin="10,38,0,0" VerticalAlignment="Top" Width="200"/>
-            <Button Content="TEST" HorizontalAlignment="Left" Margin="432,10,0,0" VerticalAlignment="Top" Width="75" Name="TestButton" Click="TestButton_Click"/>
         </Grid>
-        <Grid Name="StatusPanel" Visibility="Visible" Background="AliceBlue">
-            <Button Name="QuestButton" Content="Q" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="QuestButton_Click"/>
-            <Button Name="RaidButton" Content="R" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top" Width="75" Click="RaidButton_Click"/>
+        <Grid Name="StatusPanel" Visibility="Visible" Background="AliceBlue" Margin="0,115,0,-115">
+            
+            <Button Name="StartButton" Content="Run" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="StartButton_Click"/>
+            <CheckBox Name="QuestCheckBox" Content="Quest" IsChecked="{Binding IsQuestEnable}" HorizontalAlignment="Left" Margin="11,62,0,0" VerticalAlignment="Top"/>
+            <CheckBox Name="RaidCheckBox" Content="Raid" IsChecked="{Binding IsRaidEnable}" HorizontalAlignment="Left" Margin="10,85,0,0" VerticalAlignment="Top"/>
 
         </Grid>
     </Grid>

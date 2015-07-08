@@ -50,9 +50,8 @@ namespace Astrum.Json.Raid
         public bool use { get; set; }
     }
 
-    public class RaidBattleResultInfo
+    public class BossBattleResultInfo
     {
-        public bool isEnd { get; set; }
         public Result result { get; set; }
     }
 

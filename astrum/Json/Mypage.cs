@@ -58,7 +58,7 @@ namespace Astrum.Json.Mypage
 
 
 
-    public class Mypage
+    public class MypageInfo
     {
         public Status status { get; set; }
         public long total { get; set; }

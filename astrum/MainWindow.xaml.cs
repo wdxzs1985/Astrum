@@ -30,37 +30,38 @@ namespace Astrum
         {
             InitializeComponent();
 
-            __client = new AstrumClient();
-            __client.Username = "";
-            __client.Password = "";
+            client = new AstrumClient();
 
-            this.DataContext = Client;
-            this.PasswordBox.Password = __client.Password;
+            client.Username = "";
+            client.Password = "";
+
+            this.DataContext = client;
+            this.PasswordBox.Password = client.Password;
 
             LoginPanel.Visibility = System.Windows.Visibility.Visible;
             StatusPanel.Visibility = Visibility.Hidden;
         }
 
-        private AstrumClient __client;
-        public AstrumClient Client { get { return __client; } }
+        private AstrumClient client;
+        //public AstrumClient Client { get { return __client; } }
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             Console.WriteLine("login start");
             LoginButton.IsEnabled = false;
-            __client.Password = this.PasswordBox.Password;
+            client.Password = this.PasswordBox.Password;
 
             var login = await Task.Run(() =>
             {
-                return __client.Login();
+                return client.Login();
             });
             if (login)
             {
                 Console.WriteLine("login success");
                 LoginPanel.Visibility = Visibility.Hidden;
                 StatusPanel.Visibility = Visibility.Visible;
-                __client.Token();
-                __client.Mypage();
+                client.Token();
+                client.Mypage();
             }
             else
             {
@@ -72,47 +73,75 @@ namespace Astrum
         private async void QuestButton_Click(object sender, RoutedEventArgs e)
         {
             Console.WriteLine("quest start");
-            QuestButton.IsEnabled = false;
-            QuestButton.Content = "Runing...";
+            //QuestButton.IsEnabled = false;
+            //QuestButton.Content = "Runing...";
+
+            
             var result = await Task.Run(() =>
             {
-                __client.Mypage();
-                __client.Quest();
+                client.Mypage();
+                client.Quest();
                 return true;
             });
-            QuestButton.IsEnabled = true;
-            QuestButton.Content = "Q";
+            //QuestButton.IsEnabled = true;
+            //QuestButton.Content = "Q";
             Console.WriteLine("quest end");
-        }
-
-        private void TestButton_Click(object sender, RoutedEventArgs e)
-        {
-
-            var values = new Dictionary<string, string>
-                {
-                   { "areaId", "chapter1-1" }
-                };
-            string param = JsonConvert.SerializeObject(values);
-            Console.WriteLine(param);
         }
 
         private async void RaidButton_Click(object sender, RoutedEventArgs e)
         {
             Console.WriteLine("raid start");
-            RaidButton.IsEnabled = false;
-            RaidButton.Content = "Runing...";
+            //RaidButton.IsEnabled = false;
+            //RaidButton.Content = "Runing...";
             var result = await Task.Run(() =>
             {
-                __client.Mypage();
-                __client.Raid();
+                client.Mypage();
+                client.Raid();
                 return true;
             });
-            RaidButton.IsEnabled = true;
-            RaidButton.Content = "R";
+            //RaidButton.IsEnabled = true;
+            //RaidButton.Content = "R";
             Console.WriteLine("raid end");
         }
 
+        private bool isRunning = false;
+
+        private async void StartButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (isRunning == false)
+            {
+                StartButton.Content = "Stop";
+                isRunning = true;
+                await Task.Run(() =>
+                {
+                    client.Mypage();
+                    while (isRunning)
+                    {
+                        if (client.IsQuestEnable)
+                        {
+                            client.Quest();
+                        }
+
+                        if (client.IsRaidEnable)
+                        {
+                            client.Raid();
+                        }
+
+                        Console.WriteLine("wait 1 minute...");
+                        client.Delay(AstrumClient.MINUTE);
+                    }
+                    return true;
+                });
+            }
+            else
+            {
+                isRunning = false;
+
+                QuestCheckBox.IsChecked = false;
+                RaidCheckBox.IsChecked = false;
+
+                StartButton.Content = "Run";
+            }
+        }
     }
-
-
 }
