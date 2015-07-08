@@ -8,7 +8,7 @@
             <TextBox HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" Text="{Binding Username}" VerticalAlignment="Top" Width="200"/>
             <PasswordBox Name="PasswordBox" HorizontalAlignment="Left" Margin="10,38,0,0" VerticalAlignment="Top" Width="200"/>
         </Grid>
-        <Grid Name="StatusPanel" Visibility="Visible" Background="AliceBlue" Margin="0,115,0,-115">
+        <Grid Name="StatusPanel" Visibility="Visible" Background="AliceBlue">
             
             <Button Name="StartButton" Content="Run" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="StartButton_Click"/>
             <CheckBox Name="QuestCheckBox" Content="Quest" IsChecked="{Binding IsQuestEnable}" HorizontalAlignment="Left" Margin="11,62,0,0" VerticalAlignment="Top"/>

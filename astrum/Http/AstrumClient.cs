@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Astrum.Json.Mypage;
 using Astrum.Json.Stage;
 using Astrum.Json.Raid;
+using Astrum.Json.Event;
 
 namespace Astrum
 {
@@ -54,7 +55,15 @@ namespace Astrum
         {
             if (time > 0)
             {
-                Thread.Sleep(time + seed.Next(time));
+                for (var i = 0; i < time; i += 100)
+                {
+                    Thread.Sleep(100);
+                    if (i % 1000 == 0)
+                    {
+                        Console.WriteLine("wait {0} second", (time - i) / 1000);
+                    }
+                }
+
             }
         }
 
@@ -205,7 +214,7 @@ namespace Astrum
                         //raid
                         if (stage.status.raid != null)
                         {
-                            if (stage.status.raid.find != null && stage.status.raid.find.isNew)
+                            if (stage.status.raid.find != null && (stage.status.raid.find.isNew || stage.status.bp.value >=3 ))
                             {
                                 var loop = true;
                                 while (loop)
@@ -213,12 +222,15 @@ namespace Astrum
                                     loop = RaidBattle(stage.status.raid.find._id);
                                 }
                             }
-                            if (stage.status.raid.rescue != null && stage.status.raid.rescue.isNew)
+                            if (stage.status.raid.rescue != null && (stage.status.raid.rescue.isNew || stage.status.bp.value >= 3))
                             {
-                                RaidBattle(stage.status.raid.rescue._id);
+                                var loop = true;
+                                while (loop)
+                                {
+                                    loop = RaidBattle(stage.status.raid.rescue._id);
+                                }
                             }
                         }
-
 
                         if (stage.staminaEmpty)
                         {
@@ -228,6 +240,11 @@ namespace Astrum
                                 if (item.stock > MIN_STAMINA_STOCK)
                                 {
                                     UseItem(item, "stamina");
+                                }
+                                else
+                                {
+                                    IsQuestEnable = false;
+                                    break;
                                 }
                             }
                             else
@@ -328,16 +345,31 @@ namespace Astrum
         public bool RaidBattle(string raidId)
         {
             var battleInfo = BattleInfo(raidId);
+
+            if (battleInfo.isWin || battleInfo.isLose)
+            {
+                return false;
+            }
+
             if (battleInfo.isNew)
             {
-                RaidBattleFirstAttack(battleInfo._id);
+                RaidBattleAttack(battleInfo._id, "first");
                 return true;
             }
-            else if (battleInfo.rescue.use)
+
+            if (battleInfo.rescue.use)
             {
                 RaidBattleRescue(battleInfo._id);
+            }
+
+            if (battleInfo.bpValue >= 3)
+            {
+                RaidBattleAttack(battleInfo._id, "full");
                 return true;
             }
+
+
+
             return false;
         }
 
@@ -352,12 +384,12 @@ namespace Astrum
             return battleInfo;
         }
 
-        private void RaidBattleFirstAttack(string raidId)
+        private void RaidBattleAttack(string raidId, string attackType)
         {
             var values = new Dictionary<string, string>
             {
                 { "_id", raidId },
-                { "attackType", "first" }
+                { "attackType", attackType }
             };
             //first
             var battleResult = PostXHR("http://astrum.amebagames.com/_/raid/battle", values);
@@ -377,6 +409,51 @@ namespace Astrum
             PostXHR("http://astrum.amebagames.com/_/raid/battlerescue", values);
             Delay(DELAY_SHORT);
             
+        }
+
+        public void GuildBattle()
+        {
+            GuildBattleLobbyInfo lobby = GuildBattleLobby();
+            Schedule schedule = FindSchedule(lobby);
+
+            if (schedule != null)
+            {
+                GuildBattleInfo battleInfo = GuildBattle(schedule._id);
+
+                if (battleInfo.stamp.status)
+                {
+                    GetXHR("http://astrum.amebagames.com/_/guildbattle/stamp");
+                }
+
+
+                while (true)
+                {
+
+                }
+            }
+        }
+
+        private GuildBattleLobbyInfo GuildBattleLobby()
+        {
+            var result = GetXHR("http://astrum.amebagames.com/_/guildbattle/lobby");
+            return JsonConvert.DeserializeObject<GuildBattleLobbyInfo>(result);
+        }
+
+        private Schedule FindSchedule(GuildBattleLobbyInfo lobby)
+        {
+            if (lobby.available && "start".Equals(lobby.status))
+            {
+                Access("p=/guildbattle&route=top&value=battle");
+                return lobby.schedule.Find(item => "start".Equals(item.status));
+            }
+            return null;
+        }
+
+        private GuildBattleInfo GuildBattle(string battleId)
+        {
+            var result = GetXHR("http://astrum.amebagames.com/_/guildbattle?_id=" + battleId);
+            GuildBattleInfo battleInfo = JsonConvert.DeserializeObject<GuildBattleInfo>(result);
+            return battleInfo;
         }
 
         private void PrintMypage(MypageInfo mypage)

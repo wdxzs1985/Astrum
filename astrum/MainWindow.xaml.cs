@@ -75,16 +75,23 @@ namespace Astrum
 
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
+            Console.WriteLine(isRunning ? "run" : "stop");
+            StartButton.IsEnabled = false;
+
             if (isRunning == false)
             {
-                StartButton.Content = "Stop";
                 isRunning = true;
+
+                StartButton.Content = "Stop";
+                StartButton.IsEnabled = isRunning;
                 
                 bool result = await Task.Run(() =>
                 {
                     client.Mypage();
                     while (isRunning)
                     {
+                        Console.WriteLine("start loop");
+
                         try{
                             if (client.IsQuestEnable)
                             {
@@ -96,11 +103,13 @@ namespace Astrum
                                 client.Raid();
                             }
 
-                            Console.WriteLine("wait 1 minute...");
                             client.Delay(AstrumClient.MINUTE);
                         }
-                        catch
+                        catch(Exception ex)
                         {
+                            Console.WriteLine(ex.Message);
+                            
+                            isRunning = false;
                             return false;
                         }
                         
@@ -108,7 +117,9 @@ namespace Astrum
                     return true;
                 });
 
-                isRunning = false;
+
+                StartButton.Content = "Run";
+                StartButton.IsEnabled = true;
 
                 if (!result)
                 {
@@ -120,11 +131,9 @@ namespace Astrum
             else
             {
                 isRunning = false;
-
                 QuestCheckBox.IsChecked = false;
                 RaidCheckBox.IsChecked = false;
-
-                StartButton.Content = "Run";
+                StartButton.IsEnabled = false;
             }
         }
     }
