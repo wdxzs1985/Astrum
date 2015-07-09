@@ -80,7 +80,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Http\AstrumClient.cs" />
-    <Compile Include="Http\Context.cs" />
+    <Compile Include="Http\ViewModel.cs" />
     <Compile Include="Json\Card.cs" />
     <Compile Include="Json\Event.cs" />
     <Compile Include="Json\Mypage.cs" />
