@@ -26,6 +26,7 @@ namespace Astrum
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
             InitializeComponent();
@@ -45,7 +46,7 @@ namespace Astrum
 
         private AstrumClient client;
         //public AstrumClient Client { get { return __client; } }
-
+             
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             Console.WriteLine("login start");
@@ -75,23 +76,17 @@ namespace Astrum
 
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine(isRunning ? "run" : "stop");
-            StartButton.IsEnabled = false;
-
+            
             if (isRunning == false)
             {
-                isRunning = true;
-
                 StartButton.Content = "Stop";
-                StartButton.IsEnabled = isRunning;
-                
+                isRunning = true;               
+
                 bool result = await Task.Run(() =>
                 {
                     client.Mypage();
                     while (isRunning)
                     {
-                        Console.WriteLine("start loop");
-
                         try{
                             if (client.IsQuestEnable)
                             {
@@ -103,13 +98,11 @@ namespace Astrum
                                 client.Raid();
                             }
 
+                            Console.WriteLine("wait 1 minute...");
                             client.Delay(AstrumClient.MINUTE);
                         }
-                        catch(Exception ex)
+                        catch
                         {
-                            Console.WriteLine(ex.Message);
-                            
-                            isRunning = false;
                             return false;
                         }
                         
@@ -117,9 +110,7 @@ namespace Astrum
                     return true;
                 });
 
-
-                StartButton.Content = "Run";
-                StartButton.IsEnabled = true;
+                isRunning = false;
 
                 if (!result)
                 {
@@ -131,9 +122,11 @@ namespace Astrum
             else
             {
                 isRunning = false;
+
                 QuestCheckBox.IsChecked = false;
                 RaidCheckBox.IsChecked = false;
-                StartButton.IsEnabled = false;
+
+                StartButton.Content = "Run";
             }
         }
     }

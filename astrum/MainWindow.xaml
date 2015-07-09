@@ -1,19 +1,113 @@
 ﻿<Window x:Class="Astrum.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        <Grid Name="LoginPanel" Visibility="Visible">
-            <Button Name="LoginButton" Content="Login" HorizontalAlignment="Left" Margin="10,63,0,0" VerticalAlignment="Top" Width="200" Click="LoginButton_Click"/>
-            <TextBox HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" Text="{Binding Username}" VerticalAlignment="Top" Width="200"/>
-            <PasswordBox Name="PasswordBox" HorizontalAlignment="Left" Margin="10,38,0,0" VerticalAlignment="Top" Width="200"/>
-        </Grid>
-        <Grid Name="StatusPanel" Visibility="Visible" Background="AliceBlue">
-            
-            <Button Name="StartButton" Content="Run" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="StartButton_Click"/>
-            <CheckBox Name="QuestCheckBox" Content="Quest" IsChecked="{Binding IsQuestEnable}" HorizontalAlignment="Left" Margin="11,62,0,0" VerticalAlignment="Top"/>
-            <CheckBox Name="RaidCheckBox" Content="Raid" IsChecked="{Binding IsRaidEnable}" HorizontalAlignment="Left" Margin="10,85,0,0" VerticalAlignment="Top"/>
+        Title="ProgramTest" Height="350" Width="525" >
+        <!--Icon="Images/Icon.png"-->
 
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="White" Offset="0"/>
+                <GradientStop Color="#FF7BCFFF" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background >
+        <!--<Image Source="Images\background.jpg" Stretch="Fill">
+            <Image.OpacityMask>
+                <ImageBrush ImageSource="Images/background.jpg"/>
+            </Image.OpacityMask>
+        </Image>-->
+        <Grid Name="LoginPanel" Visibility="Visible">
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="White" Offset="0"/>
+                    <GradientStop Color="#FF3AB6FD" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+
+            <Button x:Name="LoginButton"  Margin="2,250,0,0"  Width="220" Height="36" Content="Login" HorizontalAlignment="Center" VerticalAlignment="Center" Click="LoginButton_Click" Foreground="White" BorderBrush="Black" Background="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}"  >
+                <!--<Button.Template>
+                    <ControlTemplate TargetType="Button" >
+                        <StackPanel Orientation="Horizontal" Background="Transparent" Margin="0,0,0,0">
+                            <Grid>
+                                <Image Name="LoginButtonUP" Source="Images/LoginButtonUP.png" Stretch="Fill" />
+                                <ContentPresenter x:Name="Login" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-3,0,0" Content="{TemplateBinding Content}">
+                                </ContentPresenter>                            
+                            </Grid>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Source" Value="Images/LoginButtonDown.png" TargetName="LoginButtonUP"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>-->
+            </Button>
+            <TextBox HorizontalAlignment="Left" Height="20" Margin="158,209,0,0" TextWrapping="Wrap" Text="{Binding Username}" VerticalAlignment="Top" Width="200"/>
+            <PasswordBox Name="PasswordBox" HorizontalAlignment="Left" Margin="158,236,0,0" VerticalAlignment="Top" Width="200"/>
+        </Grid>
+        <Grid Name="StatusPanel" Visibility="Visible">
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="White" Offset="0"/>
+                    <GradientStop Color="#FF3AB6FD" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <!--<Grid.Background>
+                <ImageBrush ImageSource="Images/background.jpg"/>
+            </Grid.Background>-->
+            <ScrollViewer Name="HistoryPanel" HorizontalAlignment="Left" Height="193" Margin="31,25,0,0" VerticalAlignment="Top" Width="317" Background="{DynamicResource {x:Static SystemColors.GradientActiveCaptionBrushKey}}" Opacity="0.6"/>
+            <Button Name="StartButton" Content="Run" HorizontalAlignment="Left" Margin="400,39,0,0" VerticalAlignment="Top" Width="85" Height="44" Click="StartButton_Click" Foreground="White" Background="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}">            
+            <!--<Button.Template>
+                    <ControlTemplate TargetType="Button" >
+                        <StackPanel Orientation="Horizontal" Background="Transparent" Margin="0,0,0,0">
+                            <Grid>
+                                <Image Name="FunctionButtonUP" Source="Images/FunctionButtonUP.png" Stretch="Fill" />
+                                <ContentPresenter x:Name="Run" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-2,0,0" Content="{TemplateBinding Content}">
+                                </ContentPresenter>                            
+                            </Grid>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Source" Value="Images/FunctionButtonDown.png" TargetName="FunctionButtonUP"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>-->
+            </Button>
+            
+            <CheckBox Name="QuestCheckBox" Content="Quest" IsChecked="{Binding IsQuestEnable}" HorizontalAlignment="Left" Margin="400,228,0,0" VerticalAlignment="Top" Background="White" Foreground="White"/>
+            <CheckBox Name="RaidCheckBox" Content="Raid" IsChecked="{Binding IsRaidEnable}" HorizontalAlignment="Left" Margin="400,254,0,0" VerticalAlignment="Top" Foreground="White"/>
+            <Button Name="LogoutButton" Content="Logout" HorizontalAlignment="Left" Margin="400,99,0,0" VerticalAlignment="Top" Width="85" Height="44" Foreground="White" Background="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}" >
+                <!--<Button.Template>
+                    <ControlTemplate TargetType="Button" >
+                        <StackPanel Orientation="Horizontal" Background="Transparent" Margin="0,0,0,0">
+                            <Grid>
+                                <Image Name="FunctionButtonUP" Source="Images/FunctionButtonUP.png" Stretch="Fill" />
+                                <ContentPresenter x:Name="Logout" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-2,0,0" Content="{TemplateBinding Content}">
+                                </ContentPresenter>
+                            </Grid>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Source" Value="Images/FunctionButtonDown.png" TargetName="FunctionButtonUP"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>-->
+            </Button>
+            
+            <Label Content="UserName:" HorizontalAlignment="Left" Margin="31,228,0,0" VerticalAlignment="Top" Foreground="#FFFFFCFC"/>
+            <Label Content="Level:" HorizontalAlignment="Left" Margin="31,254,0,0" VerticalAlignment="Top" Foreground="White"/>
+            <Label Content="Exp:" HorizontalAlignment="Left" Margin="31,281,0,0" VerticalAlignment="Top" Foreground="White"/>
+            <Label Content="Stamina:" HorizontalAlignment="Left" Margin="184,228,0,0" VerticalAlignment="Top" Foreground="White"/>
+            <Label Content="BP:" HorizontalAlignment="Left" Margin="184,254,0,0" VerticalAlignment="Top" Foreground="White"/>
+            <Label Content="TP:" HorizontalAlignment="Left" Margin="184,281,0,0" VerticalAlignment="Top" Foreground="White"/>
+            <TextBox Name="UsrName" HorizontalAlignment="Left" Height="23" Margin="109,231,0,0" TextWrapping="Wrap" Text="1111" VerticalAlignment="Top" Width="70" Background="{x:Null}" Foreground="White" BorderBrush="{x:Null}" IsReadOnly="True"/>          
+            <TextBox Name="UsrLevel" HorizontalAlignment="Left" Height="23" Margin="82,256,0,0" TextWrapping="Wrap" Text="111" VerticalAlignment="Top" Width="35" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" IsReadOnly="True"/>
+            <TextBox Name="UsrStamina" HorizontalAlignment="Left" Height="23" Margin="248,231,0,0" TextWrapping="Wrap" Text="111/200" VerticalAlignment="Top" Width="69" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" IsReadOnly="True"/>
+            <TextBox Name="UsrBP" HorizontalAlignment="Left" Height="23" Margin="248,257,0,0" TextWrapping="Wrap" Text="1/6" VerticalAlignment="Top" Width="69" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" IsReadOnly="True"/>
+            <TextBox Name="UsrTP" HorizontalAlignment="Left" Height="23" Margin="248,284,0,0" TextWrapping="Wrap" Text="1/6" VerticalAlignment="Top" Width="69" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" IsReadOnly="True"/>
+            <ProgressBar Name="UsrExp" HorizontalAlignment="Left" Height="15" Margin="74,287,0,0" VerticalAlignment="Top" Width="100"/>
         </Grid>
     </Grid>
 </Window>
