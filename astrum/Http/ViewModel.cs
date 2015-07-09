@@ -22,6 +22,20 @@ namespace Astrum.Http
 
         public bool IsRunning { get; set; }
 
+        private string _history;
+        public string History
+        {
+            get
+            {
+                return _history;
+            }
+            set
+            {
+                _history = value;
+                NotifyPropertyChanged("History");
+            }
+        }
+
         private bool _quest_enable;
         private bool _raid_enable;
         private bool _guild_battle_enable;
