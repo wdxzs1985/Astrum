@@ -44,7 +44,9 @@
             <Grid HorizontalAlignment="Left" Height="106" Margin="397,22,0,0" VerticalAlignment="Top" Width="102" Background="#FF2A4D70" Opacity="0.865"/>
 
 
-            <ScrollViewer x:Name="HistoryPanel" HorizontalAlignment="Left" Height="185" Margin="30,25,0,0" VerticalAlignment="Top" Width="350" Background="White" Opacity="0.8"/>
+            <ScrollViewer x:Name="HistoryPanel" HorizontalAlignment="Left" Height="185" Margin="30,25,0,0" VerticalAlignment="Top" Width="350" Background="White" Opacity="0.8">
+                <TextBlock Text="{Binding History}"/>
+            </ScrollViewer>
 
             <Label Content="角色名:" HorizontalAlignment="Left" Margin="31,228,0,0" VerticalAlignment="Top" Foreground="White" Width="63"/>
             <Label Content="Level:" HorizontalAlignment="Left" Margin="206,228,0,0" VerticalAlignment="Top" Foreground="White" Width="63"/>
@@ -67,9 +69,9 @@
 
 
 
-            <RadioButton x:Name="QuestButton" Content="Quest" HorizontalAlignment="Left" Margin="400,25,0,0" VerticalAlignment="Top" IsChecked="{Binding IsQuestEnable}" Foreground="White"/>
-            <RadioButton x:Name="RaidButton" Content="Raid" HorizontalAlignment="Left" Margin="400,50,0,0" VerticalAlignment="Top" IsChecked="{Binding IsRaidEnable}" Foreground="White"/>
-            <RadioButton x:Name="GuildBattleButton" Content="GuildBattle" HorizontalAlignment="Left" Margin="400,75,0,0" VerticalAlignment="Top" IsChecked="{Binding IsGuildBattleEnable}" Foreground="#FFF7F7F7"/>
+            <RadioButton x:Name="QuestButton" Content="Quest" HorizontalAlignment="Left" Margin="406,27,0,0" VerticalAlignment="Top" IsChecked="{Binding IsQuestEnable}" Foreground="White" Width="80"/>
+            <RadioButton x:Name="RaidButton" Content="Raid" HorizontalAlignment="Left" Margin="406,50,0,0" VerticalAlignment="Top" IsChecked="{Binding IsRaidEnable}" Foreground="White" Width="80"/>
+            <RadioButton x:Name="GuildBattleButton" Content="GuildBattle" HorizontalAlignment="Left" Margin="406,73,0,0" VerticalAlignment="Top" IsChecked="{Binding IsGuildBattleEnable}" Foreground="#FFF7F7F7"/>
 
 
 
@@ -90,6 +92,7 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
+            <CheckBox Content="bug跑图" HorizontalAlignment="Left" Margin="406,98,0,0" VerticalAlignment="Top" Width="80" Foreground="White" IsChecked="{Binding IsUnlimitStage}"/>
         </Grid>
     </Grid>
 </Window>

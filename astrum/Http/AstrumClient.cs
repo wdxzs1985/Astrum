@@ -60,7 +60,7 @@ namespace Astrum.Http
                     Thread.Sleep(100);
                     if (i % 1000 == 0)
                     {
-                        Console.WriteLine("wait {0} second", (randomTime - i) / 1000);
+                        String.Format("wait {0} second", (randomTime - i) / 1000);
                     }
                 }
             }
@@ -488,49 +488,61 @@ namespace Astrum.Http
 
         private void PrintMypage(MypageInfo mypage)
         {
-            Console.WriteLine("   Name: {0} (L{1})", mypage.status.name, mypage.status.level);
-            Console.WriteLine("  Total: {0} (ATK: {1}, DF: {2}, MAT: {3}, MDF: {4})", mypage.total, mypage.status.atk, mypage.status.df, mypage.status.mat, mypage.status.mdf);
-            Console.WriteLine("Stamina: {0} / {1}", mypage.status.stamina_value, mypage.status.stamina_max);
-            Console.WriteLine("    EXP: {0} / {1}", mypage.status.exp_value, mypage.status.exp_max);
-            Console.WriteLine("     BP: {0} / {1}", mypage.status.bp_value, mypage.status.bp_max);
-            Console.WriteLine("     TP: {0} / {1}", mypage.status.tp_value, mypage.status.tp_max);
-            Console.WriteLine("  Guild: {0}, Rank: {1}", mypage.guild.name, mypage.guild.rank);
-            Console.WriteLine("  Quest: {0}", mypage.link.quest._id);
+            string history = "";
+            history += String.Format("   Name: {0} (L{1})", mypage.status.name, mypage.status.level) + Environment.NewLine;
+            history += String.Format("  Total: {0}", mypage.total) + Environment.NewLine;
+            history += String.Format("         (ATK: {0}, DF: {1}, MAT: {2}, MDF: {3})", mypage.status.atk, mypage.status.df, mypage.status.mat, mypage.status.mdf) + Environment.NewLine;
+            history += String.Format("Stamina: {0} / {1}", mypage.status.stamina_value, mypage.status.stamina_max) + Environment.NewLine;
+            history += String.Format("    EXP: {0} / {1}", mypage.status.exp_value, mypage.status.exp_max) + Environment.NewLine;
+            history += String.Format("     BP: {0} / {1}", mypage.status.bp_value, mypage.status.bp_max) + Environment.NewLine;
+            history += String.Format("     TP: {0} / {1}", mypage.status.tp_value, mypage.status.tp_max) + Environment.NewLine;
+            history += String.Format("  Guild: {0}, Rank: {1}", mypage.guild.name, mypage.guild.rank) + Environment.NewLine;
+            history += String.Format("  Quest: {0}", mypage.link.quest._id) + Environment.NewLine;
+
+            ViewModel.History = history;
         }
 
         private void PrintStageInfo(StageInfo stage)
         {
-            Console.WriteLine("    Name: {0}[{1}] ({2})", stage.name, stage.stage, stage.isBossStage ? "BOSS" : stage.progress + "%");
+            string history = "";
+            history += String.Format("    Name: {0}[{1}] ({2})", stage.name, stage.stage, stage.isBossStage ? "BOSS" : stage.progress + "%") + Environment.NewLine;
 
             if (stage.status != null)
             {
-                Console.WriteLine(" Stamina: {0} / {1}", stage.status.stamina.value, stage.status.stamina.max);
-                Console.WriteLine("     EXP: {0} / {1}", stage.status.exp.value, stage.status.exp.max);
-                Console.WriteLine("      BP: {0} / {1}", stage.status.bp.value, stage.status.bp.max);
-                Console.WriteLine("      TP: {0} / {1}", stage.status.tp.value, stage.status.tp.max);
+                history += String.Format(" Stamina: {0} / {1}", stage.status.stamina.value, stage.status.stamina.max) + Environment.NewLine;
+                history += String.Format("     EXP: {0} / {1}", stage.status.exp.value, stage.status.exp.max) + Environment.NewLine;
+                history += String.Format("      BP: {0} / {1}", stage.status.bp.value, stage.status.bp.max) + Environment.NewLine;
+                history += String.Format("      TP: {0} / {1}", stage.status.tp.value, stage.status.tp.max) + Environment.NewLine;
             }
+            ViewModel.History = history;
         }
 
         private void PrintAreaBossInfo(AreaBossInfo boss)
         {
-            Console.WriteLine("   Name: {0}", boss.name);
-            Console.WriteLine("   Area: {0}", boss.areaName);
-            Console.WriteLine("     HP: {0} / {1}", boss.hp - boss.totalDamage, boss.hp);
+            string history = "";
+            history += String.Format("   Name: {0}", boss.name) + Environment.NewLine;
+            history += String.Format("   Area: {0}", boss.areaName) + Environment.NewLine;
+            history += String.Format("     HP: {0} / {1}", boss.hp - boss.totalDamage, boss.hp) + Environment.NewLine;
+            ViewModel.History = history;
         }
 
         private void PrintRaidBattleInfo(RaidBattleInfo battleInfo)
         {
-            Console.WriteLine("   Name: {0} (L{1})", battleInfo.name, battleInfo.level);
-            Console.WriteLine("   Rare: {0}", battleInfo.rare);
-            Console.WriteLine("     HP: {0} / {1}", battleInfo.hp - battleInfo.totalDamage, battleInfo.hp);
+            string history = "";
+            history += String.Format("   Name: {0} (L{1})", battleInfo.name, battleInfo.level) + Environment.NewLine;
+            history += String.Format("   Rare: {0}", battleInfo.rare) + Environment.NewLine;
+            history += String.Format("     HP: {0} / {1}", battleInfo.hp - battleInfo.totalDamage, battleInfo.hp) + Environment.NewLine;
+            ViewModel.History = history;
         }
 
         private void PrintBossBattleResult(BossBattleResultInfo resultInfo)
         {
             if (resultInfo.result != null)
             {
-                Console.WriteLine("  Result: {0}", resultInfo.result.resultType);
-                Console.WriteLine("  BossHP: {0} / {1}", resultInfo.result.afterBoss.hp, resultInfo.result.afterBoss.maxHp);
+                string history = "";
+                history += String.Format("  Result: {0}", resultInfo.result.resultType) + Environment.NewLine;
+                history += String.Format("  BossHP: {0} / {1}", resultInfo.result.afterBoss.hp, resultInfo.result.afterBoss.maxHp) + Environment.NewLine;
+                ViewModel.History = history;
             }
         }
 
