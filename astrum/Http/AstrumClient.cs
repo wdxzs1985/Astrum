@@ -411,34 +411,40 @@ namespace Astrum.Http
 
         public void GuildBattle()
         {
-            GuildBattleLobbyInfo lobby = GuildBattleLobby();
-            Schedule schedule = FindSchedule(lobby);
+            Schedule schedule = FindSchedule();
 
             if (schedule != null)
             {
-                GuildBattleInfo battleInfo = GuildBattle(schedule._id);
-
-                if (battleInfo.stamp.status)
-                {
-                    GetXHR("http://astrum.amebagames.com/_/guildbattle/stamp");
-                }
-
-
+                var battleId =  schedule._id;
                 while (true)
                 {
+                    GuildBattleInfo battleInfo = GuildBattle(battleId);
 
+                    if (battleInfo.stamp.status)
+                    {
+                        GetXHR("http://astrum.amebagames.com/_/guildbattle/stamp");
+                        this.Delay(DELAY_SHORT);
+                    }
+
+                    // attack
+                    var type = "front".Equals(battleInfo.status.position) ? "attack" : "yell";
+                    var ablility = "front".Equals(battleInfo.status.position) ? "ability_front_attack_default" : "ability_back_yell_default_1";
+
+                    GuildBattleCmdInfo cmdInfo = GuildBattleCmd(battleId, "attack");
+                    var cmd = cmdInfo.cmd.Find(item => "ability_front_attack_default".Equals(item._id));
+                    if (cmd != null)
+                    {
+                        GuildBattleCmd(battleId, "ability_front_attack_default", "attack");
+                    }
                 }
             }
         }
 
-        private GuildBattleLobbyInfo GuildBattleLobby()
+        private Schedule FindSchedule()
         {
             var result = GetXHR("http://astrum.amebagames.com/_/guildbattle/lobby");
-            return JsonConvert.DeserializeObject<GuildBattleLobbyInfo>(result);
-        }
+            GuildBattleLobbyInfo lobby = JsonConvert.DeserializeObject<GuildBattleLobbyInfo>(result);
 
-        private Schedule FindSchedule(GuildBattleLobbyInfo lobby)
-        {
             if (lobby.available && "start".Equals(lobby.status))
             {
                 Access("p=/guildbattle&route=top&value=battle");
@@ -451,7 +457,33 @@ namespace Astrum.Http
         {
             var result = GetXHR("http://astrum.amebagames.com/_/guildbattle?_id=" + battleId);
             GuildBattleInfo battleInfo = JsonConvert.DeserializeObject<GuildBattleInfo>(result);
+
+            this.Delay(DELAY_SHORT);
+
             return battleInfo;
+        }
+
+        private GuildBattleCmdInfo GuildBattleCmd(string battleId, string type)
+        {
+            var result = GetXHR("http://astrum.amebagames.com/_/guildbattle/cmd?_id=" + battleId + "&type=" + type);
+            GuildBattleCmdInfo cmdInfo = JsonConvert.DeserializeObject<GuildBattleCmdInfo>(result);
+
+            this.Delay(DELAY_SHORT);
+
+            return cmdInfo;
+        }
+
+        private void GuildBattleCmd(string battleId, string abilityId, string cmd)
+        {
+            var values = new Dictionary<string, string>
+            {
+                { "_id", battleId },
+                { "abilityId", abilityId },
+                { "cmd", cmd }
+            };
+            PostXHR("http://astrum.amebagames.com/_/guildbattle/cmd", values);
+
+            this.Delay(DELAY_SHORT);
         }
 
         private void PrintMypage(MypageInfo mypage)

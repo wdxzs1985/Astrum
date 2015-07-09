@@ -113,6 +113,12 @@ namespace Astrum
                                 client.Raid();
                             }
 
+                            if (client.ViewModel.IsGuildBattleEnable)
+                            {
+                                client.ViewModel.IsRunning = true;
+                                client.GuildBattle();
+                            }
+
                             var countDown = AstrumClient.MINUTE;
                             for (var i = 0; i < AstrumClient.MINUTE; i += 100)
                             {
