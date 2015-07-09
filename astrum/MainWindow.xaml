@@ -10,7 +10,7 @@
                 <GradientStop Color="White" Offset="0"/>
                 <GradientStop Color="#FF7BCFFF" Offset="1"/>
             </LinearGradientBrush>
-        </Grid.Background>
+        </Grid.Background >
         <!--<Image Source="Images\background.jpg" Stretch="Fill">
             <Image.OpacityMask>
                 <ImageBrush ImageSource="Images/background.jpg"/>
@@ -102,12 +102,12 @@
             <Label Content="Stamina:" HorizontalAlignment="Left" Margin="184,228,0,0" VerticalAlignment="Top" Foreground="White"/>
             <Label Content="BP:" HorizontalAlignment="Left" Margin="184,254,0,0" VerticalAlignment="Top" Foreground="White"/>
             <Label Content="TP:" HorizontalAlignment="Left" Margin="184,281,0,0" VerticalAlignment="Top" Foreground="White"/>
-            <TextBox Name="UsrName" HorizontalAlignment="Left" Height="23" Margin="109,231,0,0" TextWrapping="Wrap" Text="1111" VerticalAlignment="Top" Width="70" Background="{x:Null}" Foreground="White" BorderBrush="{x:Null}" IsReadOnly="True"/>
-            <TextBox Name="UsrExp" HorizontalAlignment="Left" Height="23" Margin="82,284,0,0" TextWrapping="Wrap" Text="111/222" VerticalAlignment="Top" Width="69" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" SelectionBrush="White" IsReadOnly="True"/>
-            <TextBox Name="UsrLevel" HorizontalAlignment="Left" Height="23" Margin="82,257,0,0" TextWrapping="Wrap" Text="111" VerticalAlignment="Top" Width="35" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" IsReadOnly="True"/>
-            <TextBox Name="UsrStamina" HorizontalAlignment="Left" Height="23" Margin="243,231,0,0" TextWrapping="Wrap" Text="111/200" VerticalAlignment="Top" Width="69" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" IsReadOnly="True"/>
-            <TextBox Name="UsrBP" HorizontalAlignment="Left" Height="23" Margin="243,257,0,0" TextWrapping="Wrap" Text="1/6" VerticalAlignment="Top" Width="69" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" IsReadOnly="True"/>
-            <TextBox Name="UsrTP" HorizontalAlignment="Left" Height="23" Margin="243,284,0,0" TextWrapping="Wrap" Text="1/6" VerticalAlignment="Top" Width="69" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" IsReadOnly="True"/>
+            <TextBox Name="UsrName" HorizontalAlignment="Left" Height="23" Margin="109,231,0,0" TextWrapping="Wrap" Text="1111" VerticalAlignment="Top" Width="70" Background="{x:Null}" Foreground="White" BorderBrush="{x:Null}" IsReadOnly="True"/>          
+            <TextBox Name="UsrLevel" HorizontalAlignment="Left" Height="23" Margin="82,256,0,0" TextWrapping="Wrap" Text="111" VerticalAlignment="Top" Width="35" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" IsReadOnly="True"/>
+            <TextBox Name="UsrStamina" HorizontalAlignment="Left" Height="23" Margin="248,231,0,0" TextWrapping="Wrap" Text="111/200" VerticalAlignment="Top" Width="69" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" IsReadOnly="True"/>
+            <TextBox Name="UsrBP" HorizontalAlignment="Left" Height="23" Margin="248,257,0,0" TextWrapping="Wrap" Text="1/6" VerticalAlignment="Top" Width="69" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" IsReadOnly="True"/>
+            <TextBox Name="UsrTP" HorizontalAlignment="Left" Height="23" Margin="248,284,0,0" TextWrapping="Wrap" Text="1/6" VerticalAlignment="Top" Width="69" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" IsReadOnly="True"/>
+            <ProgressBar Name="UsrExp" HorizontalAlignment="Left" Height="15" Margin="74,287,0,0" VerticalAlignment="Top" Width="100"/>
         </Grid>
     </Grid>
 </Window>
