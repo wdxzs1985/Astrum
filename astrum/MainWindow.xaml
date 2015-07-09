@@ -3,13 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="プリンセスコネクト" Height="375" Width="540" Icon="Images/Icon.png" ResizeMode="NoResize">
     <Grid>
-        <!--
-        <Image Source="Images\background.jpg" Stretch="Fill" Visibility="Hidden">
+        <Image Source="Images\background.jpg" Stretch="Fill" Visibility="Visible">
             <Image.OpacityMask>
                 <ImageBrush ImageSource="Images/background.jpg"/>
             </Image.OpacityMask>
         </Image>
-        -->
+
         <Grid Name="LoginPanel" Visibility="Visible">
             <TextBox Name="UsernameBox" HorizontalAlignment="Left" Height="24" Margin="160,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="220"/>
             <PasswordBox Name="PasswordBox" HorizontalAlignment="Left" Margin="160,240,0,0" VerticalAlignment="Top" Width="220" Height="24"/>
@@ -33,48 +32,64 @@
                 </Button.Template>
             </Button>
         </Grid>
-        <Grid Name="StatusPanel" Visibility="Hidden">
+        <Grid Name="StatusPanel" Visibility="Visible">
             <Grid.Background >
-                <SolidColorBrush Color="DarkGray"></SolidColorBrush>
-                <!--
-                    <ImageBrush ImageSource="Images/background.jpg"/>
-                -->
+                <!--<SolidColorBrush Color="DarkGray" ></SolidColorBrush>-->
+
+                <ImageBrush ImageSource="Images/background.jpg"/>
+
             </Grid.Background>
 
 
-            <ScrollViewer Name="HistoryPanel" HorizontalAlignment="Left" Height="185" Margin="30,25,0,0" VerticalAlignment="Top" Width="350" Background="White" Opacity="0.8">
+            <Grid HorizontalAlignment="Left" Height="106" Margin="397,22,0,0" VerticalAlignment="Top" Width="102" Background="#FF2A4D70" Opacity="0.865"/>
 
 
-            </ScrollViewer>
+            <ScrollViewer x:Name="HistoryPanel" HorizontalAlignment="Left" Height="185" Margin="30,25,0,0" VerticalAlignment="Top" Width="350" Background="White" Opacity="0.8"/>
 
-            <Label Content="角色名:" HorizontalAlignment="Left" Margin="30,215,0,0" VerticalAlignment="Top" Foreground="White" Width="63"/>
-            <Label Content="Level:" HorizontalAlignment="Left" Margin="205,215,0,0" VerticalAlignment="Top" Foreground="White" Width="63"/>
-            <Label Content="Sta:" HorizontalAlignment="Left" Margin="30,250,0,0" VerticalAlignment="Top" Foreground="White" Width="63"/>
-            <Label Content="Exp:" HorizontalAlignment="Left" Margin="205,250,0,0" VerticalAlignment="Top" Foreground="White" Width="63"/>
-            <Label Content="BP:" HorizontalAlignment="Left" Margin="30,285,0,0" VerticalAlignment="Top" Foreground="White" Width="63"/>
-            <Label Content="TP:" HorizontalAlignment="Left" Margin="205,285,0,0" VerticalAlignment="Top" Foreground="White" Width="63"/>
+            <Label Content="角色名:" HorizontalAlignment="Left" Margin="31,228,0,0" VerticalAlignment="Top" Foreground="White" Width="63"/>
+            <Label Content="Level:" HorizontalAlignment="Left" Margin="206,228,0,0" VerticalAlignment="Top" Foreground="White" Width="63"/>
+            <Label Content="Sta:" HorizontalAlignment="Left" Margin="31,263,0,0" VerticalAlignment="Top" Foreground="White" Width="63"/>
+            <Label Content="Exp:" HorizontalAlignment="Left" Margin="206,263,0,0" VerticalAlignment="Top" Foreground="White" Width="63"/>
+            <Label Content="BP:" HorizontalAlignment="Left" Margin="31,298,0,0" VerticalAlignment="Top" Foreground="White" Width="63"/>
+            <Label Content="TP:" HorizontalAlignment="Left" Margin="206,298,0,0" VerticalAlignment="Top" Foreground="White" Width="63"/>
 
-            <Label Content="{Binding Name}" HorizontalAlignment="Left" Margin="100,215,0,0" VerticalAlignment="Top" Width="100" Height="28" Foreground="White"/>
-            <Label Content="{Binding Level}" HorizontalAlignment="Left" Margin="275,215,0,0" VerticalAlignment="Top" Width="100" Height="28" Foreground="White"/>
+            <Label Content="{Binding Name}" HorizontalAlignment="Left" Margin="85,228,0,0" VerticalAlignment="Top" Width="116" Height="28" Foreground="White"/>
+            <Label Content="{Binding Level}" HorizontalAlignment="Left" Margin="276,228,0,0" VerticalAlignment="Top" Width="100" Height="28" Foreground="White"/>
 
-            <ProgressBar HorizontalAlignment="Left" Height="10" Margin="275,260,0,0" VerticalAlignment="Top" Width="100"
-                         Maximum="100" Minimum="0" Value="{Binding ExpProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}"  ToolTip="{Binding Exp}"/>
+            <ProgressBar HorizontalAlignment="Left" Height="10" Margin="276,273,0,0" VerticalAlignment="Top" Width="100"
+        		Maximum="100" Minimum="0" Value="{Binding ExpProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}"  ToolTip="{Binding Exp}"/>
 
-            <ProgressBar HorizontalAlignment="Left" Height="10" Margin="100,260,0,0" VerticalAlignment="Top" Width="100" Maximum="100" Value="{Binding StaminaProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Stamina}"/>
+            <ProgressBar HorizontalAlignment="Left" Height="10" Margin="85,273,0,0" VerticalAlignment="Top" Width="100" Maximum="100" Value="{Binding StaminaProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Stamina}"/>
 
-            <ProgressBar HorizontalAlignment="Left" Height="10" Margin="100,295,0,0" VerticalAlignment="Top" Width="100" Maximum="6" Value="{Binding BpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Bp}"/>
+            <ProgressBar HorizontalAlignment="Left" Height="10" Margin="85,308,0,0" VerticalAlignment="Top" Width="100" Maximum="6" Value="{Binding BpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Bp}"/>
 
-            <ProgressBar HorizontalAlignment="Left" Height="10" Margin="275,295,0,0" VerticalAlignment="Top" Width="100" Maximum="100" Value="{Binding TpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Tp}"/>
-
-
-
-            <RadioButton Name="QuestButton" Content="Quest" HorizontalAlignment="Left" Margin="400,25,0,0" VerticalAlignment="Top" IsChecked="{Binding IsQuestEnable}"/>
-            <RadioButton Name="RaidButton" Content="Raid" HorizontalAlignment="Left" Margin="400,50,0,0" VerticalAlignment="Top" IsChecked="{Binding IsRaidEnable}"/>
-            <RadioButton Name="GuildBattleButton" Content="GuildBattle" HorizontalAlignment="Left" Margin="400,75,0,0" VerticalAlignment="Top" IsChecked="{Binding IsGuildBattleEnable}"/>
+            <ProgressBar HorizontalAlignment="Left" Height="10" Margin="276,308,0,0" VerticalAlignment="Top" Width="100" Maximum="100" Value="{Binding TpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Tp}"/>
 
 
 
-            <Button Name="StartButton" Content="Start" HorizontalAlignment="Left" Margin="400,165,0,0" VerticalAlignment="Top" Width="102" Height="44" Click="StartButton_Click" />
+            <RadioButton x:Name="QuestButton" Content="Quest" HorizontalAlignment="Left" Margin="400,25,0,0" VerticalAlignment="Top" IsChecked="{Binding IsQuestEnable}" Foreground="White"/>
+            <RadioButton x:Name="RaidButton" Content="Raid" HorizontalAlignment="Left" Margin="400,50,0,0" VerticalAlignment="Top" IsChecked="{Binding IsRaidEnable}" Foreground="White"/>
+            <RadioButton x:Name="GuildBattleButton" Content="GuildBattle" HorizontalAlignment="Left" Margin="400,75,0,0" VerticalAlignment="Top" IsChecked="{Binding IsGuildBattleEnable}" Foreground="#FFF7F7F7"/>
+
+
+
+            <Button x:Name="StartButton" Content="Start" HorizontalAlignment="Left" Margin="400,165,0,0" VerticalAlignment="Top" Width="102" Height="44" Click="StartButton_Click" Foreground="White" >
+                <Button.Template>
+                    <ControlTemplate TargetType="{x:Type Button}" >
+                        <StackPanel Orientation="Horizontal" Background="Transparent" Margin="0,0,0,0" >
+                            <Grid  Width="102" Height="44" >
+                                <Image x:Name="FunctionButtonUP" Source="Images/FunctionButtonUP.png" Stretch="Fill" Margin="0,0,0,0" />
+                                <ContentPresenter x:Name="Login" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Content="{TemplateBinding Content}"/>
+                            </Grid>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Source" Value="Images/FunctionButtonDown.png" TargetName="FunctionButtonUP"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
         </Grid>
     </Grid>
 </Window>
