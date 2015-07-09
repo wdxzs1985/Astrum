@@ -26,6 +26,7 @@ namespace Astrum
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
             InitializeComponent();
@@ -45,7 +46,7 @@ namespace Astrum
 
         private AstrumClient client;
         //public AstrumClient Client { get { return __client; } }
-
+             
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             Console.WriteLine("login start");
@@ -75,11 +76,12 @@ namespace Astrum
 
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
+            
             if (isRunning == false)
             {
                 StartButton.Content = "Stop";
-                isRunning = true;
-                
+                isRunning = true;               
+
                 bool result = await Task.Run(() =>
                 {
                     client.Mypage();
