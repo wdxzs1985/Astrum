@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Astrum.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="プリンセスコネクト" Height="359" Width="540" Icon="Images/Icon.png">
+        Title="プリンセスコネクト" Height="375" Width="540" Icon="Images/Icon.png" ResizeMode="NoResize">
     <Grid>
         <!--
         <Image Source="Images\background.jpg" Stretch="Fill" Visibility="Hidden">
@@ -11,22 +11,40 @@
         </Image>
         -->
         <Grid Name="LoginPanel" Visibility="Visible">
-            <Button Name="LoginButton" Content="Login" HorizontalAlignment="Left" Margin="158,266,0,0" FontFamily="Microsoft YaHei" FontWeight="Bold" VerticalAlignment="Top" Width="200" Height="32" Click="LoginButton_Click"/>
-            <TextBox Name="UsernameBox" HorizontalAlignment="Left" Height="20" Margin="158,209,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200"/>
-            <PasswordBox Name="PasswordBox" HorizontalAlignment="Left" Margin="158,236,0,0" VerticalAlignment="Top" Width="200"/>
+            <TextBox Name="UsernameBox" HorizontalAlignment="Left" Height="24" Margin="160,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="220"/>
+            <PasswordBox Name="PasswordBox" HorizontalAlignment="Left" Margin="160,240,0,0" VerticalAlignment="Top" Width="220" Height="24"/>
+
+            <Button Name="LoginButton"  Margin="160,280,0,0" Width="220" Height="40" Content="Login" HorizontalAlignment="Left" VerticalAlignment="Top" Click="LoginButton_Click" Foreground="White" BorderBrush="Black" Background="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}"  >
+                <Button.Template>
+                    <ControlTemplate TargetType="Button" >
+                        <StackPanel Orientation="Horizontal" Background="Transparent" Margin="0,0,0,0">
+                            <Grid  Width="220" Height="36" >
+                                <Image Name="LoginButtonUP" Source="Images/LoginButtonUP.png" Stretch="Fill" />
+                                <ContentPresenter x:Name="Login" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Content="{TemplateBinding Content}">
+                                </ContentPresenter>
+                            </Grid>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Source" Value="Images/LoginButtonDown.png" TargetName="LoginButtonUP"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
         </Grid>
-        <Grid Name="StatusPanel" Visibility="Visible">
+        <Grid Name="StatusPanel" Visibility="Hidden">
             <Grid.Background >
                 <SolidColorBrush Color="DarkGray"></SolidColorBrush>
                 <!--
                     <ImageBrush ImageSource="Images/background.jpg"/>
                 -->
             </Grid.Background>
-            
-            
+
+
             <ScrollViewer Name="HistoryPanel" HorizontalAlignment="Left" Height="185" Margin="30,25,0,0" VerticalAlignment="Top" Width="350" Background="White" Opacity="0.8">
-                
-                
+
+
             </ScrollViewer>
 
             <Label Content="角色名:" HorizontalAlignment="Left" Margin="30,215,0,0" VerticalAlignment="Top" Foreground="White" Width="63"/>
@@ -47,9 +65,9 @@
             <ProgressBar HorizontalAlignment="Left" Height="10" Margin="100,295,0,0" VerticalAlignment="Top" Width="100" Maximum="6" Value="{Binding BpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Bp}"/>
 
             <ProgressBar HorizontalAlignment="Left" Height="10" Margin="275,295,0,0" VerticalAlignment="Top" Width="100" Maximum="100" Value="{Binding TpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Tp}"/>
-            
-            
-            
+
+
+
             <RadioButton Name="QuestButton" Content="Quest" HorizontalAlignment="Left" Margin="400,25,0,0" VerticalAlignment="Top" IsChecked="{Binding IsQuestEnable}"/>
             <RadioButton Name="RaidButton" Content="Raid" HorizontalAlignment="Left" Margin="400,50,0,0" VerticalAlignment="Top" IsChecked="{Binding IsRaidEnable}"/>
             <RadioButton Name="GuildBattleButton" Content="GuildBattle" HorizontalAlignment="Left" Margin="400,75,0,0" VerticalAlignment="Top" IsChecked="{Binding IsGuildBattleEnable}"/>
