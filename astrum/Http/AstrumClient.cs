@@ -430,11 +430,11 @@ namespace Astrum.Http
                     var type = "front".Equals(battleInfo.status.position) ? "attack" : "yell";
                     var ablility = "front".Equals(battleInfo.status.position) ? "ability_front_attack_default" : "ability_back_yell_default_1";
 
-                    GuildBattleCmdInfo cmdInfo = GuildBattleCmd(battleId, "attack");
-                    var cmd = cmdInfo.cmd.Find(item => "ability_front_attack_default".Equals(item._id));
+                    GuildBattleCmdInfo cmdInfo = GuildBattleCmd(battleId, type);
+                    var cmd = cmdInfo.cmd.Find(item => ablility.Equals(item._id));
                     if (cmd != null)
                     {
-                        GuildBattleCmd(battleId, "ability_front_attack_default", "attack");
+                        GuildBattleCmd(battleId, ablility, type);
                     }
                 }
             }
