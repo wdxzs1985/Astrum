@@ -13,7 +13,7 @@ using Astrum.Json.Stage;
 using Astrum.Json.Raid;
 using Astrum.Json.Event;
 
-namespace Astrum
+namespace Astrum.Http
 {
 
     public class AstrumClient : HttpClient
@@ -41,6 +41,8 @@ namespace Astrum
 
         public bool IsQuestEnable { get; set; }
         public bool IsRaidEnable { get; set; }
+
+        public CharacterContext Me { get; set; }
 
         private string xGroup = "a";
         private string xRtoken = "undefined";
@@ -174,6 +176,22 @@ namespace Astrum
             var mypage = JsonConvert.DeserializeObject<MypageInfo>(responseString);
 
             PrintMypage(mypage);
+
+            Me = new CharacterContext();
+
+            Me.Name = mypage.status.name;
+
+            Me.stamina_value = mypage.status.stamina_value;
+            Me.stamina_max = mypage.status.stamina_max;
+
+            Me.exp_value = mypage.status.exp_value;
+            Me.exp_max = mypage.status.exp_max;
+
+            Me.bp_value = mypage.status.bp_value;
+            Me.bp_max = mypage.status.bp_max;
+
+            Me.tp_value = mypage.status.tp_value;
+            Me.tp_max = mypage.status.tp_max;
 
             Access("mypage");
         }

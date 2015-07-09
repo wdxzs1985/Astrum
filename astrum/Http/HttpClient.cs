@@ -10,7 +10,7 @@ using System.Collections;
 
 using Newtonsoft.Json;
 
-namespace Astrum
+namespace Astrum.Http
 {
     public class HttpClient
     {

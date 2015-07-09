@@ -18,6 +18,8 @@ using System.IO;
 using System.Collections;
 
 using Newtonsoft.Json;
+using Astrum.Http;
+
 
 namespace Astrum
 {
