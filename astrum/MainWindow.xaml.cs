@@ -18,6 +18,9 @@ using System.IO;
 using System.Collections;
 
 using Newtonsoft.Json;
+using Astrum.Http;
+using System.Threading;
+
 
 namespace Astrum
 {
@@ -26,44 +29,47 @@ namespace Astrum
     /// </summary>
     public partial class MainWindow : Window
     {
-
         public MainWindow()
         {
             InitializeComponent();
 
             client = new AstrumClient();
 
-            client.Username = "";
-            client.Password = "";
+            this.UsernameBox.Text = "";
+            this.PasswordBox.Password = "";
 
-            this.DataContext = client;
-            this.PasswordBox.Password = client.Password;
+            this.DataContext = client.ViewModel;
 
             LoginPanel.Visibility = Visibility.Visible;
             StatusPanel.Visibility = Visibility.Hidden;
+
             LoginButton.IsEnabled = true;
         }
 
         private AstrumClient client;
-        //public AstrumClient Client { get { return __client; } }
-             
+
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             Console.WriteLine("login start");
             LoginButton.IsEnabled = false;
-            client.Password = this.PasswordBox.Password;
+
+            var username = UsernameBox.Text;
+            var password = this.PasswordBox.Password;
 
             var login = await Task.Run(() =>
             {
-                return client.Login();
+                return client.Login(username, password);
             });
             if (login)
             {
                 Console.WriteLine("login success");
                 LoginPanel.Visibility = Visibility.Hidden;
                 StatusPanel.Visibility = Visibility.Visible;
+
                 client.Token();
                 client.Mypage();
+
+                client.ViewModel.IsRunning = false;
             }
             else
             {
@@ -71,46 +77,72 @@ namespace Astrum
                 LoginButton.IsEnabled = true;
             }
         }
-
-        private bool isRunning = false;
-
+        
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            
-            if (isRunning == false)
-            {
-                StartButton.Content = "Stop";
-                isRunning = true;               
+            StartButton.IsEnabled = false;
+            QuestButton.IsEnabled = false;
+            RaidButton.IsEnabled = false;
+            GuildBattleButton.IsEnabled = false;
 
+            if (client.ViewModel.IsRunning == false)
+            {
+                client.ViewModel.IsRunning = true;
+
+                StartButton.Content = "Stop";
+                StartButton.IsEnabled = true;
+                
                 bool result = await Task.Run(() =>
                 {
                     client.Mypage();
-                    while (isRunning)
+                    while (client.ViewModel.IsRunning)
                     {
+                        Console.WriteLine("start loop");
+                        client.ViewModel.IsRunning = false;
+
                         try{
-                            if (client.IsQuestEnable)
+                            if (client.ViewModel.IsQuestEnable)
                             {
+                                client.ViewModel.IsRunning = true;
                                 client.Quest();
                             }
 
-                            if (client.IsRaidEnable)
+                            if (client.ViewModel.IsRaidEnable)
                             {
+                                client.ViewModel.IsRunning = true;
                                 client.Raid();
                             }
 
-                            Console.WriteLine("wait 1 minute...");
-                            client.Delay(AstrumClient.MINUTE);
+                            var countDown = AstrumClient.MINUTE;
+                            for (var i = 0; i < AstrumClient.MINUTE; i += 100)
+                            {
+                                Thread.Sleep(100);
+                                if (i % 1000 == 0)
+                                {
+                                    Console.WriteLine("wait {0} second", (countDown - i) / 1000);
+                                }
+                                if (!client.ViewModel.IsRunning)
+                                {
+                                    break;
+                                }
+                            }
                         }
-                        catch
+                        catch(Exception ex)
                         {
+                            Console.WriteLine(ex.Message);
+                            client.ViewModel.IsRunning = false;
                             return false;
                         }
-                        
                     }
                     return true;
                 });
 
-                isRunning = false;
+
+                StartButton.Content = "Start";
+                StartButton.IsEnabled = true;
+                QuestButton.IsEnabled = true;
+                RaidButton.IsEnabled = true;
+                GuildBattleButton.IsEnabled = true;
 
                 if (!result)
                 {
@@ -121,12 +153,8 @@ namespace Astrum
             }
             else
             {
-                isRunning = false;
-
-                QuestCheckBox.IsChecked = false;
-                RaidCheckBox.IsChecked = false;
-
-                StartButton.Content = "Run";
+                client.ViewModel.IsRunning = false;
+                StartButton.IsEnabled = false;
             }
         }
     }
