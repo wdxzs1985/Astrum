@@ -3,14 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="プリンセスコネクト" Height="375" Width="540" Icon="Images/Icon.png" ResizeMode="NoResize">
     <Grid>
+        <Image Source="Images\background.jpg" Stretch="Fill" Visibility="Visible">
+            <Image.OpacityMask>
+                <ImageBrush ImageSource="Images/background.jpg"/>
+            </Image.OpacityMask>
+        </Image>
+
         <Grid Name="LoginPanel" Visibility="Visible">
-            <Grid.Background >
-                <SolidColorBrush Color="DarkGray" ></SolidColorBrush>
-                <!--
-                <ImageBrush ImageSource="Images/background.jpg"/> 
-                -->
-            </Grid.Background>
-            
             <TextBox Name="UsernameBox" HorizontalAlignment="Left" Height="24" Margin="160,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="220"/>
             <PasswordBox Name="PasswordBox" HorizontalAlignment="Left" Margin="160,240,0,0" VerticalAlignment="Top" Width="220" Height="24"/>
 
@@ -35,10 +34,10 @@
         </Grid>
         <Grid Name="StatusPanel" Visibility="Visible">
             <Grid.Background >
-                <SolidColorBrush Color="DarkGray" ></SolidColorBrush>
-                <!--
-                <ImageBrush ImageSource="Images/background.jpg"/> 
-                -->
+                <!--<SolidColorBrush Color="DarkGray" ></SolidColorBrush>-->
+
+                <ImageBrush ImageSource="Images/background.jpg"/>
+
             </Grid.Background>
 
 
