@@ -115,7 +115,7 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <CheckBox Content="bug跑图" HorizontalAlignment="Left" Margin="406,98,0,0" VerticalAlignment="Top" Width="80" Foreground="White" IsChecked="{Binding IsUnlimitStage}"/>
+            <CheckBox Content="bug跑图" HorizontalAlignment="Left" Margin="406,98,0,0" VerticalAlignment="Top" Width="80" Foreground="White" IsChecked="{Binding IsUnlimitStage}" Visibility="Hidden"/>
         </Grid>
     </Grid>
 </Window>
