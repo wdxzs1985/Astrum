@@ -66,8 +66,6 @@ namespace Astrum.Http
         private bool _raid_enable;
         private bool _guild_battle_enable;
 
-        private bool _unlimit_stage;
-
         public bool IsQuestEnable
         {
             get
@@ -80,18 +78,7 @@ namespace Astrum.Http
                 NotifyPropertyChanged("IsQuestEnable");
             }
         }
-        public bool IsUnlimitStage
-        {
-            get
-            {
-                return _unlimit_stage;
-            }
-            set
-            {
-                _unlimit_stage = value;
-                NotifyPropertyChanged("IsUnlimitStage");
-            }
-        }
+
         public bool IsRaidEnable
         {
             get
