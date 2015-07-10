@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Astrum.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -17,6 +18,20 @@ namespace Astrum.Http
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        private List<LoginUser> _login_user_list;
+        public List<LoginUser> LoginUserList
+        {
+            get
+            {
+                return _login_user_list;
+            }
+            set
+            {
+                _login_user_list = value;
+                NotifyPropertyChanged("LoginUserList");
             }
         }
 

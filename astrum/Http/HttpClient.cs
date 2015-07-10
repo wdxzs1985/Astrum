@@ -28,27 +28,45 @@ namespace Astrum.Http
         {
             var request = CreateRequest(url);
 
-            var response = (HttpWebResponse) request.GetResponse();
-            var responseString = ResponseToString(response);
-            response.Close();
-
-            //Console.WriteLine(responseString);
-
-            return responseString;
+            HttpWebResponse response = null;
+            string result = null;
+            try
+            {
+                response = (HttpWebResponse)request.GetResponse();
+                result = ResponseToString(response);
+                //Console.WriteLine(result);
+            }
+            finally
+            {
+                if (response != null)
+                {
+                    response.Close();
+                }
+            }
+            return result;
         }
 
         public string Post(string url, Dictionary<string, string> values)
         {
             var request = CreateRequest(url);
             request = PostForm(request, values);
-            
-            var response = (HttpWebResponse)request.GetResponse();
-            var responseString = ResponseToString(response);
-            response.Close();
 
-            //Console.WriteLine(responseString);
-
-            return responseString;
+            HttpWebResponse response = null;
+            string result = null;
+            try
+            {
+                response = (HttpWebResponse)request.GetResponse();
+                result = ResponseToString(response);
+                //Console.WriteLine(result);
+            }
+            finally
+            {
+                if (response != null)
+                {
+                    response.Close();
+                }
+            }
+            return result;
         }
 
         public HttpWebRequest CreateRequest(string url)

@@ -73,13 +73,23 @@ namespace Astrum.Http
             var request = this.CreateRequest(url);
             ConfigXHRHeaders(request);
 
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            string result = ResponseToString(response);
-            //Console.WriteLine(result);
+            HttpWebResponse response = null;
+            string result = null;
+            try
+            {
+                response = (HttpWebResponse)request.GetResponse();
+                result = ResponseToString(response);
+                //Console.WriteLine(result);
 
-            RefreshToken(response);
-
-            response.Close();
+                RefreshToken(response);
+            }
+            finally
+            {
+                if (response != null)
+                {
+                    response.Close();
+                }
+            }
             return result;
         }
 
@@ -93,14 +103,23 @@ namespace Astrum.Http
 
             PostJson(request, values);
 
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            string result = ResponseToString(response);
-            //Console.WriteLine(result);
+            HttpWebResponse response = null;
+            string result = null;
+            try
+            {
+                response = (HttpWebResponse)request.GetResponse();
+                result = ResponseToString(response);
+                //Console.WriteLine(result);
 
-            RefreshToken(response);
-
-            response.Close();
-
+                RefreshToken(response);
+            }
+            finally
+            {
+                if (response != null)
+                {
+                    response.Close();
+                }
+            }
             return result;
         }
 
@@ -149,16 +168,11 @@ namespace Astrum.Http
                { "password", password }
             };
 
-            string html = Post("https://login.user.ameba.jp/web/login", values);
-
+            Post("https://login.user.ameba.jp/web/login", values);
             Get("http://astrum.amebagames.com/login");
+            this.GetXHR("http://astrum.amebagames.com/_/token");
 
             return true;
-        }
-
-        public void Token()
-        {
-            this.GetXHR("http://astrum.amebagames.com/_/token");
         }
 
         public void Access(string path)
@@ -426,7 +440,7 @@ namespace Astrum.Http
 
             if (schedule != null)
             {
-                var battleId =  schedule._id;
+                var battleId = schedule._id;
                 while (true)
                 {
                     GuildBattleInfo battleInfo = GuildBattle(battleId);
@@ -530,7 +544,7 @@ namespace Astrum.Http
             history += String.Format("   Name: {0} (L{1})", mypage.status.name, mypage.status.level) + Environment.NewLine;
             history += String.Format("  Total: {0}", mypage.total) + Environment.NewLine;
             history += String.Format("         ATK: {0}, DF: {1}", mypage.status.atk, mypage.status.df) + Environment.NewLine;
-            history += String.Format("         MAT: {2}, MDF: {3}", mypage.status.mat, mypage.status.mdf) + Environment.NewLine;
+            history += String.Format("         MAT: {0}, MDF: {1}", mypage.status.mat, mypage.status.mdf) + Environment.NewLine;
             history += String.Format("Stamina: {0} / {1}", mypage.status.stamina_value, mypage.status.stamina_max) + Environment.NewLine;
             history += String.Format("    EXP: {0} / {1}", mypage.status.exp_value, mypage.status.exp_max) + Environment.NewLine;
             history += String.Format("     BP: {0} / {1}", mypage.status.bp_value, mypage.status.bp_max) + Environment.NewLine;

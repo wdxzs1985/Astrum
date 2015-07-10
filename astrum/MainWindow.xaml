@@ -10,7 +10,7 @@
                 <ImageBrush ImageSource="Images/background.jpg"/> 
                 -->
             </Grid.Background>
-            
+
             <TextBox Name="UsernameBox" HorizontalAlignment="Left" Height="24" Margin="160,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="220"/>
             <PasswordBox Name="PasswordBox" HorizontalAlignment="Left" Margin="160,240,0,0" VerticalAlignment="Top" Width="220" Height="24"/>
 
@@ -32,8 +32,31 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
+            <ComboBox Name="LoginUserComboBox" HorizontalAlignment="Left" Margin="160,120,0,0" VerticalAlignment="Top" Width="220" Height="60" ItemsSource="{Binding LoginUserList}" SelectedIndex="0" SelectionChanged="LoginUserComboBox_SelectionChanged" TextSearch.TextPath="name"
+                       >
+                <ComboBox.Resources>
+                    <Style TargetType="{x:Type ComboBox}">
+                        <Setter Property="IsDropDownOpen" Value="False"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="IsDropDownOpen" Value="True"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ComboBox.Resources>
+
+                <ComboBox.ItemTemplate >
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,1">
+                            <Image Height="49" Source="Images/Icon.png" Margin="0,0,10,0"/>
+                            <TextBlock Text="{Binding name}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
         </Grid>
-        <Grid Name="StatusPanel" Visibility="Visible">
+        <Grid Name="StatusPanel" Visibility="Hidden">
             <Grid.Background >
                 <SolidColorBrush Color="DarkGray" ></SolidColorBrush>
                 <!--
