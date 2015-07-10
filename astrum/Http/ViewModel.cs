@@ -22,6 +22,17 @@ namespace Astrum.Http
 
         public bool IsRunning { get; set; }
 
+        public string WindowTitle
+        {
+            get
+            {
+                if(Name != null) {
+                    return String.Format("プリンセスコネクト [{0} (Lv {1})]", Name, Level);
+                }
+                return "プリンセスコネクト";
+            }
+        }
+
         private string _history;
         public string History
         {
@@ -113,6 +124,7 @@ namespace Astrum.Http
             {
                 _name = value;
                 NotifyPropertyChanged("Name");
+                NotifyPropertyChanged("WindowTitle");
             }
         }
         public long Level
@@ -125,7 +137,7 @@ namespace Astrum.Http
             {
                 _level = value;
                 NotifyPropertyChanged("Level");
-
+                NotifyPropertyChanged("WindowTitle");
             }
         }
 

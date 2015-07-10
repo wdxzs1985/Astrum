@@ -35,10 +35,10 @@ namespace Astrum
 
             client = new AstrumClient();
 
+            this.DataContext = client.ViewModel;
+
             this.UsernameBox.Text = "";
             this.PasswordBox.Password = "";
-
-            this.DataContext = client.ViewModel;
 
             LoginPanel.Visibility = Visibility.Visible;
             StatusPanel.Visibility = Visibility.Hidden;
