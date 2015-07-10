@@ -20,30 +20,36 @@ using System.Collections;
 using Newtonsoft.Json;
 using Astrum.Http;
 using System.Threading;
+using Astrum.Json;
 
 
 namespace Astrum
 {
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        public const string USER_LIST_FILE = "./userlist.json";
+
         public MainWindow()
         {
             InitializeComponent();
 
             client = new AstrumClient();
 
+            this.DataContext = client.ViewModel;
+
             this.UsernameBox.Text = "";
             this.PasswordBox.Password = "";
-
-            this.DataContext = client.ViewModel;
 
             LoginPanel.Visibility = Visibility.Visible;
             StatusPanel.Visibility = Visibility.Hidden;
 
             LoginButton.IsEnabled = true;
+
+            LoadUserList();
         }
 
         private AstrumClient client;
@@ -56,26 +62,124 @@ namespace Astrum
             var username = UsernameBox.Text;
             var password = this.PasswordBox.Password;
 
-            var login = await Task.Run(() =>
+            var login = false;
+            if (!"".Equals(username) && !"".Equals(password))
             {
-                return client.Login(username, password);
-            });
+                login = await Task.Run(() =>
+                {
+                    try
+                    {
+                        return client.Login(username, password);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        return false;
+                    }
+
+                });
+            }
+
             if (login)
             {
+                client.Mypage();
+
                 Console.WriteLine("login success");
                 LoginPanel.Visibility = Visibility.Hidden;
                 StatusPanel.Visibility = Visibility.Visible;
 
-                client.Token();
-                client.Mypage();
-
                 client.ViewModel.IsRunning = false;
+
+                //save user
+                await Task.Run(() =>
+                {
+                    LoginUser newUser = new LoginUser { username = username, password = password };
+
+                    var userList = client.ViewModel.LoginUserList.Where(user => user.username != null && !newUser.username.Equals(user.username)).ToList();
+
+                    userList.Insert(0, new LoginUser { username = username, password = password ,name = client.ViewModel.Name});
+
+                    client.ViewModel.LoginUserList = userList;
+
+                    FileStream fs = null;
+                    StreamWriter sw = null;
+                    try
+                    {
+                        LoginUserList values = new LoginUserList();
+                        values.list = userList;
+
+                        string json = JsonConvert.SerializeObject(values);
+
+                        fs = new FileStream(USER_LIST_FILE, FileMode.Create);
+                        sw = new StreamWriter(fs);
+                        sw.WriteLine(json);
+                    }
+                    catch
+                    {
+
+                    }
+                    finally
+                    {
+                        if (sw != null)
+                        {
+                            sw.Close();
+                        }
+                        if (fs != null)
+                        {
+                            fs.Close();
+                        }
+                    }
+                });
             }
             else
             {
-                Console.WriteLine("login failed");
+                MessageBoxResult result = MessageBox.Show("login failed");   
                 LoginButton.IsEnabled = true;
             }
+        }
+
+        private async void LoadUserList()
+        {
+            int index = 0;
+            List<LoginUser> loginUserList = await Task.Run(() =>
+            {
+                loginUserList = new List<LoginUser>();
+                FileStream fs = null;
+                StreamReader sr = null;
+                try
+                {
+                    fs = new FileStream(USER_LIST_FILE, FileMode.Open);
+                    sr = new StreamReader(fs);
+
+                    string text = sr.ReadToEnd();
+
+                    LoginUserList userList = JsonConvert.DeserializeObject<LoginUserList>(text);
+
+                    loginUserList = userList.list;
+
+                }
+                catch
+                {
+                }
+                finally
+                {
+                    if (sr != null)
+                    {
+                        sr.Close();
+                    }
+                    if (fs != null)
+                    {
+                        fs.Close();
+                    }
+                }
+
+                loginUserList.Add(new LoginUser { name = "New User" });
+
+                return loginUserList;
+            });
+
+            client.ViewModel.LoginUserList = loginUserList;
+            LoginUserComboBox.SelectedIndex = index;
         }
         
         private async void StartButton_Click(object sender, RoutedEventArgs e)
@@ -97,7 +201,7 @@ namespace Astrum
                     client.Mypage();
                     while (client.ViewModel.IsRunning)
                     {
-                        Console.WriteLine("start loop");
+                        Console.WriteLine("Start Loop");
                         client.ViewModel.IsRunning = false;
 
                         try{
@@ -125,7 +229,7 @@ namespace Astrum
                                 Thread.Sleep(100);
                                 if (i % 1000 == 0)
                                 {
-                                    Console.WriteLine("wait {0} second", (countDown - i) / 1000);
+                                    Console.WriteLine("Wait {0} Second", (countDown - i) / 1000);
                                 }
                                 if (!client.ViewModel.IsRunning)
                                 {
@@ -161,6 +265,29 @@ namespace Astrum
             {
                 client.ViewModel.IsRunning = false;
                 StartButton.IsEnabled = false;
+            }
+        }
+
+
+        private void LoginUserComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            LoginUser user = (LoginUser)LoginUserComboBox.SelectedItem;
+
+            if (user != null)
+            {
+                UsernameBox.Text = user.username;
+                PasswordBox.Password = user.password;
+
+                if (user.username != null)
+                {
+                    UsernameBox.Visibility = Visibility.Hidden;
+                    PasswordBox.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    UsernameBox.Visibility = Visibility.Visible;
+                    PasswordBox.Visibility = Visibility.Visible;
+                }
             }
         }
     }

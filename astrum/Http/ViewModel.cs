@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Astrum.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -20,7 +21,32 @@ namespace Astrum.Http
             }
         }
 
+        private List<LoginUser> _login_user_list;
+        public List<LoginUser> LoginUserList
+        {
+            get
+            {
+                return _login_user_list;
+            }
+            set
+            {
+                _login_user_list = value;
+                NotifyPropertyChanged("LoginUserList");
+            }
+        }
+
         public bool IsRunning { get; set; }
+
+        public string WindowTitle
+        {
+            get
+            {
+                if(Name != null) {
+                    return String.Format("プリンセスコネクト [{0} (Lv {1})]", Name, Level);
+                }
+                return "プリンセスコネクト";
+            }
+        }
 
         private string _history;
         public string History
@@ -113,6 +139,7 @@ namespace Astrum.Http
             {
                 _name = value;
                 NotifyPropertyChanged("Name");
+                NotifyPropertyChanged("WindowTitle");
             }
         }
         public long Level
@@ -125,7 +152,7 @@ namespace Astrum.Http
             {
                 _level = value;
                 NotifyPropertyChanged("Level");
-
+                NotifyPropertyChanged("WindowTitle");
             }
         }
 
