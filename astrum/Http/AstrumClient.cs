@@ -28,7 +28,7 @@ namespace Astrum.Http
         public const int DELAY_SHORT = SECOND;
         public const int NO_DELAY = 0;
 
-        public const int MIN_STAMINA_STOCK = 9999;
+        public const int MIN_STAMINA_STOCK = 0;
 
         public AstrumClient()
         {
@@ -543,8 +543,8 @@ namespace Astrum.Http
             string history = "";
             history += String.Format("   Name: {0} (L{1})", mypage.status.name, mypage.status.level) + Environment.NewLine;
             history += String.Format("  Total: {0}", mypage.total) + Environment.NewLine;
-            history += String.Format("         ATK: {0}, DF: {1}", mypage.status.atk, mypage.status.df) + Environment.NewLine;
-            history += String.Format("         MAT: {0}, MDF: {1}", mypage.status.mat, mypage.status.mdf) + Environment.NewLine;
+            history += String.Format("    ATK: {0}, DF: {1}", mypage.status.atk, mypage.status.df) + Environment.NewLine;
+            history += String.Format("    MAT: {0}, MDF: {1}", mypage.status.mat, mypage.status.mdf) + Environment.NewLine;
             history += String.Format("Stamina: {0} / {1}", mypage.status.stamina_value, mypage.status.stamina_max) + Environment.NewLine;
             history += String.Format("    EXP: {0} / {1}", mypage.status.exp_value, mypage.status.exp_max) + Environment.NewLine;
             history += String.Format("     BP: {0} / {1}", mypage.status.bp_value, mypage.status.bp_max) + Environment.NewLine;
