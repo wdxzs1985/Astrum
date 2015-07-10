@@ -203,25 +203,35 @@ namespace Astrum.Http
                     }
                     else
                     {
-                        //raid
-                        if (stage.status.raid != null)
+                        if (ViewModel.IsGuildBattleEnable)
                         {
-                            bool canFull = stage.status.bp.value >= 3;
-
-                            if (stage.status.raid.find != null && (stage.status.raid.find.isNew || canFull))
+                            if (stage.status.tp.value == stage.status.tp.max)
                             {
-                                var loop = true;
-                                while (loop)
-                                {
-                                    loop = RaidBattle(stage.status.raid.find._id);
-                                }
+                                return;
                             }
-                            if (stage.status.raid.rescue != null && (stage.status.raid.rescue.isNew || canFull))
+                        }
+                        else
+                        {
+                            //raid
+                            if (stage.status.raid != null)
                             {
-                                var loop = true;
-                                while (loop)
+                                bool canFull = stage.status.bp.value >= 3;
+
+                                if (stage.status.raid.find != null && (stage.status.raid.find.isNew || canFull))
                                 {
-                                    loop = RaidBattle(stage.status.raid.rescue._id);
+                                    var loop = true;
+                                    while (loop)
+                                    {
+                                        loop = RaidBattle(stage.status.raid.find._id);
+                                    }
+                                }
+                                if (stage.status.raid.rescue != null && (stage.status.raid.rescue.isNew || canFull))
+                                {
+                                    var loop = true;
+                                    while (loop)
+                                    {
+                                        loop = RaidBattle(stage.status.raid.rescue._id);
+                                    }
                                 }
                             }
                         }
@@ -247,6 +257,7 @@ namespace Astrum.Http
                         }
                         //forward
                         stage = ForwardStage(areaId);
+
                     }
                 }
             }
@@ -426,15 +437,37 @@ namespace Astrum.Http
                         this.Delay(DELAY_SHORT);
                     }
 
-                    // attack
-                    var type = "front".Equals(battleInfo.status.position) ? "attack" : "yell";
-                    var ablility = "front".Equals(battleInfo.status.position) ? "ability_front_attack_default" : "ability_back_yell_default_1";
-
-                    GuildBattleCmdInfo cmdInfo = GuildBattleCmd(battleId, type);
-                    var cmd = cmdInfo.cmd.Find(item => ablility.Equals(item._id));
-                    if (cmd != null)
+                    if (battleInfo.status.tp.value >= 10)
                     {
-                        GuildBattleCmd(battleId, ablility, type);
+                        // attack
+                        var type = "front".Equals(battleInfo.status.position) ? "attack" : "yell";
+                        var ablility = "front".Equals(battleInfo.status.position) ? "ability_front_attack_default" : "ability_back_yell_default_1";
+
+                        GuildBattleCmdInfo cmdInfo = GuildBattleCmd(battleId, type);
+                        var cmd = cmdInfo.cmd.Find(item => ablility.Equals(item._id));
+                        if (cmd != null)
+                        {
+                            GuildBattleCmd(battleId, ablility, type);
+                        }
+                    }
+                    else
+                    {
+                        if (ViewModel.IsUnlimitStage)
+                        {
+                            Quest();
+                        }
+                        else
+                        {
+                            // quest
+                            TpQuest();
+
+                            //rollet
+
+                            //normal
+
+                            //post
+                        }
+
                     }
                 }
             }
@@ -483,7 +516,12 @@ namespace Astrum.Http
             };
             PostXHR("http://astrum.amebagames.com/_/guildbattle/cmd", values);
 
-            this.Delay(DELAY_SHORT);
+            this.Delay(DELAY_LONG);
+        }
+
+        private void TpQuest()
+        {
+            this.Delay(MINUTE);
         }
 
         private void PrintMypage(MypageInfo mypage)
@@ -491,7 +529,8 @@ namespace Astrum.Http
             string history = "";
             history += String.Format("   Name: {0} (L{1})", mypage.status.name, mypage.status.level) + Environment.NewLine;
             history += String.Format("  Total: {0}", mypage.total) + Environment.NewLine;
-            history += String.Format("         (ATK: {0}, DF: {1}, MAT: {2}, MDF: {3})", mypage.status.atk, mypage.status.df, mypage.status.mat, mypage.status.mdf) + Environment.NewLine;
+            history += String.Format("         ATK: {0}, DF: {1}", mypage.status.atk, mypage.status.df) + Environment.NewLine;
+            history += String.Format("         MAT: {2}, MDF: {3}", mypage.status.mat, mypage.status.mdf) + Environment.NewLine;
             history += String.Format("Stamina: {0} / {1}", mypage.status.stamina_value, mypage.status.stamina_max) + Environment.NewLine;
             history += String.Format("    EXP: {0} / {1}", mypage.status.exp_value, mypage.status.exp_max) + Environment.NewLine;
             history += String.Format("     BP: {0} / {1}", mypage.status.bp_value, mypage.status.bp_max) + Environment.NewLine;

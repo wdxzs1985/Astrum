@@ -58,7 +58,15 @@ namespace Astrum
 
             var login = await Task.Run(() =>
             {
-                return client.Login(username, password);
+                try{
+                    return client.Login(username, password);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return false;
+                }
+                
             });
             if (login)
             {
