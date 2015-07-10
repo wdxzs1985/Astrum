@@ -140,9 +140,9 @@
                 </Button.Template>
             </Button>
             <CheckBox Content="bug跑图" HorizontalAlignment="Left" Margin="406,98,0,0" VerticalAlignment="Top" Width="80" Foreground="White" IsChecked="{Binding IsUnlimitStage}" Visibility="Hidden"/>
-            <Label Content="名   前" HorizontalAlignment="Left" Margin="33,224,0,0" VerticalAlignment="Top" Foreground="White" Width="63" FontFamily="Kozuka Mincho Pr6N H"/>
+            <Label Content="名   前" HorizontalAlignment="Left" Margin="33,227,0,0" VerticalAlignment="Top" Foreground="White" Width="63" FontFamily="Microsoft YaHei" FontWeight="Bold"/>
             <Label Content="Level" HorizontalAlignment="Left" Margin="208,230,0,0" VerticalAlignment="Top" Foreground="White" Width="63" FontFamily="Arial Black"/>
-            <Label Content="スタミナ" HorizontalAlignment="Left" Margin="26,260,0,0" VerticalAlignment="Top" Foreground="White" Width="59" FontFamily="Kozuka Mincho Pr6N H"/>
+            <Label Content="スタミナ" HorizontalAlignment="Left" Margin="26,263,0,0" VerticalAlignment="Top" Foreground="White" Width="59" FontFamily="Microsoft YaHei" FontWeight="Bold"/>
             <Label Content="B   P" HorizontalAlignment="Left" Margin="34,299,0,0" VerticalAlignment="Top" Foreground="White" Width="63" FontFamily="Arial Black"/>
             <Label Content="T   P" HorizontalAlignment="Left" Margin="211,299,0,0" VerticalAlignment="Top" Foreground="White" Width="63" FontFamily="Arial Black"/>
             <Label Content="{Binding Name}" HorizontalAlignment="Left" Margin="85,228,0,0" VerticalAlignment="Top" Width="116" Height="28" Foreground="#FF1D3F4A"/>
@@ -152,7 +152,7 @@
             <ProgressBar HorizontalAlignment="Left" Height="10" Margin="85,273,0,0" VerticalAlignment="Top" Width="100" Maximum="100" Value="{Binding StaminaProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Stamina}"/>           
             <ProgressBar HorizontalAlignment="Left" Height="10" Margin="85,308,0,0" VerticalAlignment="Top" Width="100" Maximum="6" Value="{Binding BpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Bp}"  />                   
             <ProgressBar HorizontalAlignment="Left" Height="10" Margin="276,308,0,0" VerticalAlignment="Top" Width="100" Maximum="100" Value="{Binding TpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Tp}"/>
-            <Label Content="経験値" HorizontalAlignment="Left" Margin="208,260,0,0" VerticalAlignment="Top" Foreground="White" Width="63" FontFamily="Kozuka Mincho Pro H"/>
+            <Label Content="経験値" HorizontalAlignment="Left" Margin="208,263,0,0" VerticalAlignment="Top" Foreground="White" Width="63" FontFamily="Microsoft YaHei" FontWeight="Bold"/>
 
             <Grid HorizontalAlignment="Left" Height="191" Margin="34,24,0,0" VerticalAlignment="Top" Width="359">
                 <Grid.Background>
