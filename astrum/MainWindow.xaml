@@ -72,21 +72,21 @@
 
 
 
-            <Grid HorizontalAlignment="Left" Height="26" Margin="206,229,0,0" VerticalAlignment="Top" Width="50" Opacity="0.85">
+            <Grid HorizontalAlignment="Left" Height="26" Margin="215,229,0,0" VerticalAlignment="Top" Width="50" Opacity="0.85">
                 <Grid.Background>
                     <ImageBrush ImageSource="Images/pop.png"/>
                 </Grid.Background>
             </Grid>
 
 
-            <Grid HorizontalAlignment="Left" Height="26" Margin="206,263,0,0" VerticalAlignment="Top" Width="50" Opacity="0.85">
+            <Grid HorizontalAlignment="Left" Height="26" Margin="215,263,0,0" VerticalAlignment="Top" Width="50" Opacity="0.85">
                 <Grid.Background>
                     <ImageBrush ImageSource="Images/pop.png"/>
                 </Grid.Background>
             </Grid>
 
 
-            <Grid HorizontalAlignment="Left" Height="26" Margin="206,298,0,0" VerticalAlignment="Top" Width="50" Opacity="0.85">
+            <Grid HorizontalAlignment="Left" Height="26" Margin="215,298,0,0" VerticalAlignment="Top" Width="50" Opacity="0.85">
                 <Grid.Background>
                     <ImageBrush ImageSource="Images/pop.png"/>
                 </Grid.Background>
@@ -150,10 +150,10 @@
             </Button>
 
             <Label Content="名   前" HorizontalAlignment="Left" Margin="33,227,0,0" VerticalAlignment="Top" Foreground="White" Width="63" FontFamily="Microsoft YaHei" FontWeight="Bold"/>
-            <Label Content="Level" HorizontalAlignment="Left" Margin="208,230,0,0" VerticalAlignment="Top" Foreground="White" Width="63" FontFamily="Arial Black"/>
+            <Label Content="Level" HorizontalAlignment="Left" Margin="217,230,0,0" VerticalAlignment="Top" Foreground="White" Width="63" FontFamily="Arial Black"/>
             <Label Content="スタミナ" HorizontalAlignment="Left" Margin="26,263,0,0" VerticalAlignment="Top" Foreground="White" Width="59" FontFamily="Microsoft YaHei" FontWeight="Bold"/>
             <Label Content="B   P" HorizontalAlignment="Left" Margin="34,299,0,0" VerticalAlignment="Top" Foreground="White" Width="63" FontFamily="Arial Black"/>
-            <Label Content="T   P" HorizontalAlignment="Left" Margin="211,299,0,0" VerticalAlignment="Top" Foreground="White" Width="63" FontFamily="Arial Black"/>
+            <Label Content="T   P" HorizontalAlignment="Left" Margin="220,299,0,0" VerticalAlignment="Top" Foreground="White" Width="63" FontFamily="Arial Black"/>
             <Label Content="{Binding Name}" HorizontalAlignment="Left" Margin="85,228,0,0" VerticalAlignment="Top" Width="116" Height="28" Foreground="#FF1D3F4A"/>
             <Label Content="{Binding Level}" HorizontalAlignment="Left" Margin="276,228,0,0" VerticalAlignment="Top" Width="100" Height="28" Foreground="#FF1D3F4A"/>
             <ProgressBar HorizontalAlignment="Left" Height="10" Margin="276,273,0,0" VerticalAlignment="Top" Width="100"
@@ -161,7 +161,7 @@
             <ProgressBar HorizontalAlignment="Left" Height="10" Margin="85,273,0,0" VerticalAlignment="Top" Width="100" Maximum="100" Value="{Binding StaminaProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Stamina}"/>
             <ProgressBar HorizontalAlignment="Left" Height="10" Margin="85,308,0,0" VerticalAlignment="Top" Width="100" Maximum="6" Value="{Binding BpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Bp}"  />
             <ProgressBar HorizontalAlignment="Left" Height="10" Margin="276,308,0,0" VerticalAlignment="Top" Width="100" Maximum="100" Value="{Binding TpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Tp}"/>
-            <Label Content="経験値" HorizontalAlignment="Left" Margin="208,263,0,0" VerticalAlignment="Top" Foreground="White" Width="63" FontFamily="Microsoft YaHei" FontWeight="Bold"/>
+            <Label Content="経験値" HorizontalAlignment="Left" Margin="217,263,0,0" VerticalAlignment="Top" Foreground="White" Width="63" FontFamily="Microsoft YaHei" FontWeight="Bold"/>
 
             <Grid HorizontalAlignment="Left" Height="191" Margin="34,24,0,0" VerticalAlignment="Top" Width="359">
                 <Grid.Background>
