@@ -36,7 +36,7 @@
             <TextBox Name="UsernameBox" HorizontalAlignment="Left" Height="24" Margin="160,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="220"/>
             <PasswordBox Name="PasswordBox" HorizontalAlignment="Left" Margin="160,240,0,0" VerticalAlignment="Top" Width="220" Height="24"/>
 
-            <Button Name="LoginButton"  Margin="160,280,0,0" Width="220" Height="40" Content="Login" HorizontalAlignment="Left" VerticalAlignment="Top" Click="LoginButton_Click" Foreground="White" BorderBrush="Black" Background="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}"  >
+            <Button Name="LoginButton"  Margin="160,280,0,0" Width="220" Height="40" Content="登陆" HorizontalAlignment="Left" VerticalAlignment="Top" Click="LoginButton_Click" Foreground="White" BorderBrush="Black" Background="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}"  >
                 <Button.Template>
                     <ControlTemplate TargetType="Button" >
                         <StackPanel Orientation="Horizontal" Background="Transparent" Margin="0,0,0,0">

@@ -60,6 +60,8 @@ namespace Astrum
         {
             Console.WriteLine("login start");
             LoginButton.IsEnabled = false;
+            LoginButton.Content = "少女祈祷中";
+            LoginUserComboBox.IsEnabled = false;
 
             var username = UsernameBox.Text;
             var password = this.PasswordBox.Password;
@@ -86,7 +88,6 @@ namespace Astrum
             {
                 client.Mypage();
 
-                Console.WriteLine("login success");
                 LoginPanel.Visibility = Visibility.Hidden;
                 StatusPanel.Visibility = Visibility.Visible;
 
@@ -98,8 +99,10 @@ namespace Astrum
             }
             else
             {
-                MessageBoxResult result = MessageBox.Show("login failed");   
+                MessageBoxResult result = MessageBox.Show("login failed");
                 LoginButton.IsEnabled = true;
+                LoginButton.Content = "登陆";
+                LoginUserComboBox.IsEnabled = true;
             }
         }
 
