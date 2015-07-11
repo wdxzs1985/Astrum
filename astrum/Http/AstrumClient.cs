@@ -376,6 +376,8 @@ namespace Astrum.Http
                 RaidBattleRescue(battleInfo._id);
             }
 
+            ViewModel.BpValue = battleInfo.bpValue;
+
             if (battleInfo.bpValue >= 3)
             {
                 RaidBattleAttack(battleInfo._id, "full");
@@ -429,15 +431,20 @@ namespace Astrum.Http
             if (schedule != null)
             {
                 var battleId = schedule._id;
+                GuildBattleInfo battleInfo = GuildBattle(battleId);
+
+                if (battleInfo.stamp.status)
+                {
+                    GuildBattleStamp(battleId);
+                }
+
+                GuildBattleChat();
+
                 while (true)
                 {
-                    GuildBattleInfo battleInfo = GuildBattle(battleId);
-                    
-                        if (battleInfo.stamp.status)
-                        {
-                                GuildBattleStamp(battleId);
-                        }
-                    //GuildBattleChat();
+                    battleInfo = GuildBattle(battleId);
+
+                    ViewModel.TpValue = battleInfo.status.tp.value;
 
                     if (battleInfo.status.tp.value >= 10)
                     {
@@ -556,6 +563,10 @@ namespace Astrum.Http
 
                 var stage = EnterTpStage();
 
+                if (stage.status.tp.value >= 80)
+                {
+                    return;
+                }
                 if (stage.staminaEmpty)
                 {
                     if (stage.items != null)
@@ -574,10 +585,6 @@ namespace Astrum.Http
                     {
                         return;
                     }
-                }
-                if (stage.status.tp.value >= 80)
-                {
-                    return;
                 }
                 //forward
                 stage = ForwardTpStage();
@@ -618,11 +625,7 @@ namespace Astrum.Http
             string history = "";
             history += String.Format("   Name: {0} (L{1})", mypage.status.name, mypage.status.level) + Environment.NewLine;
             history += String.Format("  Total: {0}", mypage.total) + Environment.NewLine;
-<<<<<<< HEAD
             history += String.Format("    ATK: {0},  DF: {1}", mypage.status.atk, mypage.status.df) + Environment.NewLine;
-=======
-            history += String.Format("    ATK: {0}, DF: {1}", mypage.status.atk, mypage.status.df) + Environment.NewLine;
->>>>>>> 669824b397df7cf48c04c4a89b7b9b4bb6144c57
             history += String.Format("    MAT: {0}, MDF: {1}", mypage.status.mat, mypage.status.mdf) + Environment.NewLine;
             history += String.Format("Stamina: {0} / {1}", mypage.status.stamina_value, mypage.status.stamina_max) + Environment.NewLine;
             history += String.Format("    EXP: {0} / {1}", mypage.status.exp_value, mypage.status.exp_max) + Environment.NewLine;
