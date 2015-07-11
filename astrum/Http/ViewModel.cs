@@ -48,7 +48,22 @@ namespace Astrum.Http
             }
         }
 
+        private long _minStaminaStock;
         private string _history;
+
+        public long MinStaminaStock
+        {
+            get
+            {
+                return _minStaminaStock;
+            }
+            set
+            {
+                _minStaminaStock = value;
+                NotifyPropertyChanged("MinStaminaStock");
+            }
+        }
+
         public string History
         {
             get

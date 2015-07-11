@@ -28,7 +28,7 @@ namespace Astrum.Http
         public const int DELAY_SHORT = SECOND;
         public const int NO_DELAY = 0;
 
-        public const int MIN_STAMINA_STOCK = 50;
+        public const int MIN_STAMINA_STOCK = 9999;
 
         public AstrumClient()
         {
@@ -37,6 +37,8 @@ namespace Astrum.Http
             ViewModel.IsQuestEnable = true;
             ViewModel.IsRaidEnable = false;
             ViewModel.IsGuildBattleEnable = false;
+
+            ViewModel.MinStaminaStock = MIN_STAMINA_STOCK;
         }
 
         public ViewModel ViewModel { get; set; }
@@ -255,7 +257,7 @@ namespace Astrum.Http
                         if (stage.items != null)
                         {
                             var item = stage.items.Find(e => "instant-half_stamina_potion".Equals(e._id));
-                            if (item.stock > MIN_STAMINA_STOCK)
+                            if (item.stock > ViewModel.MinStaminaStock)
                             {
                                 UseItem(item, "stamina");
                             }

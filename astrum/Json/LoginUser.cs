@@ -18,5 +18,7 @@ namespace Astrum.Json
         public string password { get; set; }
 
         public string name { get; set; }
+
+        public long minstaminastock { get; set; }
     }
 }

@@ -54,6 +54,8 @@ namespace Astrum
 
         private AstrumClient client;
 
+        private LoginUser nowUser;
+
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             Console.WriteLine("login start");
@@ -90,46 +92,9 @@ namespace Astrum
 
                 client.ViewModel.IsRunning = false;
 
+                nowUser = new LoginUser { username = username, password = password };
                 //save user
-                await Task.Run(() =>
-                {
-                    LoginUser newUser = new LoginUser { username = username, password = password };
-
-                    var userList = client.ViewModel.LoginUserList.Where(user => user.username != null && !newUser.username.Equals(user.username)).ToList();
-
-                    userList.Insert(0, new LoginUser { username = username, password = password ,name = client.ViewModel.Name});
-
-                    client.ViewModel.LoginUserList = userList;
-
-                    FileStream fs = null;
-                    StreamWriter sw = null;
-                    try
-                    {
-                        LoginUserList values = new LoginUserList();
-                        values.list = userList;
-
-                        string json = JsonConvert.SerializeObject(values);
-
-                        fs = new FileStream(USER_LIST_FILE, FileMode.Create);
-                        sw = new StreamWriter(fs);
-                        sw.WriteLine(json);
-                    }
-                    catch
-                    {
-
-                    }
-                    finally
-                    {
-                        if (sw != null)
-                        {
-                            sw.Close();
-                        }
-                        if (fs != null)
-                        {
-                            fs.Close();
-                        }
-                    }
-                });
+                SaveUserList();
             }
             else
             {
@@ -181,6 +146,51 @@ namespace Astrum
             client.ViewModel.LoginUserList = loginUserList;
             LoginUserComboBox.SelectedIndex = index;
         }
+
+        private async void SaveUserList()
+        {
+            await Task.Run(() =>
+            {
+                var userList = client.ViewModel.LoginUserList.Where(user => user.username != null && !nowUser.username.Equals(user.username)).ToList();
+
+                nowUser.name = client.ViewModel.Name;
+                nowUser.minstaminastock = client.ViewModel.MinStaminaStock;
+
+                userList.Insert(0, nowUser);
+
+                client.ViewModel.LoginUserList = userList;
+
+                FileStream fs = null;
+                StreamWriter sw = null;
+                try
+                {
+                    LoginUserList values = new LoginUserList();
+                    values.list = userList;
+
+                    string json = JsonConvert.SerializeObject(values);
+
+                    fs = new FileStream(USER_LIST_FILE, FileMode.Create);
+                    sw = new StreamWriter(fs);
+                    sw.WriteLine(json);
+                }
+                catch
+                {
+
+                }
+                finally
+                {
+                    if (sw != null)
+                    {
+                        sw.Close();
+                    }
+                    if (fs != null)
+                    {
+                        fs.Close();
+                    }
+                }
+
+            });
+        }
         
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
@@ -188,6 +198,8 @@ namespace Astrum
             QuestButton.IsEnabled = false;
             RaidButton.IsEnabled = false;
             GuildBattleButton.IsEnabled = false;
+
+            SaveUserList();
 
             if (client.ViewModel.IsRunning == false)
             {
@@ -227,13 +239,18 @@ namespace Astrum
                             for (var i = 0; i < AstrumClient.MINUTE; i += 100)
                             {
                                 Thread.Sleep(100);
-                                if (i % 1000 == 0)
+                                if (client.ViewModel.IsRunning)
                                 {
-                                    var message = String.Format("少女休息中。。。 {0} 秒", (countDown - i) / 1000);
-                                    client.ViewModel.History = message;
+                                    if (i % 1000 == 0)
+                                    {
+                                        var message = String.Format("少女休息中。。。 {0} 秒", (countDown - i) / 1000);
+                                        client.ViewModel.History = message;
+                                    }
                                 }
-                                if (!client.ViewModel.IsRunning)
+                                else
                                 {
+                                    var message = "少女休息中。。。 ";
+                                    client.ViewModel.History = message;
                                     break;
                                 }
                             }
@@ -278,6 +295,8 @@ namespace Astrum
             {
                 UsernameBox.Text = user.username;
                 PasswordBox.Password = user.password;
+
+                client.ViewModel.MinStaminaStock = user.minstaminastock;
 
                 if (user.username != null)
                 {
