@@ -82,6 +82,10 @@ namespace Astrum.Http
 
                 RefreshToken(response);
             }
+            catch(Exception ex)
+            {
+                ViewModel.History = ex.Message;
+            }
             finally
             {
                 if (response != null)
@@ -111,6 +115,10 @@ namespace Astrum.Http
                 //Console.WriteLine(result);
 
                 RefreshToken(response);
+            }
+            catch (Exception ex)
+            {
+                ViewModel.History = ex.Message;
             }
             finally
             {
@@ -166,6 +174,8 @@ namespace Astrum.Http
                { "username", username },
                { "password", password }
             };
+
+            clearCookie();
 
             Post("https://login.user.ameba.jp/web/login", values);
             Get("http://astrum.amebagames.com/login");

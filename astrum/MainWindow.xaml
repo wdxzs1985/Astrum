@@ -139,7 +139,7 @@
                     </ControlTemplate>
                 </Button.Template>
             </Button>
-            <CheckBox Content="bug跑图" HorizontalAlignment="Left" Margin="406,98,0,0" VerticalAlignment="Top" Width="80" Foreground="White" IsChecked="{Binding IsUnlimitStage}" Visibility="Hidden"/>
+            
             <Label Content="名   前" HorizontalAlignment="Left" Margin="33,227,0,0" VerticalAlignment="Top" Foreground="White" Width="63" FontFamily="Microsoft YaHei" FontWeight="Bold"/>
             <Label Content="Level" HorizontalAlignment="Left" Margin="208,230,0,0" VerticalAlignment="Top" Foreground="White" Width="63" FontFamily="Arial Black"/>
             <Label Content="スタミナ" HorizontalAlignment="Left" Margin="26,263,0,0" VerticalAlignment="Top" Foreground="White" Width="59" FontFamily="Microsoft YaHei" FontWeight="Bold"/>

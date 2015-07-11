@@ -229,7 +229,8 @@ namespace Astrum
                                 Thread.Sleep(100);
                                 if (i % 1000 == 0)
                                 {
-                                    Console.WriteLine("Wait {0} Second", (countDown - i) / 1000);
+                                    var message = String.Format("少女休息中。。。 {0} 秒", (countDown - i) / 1000);
+                                    client.ViewModel.History = message;
                                 }
                                 if (!client.ViewModel.IsRunning)
                                 {
