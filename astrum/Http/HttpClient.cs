@@ -21,6 +21,11 @@ namespace Astrum.Http
 
         public HttpClient()
         {
+            clearCookie();
+        }
+
+        public void clearCookie()
+        {
             cc = new CookieContainer();
         }
 

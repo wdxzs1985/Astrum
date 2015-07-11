@@ -28,7 +28,7 @@ namespace Astrum.Http
         public const int DELAY_SHORT = SECOND;
         public const int NO_DELAY = 0;
 
-        public const int MIN_STAMINA_STOCK = 0;
+        public const int MIN_STAMINA_STOCK = 9999;
 
         public AstrumClient()
         {
@@ -37,7 +37,8 @@ namespace Astrum.Http
             ViewModel.IsQuestEnable = true;
             ViewModel.IsRaidEnable = false;
             ViewModel.IsGuildBattleEnable = false;
-            ViewModel.IsUnlimitStage = false;
+
+            ViewModel.MinStaminaStock = MIN_STAMINA_STOCK;
         }
 
         public ViewModel ViewModel { get; set; }
@@ -83,6 +84,10 @@ namespace Astrum.Http
 
                 RefreshToken(response);
             }
+            catch(Exception ex)
+            {
+                ViewModel.History = ex.Message;
+            }
             finally
             {
                 if (response != null)
@@ -112,6 +117,10 @@ namespace Astrum.Http
                 //Console.WriteLine(result);
 
                 RefreshToken(response);
+            }
+            catch (Exception ex)
+            {
+                ViewModel.History = ex.Message;
             }
             finally
             {
@@ -168,6 +177,8 @@ namespace Astrum.Http
                { "password", password }
             };
 
+            clearCookie();
+
             Post("https://login.user.ameba.jp/web/login", values);
             Get("http://astrum.amebagames.com/login");
             this.GetXHR("http://astrum.amebagames.com/_/token");
@@ -209,7 +220,7 @@ namespace Astrum.Http
                         AreaBossBattle(areaId);
                         break;
                     }
-                    else if ((stage.stageClear && stage.nextStage.isBossStage) && !ViewModel.IsUnlimitStage)
+                    else if (stage.stageClear && stage.nextStage.isBossStage)
                     {
                         stage = ForwardStage(areaId);
                         AreaBossBattle(areaId);
@@ -217,62 +228,51 @@ namespace Astrum.Http
                     }
                     else
                     {
-                        if (ViewModel.IsGuildBattleEnable)
+                        //raid
+                        if (stage.status.raid != null)
                         {
-                            if (stage.status.tp.value == stage.status.tp.max)
-                            {
-                                return;
-                            }
-                        }
-                        else
-                        {
-                            //raid
-                            if (stage.status.raid != null)
-                            {
-                                bool canFull = stage.status.bp.value >= 3;
+                            bool canFull = stage.status.bp.value >= 3;
 
-                                if (stage.status.raid.find != null && (stage.status.raid.find.isNew || canFull))
+                            if (stage.status.raid.find != null && (stage.status.raid.find.isNew || canFull))
+                            {
+                                var loop = true;
+                                while (loop)
                                 {
-                                    var loop = true;
-                                    while (loop)
-                                    {
-                                        loop = RaidBattle(stage.status.raid.find._id);
-                                    }
+                                    loop = RaidBattle(stage.status.raid.find._id);
                                 }
-                                if (stage.status.raid.rescue != null && (stage.status.raid.rescue.isNew || canFull))
+                            }
+                            if (stage.status.raid.rescue != null && (stage.status.raid.rescue.isNew || canFull))
+                            {
+                                var loop = true;
+                                while (loop)
                                 {
-                                    var loop = true;
-                                    while (loop)
-                                    {
-                                        loop = RaidBattle(stage.status.raid.rescue._id);
-                                    }
+                                    loop = RaidBattle(stage.status.raid.rescue._id);
                                 }
                             }
                         }
+                    }
 
-                        if (stage.staminaEmpty)
+                    if (stage.staminaEmpty)
+                    {
+                        if (stage.items != null)
                         {
-                            if (stage.items != null)
+                            var item = stage.items.Find(e => "instant-half_stamina_potion".Equals(e._id));
+                            if (item.stock > ViewModel.MinStaminaStock)
                             {
-                                var item = stage.items.Find(e => "instant-half_stamina_potion".Equals(e._id));
-                                if (item.stock > MIN_STAMINA_STOCK)
-                                {
-                                    UseItem(item, "stamina");
-                                }
-                                else
-                                {
-                                    return;
-                                }
+                                UseItem(item, "stamina");
                             }
                             else
                             {
                                 return;
                             }
                         }
-                        //forward
-                        stage = ForwardStage(areaId);
-
+                        else
+                        {
+                            return;
+                        }
                     }
+                    //forward
+                    stage = ForwardStage(areaId);
                 }
             }
         }
@@ -388,6 +388,8 @@ namespace Astrum.Http
                 RaidBattleRescue(battleInfo._id);
             }
 
+            ViewModel.BpValue = battleInfo.bpValue;
+
             if (battleInfo.bpValue >= 3)
             {
                 RaidBattleAttack(battleInfo._id, "full");
@@ -441,15 +443,20 @@ namespace Astrum.Http
             if (schedule != null)
             {
                 var battleId = schedule._id;
+                GuildBattleInfo battleInfo = GuildBattle(battleId);
+
+                if (battleInfo.stamp.status)
+                {
+                    GuildBattleStamp(battleId);
+                }
+
+                GuildBattleChat();
+
                 while (true)
                 {
-                    GuildBattleInfo battleInfo = GuildBattle(battleId);
+                    battleInfo = GuildBattle(battleId);
 
-                    if (battleInfo.stamp.status)
-                    {
-                        GetXHR("http://astrum.amebagames.com/_/guildbattle/stamp");
-                        this.Delay(DELAY_SHORT);
-                    }
+                    ViewModel.TpValue = battleInfo.status.tp.value;
 
                     if (battleInfo.status.tp.value >= 10)
                     {
@@ -466,12 +473,6 @@ namespace Astrum.Http
                     }
                     else
                     {
-                        if (ViewModel.IsUnlimitStage)
-                        {
-                            Quest();
-                        }
-                        else
-                        {
                             // quest
                             TpQuest();
 
@@ -480,7 +481,6 @@ namespace Astrum.Http
                             //normal
 
                             //post
-                        }
 
                     }
                 }
@@ -510,6 +510,26 @@ namespace Astrum.Http
             return battleInfo;
         }
 
+        private void GuildBattleStamp(string battleId)
+        {
+            var values = new Dictionary<string, string>
+                {
+                    { "stampId", battleId }
+                };
+            PostXHR("http://astrum.amebagames.com/_/guildbattle/stamp", values);
+            this.Delay(DELAY_SHORT);
+        }
+
+        private void GuildBattleChat()
+        {
+            var values = new Dictionary<string, string>
+            {
+                { "stampId", "chat-stamp-004" }, { "type", "stamp" }
+            };
+            PostXHR("http://astrum.amebagames.com/_/guild/chat", values);
+            this.Delay(DELAY_SHORT);
+        }
+
         private GuildBattleCmdInfo GuildBattleCmd(string battleId, string type)
         {
             var result = GetXHR("http://astrum.amebagames.com/_/guildbattle/cmd?_id=" + battleId + "&type=" + type);
@@ -519,6 +539,7 @@ namespace Astrum.Http
 
             return cmdInfo;
         }
+
 
         private void GuildBattleCmd(string battleId, string abilityId, string cmd)
         {
@@ -533,9 +554,82 @@ namespace Astrum.Http
             this.Delay(DELAY_LONG);
         }
 
+        private void GuildBattleTp(string battleId)
+        {
+            var result = GetXHR("http://astrum.amebagames.com/_/guildbattle/tp?_id=" + battleId);
+            TpInfo tpInfo = JsonConvert.DeserializeObject<TpInfo>(result);
+
+            this.Delay(DELAY_SHORT);
+
+
+            TpQuest();
+
+        }
+
         private void TpQuest()
         {
-            this.Delay(MINUTE);
+            Access("stage");
+
+            while (ViewModel.IsRunning)
+            {
+
+                var stage = EnterTpStage();
+
+                if (stage.status.tp.value >= 80)
+                {
+                    return;
+                }
+                if (stage.staminaEmpty)
+                {
+                    if (stage.items != null)
+                    {
+                        var item = stage.items.Find(e => "instant-half_stamina_potion".Equals(e._id));
+                        if (item.stock > MIN_STAMINA_STOCK)
+                        {
+                            UseItem(item, "stamina");
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                //forward
+                stage = ForwardTpStage();
+
+            }
+        }
+
+        private StageInfo EnterTpStage()
+        {
+            var result = GetXHR("http://astrum.amebagames.com/_/stage/tp");
+            var stage = JsonConvert.DeserializeObject<StageInfo>(result);
+
+            PrintStageInfo(stage);
+            UpdateStageView(stage);
+            Delay(DELAY_SHORT);
+
+            return stage;
+        }
+
+        private StageInfo ForwardTpStage()
+        {
+            var values = new Dictionary<string, string>
+                {
+                   { "areaId", "recovery_tp" }
+                };
+            var result = PostXHR("http://astrum.amebagames.com/_/stage/tp", values);
+            var stage = JsonConvert.DeserializeObject<StageInfo>(result);
+
+            PrintStageInfo(stage);
+            UpdateStageView(stage);
+            Delay(DELAY_SHORT);
+
+            return stage;
         }
 
         private void PrintMypage(MypageInfo mypage)
@@ -543,7 +637,7 @@ namespace Astrum.Http
             string history = "";
             history += String.Format("   Name: {0} (L{1})", mypage.status.name, mypage.status.level) + Environment.NewLine;
             history += String.Format("  Total: {0}", mypage.total) + Environment.NewLine;
-            history += String.Format("    ATK: {0}, DF: {1}", mypage.status.atk, mypage.status.df) + Environment.NewLine;
+            history += String.Format("    ATK: {0},  DF: {1}", mypage.status.atk, mypage.status.df) + Environment.NewLine;
             history += String.Format("    MAT: {0}, MDF: {1}", mypage.status.mat, mypage.status.mdf) + Environment.NewLine;
             history += String.Format("Stamina: {0} / {1}", mypage.status.stamina_value, mypage.status.stamina_max) + Environment.NewLine;
             history += String.Format("    EXP: {0} / {1}", mypage.status.exp_value, mypage.status.exp_max) + Environment.NewLine;
