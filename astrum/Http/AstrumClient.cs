@@ -206,12 +206,13 @@ namespace Astrum.Http
 
         public void Quest()
         {
-            Access("stage");
-
             while (ViewModel.IsRunning)
             {
-                var areaId = "chapter1-1";
-                var stage = EnterStage(areaId);
+                Access("stage");
+
+               //var areaId = "chapter1-1";
+                var stage = EnterStage();
+                var areaId = stage._id;
 
                 while (ViewModel.IsRunning)
                 {
@@ -277,9 +278,9 @@ namespace Astrum.Http
             }
         }
 
-        private StageInfo EnterStage(string areaId)
+        private StageInfo EnterStage()
         {
-            var result = GetXHR("http://astrum.amebagames.com/_/stage?areaId=" + areaId);
+            var result = GetXHR("http://astrum.amebagames.com/_/stage");
             var stage = JsonConvert.DeserializeObject<StageInfo>(result);
 
             PrintStageInfo(stage);
@@ -473,15 +474,22 @@ namespace Astrum.Http
                     }
                     else
                     {
-                            // quest
-                            TpQuest();
+                        //http://astrum.amebagames.com/_/guildbattle/tp?_id=B4e00c0644ed6fcfddd354c5cd714246994f6c7f9f3065b289bbd8ed1815d065d
 
-                            //rollet
+                        // quest
+                        TpQuest();
 
-                            //normal
-
-                            //post
-
+                        //rollet
+                        //http://astrum.amebagames.com/_/guildbattle/tp/roulette?_id=B4e00c0644ed6fcfddd354c5cd714246994f6c7f9f3065b289bbd8ed1815d065d
+                        //{"available":true,"initialPosition":7,"order":[30,50,60,50,30,30,40,70,40,30,20,30,80,30,20],"_hash":"6f42db45642ed44a16bf4e5443656200"}
+                        //http://astrum.amebagames.com/_/guildbattle/tp/roulette
+                        //{"_id":"B4e00c0644ed6fcfddd354c5cd714246994f6c7f9f3065b289bbd8ed1815d065d","position":-6}
+                        //normal
+                        //http://astrum.amebagames.com/_/guildbattle/tp/normal
+                        //{"_id":"B4e00c0644ed6fcfddd354c5cd714246994f6c7f9f3065b289bbd8ed1815d065d"}
+                        //post
+                        //http://astrum.amebagames.com/_/guildbattle/tp/chat
+                        //{"_id":"B4e00c0644ed6fcfddd354c5cd714246994f6c7f9f3065b289bbd8ed1815d065d"}
                     }
                 }
             }
@@ -494,7 +502,7 @@ namespace Astrum.Http
 
             if (lobby.available && "start".Equals(lobby.status))
             {
-                Access("p=/guildbattle&route=top&value=battle");
+                Access("/guildbattle&route=top&value=battle");
                 return lobby.schedule.Find(item => "start".Equals(item.status));
             }
             return null;
@@ -570,11 +578,10 @@ namespace Astrum.Http
         {
             Access("stage");
 
+            var stage = EnterTpStage();
+
             while (ViewModel.IsRunning)
             {
-
-                var stage = EnterTpStage();
-
                 if (stage.status.tp.value >= 80)
                 {
                     return;
