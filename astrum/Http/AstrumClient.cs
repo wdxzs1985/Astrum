@@ -387,35 +387,37 @@ namespace Astrum.Http
         {
             var battleInfo = BattleInfo(raidId);
 
-            if (battleInfo.isWin || battleInfo.isLose)
+            if (battleInfo.isPlaying)
             {
-                return false;
+                if (battleInfo.isNew)
+                {
+                    RaidBattleAttack(battleInfo._id, "first");
+                    return true;
+                }
+
+                if (battleInfo.rescue.use)
+                {
+                    RaidBattleRescue(battleInfo._id);
+                }
+
+                ViewModel.BpValue = battleInfo.bpValue;
+
+                if (ViewModel.CanFullAttack)
+                {
+                    RaidBattleAttack(battleInfo._id, "full");
+                    return true;
+                }
             }
-
-            if (battleInfo.isNew)
+            else
             {
-                RaidBattleAttack(battleInfo._id, "first");
-                return true;
-            }
-
-            if (battleInfo.rescue.use)
-            {
-                RaidBattleRescue(battleInfo._id);
-            }
-
-            ViewModel.BpValue = battleInfo.bpValue;
-
-            if (ViewModel.CanFullAttack)
-            {
-                RaidBattleAttack(battleInfo._id, "full");
-                return true;
+                RaidBattleResult(raidId);
             }
             return false;
         }
 
         private RaidBattleInfo BattleInfo(string raidId)
         {
-            var result = GetXHR("http://astrum.amebagames.com/_/raid/battle?_id=" + raidId);
+            var result = GetXHR("http://astrum.amebagames.com/_/raid/battle?_id=" + Uri.EscapeDataString(raidId));
             var battleInfo = JsonConvert.DeserializeObject<RaidBattleInfo>(result);
 
             PrintRaidBattleInfo(battleInfo);
@@ -450,6 +452,15 @@ namespace Astrum.Http
             Delay(DELAY_SHORT);
 
         }
+
+        private void RaidBattleResult(string raidId)
+        {
+            var result = GetXHR("http://astrum.amebagames.com/_/raid/battleresult?_id=" + Uri.EscapeDataString(raidId));
+            RaidBattleInfo battleInfo = JsonConvert.DeserializeObject<RaidBattleInfo>(result);
+            
+            GetXHR("http://astrum.amebagames.com/_/raid/summary");
+        }
+
 
         public void FuryRaid(string eventId)
         {
