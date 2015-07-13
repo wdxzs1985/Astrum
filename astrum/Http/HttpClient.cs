@@ -10,7 +10,7 @@ using System.Collections;
 
 using Newtonsoft.Json;
 
-namespace Astrum
+namespace Astrum.Http
 {
     public class HttpClient
     {
@@ -21,6 +21,11 @@ namespace Astrum
 
         public HttpClient()
         {
+            clearCookie();
+        }
+
+        public void clearCookie()
+        {
             cc = new CookieContainer();
         }
 
@@ -28,27 +33,45 @@ namespace Astrum
         {
             var request = CreateRequest(url);
 
-            var response = (HttpWebResponse) request.GetResponse();
-            var responseString = ResponseToString(response);
-            response.Close();
-
-            //Console.WriteLine(responseString);
-
-            return responseString;
+            HttpWebResponse response = null;
+            string result = null;
+            try
+            {
+                response = (HttpWebResponse)request.GetResponse();
+                result = ResponseToString(response);
+                //Console.WriteLine(result);
+            }
+            finally
+            {
+                if (response != null)
+                {
+                    response.Close();
+                }
+            }
+            return result;
         }
 
         public string Post(string url, Dictionary<string, string> values)
         {
             var request = CreateRequest(url);
             request = PostForm(request, values);
-            
-            var response = (HttpWebResponse)request.GetResponse();
-            var responseString = ResponseToString(response);
-            response.Close();
 
-            //Console.WriteLine(responseString);
-
-            return responseString;
+            HttpWebResponse response = null;
+            string result = null;
+            try
+            {
+                response = (HttpWebResponse)request.GetResponse();
+                result = ResponseToString(response);
+                //Console.WriteLine(result);
+            }
+            finally
+            {
+                if (response != null)
+                {
+                    response.Close();
+                }
+            }
+            return result;
         }
 
         public HttpWebRequest CreateRequest(string url)
@@ -56,6 +79,9 @@ namespace Astrum
             var request = (HttpWebRequest)WebRequest.Create(url);
             request.CookieContainer = cc;
             request.UserAgent = UA;
+
+            request.Proxy = null;
+
             return request;
         }
 

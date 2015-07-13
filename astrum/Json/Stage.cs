@@ -21,9 +21,6 @@ namespace Astrum.Json.Stage
         public bool stageClear { get; set; }
         public bool isBossStage { get; set; }
 
-        public object limitedraid { get; set; }
-        public object furyraid { get; set; }
-
         public Status status { get; set; }
 
         public NextStage nextStage { get; set; }
@@ -56,14 +53,6 @@ namespace Astrum.Json.Stage
         public int max { get; set; }
     }
 
-    public class Limitedraid
-    {
-    }
-
-    public class Furyraid
-    {
-    }
-
     public class Status
     {
         public int level { get; set; }
@@ -74,13 +63,15 @@ namespace Astrum.Json.Stage
         public int lilu { get; set; }
         public int gacha { get; set; }
         public StageRaidInfo raid { get; set; }
-        public Limitedraid limitedraid { get; set; }
-        public Furyraid furyraid { get; set; }
+        //public StageRaidInfo limitedraid { get; set; }
+        public StageRaidInfo furyraid { get; set; }
         public bool guild { get; set; }
     }
 
     public class StageRaidInfo
     {
+        public string eventId { get; set; }
+
         public RaidBattleInfo find { get; set; }
 
         public RaidBattleInfo rescue { get; set; }
