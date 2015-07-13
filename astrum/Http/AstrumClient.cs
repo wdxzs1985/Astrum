@@ -229,26 +229,40 @@ namespace Astrum.Http
                     }
                     else
                     {
+                        ViewModel.CanFullAttack = stage.status.bp.value >= 3;
+
+                        //furyraid
+                        if (stage.status.furyraid != null)
+                        {
+                            var eventId = stage.status.furyraid.eventId;
+                            if (stage.status.furyraid.find != null || stage.status.furyraid.rescue != null)
+                            {
+                                FuryRaid(stage.status.furyraid.eventId);
+                                break;
+                            }
+
+                            ViewModel.CanFullAttack = false;
+                        }
                         //raid
                         if (stage.status.raid != null)
                         {
-                            bool canFull = stage.status.bp.value >= 3;
-
-                            if (stage.status.raid.find != null && (stage.status.raid.find.isNew || canFull))
+                            if (stage.status.raid.find != null && (stage.status.raid.find.isNew || ViewModel.CanFullAttack))
                             {
                                 var loop = true;
                                 while (loop)
                                 {
                                     loop = RaidBattle(stage.status.raid.find._id);
                                 }
+                                break;
                             }
-                            if (stage.status.raid.rescue != null && (stage.status.raid.rescue.isNew || canFull))
+                            if (stage.status.raid.rescue != null && (stage.status.raid.rescue.isNew || ViewModel.CanFullAttack))
                             {
                                 var loop = true;
                                 while (loop)
                                 {
                                     loop = RaidBattle(stage.status.raid.rescue._id);
                                 }
+                                break;
                             }
                         }
                     }
@@ -373,35 +387,37 @@ namespace Astrum.Http
         {
             var battleInfo = BattleInfo(raidId);
 
-            if (battleInfo.isWin || battleInfo.isLose)
+            if (battleInfo.isPlaying)
             {
-                return false;
+                if (battleInfo.isNew)
+                {
+                    RaidBattleAttack(battleInfo._id, "first");
+                    return true;
+                }
+
+                if (battleInfo.rescue.use)
+                {
+                    RaidBattleRescue(battleInfo._id);
+                }
+
+                ViewModel.BpValue = battleInfo.bpValue;
+
+                if (ViewModel.CanFullAttack)
+                {
+                    RaidBattleAttack(battleInfo._id, "full");
+                    return true;
+                }
             }
-
-            if (battleInfo.isNew)
+            else
             {
-                RaidBattleAttack(battleInfo._id, "first");
-                return true;
-            }
-
-            if (battleInfo.rescue.use)
-            {
-                RaidBattleRescue(battleInfo._id);
-            }
-
-            ViewModel.BpValue = battleInfo.bpValue;
-
-            if (battleInfo.bpValue >= 3)
-            {
-                RaidBattleAttack(battleInfo._id, "full");
-                return true;
+                RaidBattleResult(raidId);
             }
             return false;
         }
 
         private RaidBattleInfo BattleInfo(string raidId)
         {
-            var result = GetXHR("http://astrum.amebagames.com/_/raid/battle?_id=" + raidId);
+            var result = GetXHR("http://astrum.amebagames.com/_/raid/battle?_id=" + Uri.EscapeDataString(raidId));
             var battleInfo = JsonConvert.DeserializeObject<RaidBattleInfo>(result);
 
             PrintRaidBattleInfo(battleInfo);
@@ -435,6 +451,129 @@ namespace Astrum.Http
             PostXHR("http://astrum.amebagames.com/_/raid/battlerescue", values);
             Delay(DELAY_SHORT);
 
+        }
+
+        private void RaidBattleResult(string raidId)
+        {
+            var result = GetXHR("http://astrum.amebagames.com/_/raid/battleresult?_id=" + Uri.EscapeDataString(raidId));
+            RaidBattleInfo battleInfo = JsonConvert.DeserializeObject<RaidBattleInfo>(result);
+            
+            GetXHR("http://astrum.amebagames.com/_/raid/summary");
+        }
+
+
+        public void FuryRaid(string eventId)
+        {
+            string result = GetXHR("http://astrum.amebagames.com/_/event/furyraid/bosses?_id=" + Uri.EscapeDataString(eventId));
+            FuryRaidInfo raidInfo = JsonConvert.DeserializeObject<FuryRaidInfo>(result);
+
+            if (raidInfo.find != null)
+            {
+                foreach (var battleInfo in raidInfo.find.list)
+                {
+                    var loop = true;
+                    while (loop)
+                    {
+                        loop = FuryRaidBattle(battleInfo._id);
+                    }
+                }
+            }
+
+            if (raidInfo.rescue != null)
+            {
+                foreach (var battleInfo in raidInfo.rescue.list)
+                {
+                    var loop = true;
+                    while (loop)
+                    {
+                        loop = FuryRaidBattle(battleInfo._id);
+                    }
+                }
+            }
+        }
+
+        public bool FuryRaidBattle(string raidId)
+        {
+            var battleInfo = FuryBattleInfo(raidId);
+
+            if (battleInfo.isPlaying)
+            {
+                if (battleInfo.isNew)
+                {
+                    var attackType = "first";
+                    if ("rescue".Equals(battleInfo.type))
+                    {
+                        attackType = "rescue";
+                    }
+
+                    FuryRaidBattleAttack(battleInfo._id, attackType);
+                    return true;
+                }
+
+                if (battleInfo.rescue.use)
+                {
+                    FuryRaidBattleRescue(battleInfo._id);
+                }
+
+                ViewModel.BpValue = battleInfo.bpValue;
+
+                if (battleInfo.bpValue >= 3)
+                {
+                    FuryRaidBattleAttack(battleInfo._id, "full");
+                    return true;
+                }
+            }
+            else
+            {
+                FuryRaidBattleResult(raidId);
+            }
+            return false;
+        }
+
+        private RaidBattleInfo FuryBattleInfo(string raidId)
+        {
+            var result = GetXHR("http://astrum.amebagames.com/_/event/furyraid/battle?_id=" + Uri.EscapeDataString(raidId));
+            var battleInfo = JsonConvert.DeserializeObject<RaidBattleInfo>(result);
+
+            PrintRaidBattleInfo(battleInfo);
+            Delay(DELAY_SHORT);
+
+            return battleInfo;
+        }
+
+        private void FuryRaidBattleAttack(string raidId, string attackType)
+        {
+            var values = new Dictionary<string, string>
+            {
+                { "_id", raidId },
+                { "attackType", attackType }
+            };
+            //first
+            var battleResult = PostXHR("http://astrum.amebagames.com/_/event/furyraid/battle", values);
+            var battleResultInfo = JsonConvert.DeserializeObject<BossBattleResultInfo>(battleResult);
+
+            PrintBossBattleResult(battleResultInfo);
+            Delay(DELAY_LONG);
+
+        }
+
+        private void FuryRaidBattleRescue(string raidId)
+        {
+            var values = new Dictionary<string, string>
+            {
+                { "_id", raidId }
+            };
+            PostXHR("http://astrum.amebagames.com/_/event/furyraid/battlerescue", values);
+            Delay(DELAY_SHORT);
+        }
+
+        private void FuryRaidBattleResult(string raidId)
+        {
+            var result = GetXHR("http://astrum.amebagames.com/_/event/furyraid/battleresult?_id=" + Uri.EscapeDataString(raidId));
+            RaidBattleInfo battleInfo = JsonConvert.DeserializeObject<RaidBattleInfo>(result);
+
+            var eventId = battleInfo.eventId;
+            GetXHR("http://astrum.amebagames.com/_/event/furyraid/summary?_id=" + Uri.EscapeDataString(eventId));
         }
 
         public void GuildBattle()
@@ -682,11 +821,14 @@ namespace Astrum.Http
 
         private void PrintRaidBattleInfo(RaidBattleInfo battleInfo)
         {
-            string history = "";
-            history += String.Format("   Name: {0} (L{1})", battleInfo.name, battleInfo.level) + Environment.NewLine;
-            history += String.Format("   Rare: {0}", battleInfo.rare) + Environment.NewLine;
-            history += String.Format("     HP: {0} / {1}", battleInfo.hp - battleInfo.totalDamage, battleInfo.hp) + Environment.NewLine;
-            ViewModel.History = history;
+            if (battleInfo.isPlaying)
+            {
+                string history = "";
+                history += String.Format("   Name: {0} (L{1})", battleInfo.name, battleInfo.level) + Environment.NewLine;
+                history += String.Format("   Rare: {0}", battleInfo.rare) + Environment.NewLine;
+                history += String.Format("     HP: {0} / {1}", battleInfo.hp - battleInfo.totalDamage, battleInfo.hp) + Environment.NewLine;
+                ViewModel.History = history;
+            }
         }
 
         private void PrintBossBattleResult(BossBattleResultInfo resultInfo)
