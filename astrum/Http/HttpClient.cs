@@ -79,6 +79,9 @@ namespace Astrum.Http
             var request = (HttpWebRequest)WebRequest.Create(url);
             request.CookieContainer = cc;
             request.UserAgent = UA;
+
+            request.Proxy = null;
+
             return request;
         }
 
