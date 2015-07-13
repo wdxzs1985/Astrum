@@ -99,7 +99,7 @@ namespace Astrum
             }
             else
             {
-                MessageBoxResult result = MessageBox.Show("login failed");
+                MessageBoxResult result = MessageBox.Show("登入失败");
                 LoginButton.IsEnabled = true;
                 LoginButton.Content = "登陆";
                 LoginUserComboBox.IsEnabled = true;
@@ -213,13 +213,15 @@ namespace Astrum
                 
                 bool result = await Task.Run(() =>
                 {
-                    client.Mypage();
                     while (client.ViewModel.IsRunning)
                     {
                         Console.WriteLine("Start Loop");
                         client.ViewModel.IsRunning = false;
 
-                        try{
+                        try
+                        {
+                            client.Mypage();
+
                             if (client.ViewModel.IsQuestEnable)
                             {
                                 client.ViewModel.IsRunning = true;
@@ -280,6 +282,7 @@ namespace Astrum
                     LoginPanel.Visibility = Visibility.Visible;
                     StatusPanel.Visibility = Visibility.Hidden;
                     LoginButton.IsEnabled = true;
+                    LoginUserComboBox.IsEnabled = true;
                 }
             }
             else

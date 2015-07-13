@@ -55,6 +55,7 @@
                 </Button.Template>
             </Button>
         </Grid>
+
         <Grid Name="StatusPanel" Visibility="Visible">
             <Grid.Background >
                 <!--<SolidColorBrush Color="DarkGray" ></SolidColorBrush>-->
@@ -63,75 +64,74 @@
 
             </Grid.Background>
 
+            <Grid HorizontalAlignment="Left" Height="30" Margin="30,220,0,0" VerticalAlignment="Top" Width="180">
+                <Label Content="名前" Margin="0,0,0,0" Foreground="White" Width="60" FontFamily="Microsoft YaHei" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <Label.Background>
+                        <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
+                    </Label.Background>
+                </Label>
+                <Label Content="{Binding Name}" HorizontalAlignment="Left" Margin="70,0,0,0" Width="100" Height="28" Background="#66FFFFFF" VerticalAlignment="Center"/>
+            </Grid>
 
-            <Grid HorizontalAlignment="Left" Height="26" Margin="30,228,0,0" VerticalAlignment="Top" Width="50" Opacity="0.85">
-                <Grid.Background>
-                    <ImageBrush ImageSource="Images/pop.png"/>
-                </Grid.Background>
+            <Grid HorizontalAlignment="Left" Height="30" Margin="220,220,0,0" VerticalAlignment="Top" Width="180">
+                <Label Content="Level" Margin="0,0,0,0" Foreground="White" Width="60" FontFamily="Arial Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left">
+                    <Label.Background>
+                        <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
+                    </Label.Background>
+                </Label>
+                <Label Content="{Binding Level}" HorizontalAlignment="Left" Margin="70,0,0,0" VerticalAlignment="Top" Width="100" Height="28" Background="#66FFFFFF"/>
+            </Grid>
+
+            <Grid HorizontalAlignment="Left" Height="30" Margin="30,260,0,0" VerticalAlignment="Top" Width="180">
+                <Label Content="スタミナ" Margin="0,0,0,0" Foreground="White" Width="60" FontFamily="Microsoft YaHei" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <Label.Background>
+                        <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
+                    </Label.Background>
+                </Label>
+                <ProgressBar HorizontalAlignment="Left" Height="10" Margin="70,0,0,0" VerticalAlignment="Center" Width="100" Maximum="100" Value="{Binding StaminaProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Stamina}"/>
+            </Grid>
+
+            <Grid HorizontalAlignment="Left" Height="26" Margin="220,260,0,0" VerticalAlignment="Top" Width="180">
+                <Label Content="経験値" Margin="0,0,0,0" Foreground="White" Width="60" FontFamily="Microsoft YaHei" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <Label.Background>
+                        <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
+                    </Label.Background>
+                </Label>
+                <ProgressBar HorizontalAlignment="Left" Height="10" Margin="70,0,0,0" VerticalAlignment="Center" Width="100"
+        		Maximum="100" Minimum="0" Value="{Binding ExpProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}"  ToolTip="{Binding Exp}"/>
+            </Grid>
+
+            <Grid HorizontalAlignment="Left" Height="26" Margin="30,300,0,0" VerticalAlignment="Top" Width="180">
+                <Label Content="BP" Margin="0,0,0,0" Foreground="White" Width="60" FontFamily="Arial Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left">
+                    <Label.Background>
+                        <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
+                    </Label.Background>
+                </Label>
+                <ProgressBar HorizontalAlignment="Left" Height="10" Margin="70,0,0,0" VerticalAlignment="Center" Width="100" Maximum="6" Value="{Binding BpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Bp}"  />
             </Grid>
 
 
-
-            <Grid HorizontalAlignment="Left" Height="26" Margin="215,229,0,0" VerticalAlignment="Top" Width="50" Opacity="0.85">
-                <Grid.Background>
-                    <ImageBrush ImageSource="Images/pop.png"/>
-                </Grid.Background>
+            <Grid HorizontalAlignment="Left" Height="26" Margin="220,300,0,0" VerticalAlignment="Top" Width="180">
+                <Label Content="TP" Margin="0,0,0,0" Foreground="White" Width="60" FontFamily="Arial Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left">
+                    <Label.Background>
+                        <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
+                    </Label.Background>
+                </Label>
+                <ProgressBar HorizontalAlignment="Left" Height="10" Margin="70,0,0,0" VerticalAlignment="Center" Width="100" Maximum="100" Value="{Binding TpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Tp}"/>
             </Grid>
-
-
-            <Grid HorizontalAlignment="Left" Height="26" Margin="215,263,0,0" VerticalAlignment="Top" Width="50" Opacity="0.85">
-                <Grid.Background>
-                    <ImageBrush ImageSource="Images/pop.png"/>
-                </Grid.Background>
-            </Grid>
-
-
-            <Grid HorizontalAlignment="Left" Height="26" Margin="215,298,0,0" VerticalAlignment="Top" Width="50" Opacity="0.85">
-                <Grid.Background>
-                    <ImageBrush ImageSource="Images/pop.png"/>
-                </Grid.Background>
-            </Grid>
-
-
-            <Grid HorizontalAlignment="Left" Height="26" Margin="30,298,0,0" VerticalAlignment="Top" Width="50" Opacity="0.85">
-                <Grid.Background>
-                    <ImageBrush ImageSource="Images/pop.png"/>
-                </Grid.Background>
-            </Grid>
-
-
-            <Grid HorizontalAlignment="Left" Height="26" Margin="30,263,0,0" VerticalAlignment="Top" Width="50" Opacity="0.85">
-                <Grid.Background>
-                    <ImageBrush ImageSource="Images/pop.png"/>
-                </Grid.Background>
-            </Grid>
-
 
             <Grid HorizontalAlignment="Left" Height="142" Margin="398,24,0,0" VerticalAlignment="Top" Width="102" Background="#FF2A4D70" Opacity="0.865">
-
 
                 <RadioButton x:Name="QuestButton" Content="Quest" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="{Binding IsQuestEnable}" Foreground="White" Width="80"/>
                 <RadioButton x:Name="RaidButton" Content="Raid" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" IsChecked="{Binding IsRaidEnable}" Foreground="White" Width="80"/>
                 <RadioButton x:Name="GuildBattleButton" Content="GuildBattle" HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top" IsChecked="{Binding IsGuildBattleEnable}" Foreground="#FFF7F7F7"/>
 
-
-
                 <Label Content="存药" HorizontalAlignment="Left" Margin="10,83,0,0" VerticalAlignment="Top" Width="80" Foreground="White"/>
                 <TextBox HorizontalAlignment="Left" Height="23" Margin="10,110,0,0" TextWrapping="Wrap" Text="{Binding MinStaminaStock}" VerticalAlignment="Top" Width="82"/>
 
-
-
             </Grid>
 
-
-            <ScrollViewer x:Name="HistoryPanel" HorizontalAlignment="Left" Height="185" Margin="660,30,-476,0" VerticalAlignment="Top" Width="350" Background="White" Opacity="0.8" Visibility="Hidden">
-                <TextBlock Text="{Binding History}"/>
-            </ScrollViewer>
-
-
-
-
-            <Button x:Name="StartButton" Content="Start" HorizontalAlignment="Left" Margin="398,171,0,0" VerticalAlignment="Top" Width="102" Height="44" Click="StartButton_Click" Foreground="White" >
+            <Button x:Name="StartButton" Content="Start" HorizontalAlignment="Left" Margin="400,170,0,0" VerticalAlignment="Top" Width="100" Height="44" Click="StartButton_Click" Foreground="White" >
                 <Button.Template>
                     <ControlTemplate TargetType="{x:Type Button}" >
                         <StackPanel Orientation="Horizontal" Background="Transparent" Margin="0,0,0,0" >
@@ -149,25 +149,13 @@
                 </Button.Template>
             </Button>
 
-            <Label Content="名   前" HorizontalAlignment="Left" Margin="33,227,0,0" VerticalAlignment="Top" Foreground="White" Width="63" FontFamily="Microsoft YaHei" FontWeight="Bold"/>
-            <Label Content="Level" HorizontalAlignment="Left" Margin="217,230,0,0" VerticalAlignment="Top" Foreground="White" Width="63" FontFamily="Arial Black"/>
-            <Label Content="スタミナ" HorizontalAlignment="Left" Margin="26,263,0,0" VerticalAlignment="Top" Foreground="White" Width="59" FontFamily="Microsoft YaHei" FontWeight="Bold"/>
-            <Label Content="B   P" HorizontalAlignment="Left" Margin="34,299,0,0" VerticalAlignment="Top" Foreground="White" Width="63" FontFamily="Arial Black"/>
-            <Label Content="T   P" HorizontalAlignment="Left" Margin="220,299,0,0" VerticalAlignment="Top" Foreground="White" Width="63" FontFamily="Arial Black"/>
-            <Label Content="{Binding Name}" HorizontalAlignment="Left" Margin="85,228,0,0" VerticalAlignment="Top" Width="116" Height="28" Foreground="#FF1D3F4A"/>
-            <Label Content="{Binding Level}" HorizontalAlignment="Left" Margin="276,228,0,0" VerticalAlignment="Top" Width="100" Height="28" Foreground="#FF1D3F4A"/>
-            <ProgressBar HorizontalAlignment="Left" Height="10" Margin="276,273,0,0" VerticalAlignment="Top" Width="100"
-        		Maximum="100" Minimum="0" Value="{Binding ExpProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}"  ToolTip="{Binding Exp}"/>
-            <ProgressBar HorizontalAlignment="Left" Height="10" Margin="85,273,0,0" VerticalAlignment="Top" Width="100" Maximum="100" Value="{Binding StaminaProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Stamina}"/>
-            <ProgressBar HorizontalAlignment="Left" Height="10" Margin="85,308,0,0" VerticalAlignment="Top" Width="100" Maximum="6" Value="{Binding BpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Bp}"  />
-            <ProgressBar HorizontalAlignment="Left" Height="10" Margin="276,308,0,0" VerticalAlignment="Top" Width="100" Maximum="100" Value="{Binding TpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Tp}"/>
-            <Label Content="経験値" HorizontalAlignment="Left" Margin="217,263,0,0" VerticalAlignment="Top" Foreground="White" Width="63" FontFamily="Microsoft YaHei" FontWeight="Bold"/>
-
-            <Grid HorizontalAlignment="Left" Height="191" Margin="34,24,0,0" VerticalAlignment="Top" Width="359">
+            <Grid HorizontalAlignment="Left" Height="190" Margin="30,20,0,0" VerticalAlignment="Top" Width="360">
                 <Grid.Background>
                     <ImageBrush ImageSource="Images/textpop.png"/>
                 </Grid.Background>
-                <TextBlock HorizontalAlignment="Left" Height="152" Margin="29,19,0,0" TextWrapping="Wrap" Text="{Binding History}" VerticalAlignment="Top" Width="273" Background="{x:Null}"  Foreground="#FF1D3F4A"/>
+                <ScrollViewer x:Name="HistoryPanel" HorizontalAlignment="Left" Height="150" Margin="20,20,0,0" VerticalAlignment="Top" Width="290"  >
+                    <TextBlock Text="{Binding History}"/>
+                </ScrollViewer>
             </Grid>
         </Grid>
     </Grid>
