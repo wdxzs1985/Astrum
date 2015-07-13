@@ -3,13 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="{Binding WindowTitle}" Height="375" Width="540" Icon="Images/Icon.png" ResizeMode="NoResize">
     <Grid>
+        <Grid.Background >
+            <ImageBrush ImageSource="Images/background.jpg" ViewportUnits="Absolute" Viewport="0,0,126,126" Stretch="None" TileMode="Tile"/>
+        </Grid.Background>
+
         <Grid Name="LoginPanel" Visibility="Visible">
-            <Grid.Background >
-                <!--<SolidColorBrush Color="DarkGray" ></SolidColorBrush>-->
-
-                <ImageBrush ImageSource="Images/background.jpg"/>
-
-            </Grid.Background>
             <ComboBox Name="LoginUserComboBox" HorizontalAlignment="Left" Margin="208,36,0,0" VerticalAlignment="Top" Width="131" Height="132" ItemsSource="{Binding LoginUserList}" SelectedIndex="0" SelectionChanged="LoginUserComboBox_SelectionChanged" TextSearch.TextPath="name">
 
                 <ComboBox.Resources>
@@ -56,14 +54,7 @@
             </Button>
         </Grid>
 
-        <Grid Name="StatusPanel" Visibility="Visible">
-            <Grid.Background >
-                <!--<SolidColorBrush Color="DarkGray" ></SolidColorBrush>-->
-
-                <ImageBrush ImageSource="Images/Loginbackground.jpg"/>
-
-            </Grid.Background>
-
+        <Grid Name="StatusPanel" Visibility="Hidden">
             <Grid HorizontalAlignment="Left" Height="30" Margin="30,220,0,0" VerticalAlignment="Top" Width="180">
                 <Label Content="名前" Margin="0,0,0,0" Foreground="White" Width="60" FontFamily="Microsoft YaHei" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Left">
                     <Label.Background>
