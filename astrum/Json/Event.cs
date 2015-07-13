@@ -141,4 +141,18 @@ namespace Astrum.Json.Event
     {
         public bool available { get; set; }
     }
+
+    public class TpInfo
+    {
+        public TpStatus normal { get; set; }
+        public TpStatus chat { get; set; }
+        public TpStatus roulette { get; set; }
+        //public TpStatus status { get; set; }
+    }
+
+    public class TpStatus
+    {
+        public bool available { get; set; }
+    }
+
 }
