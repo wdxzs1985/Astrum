@@ -36,6 +36,7 @@ namespace Astrum.Http
         }
 
         public bool IsRunning { get; set; }
+        public bool CanFullAttack { get; set; }
 
         public string WindowTitle
         {
