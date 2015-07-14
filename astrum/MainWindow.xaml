@@ -1,15 +1,15 @@
 ﻿<Window x:Class="Astrum.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="{Binding WindowTitle}" Height="460" Width="560" Icon="Images/Icon.png" ResizeMode="NoResize">
+        Title="{Binding WindowTitle}" Height="480" Width="580" Icon="Images/Icon.png" ResizeMode="NoResize">
     <Grid>
         <Grid.Background >
             <!--<SolidColorBrush Color="DarkGray" ></SolidColorBrush>-->
 
-            <ImageBrush ImageSource="Images/background.jpg"/>
+            <ImageBrush ImageSource="Images/background.jpg" Stretch="UniformToFill" AlignmentX="Left" AlignmentY="Top"/>
 
         </Grid.Background>
-        <Grid Name="LoginPanel" Visibility="Visible" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="167,76,78.468,76">
+        <Grid Name="LoginPanel" Visibility="Hidden" VerticalAlignment="Center" HorizontalAlignment="Center" Height="280" Width="220">
             <ComboBox Name="LoginUserComboBox" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Top" Width="131" Height="132" ItemsSource="{Binding LoginUserList}" SelectedIndex="0" SelectionChanged="LoginUserComboBox_SelectionChanged" TextSearch.TextPath="name">
 
                 <ComboBox.Resources>
@@ -56,11 +56,11 @@
             </Button>
         </Grid>
 
-        <Grid Name="StatusPanel" Visibility="Visible" Grid.ColumnSpan="2">
+        <Grid Name="StatusPanel" Visibility="Visible">
             <Grid.Background >
                 <!--<SolidColorBrush Color="DarkGray" ></SolidColorBrush>-->
 
-                <ImageBrush ImageSource="Images/Loginbackground.jpg"/>
+                <ImageBrush ImageSource="Images/Loginbackground.jpg" Stretch="UniformToFill" AlignmentX="Left" AlignmentY="Top"/>
 
             </Grid.Background>
 
