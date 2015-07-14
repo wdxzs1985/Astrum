@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Astrum.Json.Mypage;
 using Astrum.Json.Raid;
+using Astrum.Json.Item;
 
 namespace Astrum.Json.Stage
 {
@@ -25,7 +26,7 @@ namespace Astrum.Json.Stage
 
         public NextStage nextStage { get; set; }
 
-        public List<Item> items { get; set; }
+        public List<ItemInfo> items { get; set; }
     }
 
     public class Stamina
@@ -98,13 +99,4 @@ namespace Astrum.Json.Stage
         public bool isLastBoss { get; set; }
     }
 
-    public class Item
-    {
-        public string _id { get; set; }
-        public string name { get; set; }
-        public string description { get; set; }
-        public int stock { get; set; }
-        public int max { get; set; }
-        public bool isSingle { get; set; }
-    }
 }
