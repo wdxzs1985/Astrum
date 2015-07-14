@@ -235,25 +235,7 @@ namespace Astrum
                                 client.GuildBattle();
                             }
 
-                            var countDown = AstrumClient.MINUTE;
-                            for (var i = 0; i < AstrumClient.MINUTE; i += 100)
-                            {
-                                Thread.Sleep(100);
-                                if (client.ViewModel.IsRunning)
-                                {
-                                    if (i % 1000 == 0)
-                                    {
-                                        var message = String.Format("少女休息中。。。 {0} 秒", (countDown - i) / 1000);
-                                        client.ViewModel.History = message;
-                                    }
-                                }
-                                else
-                                {
-                                    var message = "少女休息中。。。 ";
-                                    client.ViewModel.History = message;
-                                    break;
-                                }
-                            }
+                            client.CountDown(AstrumClient.MINUTE);
                         }
                         catch(Exception ex)
                         {

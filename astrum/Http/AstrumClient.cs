@@ -22,6 +22,7 @@ namespace Astrum.Http
         public const string XHR = "XMLHttpRequest";
         public const string PUT = "PUT";
 
+        public const int INTERTAL = 100;
         public const int SECOND = 1000;
         public const int MINUTE = 60 * SECOND;
 
@@ -35,6 +36,8 @@ namespace Astrum.Http
         public const string INSTANT_BP_MINI = "instant-mini_bp_ether";
 
         public const int MIN_STAMINA_STOCK = 9999;
+
+        public const int EASY_BOSS_HP = 1000000;
 
         public AstrumClient()
         {
@@ -61,13 +64,31 @@ namespace Astrum.Http
             {
                 int randomTime = time + seed.Next(time);
 
-                for (var i = 0; i < randomTime; i += 100)
+                for (var i = 0; i < randomTime; i += INTERTAL)
                 {
-                    Thread.Sleep(100);
-                    if (i % 1000 == 0)
+                    Thread.Sleep(INTERTAL);
+                }
+            }
+        }
+
+        public void CountDown(int countDown)
+        {
+            for (var i = 0; i < AstrumClient.MINUTE; i += INTERTAL)
+            {
+                Thread.Sleep(INTERTAL);
+                if (ViewModel.IsRunning)
+                {
+                    if (i % SECOND == 0)
                     {
-                        String.Format("wait {0} second", (randomTime - i) / 1000);
+                        var message = String.Format("少女休息中。。。 {0} 秒", (countDown - i) / SECOND);
+                        ViewModel.History = message;
                     }
+                }
+                else
+                {
+                    var message = "少女休息中。。。 ";
+                    ViewModel.History = message;
+                    break;
                 }
             }
         }
@@ -285,7 +306,7 @@ namespace Astrum.Http
                             }
                         }
 
-                        if (stage.staminaEmpty && ViewModel.IsRunning)
+                        if (stage.staminaEmpty)
                         {
                             if (stage.items != null)
                             {
@@ -293,6 +314,7 @@ namespace Astrum.Http
                                 if (item.stock > ViewModel.MinStaminaStock && ViewModel.ExpMax - ViewModel.ExpMin > 150)
                                 {
                                     UseItem(item, "stamina");
+                                    return;
                                 }
                                 else
                                 {
@@ -429,11 +451,9 @@ namespace Astrum.Http
 
                 if (ViewModel.CanFullAttack)
                 {
-                    if (battleInfo.hp < 1000000)
-                    {
-
-                    }
-                    RaidBattleAttack(battleInfo._id, "full");
+                    var hp = battleInfo.hp - battleInfo.totalDamage;
+                    var attackType = hp > EASY_BOSS_HP ? "full" : "normal";
+                    RaidBattleAttack(battleInfo._id, attackType);
                     return true;
                 }
             }
@@ -546,11 +566,11 @@ namespace Astrum.Http
                     FuryRaidBattleRescue(battleInfo._id);
                 }
 
-                ViewModel.BpValue = battleInfo.bpValue;
-
-                if (battleInfo.bpValue >= 3)
+                if (ViewModel.CanFullAttack)
                 {
-                    FuryRaidBattleAttack(battleInfo._id, "full");
+                    var hp = battleInfo.hp - battleInfo.totalDamage;
+                    var attackType = hp > EASY_BOSS_HP ? "full" : "normal";
+                    FuryRaidBattleAttack(battleInfo._id, attackType);
                     return true;
                 }
             }
@@ -565,6 +585,8 @@ namespace Astrum.Http
         {
             var result = GetXHR("http://astrum.amebagames.com/_/event/furyraid/battle?_id=" + Uri.EscapeDataString(raidId));
             var battleInfo = JsonConvert.DeserializeObject<RaidBattleInfo>(result);
+
+            ViewModel.BpValue = battleInfo.bpValue;
 
             PrintRaidBattleInfo(battleInfo);
             Delay(DELAY_SHORT);
