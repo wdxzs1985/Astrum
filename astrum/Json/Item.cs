@@ -32,10 +32,11 @@ namespace Astrum.Json.Item
     public class UseItemResult
     {
         public string _id { get; set; }
-        public Stock stock { get; set; }
+        public ValueComparer stock { get; set; }
+        public ValueComparer value { get; set; }
     }
 
-    public class Stock
+    public class ValueComparer
     {
         public int after { get; set; }
         public int before { get; set; }

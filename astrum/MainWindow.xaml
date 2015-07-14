@@ -7,7 +7,7 @@
             <ImageBrush ImageSource="Images/background.jpg" ViewportUnits="Absolute" Viewport="0,0,126,126" Stretch="None" TileMode="Tile"/>
         </Grid.Background>
 
-        <Grid Name="LoginPanel" Visibility="Visible" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid Name="LoginPanel" Visibility="Hidden" HorizontalAlignment="Center" VerticalAlignment="Center">
             <ComboBox Name="LoginUserComboBox" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Top" Width="131" Height="132" ItemsSource="{Binding LoginUserList}" SelectedIndex="0" SelectionChanged="LoginUserComboBox_SelectionChanged" TextSearch.TextPath="name">
 
                 <ComboBox.Resources>
@@ -54,7 +54,7 @@
             </Button>
         </Grid>
 
-        <Grid Name="StatusPanel" Visibility="Hidden">
+        <Grid Name="StatusPanel" Visibility="Visible">
             <Grid HorizontalAlignment="Left" Height="30" Margin="30,220,0,0" VerticalAlignment="Top" Width="180">
                 <Label Content="名前" Margin="0,0,0,0" Foreground="White" Width="60" FontFamily="Microsoft YaHei" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Left">
                     <Label.Background>
@@ -79,7 +79,7 @@
                         <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
                     </Label.Background>
                 </Label>
-                <ProgressBar HorizontalAlignment="Left" Height="10" Margin="70,0,0,0" VerticalAlignment="Center" Width="100" Maximum="100" Value="{Binding StaminaProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Stamina}"/>
+                <ProgressBar Name="StaminaProgress" HorizontalAlignment="Left" Height="10" Margin="70,0,0,0" VerticalAlignment="Center" Width="100" Maximum="100" Value="{Binding StaminaProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Stamina}" ValueChanged="ProgressBar_ValueChanged"/>
             </Grid>
 
             <Grid HorizontalAlignment="Left" Height="26" Margin="220,260,0,0" VerticalAlignment="Top" Width="180">
@@ -88,7 +88,7 @@
                         <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
                     </Label.Background>
                 </Label>
-                <ProgressBar HorizontalAlignment="Left" Height="10" Margin="70,0,0,0" VerticalAlignment="Center" Width="100"
+                <ProgressBar Name="ExpProgress" HorizontalAlignment="Left" Height="10" Margin="70,0,0,0" VerticalAlignment="Center" Width="100"
         		Maximum="100" Minimum="0" Value="{Binding ExpProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}"  ToolTip="{Binding Exp}"/>
             </Grid>
 
@@ -98,7 +98,7 @@
                         <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
                     </Label.Background>
                 </Label>
-                <ProgressBar HorizontalAlignment="Left" Height="10" Margin="70,0,0,0" VerticalAlignment="Center" Width="100" Maximum="6" Value="{Binding BpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Bp}"  />
+                <ProgressBar Name="BpProgress" HorizontalAlignment="Left" Height="10" Margin="70,0,0,0" VerticalAlignment="Center" Width="100" Maximum="6" Value="{Binding BpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Bp}"  ValueChanged="ProgressBar_ValueChanged"/>
             </Grid>
 
 
@@ -108,7 +108,7 @@
                         <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
                     </Label.Background>
                 </Label>
-                <ProgressBar HorizontalAlignment="Left" Height="10" Margin="70,0,0,0" VerticalAlignment="Center" Width="100" Maximum="100" Value="{Binding TpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Tp}"/>
+                <ProgressBar Name="TpProgress" HorizontalAlignment="Left" Height="10" Margin="70,0,0,0" VerticalAlignment="Center" Width="100" Maximum="100" Value="{Binding TpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Tp}" ValueChanged="ProgressBar_ValueChanged"/>
             </Grid>
 
             <Grid HorizontalAlignment="Left" Height="30" Margin="30,340,0,0" VerticalAlignment="Top" Width="180">

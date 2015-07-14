@@ -292,5 +292,29 @@ namespace Astrum
                 }
             }
         }
+
+        private void ProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            var p = (ProgressBar)sender;
+            p.ApplyTemplate();
+
+            Console.WriteLine("{0}: {1} -> {2}", p.Name, e.OldValue, e.NewValue);
+
+            var progress = (e.NewValue / p.Maximum) * 100;
+
+            var foreground = new SolidColorBrush(Color.FromRgb(1,211,40));
+
+            if (progress <= 10d)
+            {
+                foreground = Brushes.Red;
+            }
+            else if (progress <= 40d)
+            {
+                foreground = Brushes.Orange;
+            }
+
+            ((Panel)p.Template.FindName("Animation", p)).Background = foreground;
+
+        }
     }
 }

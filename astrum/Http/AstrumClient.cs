@@ -962,10 +962,12 @@ namespace Astrum.Http
             if (INSTANT_STAMINA_HALF.Equals(item._id))
             {
                 ViewModel.StaminaHalfStock = item.stock.after;
+                ViewModel.StaminaValue = item.value.after;
             }
             else if (INSTANT_STAMINA.Equals(item._id))
             {
                 ViewModel.StaminaStock = item.stock.after;
+                ViewModel.StaminaValue = item.value.after;
             }
             else if (INSTANT_BP_MINI.Equals(item._id))
             {
