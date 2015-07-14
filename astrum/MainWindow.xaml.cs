@@ -199,7 +199,6 @@ namespace Astrum
         {
             StartButton.IsEnabled = false;
             QuestButton.IsEnabled = false;
-            RaidButton.IsEnabled = false;
             GuildBattleButton.IsEnabled = false;
 
             SaveUserList();
@@ -226,12 +225,6 @@ namespace Astrum
                             {
                                 client.ViewModel.IsRunning = true;
                                 client.Quest();
-                            }
-
-                            if (client.ViewModel.IsRaidEnable)
-                            {
-                                client.ViewModel.IsRunning = true;
-                                client.Raid();
                             }
 
                             if (client.ViewModel.IsGuildBattleEnable)
@@ -274,7 +267,6 @@ namespace Astrum
                 StartButton.Content = "Start";
                 StartButton.IsEnabled = true;
                 QuestButton.IsEnabled = true;
-                RaidButton.IsEnabled = true;
                 GuildBattleButton.IsEnabled = true;
 
                 if (!result)

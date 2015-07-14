@@ -36,7 +36,15 @@ namespace Astrum.Http
         }
 
         public bool IsRunning { get; set; }
-        public bool CanFullAttack { get; set; }
+        public bool IsFuryRaidEnable { get; set; }
+        public bool IsFuryRaid { get; set; }
+        public bool CanFullAttack
+        {
+            get
+            {
+                return (IsFuryRaidEnable == IsFuryRaid) && BpValue >= 3;
+            }
+        }
 
         public string WindowTitle
         {
