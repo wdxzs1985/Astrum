@@ -87,6 +87,7 @@ namespace Astrum
             if (login)
             {
                 client.Mypage();
+                client.Item();
 
                 LoginPanel.Visibility = Visibility.Hidden;
                 StatusPanel.Visibility = Visibility.Visible;
@@ -220,6 +221,7 @@ namespace Astrum
                         try
                         {
                             client.Mypage();
+                            client.Item();
 
                             if (client.ViewModel.IsQuestEnable)
                             {

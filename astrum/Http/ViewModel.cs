@@ -57,8 +57,63 @@ namespace Astrum.Http
             }
         }
 
+        private long _bpMiniStock;
+        private long _bpStock;
+        private long _staminaHalfStock;
+        private long _staminaStock;
         private long _minStaminaStock;
-        private string _history;
+
+        public long BpMiniStock
+        {
+            get
+            {
+                return _bpMiniStock;
+            }
+            set
+            {
+                _bpMiniStock = value;
+                NotifyPropertyChanged("BpMiniStock");
+            }
+        }
+
+        public long BpStock
+        {
+            get
+            {
+                return _bpStock;
+            }
+            set
+            {
+                _bpStock = value;
+                NotifyPropertyChanged("BpStock");
+            }
+        }
+
+        public long StaminaHalfStock
+        {
+            get
+            {
+                return _staminaHalfStock;
+            }
+            set
+            {
+                _staminaHalfStock = value;
+                NotifyPropertyChanged("StaminaHalfStock");
+            }
+        }
+
+        public long StaminaStock
+        {
+            get
+            {
+                return _staminaStock;
+            }
+            set
+            {
+                _staminaStock = value;
+                NotifyPropertyChanged("StaminaStock");
+            }
+        }
 
         public long MinStaminaStock
         {
@@ -73,6 +128,7 @@ namespace Astrum.Http
             }
         }
 
+        private string _history;
         public string History
         {
             get
@@ -87,7 +143,6 @@ namespace Astrum.Http
         }
 
         private bool _quest_enable;
-        private bool _raid_enable;
         private bool _guild_battle_enable;
 
         public bool IsQuestEnable
@@ -103,18 +158,6 @@ namespace Astrum.Http
             }
         }
 
-        public bool IsRaidEnable
-        {
-            get
-            {
-                return _raid_enable;
-            }
-            set
-            {
-                _raid_enable = value;
-                NotifyPropertyChanged("IsRaidEnable");
-            }
-        }
         public bool IsGuildBattleEnable
         {
             get

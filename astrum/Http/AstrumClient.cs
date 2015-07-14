@@ -12,6 +12,7 @@ using Astrum.Json.Mypage;
 using Astrum.Json.Stage;
 using Astrum.Json.Raid;
 using Astrum.Json.Event;
+using Astrum.Json.Item;
 
 namespace Astrum.Http
 {
@@ -28,6 +29,11 @@ namespace Astrum.Http
         public const int DELAY_SHORT = SECOND;
         public const int NO_DELAY = 0;
 
+        public const string INSTANT_STAMINA_HALF = "instant-half_stamina_potion";
+        public const string INSTANT_STAMINA = "instant-stamina_potion";
+        public const string INSTANT_BP = "instant-bp_ether";
+        public const string INSTANT_BP_MINI = "instant-mini_bp_ether";
+
         public const int MIN_STAMINA_STOCK = 9999;
 
         public AstrumClient()
@@ -35,7 +41,6 @@ namespace Astrum.Http
             ViewModel = new ViewModel();
 
             ViewModel.IsQuestEnable = true;
-            ViewModel.IsRaidEnable = false;
             ViewModel.IsGuildBattleEnable = false;
 
             ViewModel.MinStaminaStock = MIN_STAMINA_STOCK;
@@ -203,6 +208,19 @@ namespace Astrum.Http
             Access("mypage");
         }
 
+        public void Item()
+        {
+            var responseString = GetXHR("http://astrum.amebagames.com/_/item");
+            var itemList = JsonConvert.DeserializeObject<ItemList>(responseString);
+
+            Access("item");
+
+            foreach (var item in itemList.list)
+            {
+                UpdateItemStock(item);
+            }
+        }
+
 
         public void Quest()
         {
@@ -237,11 +255,15 @@ namespace Astrum.Http
                         {
                             ViewModel.IsFuryRaidEnable = true;
                             ViewModel.IsFuryRaid = true;
+
                             var eventId = stage.status.furyraid.eventId;
-                            if (stage.status.furyraid.find != null || stage.status.furyraid.rescue != null)
+                            if (stage.status.furyraid.find != null && (stage.status.furyraid.find.isNew || ViewModel.CanFullAttack))
                             {
                                 FuryRaid(stage.status.furyraid.eventId);
-                                break;
+                            }
+                            if (stage.status.furyraid.rescue != null && (stage.status.furyraid.rescue.isNew || ViewModel.CanFullAttack))
+                            {
+                                FuryRaid(stage.status.furyraid.eventId);
                             }
 
                         }
@@ -256,38 +278,35 @@ namespace Astrum.Http
                                 {
                                     loop = RaidBattle(stage.status.raid.find._id);
                                 }
-                                break;
                             }
-                            if (stage.status.raid.rescue != null && stage.status.raid.rescue.isNew)
+                            if (stage.status.raid.rescue != null && (stage.status.raid.rescue.isNew || ViewModel.CanFullAttack))
                             {
                                 Raid();
-                                break;
                             }
                         }
-                    }
 
-                    if (stage.staminaEmpty)
-                    {
-                        if (stage.items != null)
+                        if (stage.staminaEmpty && ViewModel.IsRunning)
                         {
-                            var item = stage.items.Find(e => "instant-half_stamina_potion".Equals(e._id));
-                            if (item.stock > ViewModel.MinStaminaStock)
+                            if (stage.items != null)
                             {
-                                UseItem(item, "stamina");
+                                var item = stage.items.Find(e => INSTANT_STAMINA_HALF.Equals(e._id));
+                                if (item.stock > ViewModel.MinStaminaStock && ViewModel.ExpMax - ViewModel.ExpMin > 150)
+                                {
+                                    UseItem(item, "stamina");
+                                }
+                                else
+                                {
+                                    return;
+                                }
                             }
                             else
                             {
                                 return;
                             }
                         }
-                        else
-                        {
-                            return;
-                        }
+                        //forward
+                        stage = ForwardStage(areaId);
                     }
-                    //forward
-                    stage = ForwardStage(areaId);
-
                 }
             }
         }
@@ -320,7 +339,7 @@ namespace Astrum.Http
             return stage;
         }
 
-        public void UseItem(Item item, string type)
+        public void UseItem(ItemInfo item, string type)
         {
             GetXHR("http://astrum.amebagames.com/_/item/common?type=" + type);
 
@@ -329,7 +348,11 @@ namespace Astrum.Http
                 { "itemId", item._id },
                 { "value", "1" }
             };
-            PostXHR("http://astrum.amebagames.com/_/item/common", values);
+            string result = PostXHR("http://astrum.amebagames.com/_/item/common", values);
+            var useItemResult = JsonConvert.DeserializeObject<UseItemResult>(result);
+
+            UpdateItemStock(useItemResult);
+
             Delay(DELAY_SHORT);
         }
 
@@ -406,6 +429,10 @@ namespace Astrum.Http
 
                 if (ViewModel.CanFullAttack)
                 {
+                    if (battleInfo.hp < 1000000)
+                    {
+
+                    }
                     RaidBattleAttack(battleInfo._id, "full");
                     return true;
                 }
@@ -517,7 +544,6 @@ namespace Astrum.Http
                 if (battleInfo.rescue.use)
                 {
                     FuryRaidBattleRescue(battleInfo._id);
-                    return true;
                 }
 
                 ViewModel.BpValue = battleInfo.bpValue;
@@ -734,7 +760,7 @@ namespace Astrum.Http
                 {
                     if (stage.items != null)
                     {
-                        var item = stage.items.Find(e => "instant-half_stamina_potion".Equals(e._id));
+                        var item = stage.items.Find(e => INSTANT_STAMINA_HALF.Equals(e._id));
                         if (item.stock > MIN_STAMINA_STOCK)
                         {
                             UseItem(item, "stamina");
@@ -888,5 +914,45 @@ namespace Astrum.Http
             }
         }
 
+        private void UpdateItemStock(ItemInfo item)
+        {
+            if (INSTANT_STAMINA_HALF.Equals(item._id))
+            {
+                ViewModel.StaminaHalfStock = item.stock;
+            }
+            else if (INSTANT_STAMINA.Equals(item._id))
+            {
+                ViewModel.StaminaStock = item.stock;
+            }
+            else if (INSTANT_BP_MINI.Equals(item._id))
+            {
+                ViewModel.BpMiniStock = item.stock;
+            }
+            else if (INSTANT_BP.Equals(item._id))
+            {
+                ViewModel.BpStock = item.stock;
+            }
+        }
+
+
+        private void UpdateItemStock(UseItemResult item)
+        {
+            if (INSTANT_STAMINA_HALF.Equals(item._id))
+            {
+                ViewModel.StaminaHalfStock = item.stock.after;
+            }
+            else if (INSTANT_STAMINA.Equals(item._id))
+            {
+                ViewModel.StaminaStock = item.stock.after;
+            }
+            else if (INSTANT_BP_MINI.Equals(item._id))
+            {
+                ViewModel.BpMiniStock = item.stock.after;
+            }
+            else if (INSTANT_BP.Equals(item._id))
+            {
+                ViewModel.BpStock = item.stock.after;
+            }
+        }
     }
 }
