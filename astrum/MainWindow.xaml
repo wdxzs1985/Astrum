@@ -1,16 +1,16 @@
 ﻿<Window x:Class="Astrum.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="{Binding WindowTitle}" Height="375" Width="540" Icon="Images/Icon.png" ResizeMode="NoResize">
+        Title="{Binding WindowTitle}" Height="480" Width="580" Icon="Images/Icon.png" ResizeMode="NoResize">
     <Grid>
-        <Grid Name="LoginPanel" Visibility="Visible">
-            <Grid.Background >
-                <!--<SolidColorBrush Color="DarkGray" ></SolidColorBrush>-->
+        <Grid.Background >
+            <!--<SolidColorBrush Color="DarkGray" ></SolidColorBrush>-->
 
-                <ImageBrush ImageSource="Images/background.jpg"/>
+            <ImageBrush ImageSource="Images/background.jpg" Stretch="UniformToFill" AlignmentX="Left" AlignmentY="Top"/>
 
-            </Grid.Background>
-            <ComboBox Name="LoginUserComboBox" HorizontalAlignment="Left" Margin="208,36,0,0" VerticalAlignment="Top" Width="131" Height="132" ItemsSource="{Binding LoginUserList}" SelectedIndex="0" SelectionChanged="LoginUserComboBox_SelectionChanged" TextSearch.TextPath="name">
+        </Grid.Background>
+        <Grid Name="LoginPanel" Visibility="Hidden" VerticalAlignment="Center" HorizontalAlignment="Center" Height="280" Width="220">
+            <ComboBox Name="LoginUserComboBox" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Top" Width="131" Height="132" ItemsSource="{Binding LoginUserList}" SelectedIndex="0" SelectionChanged="LoginUserComboBox_SelectionChanged" TextSearch.TextPath="name">
 
                 <ComboBox.Resources>
                     <Style TargetType="{x:Type ComboBox}">
@@ -33,10 +33,10 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
 
-            <TextBox Name="UsernameBox" HorizontalAlignment="Left" Height="24" Margin="160,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="220"/>
-            <PasswordBox Name="PasswordBox" HorizontalAlignment="Left" Margin="160,240,0,0" VerticalAlignment="Top" Width="220" Height="24"/>
+            <TextBox Name="UsernameBox" HorizontalAlignment="Center" Height="24" Margin="0,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="220"/>
+            <PasswordBox Name="PasswordBox" HorizontalAlignment="Center" Margin="0,200,0,0" VerticalAlignment="Top" Width="220" Height="24"/>
 
-            <Button Name="LoginButton"  Margin="160,280,0,0" Width="220" Height="40" Content="登陆" HorizontalAlignment="Left" VerticalAlignment="Top" Click="LoginButton_Click" Foreground="White" BorderBrush="Black" Background="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}"  >
+            <Button Name="LoginButton"  Margin="0,240,0,0" Width="220" Height="40" Content="登陆" HorizontalAlignment="Center" VerticalAlignment="Top" Click="LoginButton_Click" Foreground="White" BorderBrush="Black" Background="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}"  >
                 <Button.Template>
                     <ControlTemplate TargetType="Button" >
                         <StackPanel Orientation="Horizontal" Background="Transparent" Margin="0,0,0,0">
@@ -60,7 +60,7 @@
             <Grid.Background >
                 <!--<SolidColorBrush Color="DarkGray" ></SolidColorBrush>-->
 
-                <ImageBrush ImageSource="Images/Loginbackground.jpg"/>
+                <ImageBrush ImageSource="Images/Loginbackground.jpg" Stretch="UniformToFill" AlignmentX="Left" AlignmentY="Top"/>
 
             </Grid.Background>
 
@@ -88,7 +88,7 @@
                         <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
                     </Label.Background>
                 </Label>
-                <ProgressBar HorizontalAlignment="Left" Height="10" Margin="70,0,0,0" VerticalAlignment="Center" Width="100" Maximum="100" Value="{Binding StaminaProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Stamina}"/>
+                <ProgressBar Name="StaminaProgress" HorizontalAlignment="Left" Height="10" Margin="70,0,0,0" VerticalAlignment="Center" Width="100" Maximum="100" Value="{Binding StaminaProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Stamina}" ValueChanged="ProgressBar_ValueChanged" />
             </Grid>
 
             <Grid HorizontalAlignment="Left" Height="26" Margin="220,260,0,0" VerticalAlignment="Top" Width="180">
@@ -97,7 +97,7 @@
                         <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
                     </Label.Background>
                 </Label>
-                <ProgressBar HorizontalAlignment="Left" Height="10" Margin="70,0,0,0" VerticalAlignment="Center" Width="100"
+                <ProgressBar Name="ExpProgress" HorizontalAlignment="Left" Height="10" Margin="70,0,0,0" VerticalAlignment="Center" Width="100"
         		Maximum="100" Minimum="0" Value="{Binding ExpProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}"  ToolTip="{Binding Exp}"/>
             </Grid>
 
@@ -107,9 +107,8 @@
                         <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
                     </Label.Background>
                 </Label>
-                <ProgressBar HorizontalAlignment="Left" Height="10" Margin="70,0,0,0" VerticalAlignment="Center" Width="100" Maximum="6" Value="{Binding BpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Bp}"  />
+                <ProgressBar Name="BpProgress" HorizontalAlignment="Left" Height="10" Margin="70,0,0,0" VerticalAlignment="Center" Width="100" Maximum="6" Value="{Binding BpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Bp}" ValueChanged="ProgressBar_ValueChanged" />
             </Grid>
-
 
             <Grid HorizontalAlignment="Left" Height="26" Margin="220,300,0,0" VerticalAlignment="Top" Width="180">
                 <Label Content="TP" Margin="0,0,0,0" Foreground="White" Width="60" FontFamily="Arial Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left">
@@ -117,37 +116,72 @@
                         <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
                     </Label.Background>
                 </Label>
-                <ProgressBar HorizontalAlignment="Left" Height="10" Margin="70,0,0,0" VerticalAlignment="Center" Width="100" Maximum="100" Value="{Binding TpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Tp}"/>
+                <ProgressBar Name="TpProgress" HorizontalAlignment="Left" Height="10" Margin="70,0,0,0" VerticalAlignment="Center" Width="100" Maximum="100" Value="{Binding TpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Tp}" ValueChanged="ProgressBar_ValueChanged" />
             </Grid>
 
-            <Grid HorizontalAlignment="Left" Height="142" Margin="398,24,0,0" VerticalAlignment="Top" Width="102" Background="#FF2A4D70" Opacity="0.865">
-
-                <RadioButton x:Name="QuestButton" Content="Quest" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="{Binding IsQuestEnable}" Foreground="White" Width="80"/>
-                <RadioButton x:Name="RaidButton" Content="Raid" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" IsChecked="{Binding IsRaidEnable}" Foreground="White" Width="80"/>
-                <RadioButton x:Name="GuildBattleButton" Content="GuildBattle" HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top" IsChecked="{Binding IsGuildBattleEnable}" Foreground="#FFF7F7F7"/>
-
-                <Label Content="存药" HorizontalAlignment="Left" Margin="10,83,0,0" VerticalAlignment="Top" Width="80" Foreground="White"/>
-                <TextBox HorizontalAlignment="Left" Height="23" Margin="10,110,0,0" TextWrapping="Wrap" Text="{Binding MinStaminaStock}" VerticalAlignment="Top" Width="82"/>
-
+            <Grid HorizontalAlignment="Left" Height="30" Margin="30,340,0,0" VerticalAlignment="Top" Width="180">
+                <Label Content="SP" Margin="0,0,0,0" Foreground="White" Width="60" FontFamily="Microsoft YaHei" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <Label.Background>
+                        <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
+                    </Label.Background>
+                </Label>
+                <Label Content="{Binding StaminaStock}" HorizontalAlignment="Left" Margin="70,0,0,0" Width="100" Height="28" Background="#66FFFFFF" VerticalAlignment="Center"/>
             </Grid>
 
-            <Button x:Name="StartButton" Content="Start" HorizontalAlignment="Left" Margin="400,170,0,0" VerticalAlignment="Top" Width="100" Height="44" Click="StartButton_Click" Foreground="White" >
-                <Button.Template>
-                    <ControlTemplate TargetType="{x:Type Button}" >
-                        <StackPanel Orientation="Horizontal" Background="Transparent" Margin="0,0,0,0" >
-                            <Grid  Width="102" Height="44" >
-                                <Image x:Name="FunctionButtonUP" Source="Images/FunctionButtonUP.png" Stretch="Fill" Margin="0,0,0,0" />
-                                <ContentPresenter x:Name="Login" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Content="{TemplateBinding Content}"/>
-                            </Grid>
-                        </StackPanel>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsPressed" Value="true">
-                                <Setter Property="Source" Value="Images/FunctionButtonDown.png" TargetName="FunctionButtonUP"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
+            <Grid HorizontalAlignment="Left" Height="30" Margin="220,340,0,0" VerticalAlignment="Top" Width="180">
+                <Label Content="SP Half" Margin="0,0,0,0" Foreground="White" Width="60" FontFamily="Arial Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left">
+                    <Label.Background>
+                        <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
+                    </Label.Background>
+                </Label>
+                <Label Content="{Binding StaminaHalfStock}" HorizontalAlignment="Left" Margin="70,0,0,0" VerticalAlignment="Top" Width="100" Height="28" Background="#66FFFFFF"/>
+            </Grid>
+
+            <Grid HorizontalAlignment="Left" Height="30" Margin="30,380,0,0" VerticalAlignment="Top" Width="180">
+                <Label Content="BP" Margin="0,0,0,0" Foreground="White" Width="60" FontFamily="Microsoft YaHei" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <Label.Background>
+                        <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
+                    </Label.Background>
+                </Label>
+                <Label Content="{Binding BpStock}" HorizontalAlignment="Left" Margin="70,0,0,0" Width="100" Height="28" Background="#66FFFFFF" VerticalAlignment="Center"/>
+            </Grid>
+
+            <Grid HorizontalAlignment="Left" Height="30" Margin="220,380,0,0" VerticalAlignment="Top" Width="180">
+                <Label Content="BP Mini" Margin="0,0,0,0" Foreground="White" Width="60" FontFamily="Arial Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left">
+                    <Label.Background>
+                        <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
+                    </Label.Background>
+                </Label>
+                <Label Content="{Binding BpMiniStock}" HorizontalAlignment="Left" Margin="70,0,0,0" VerticalAlignment="Top" Width="100" Height="28" Background="#66FFFFFF"/>
+            </Grid>
+
+            <Grid HorizontalAlignment="Left" Height="200" Margin="410,20,0,0" VerticalAlignment="Top" Width="120" Background="#FF2A4D70">
+
+                <RadioButton x:Name="QuestButton" Content="Quest" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" IsChecked="{Binding IsQuestEnable}" Foreground="White" Width="100" />
+                <RadioButton x:Name="GuildBattleButton" Content="GuildBattle" HorizontalAlignment="Center" Margin="0,40,0,0" VerticalAlignment="Top" IsChecked="{Binding IsGuildBattleEnable}" Foreground="#FFF7F7F7" Width="100"/>
+
+                <Label Content="存药" HorizontalAlignment="Center" Margin="0,70,0,0" VerticalAlignment="Top" Width="100" Foreground="White"/>
+                <TextBox HorizontalAlignment="Center" Height="23" Margin="0,100,0,0" TextWrapping="Wrap" Text="{Binding MinStaminaStock}" VerticalAlignment="Top" Width="100"/>
+
+
+                <Button x:Name="StartButton" Content="Start" HorizontalAlignment="Center" Margin="0,140,0,0" VerticalAlignment="Top" Width="100" Height="44" Click="StartButton_Click" Foreground="White" >
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}" >
+                            <StackPanel Orientation="Horizontal" Background="Transparent" Margin="0,0,0,0" >
+                                <Grid  Width="102" Height="44" >
+                                    <Image x:Name="FunctionButtonUP" Source="Images/FunctionButtonUP.png" Stretch="Fill" Margin="0,0,0,0" />
+                                    <ContentPresenter x:Name="Login" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Content="{TemplateBinding Content}"/>
+                                </Grid>
+                            </StackPanel>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsPressed" Value="true">
+                                    <Setter Property="Source" Value="Images/FunctionButtonDown.png" TargetName="FunctionButtonUP"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
 
             <Grid HorizontalAlignment="Left" Height="190" Margin="30,20,0,0" VerticalAlignment="Top" Width="360">
                 <Grid.Background>

@@ -87,6 +87,7 @@ namespace Astrum
             if (login)
             {
                 client.Mypage();
+                client.Item();
 
                 LoginPanel.Visibility = Visibility.Hidden;
                 StatusPanel.Visibility = Visibility.Visible;
@@ -199,7 +200,6 @@ namespace Astrum
         {
             StartButton.IsEnabled = false;
             QuestButton.IsEnabled = false;
-            RaidButton.IsEnabled = false;
             GuildBattleButton.IsEnabled = false;
 
             SaveUserList();
@@ -221,17 +221,12 @@ namespace Astrum
                         try
                         {
                             client.Mypage();
+                            client.Item();
 
                             if (client.ViewModel.IsQuestEnable)
                             {
                                 client.ViewModel.IsRunning = true;
                                 client.Quest();
-                            }
-
-                            if (client.ViewModel.IsRaidEnable)
-                            {
-                                client.ViewModel.IsRunning = true;
-                                client.Raid();
                             }
 
                             if (client.ViewModel.IsGuildBattleEnable)
@@ -240,25 +235,7 @@ namespace Astrum
                                 client.GuildBattle();
                             }
 
-                            var countDown = AstrumClient.MINUTE;
-                            for (var i = 0; i < AstrumClient.MINUTE; i += 100)
-                            {
-                                Thread.Sleep(100);
-                                if (client.ViewModel.IsRunning)
-                                {
-                                    if (i % 1000 == 0)
-                                    {
-                                        var message = String.Format("少女休息中。。。 {0} 秒", (countDown - i) / 1000);
-                                        client.ViewModel.History = message;
-                                    }
-                                }
-                                else
-                                {
-                                    var message = "少女休息中。。。 ";
-                                    client.ViewModel.History = message;
-                                    break;
-                                }
-                            }
+                            client.CountDown(AstrumClient.MINUTE);
                         }
                         catch(Exception ex)
                         {
@@ -274,7 +251,6 @@ namespace Astrum
                 StartButton.Content = "Start";
                 StartButton.IsEnabled = true;
                 QuestButton.IsEnabled = true;
-                RaidButton.IsEnabled = true;
                 GuildBattleButton.IsEnabled = true;
 
                 if (!result)
@@ -315,6 +291,30 @@ namespace Astrum
                     PasswordBox.Visibility = Visibility.Visible;
                 }
             }
+        }
+
+        private void ProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            var p = (ProgressBar)sender;
+            p.ApplyTemplate();
+
+            Console.WriteLine("{0}: {1} -> {2}", p.Name, e.OldValue, e.NewValue);
+
+            var progress = (e.NewValue / p.Maximum) * 100;
+
+            var foreground = new SolidColorBrush(Color.FromRgb(1,211,40));
+
+            if (progress <= 10d)
+            {
+                foreground = Brushes.Red;
+            }
+            else if (progress <= 40d)
+            {
+                foreground = Brushes.Orange;
+            }
+
+            ((Panel)p.Template.FindName("Animation", p)).Background = foreground;
+
         }
     }
 }

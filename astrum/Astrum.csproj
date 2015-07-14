@@ -87,6 +87,7 @@
     <Compile Include="Http\ViewModel.cs" />
     <Compile Include="Json\Card.cs" />
     <Compile Include="Json\Event.cs" />
+    <Compile Include="Json\Item.cs" />
     <Compile Include="Json\LoginUser.cs" />
     <Compile Include="Json\Mypage.cs" />
     <Compile Include="Http\HttpClient.cs" />
