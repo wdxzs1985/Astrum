@@ -368,7 +368,7 @@ namespace Astrum.Http
             if (raidInfo.find != null)
             {
                 var battleInfo = raidInfo.find;
-                var loop = true;
+                var loop = battleInfo.isNew || ViewModel.CanFullAttack;
                 while (loop)
                 {
                     loop = RaidBattle(battleInfo._id);
@@ -379,7 +379,7 @@ namespace Astrum.Http
             {
                 foreach (var battleInfo in raidInfo.rescue.list)
                 {
-                    var loop = true;
+                    var loop = battleInfo.isNew || ViewModel.CanFullAttack;
                     while (loop)
                     {
                         loop = RaidBattle(battleInfo._id);
@@ -476,7 +476,7 @@ namespace Astrum.Http
             {
                 foreach (var battleInfo in raidInfo.find.list)
                 {
-                    var loop = true;
+                    var loop = battleInfo.isNew || ViewModel.CanFullAttack;
                     while (loop)
                     {
                         loop = FuryRaidBattle(battleInfo._id);
@@ -488,7 +488,7 @@ namespace Astrum.Http
             {
                 foreach (var battleInfo in raidInfo.rescue.list)
                 {
-                    var loop = true;
+                    var loop = battleInfo.isNew || ViewModel.CanFullAttack;
                     while (loop)
                     {
                         loop = FuryRaidBattle(battleInfo._id);
