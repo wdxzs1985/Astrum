@@ -65,6 +65,22 @@ namespace Astrum.Http
             }
         }
 
+        private long _stock;
+
+        public long Stock 
+        {
+            get 
+            {
+                return _stock;
+            }
+            set 
+            {
+                _stock = value;
+                NotifyPropertyChanged("Stock");
+            }
+            
+        }
+
         public string History
         {
             get

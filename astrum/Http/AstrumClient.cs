@@ -37,7 +37,7 @@ namespace Astrum.Http
             ViewModel.IsQuestEnable = true;
             ViewModel.IsRaidEnable = false;
             ViewModel.IsGuildBattleEnable = false;
-
+            
             ViewModel.MinStaminaStock = MIN_STAMINA_STOCK;
         }
 
@@ -231,12 +231,13 @@ namespace Astrum.Http
                     {
                         ViewModel.CanFullAttack = stage.status.bp.value >= 3;
 
+                        
                         //furyraid
                         if (stage.status.furyraid != null)
                         {
                             var eventId = stage.status.furyraid.eventId;
                             if (stage.status.furyraid.find != null || stage.status.furyraid.rescue != null)
-                            {
+                            {                               
                                 FuryRaid(stage.status.furyraid.eventId);
                                 break;
                             }
@@ -257,6 +258,7 @@ namespace Astrum.Http
                             }
                             if (stage.status.raid.rescue != null && (stage.status.raid.rescue.isNew || ViewModel.CanFullAttack))
                             {
+                                Raid();
                                 var loop = true;
                                 while (loop)
                                 {
@@ -386,7 +388,7 @@ namespace Astrum.Http
         public bool RaidBattle(string raidId)
         {
             var battleInfo = BattleInfo(raidId);
-
+            
             if (battleInfo.isPlaying)
             {
                 if (battleInfo.isNew)
@@ -397,6 +399,7 @@ namespace Astrum.Http
 
                 if (battleInfo.rescue.use)
                 {
+                  
                     RaidBattleRescue(battleInfo._id);
                 }
 
@@ -859,7 +862,7 @@ namespace Astrum.Http
             ViewModel.BpMax = mypage.status.bp_max;
 
             ViewModel.TpValue = mypage.status.tp_value;
-            ViewModel.TpMax = mypage.status.tp_max;
+            ViewModel.TpMax = mypage.status.tp_max;            
         }
 
         private void UpdateStageView(StageInfo stage)
@@ -880,8 +883,8 @@ namespace Astrum.Http
 
                 ViewModel.TpValue = stage.status.tp.value;
                 ViewModel.TpMax = stage.status.tp.max;
+                
             }
-        }
-
+        }        
     }
 }
