@@ -7,8 +7,8 @@
             <ImageBrush ImageSource="Images/background.jpg" ViewportUnits="Absolute" Viewport="0,0,126,126" Stretch="None" TileMode="Tile"/>
         </Grid.Background>
 
-        <Grid Name="LoginPanel" Visibility="Hidden">
-            <ComboBox Name="LoginUserComboBox" HorizontalAlignment="Left" Margin="208,36,0,0" VerticalAlignment="Top" Width="131" Height="132" ItemsSource="{Binding LoginUserList}" SelectedIndex="0" SelectionChanged="LoginUserComboBox_SelectionChanged" TextSearch.TextPath="name">
+        <Grid Name="LoginPanel" Visibility="Visible" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <ComboBox Name="LoginUserComboBox" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Top" Width="131" Height="132" ItemsSource="{Binding LoginUserList}" SelectedIndex="0" SelectionChanged="LoginUserComboBox_SelectionChanged" TextSearch.TextPath="name">
 
                 <ComboBox.Resources>
                     <Style TargetType="{x:Type ComboBox}">
@@ -31,10 +31,10 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
 
-            <TextBox Name="UsernameBox" HorizontalAlignment="Left" Height="24" Margin="160,200,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="220"/>
-            <PasswordBox Name="PasswordBox" HorizontalAlignment="Left" Margin="160,240,0,0" VerticalAlignment="Top" Width="220" Height="24"/>
+            <TextBox Name="UsernameBox" HorizontalAlignment="Center" Height="24" Margin="0,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="220"/>
+            <PasswordBox Name="PasswordBox" HorizontalAlignment="Center" Margin="0,200,0,0" VerticalAlignment="Top" Width="220" Height="24"/>
 
-            <Button Name="LoginButton"  Margin="160,280,0,0" Width="220" Height="40" Content="登陆" HorizontalAlignment="Left" VerticalAlignment="Top" Click="LoginButton_Click" Foreground="White" BorderBrush="Black" Background="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}"  >
+            <Button Name="LoginButton"  Margin="0,240,0,0" Width="220" Height="40" Content="登陆" HorizontalAlignment="Center" VerticalAlignment="Top" Click="LoginButton_Click" Foreground="White" BorderBrush="Black" Background="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}"  >
                 <Button.Template>
                     <ControlTemplate TargetType="Button" >
                         <StackPanel Orientation="Horizontal" Background="Transparent" Margin="0,0,0,0">
@@ -54,7 +54,7 @@
             </Button>
         </Grid>
 
-        <Grid Name="StatusPanel" Visibility="Visible">
+        <Grid Name="StatusPanel" Visibility="Hidden">
             <Grid HorizontalAlignment="Left" Height="30" Margin="30,220,0,0" VerticalAlignment="Top" Width="180">
                 <Label Content="名前" Margin="0,0,0,0" Foreground="White" Width="60" FontFamily="Microsoft YaHei" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Left">
                     <Label.Background>
