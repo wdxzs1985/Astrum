@@ -123,7 +123,6 @@
             <Grid HorizontalAlignment="Left" Height="142" Margin="398,24,0,0" VerticalAlignment="Top" Width="102" Background="#FF2A4D70" Opacity="0.865">
 
                 <RadioButton x:Name="QuestButton" Content="Quest" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="{Binding IsQuestEnable}" Foreground="White" Width="80"/>
-                <RadioButton x:Name="RaidButton" Content="Raid" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" IsChecked="{Binding IsRaidEnable}" Foreground="White" Width="80"/>
                 <RadioButton x:Name="GuildBattleButton" Content="GuildBattle" HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top" IsChecked="{Binding IsGuildBattleEnable}" Foreground="#FFF7F7F7"/>
 
                 <Label Content="存药" HorizontalAlignment="Left" Margin="10,83,0,0" VerticalAlignment="Top" Width="80" Foreground="White"/>
