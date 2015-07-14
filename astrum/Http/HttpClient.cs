@@ -80,7 +80,7 @@ namespace Astrum.Http
             request.CookieContainer = cc;
             request.UserAgent = UA;
 
-            request.Proxy = null;
+            //request.Proxy = null;
 
             return request;
         }
