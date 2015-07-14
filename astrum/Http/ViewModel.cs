@@ -143,7 +143,6 @@ namespace Astrum.Http
         }
 
         private bool _quest_enable;
-        private bool _raid_enable;
         private bool _guild_battle_enable;
 
         public bool IsQuestEnable
@@ -159,18 +158,6 @@ namespace Astrum.Http
             }
         }
 
-        public bool IsRaidEnable
-        {
-            get
-            {
-                return _raid_enable;
-            }
-            set
-            {
-                _raid_enable = value;
-                NotifyPropertyChanged("IsRaidEnable");
-            }
-        }
         public bool IsGuildBattleEnable
         {
             get

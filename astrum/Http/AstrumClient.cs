@@ -22,6 +22,7 @@ namespace Astrum.Http
         public const string XHR = "XMLHttpRequest";
         public const string PUT = "PUT";
 
+        public const int INTERTAL = 100;
         public const int SECOND = 1000;
         public const int MINUTE = 60 * SECOND;
 
@@ -36,12 +37,13 @@ namespace Astrum.Http
 
         public const int MIN_STAMINA_STOCK = 9999;
 
+        public const int EASY_BOSS_HP = 1000000;
+
         public AstrumClient()
         {
             ViewModel = new ViewModel();
 
             ViewModel.IsQuestEnable = true;
-            ViewModel.IsRaidEnable = false;
             ViewModel.IsGuildBattleEnable = false;
 
             ViewModel.MinStaminaStock = MIN_STAMINA_STOCK;
@@ -62,13 +64,31 @@ namespace Astrum.Http
             {
                 int randomTime = time + seed.Next(time);
 
-                for (var i = 0; i < randomTime; i += 100)
+                for (var i = 0; i < randomTime; i += INTERTAL)
                 {
-                    Thread.Sleep(100);
-                    if (i % 1000 == 0)
+                    Thread.Sleep(INTERTAL);
+                }
+            }
+        }
+
+        public void CountDown(int countDown)
+        {
+            for (var i = 0; i < AstrumClient.MINUTE; i += INTERTAL)
+            {
+                Thread.Sleep(INTERTAL);
+                if (ViewModel.IsRunning)
+                {
+                    if (i % SECOND == 0)
                     {
-                        String.Format("wait {0} second", (randomTime - i) / 1000);
+                        var message = String.Format("少女休息中。。。 {0} 秒", (countDown - i) / SECOND);
+                        ViewModel.History = message;
                     }
+                }
+                else
+                {
+                    var message = "少女休息中。。。 ";
+                    ViewModel.History = message;
+                    break;
                 }
             }
         }
@@ -294,6 +314,7 @@ namespace Astrum.Http
                                 if (item.stock > ViewModel.MinStaminaStock && ViewModel.ExpMax - ViewModel.ExpMin > 150)
                                 {
                                     UseItem(item, "stamina");
+                                    return;
                                 }
                                 else
                                 {
@@ -430,7 +451,9 @@ namespace Astrum.Http
 
                 if (ViewModel.CanFullAttack)
                 {
-                    RaidBattleAttack(battleInfo._id, "full");
+                    var hp = battleInfo.hp - battleInfo.totalDamage;
+                    var attackType = hp > EASY_BOSS_HP ? "full" : "normal";
+                    RaidBattleAttack(battleInfo._id, attackType);
                     return true;
                 }
             }
@@ -543,11 +566,11 @@ namespace Astrum.Http
                     FuryRaidBattleRescue(battleInfo._id);
                 }
 
-                ViewModel.BpValue = battleInfo.bpValue;
-
-                if (battleInfo.bpValue >= 3)
+                if (ViewModel.CanFullAttack)
                 {
-                    FuryRaidBattleAttack(battleInfo._id, "full");
+                    var hp = battleInfo.hp - battleInfo.totalDamage;
+                    var attackType = hp > EASY_BOSS_HP ? "full" : "normal";
+                    FuryRaidBattleAttack(battleInfo._id, attackType);
                     return true;
                 }
             }
@@ -562,6 +585,8 @@ namespace Astrum.Http
         {
             var result = GetXHR("http://astrum.amebagames.com/_/event/furyraid/battle?_id=" + Uri.EscapeDataString(raidId));
             var battleInfo = JsonConvert.DeserializeObject<RaidBattleInfo>(result);
+
+            ViewModel.BpValue = battleInfo.bpValue;
 
             PrintRaidBattleInfo(battleInfo);
             Delay(DELAY_SHORT);
@@ -913,19 +938,19 @@ namespace Astrum.Http
 
         private void UpdateItemStock(ItemInfo item)
         {
-            if ("instant-half_stamina_potion".Equals(item._id))
+            if (INSTANT_STAMINA_HALF.Equals(item._id))
             {
                 ViewModel.StaminaHalfStock = item.stock;
             }
-            else if ("instant-stamina_potion".Equals(item._id))
+            else if (INSTANT_STAMINA.Equals(item._id))
             {
                 ViewModel.StaminaStock = item.stock;
             }
-            else if ("instant-mini_bp_ether".Equals(item._id))
+            else if (INSTANT_BP_MINI.Equals(item._id))
             {
                 ViewModel.BpMiniStock = item.stock;
             }
-            else if ("instant-bp_ether".Equals(item._id))
+            else if (INSTANT_BP.Equals(item._id))
             {
                 ViewModel.BpStock = item.stock;
             }
