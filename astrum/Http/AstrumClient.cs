@@ -229,11 +229,14 @@ namespace Astrum.Http
                     }
                     else
                     {
-                        ViewModel.CanFullAttack = stage.status.bp.value >= 3;
+                        ViewModel.IsFuryRaidEnable = false;
+                        ViewModel.IsFuryRaid = false;
 
                         //furyraid
                         if (stage.status.furyraid != null)
                         {
+                            ViewModel.IsFuryRaidEnable = true;
+                            ViewModel.IsFuryRaid = true;
                             var eventId = stage.status.furyraid.eventId;
                             if (stage.status.furyraid.find != null || stage.status.furyraid.rescue != null)
                             {
@@ -241,11 +244,11 @@ namespace Astrum.Http
                                 break;
                             }
 
-                            ViewModel.CanFullAttack = false;
                         }
                         //raid
                         if (stage.status.raid != null)
                         {
+                            ViewModel.IsFuryRaid = false;
                             if (stage.status.raid.find != null && (stage.status.raid.find.isNew || ViewModel.CanFullAttack))
                             {
                                 var loop = true;
@@ -255,13 +258,9 @@ namespace Astrum.Http
                                 }
                                 break;
                             }
-                            if (stage.status.raid.rescue != null && (stage.status.raid.rescue.isNew || ViewModel.CanFullAttack))
+                            if (stage.status.raid.rescue != null && stage.status.raid.rescue.isNew)
                             {
-                                var loop = true;
-                                while (loop)
-                                {
-                                    loop = RaidBattle(stage.status.raid.rescue._id);
-                                }
+                                Raid();
                                 break;
                             }
                         }
@@ -288,6 +287,7 @@ namespace Astrum.Http
                     }
                     //forward
                     stage = ForwardStage(areaId);
+
                 }
             }
         }
@@ -367,7 +367,7 @@ namespace Astrum.Http
             if (raidInfo.find != null)
             {
                 var battleInfo = raidInfo.find;
-                var loop = true;
+                var loop = battleInfo.isNew || ViewModel.CanFullAttack;
                 while (loop)
                 {
                     loop = RaidBattle(battleInfo._id);
@@ -378,7 +378,11 @@ namespace Astrum.Http
             {
                 foreach (var battleInfo in raidInfo.rescue.list)
                 {
-                    RaidBattle(battleInfo._id);
+                    var loop = battleInfo.isNew || ViewModel.CanFullAttack;
+                    while (loop)
+                    {
+                        loop = RaidBattle(battleInfo._id);
+                    }
                 }
             }
         }
@@ -386,7 +390,6 @@ namespace Astrum.Http
         public bool RaidBattle(string raidId)
         {
             var battleInfo = BattleInfo(raidId);
-
             if (battleInfo.isPlaying)
             {
                 if (battleInfo.isNew)
@@ -398,9 +401,8 @@ namespace Astrum.Http
                 if (battleInfo.rescue.use)
                 {
                     RaidBattleRescue(battleInfo._id);
+                    return true;
                 }
-
-                ViewModel.BpValue = battleInfo.bpValue;
 
                 if (ViewModel.CanFullAttack)
                 {
@@ -419,6 +421,8 @@ namespace Astrum.Http
         {
             var result = GetXHR("http://astrum.amebagames.com/_/raid/battle?_id=" + Uri.EscapeDataString(raidId));
             var battleInfo = JsonConvert.DeserializeObject<RaidBattleInfo>(result);
+
+            ViewModel.BpValue = battleInfo.bpValue;
 
             PrintRaidBattleInfo(battleInfo);
             Delay(DELAY_SHORT);
@@ -471,7 +475,7 @@ namespace Astrum.Http
             {
                 foreach (var battleInfo in raidInfo.find.list)
                 {
-                    var loop = true;
+                    var loop = battleInfo.isNew || ViewModel.CanFullAttack;
                     while (loop)
                     {
                         loop = FuryRaidBattle(battleInfo._id);
@@ -483,7 +487,7 @@ namespace Astrum.Http
             {
                 foreach (var battleInfo in raidInfo.rescue.list)
                 {
-                    var loop = true;
+                    var loop = battleInfo.isNew || ViewModel.CanFullAttack;
                     while (loop)
                     {
                         loop = FuryRaidBattle(battleInfo._id);
@@ -513,6 +517,7 @@ namespace Astrum.Http
                 if (battleInfo.rescue.use)
                 {
                     FuryRaidBattleRescue(battleInfo._id);
+                    return true;
                 }
 
                 ViewModel.BpValue = battleInfo.bpValue;
