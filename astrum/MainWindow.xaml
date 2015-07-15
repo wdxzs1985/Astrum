@@ -4,7 +4,7 @@
         Title="{Binding WindowTitle}" Height="480" Width="580" Icon="Images/Icon.png" ResizeMode="NoResize">
     <Grid>
         <Grid.Background >
-            <ImageBrush ImageSource="Images/background.jpg" AlignmentX="Left" AlignmentY="Top" TileMode="Tile" Stretch="None" ViewportUnits="Absolute" ViewboxUnits="Absolute" Viewport="0,0,126,126"/>
+            <ImageBrush ImageSource="Images/background.jpg" AlignmentX="Left" AlignmentY="Top" Stretch="UniformToFill"/>
         </Grid.Background>
         <Grid Name="LoginPanel" Visibility="Hidden" VerticalAlignment="Center" HorizontalAlignment="Center" Height="280" Width="220">
             <ComboBox Name="LoginUserComboBox" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Top" Width="131" Height="132" ItemsSource="{Binding LoginUserList}" SelectedIndex="0" SelectionChanged="LoginUserComboBox_SelectionChanged" TextSearch.TextPath="name">
@@ -55,6 +55,9 @@
 
         <Grid Name="StatusPanel" Visibility="Visible">
 
+            <Grid.Background >
+                <ImageBrush ImageSource="Images/Loginbackground.jpg" AlignmentX="Left" AlignmentY="Top" Stretch="UniformToFill"/>
+            </Grid.Background>
             <Grid HorizontalAlignment="Left" Height="30" Margin="30,220,0,0" VerticalAlignment="Top" Width="180">
                 <Label Content="名前" Margin="0,0,0,0" Foreground="White" Width="73" Height="25" FontFamily="Microsoft YaHei" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Left">
                     <Label.Background>
