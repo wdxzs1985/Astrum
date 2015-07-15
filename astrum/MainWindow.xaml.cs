@@ -296,25 +296,26 @@ namespace Astrum
         private void ProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             var p = (ProgressBar)sender;
-            p.ApplyTemplate();
 
-            Console.WriteLine("{0}: {1} -> {2}", p.Name, e.OldValue, e.NewValue);
+            var progressBefore = (e.OldValue / p.Maximum) * 100;
+            var progressAfter = (e.NewValue / p.Maximum) * 100;
 
-            var progress = (e.NewValue / p.Maximum) * 100;
+            Console.WriteLine("{0}: {1}% -> {2}%", p.Name, progressBefore, progressAfter);
+
 
             var foreground = new SolidColorBrush(Color.FromRgb(1,211,40));
 
-            if (progress <= 10d)
+            if (progressAfter <= 10d)
             {
                 foreground = Brushes.Red;
             }
-            else if (progress <= 40d)
+            else if (progressAfter <= 40d)
             {
                 foreground = Brushes.Orange;
             }
 
-            ((Panel)p.Template.FindName("Animation", p)).Background = foreground;
 
+            p.Foreground = foreground;
         }
     }
 }

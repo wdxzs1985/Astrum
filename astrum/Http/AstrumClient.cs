@@ -469,9 +469,9 @@ namespace Astrum.Http
             var result = GetXHR("http://astrum.amebagames.com/_/raid/battle?_id=" + Uri.EscapeDataString(raidId));
             var battleInfo = JsonConvert.DeserializeObject<RaidBattleInfo>(result);
 
-            ViewModel.BpValue = battleInfo.bpValue;
-
             PrintRaidBattleInfo(battleInfo);
+            UpdateBattleBp(battleInfo);
+
             Delay(DELAY_SHORT);
 
             return battleInfo;
@@ -586,9 +586,9 @@ namespace Astrum.Http
             var result = GetXHR("http://astrum.amebagames.com/_/event/furyraid/battle?_id=" + Uri.EscapeDataString(raidId));
             var battleInfo = JsonConvert.DeserializeObject<RaidBattleInfo>(result);
 
-            ViewModel.BpValue = battleInfo.bpValue;
-
             PrintRaidBattleInfo(battleInfo);
+            UpdateBattleBp(battleInfo);
+
             Delay(DELAY_SHORT);
 
             return battleInfo;
@@ -933,6 +933,14 @@ namespace Astrum.Http
 
                 ViewModel.TpValue = stage.status.tp.value;
                 ViewModel.TpMax = stage.status.tp.max;
+            }
+        }
+
+        private void UpdateBattleBp(RaidBattleInfo battleInfo)
+        {
+            if (battleInfo.isPlaying)
+            {
+                ViewModel.BpValue = battleInfo.bpValue;
             }
         }
 
