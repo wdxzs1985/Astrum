@@ -127,11 +127,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\background.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
+    <Resource Include="Images\background.jpg" />
     <Resource Include="Images\Icon.png" />
   </ItemGroup>
   <ItemGroup>
