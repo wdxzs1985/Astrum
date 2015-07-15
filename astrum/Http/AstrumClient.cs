@@ -645,7 +645,7 @@ namespace Astrum.Http
 
                 GuildBattleChat();
 
-                while (true)
+                while (ViewModel.IsRunning)
                 {
                     battleInfo = GuildBattle(battleId);
 
@@ -714,7 +714,7 @@ namespace Astrum.Http
         {
             var values = new Dictionary<string, string>
                 {
-                    { "stampId", battleId }
+                    { "_id", battleId }
                 };
             PostXHR("http://astrum.amebagames.com/_/guildbattle/stamp", values);
             this.Delay(DELAY_SHORT);
