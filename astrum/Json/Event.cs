@@ -155,4 +155,10 @@ namespace Astrum.Json.Event
         public bool available { get; set; }
     }
 
+    public class Roulette
+    {
+        public bool available { get; set; }
+        public int initialPosition { get; set; }
+        public List<int> order { get; set; }
+    }
 }

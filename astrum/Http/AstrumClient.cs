@@ -667,24 +667,84 @@ namespace Astrum.Http
                     else
                     {
                         //http://astrum.amebagames.com/_/guildbattle/tp?_id=B4e00c0644ed6fcfddd354c5cd714246994f6c7f9f3065b289bbd8ed1815d065d
+                        TpInfo tpInfo = GuildBattleTpInfo(battleId);
 
-                        // quest
-                        TpQuest();
-
-                        //rollet
-                        //http://astrum.amebagames.com/_/guildbattle/tp/roulette?_id=B4e00c0644ed6fcfddd354c5cd714246994f6c7f9f3065b289bbd8ed1815d065d
-                        //{"available":true,"initialPosition":7,"order":[30,50,60,50,30,30,40,70,40,30,20,30,80,30,20],"_hash":"6f42db45642ed44a16bf4e5443656200"}
-                        //http://astrum.amebagames.com/_/guildbattle/tp/roulette
-                        //{"_id":"B4e00c0644ed6fcfddd354c5cd714246994f6c7f9f3065b289bbd8ed1815d065d","position":-6}
-                        //normal
-                        //http://astrum.amebagames.com/_/guildbattle/tp/normal
-                        //{"_id":"B4e00c0644ed6fcfddd354c5cd714246994f6c7f9f3065b289bbd8ed1815d065d"}
-                        //post
-                        //http://astrum.amebagames.com/_/guildbattle/tp/chat
-                        //{"_id":"B4e00c0644ed6fcfddd354c5cd714246994f6c7f9f3065b289bbd8ed1815d065d"}
+                        if (tpInfo.normal.available)
+                        {
+                            GuildBattleTpNormal(battleId);
+                        }
+                        else if (tpInfo.chat.available)
+                        {
+                            GuildBattleTpChat(battleId);
+                        }
+                        else if (tpInfo.roulette.available)
+                        {
+                            GuildBattleRoulette(battleId);
+                        }
+                        else
+                        {
+                            // quest
+                            if (ViewModel.StaminaValue >= 5)
+                            {
+                                TpQuest();
+                            }
+                            else
+                            {
+                                return;
+                            }
+                        }
                     }
                 }
             }
+        }
+
+        private TpInfo GuildBattleTpInfo(string battleId)
+        {
+            var result = GetXHR("http://astrum.amebagames.com/_/guildbattle/tp?_id=" + Uri.EscapeDataString(battleId));
+            TpInfo tpInfo = JsonConvert.DeserializeObject<TpInfo>(result);
+            Delay(DELAY_SHORT);
+
+            return tpInfo;
+        }
+
+        private void GuildBattleTpNormal(string battleId)
+        {
+            var values = new Dictionary<string, string>
+            {
+                { "_id", battleId }
+            };
+            PostXHR("http://astrum.amebagames.com/_/guildbattle/tp/normal", values);
+            Delay(DELAY_SHORT);
+        }
+
+        private void GuildBattleTpChat(string battleId)
+        {
+            var values = new Dictionary<string, string>
+            {
+                { "_id", battleId }
+            };
+            PostXHR("http://astrum.amebagames.com/_/guildbattle/tp/normal", values);
+            Delay(DELAY_SHORT);
+        }
+
+        private void GuildBattleRoulette(string battleId)
+        {
+            var result = GetXHR("http://astrum.amebagames.com/_/guildbattle/tp/roulette?_id=" + Uri.EscapeDataString(battleId));
+            Roulette roulette = JsonConvert.DeserializeObject<Roulette>(result);
+
+            Delay(DELAY_SHORT);
+
+            int targetPosition = roulette.order.IndexOf(80);
+            int position = roulette.initialPosition - targetPosition;
+
+
+            var values = new Dictionary<string, string>
+            {
+                { "_id", battleId },
+                { "position", position.ToString() }
+            };
+            PostXHR("http://astrum.amebagames.com/_/guildbattle/tp/roulette", values);
+            Delay(DELAY_SHORT);
         }
 
         private Schedule FindSchedule()
@@ -780,26 +840,10 @@ namespace Astrum.Http
                 }
                 if (stage.staminaEmpty)
                 {
-                    if (stage.items != null)
-                    {
-                        var item = stage.items.Find(e => INSTANT_STAMINA_HALF.Equals(e._id));
-                        if (item.stock > MIN_STAMINA_STOCK)
-                        {
-                            UseItem(item, "stamina");
-                        }
-                        else
-                        {
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        return;
-                    }
+                    return;
                 }
                 //forward
                 stage = ForwardTpStage();
-
             }
         }
 
