@@ -20,70 +20,189 @@ using System.Collections;
 using Newtonsoft.Json;
 using Astrum.Http;
 using System.Threading;
+using Astrum.Json;
 
 
 namespace Astrum
 {
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        public const string USER_LIST_FILE = "./userlist.json";
+
         public MainWindow()
         {
             InitializeComponent();
 
             client = new AstrumClient();
 
+            this.DataContext = client.ViewModel;
+
             this.UsernameBox.Text = "";
             this.PasswordBox.Password = "";
-
-            this.DataContext = client.ViewModel;
 
             LoginPanel.Visibility = Visibility.Visible;
             StatusPanel.Visibility = Visibility.Hidden;
 
             LoginButton.IsEnabled = true;
+
+            LoadUserList();
         }
 
         private AstrumClient client;
+
+        private LoginUser nowUser;
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             Console.WriteLine("login start");
             LoginButton.IsEnabled = false;
+            LoginButton.Content = "少女祈祷中";
+            LoginUserComboBox.IsEnabled = false;
 
             var username = UsernameBox.Text;
             var password = this.PasswordBox.Password;
 
-            var login = await Task.Run(() =>
+            var login = false;
+            if (!"".Equals(username) && !"".Equals(password))
             {
-                return client.Login(username, password);
-            });
+                login = await Task.Run(() =>
+                {
+                    try
+                    {
+                        return client.Login(username, password);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        return false;
+                    }
+
+                });
+            }
+
             if (login)
             {
-                Console.WriteLine("login success");
+                client.Mypage();
+                client.Item();
+
                 LoginPanel.Visibility = Visibility.Hidden;
                 StatusPanel.Visibility = Visibility.Visible;
 
-                client.Token();
-                client.Mypage();
-
                 client.ViewModel.IsRunning = false;
+
+                nowUser = new LoginUser { username = username, password = password };
+                //save user
+                SaveUserList();
             }
             else
             {
-                Console.WriteLine("login failed");
+                MessageBoxResult result = MessageBox.Show("登入失败");
                 LoginButton.IsEnabled = true;
+                LoginButton.Content = "登陆";
+                LoginUserComboBox.IsEnabled = true;
             }
+        }
+
+        private async void LoadUserList()
+        {
+            int index = 0;
+            List<LoginUser> loginUserList = await Task.Run(() =>
+            {
+                loginUserList = new List<LoginUser>();
+                FileStream fs = null;
+                StreamReader sr = null;
+                try
+                {
+                    fs = new FileStream(USER_LIST_FILE, FileMode.Open);
+                    sr = new StreamReader(fs);
+
+                    string text = sr.ReadToEnd();
+
+                    LoginUserList userList = JsonConvert.DeserializeObject<LoginUserList>(text);
+
+                    loginUserList = userList.list;
+
+                }
+                catch
+                {
+                }
+                finally
+                {
+                    if (sr != null)
+                    {
+                        sr.Close();
+                    }
+                    if (fs != null)
+                    {
+                        fs.Close();
+                    }
+                }
+
+                loginUserList.Add(new LoginUser { name = "New User" });
+
+                return loginUserList;
+            });
+
+            client.ViewModel.LoginUserList = loginUserList;
+            LoginUserComboBox.SelectedIndex = index;
+        }
+
+        private async void SaveUserList()
+        {
+            await Task.Run(() =>
+            {
+                var userList = client.ViewModel.LoginUserList.Where(user => user.username != null && !nowUser.username.Equals(user.username)).ToList();
+
+                nowUser.name = client.ViewModel.Name;
+                nowUser.minstaminastock = client.ViewModel.MinStaminaStock;
+
+                userList.Insert(0, nowUser);
+
+                client.ViewModel.LoginUserList = userList;
+
+                FileStream fs = null;
+                StreamWriter sw = null;
+                try
+                {
+                    LoginUserList values = new LoginUserList();
+                    values.list = userList;
+
+                    string json = JsonConvert.SerializeObject(values);
+
+                    fs = new FileStream(USER_LIST_FILE, FileMode.Create);
+                    sw = new StreamWriter(fs);
+                    sw.WriteLine(json);
+                }
+                catch
+                {
+
+                }
+                finally
+                {
+                    if (sw != null)
+                    {
+                        sw.Close();
+                    }
+                    if (fs != null)
+                    {
+                        fs.Close();
+                    }
+                }
+
+            });
         }
         
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
             StartButton.IsEnabled = false;
             QuestButton.IsEnabled = false;
-            RaidButton.IsEnabled = false;
             GuildBattleButton.IsEnabled = false;
+
+            SaveUserList();
 
             if (client.ViewModel.IsRunning == false)
             {
@@ -94,23 +213,20 @@ namespace Astrum
                 
                 bool result = await Task.Run(() =>
                 {
-                    client.Mypage();
                     while (client.ViewModel.IsRunning)
                     {
-                        Console.WriteLine("start loop");
+                        Console.WriteLine("Start Loop");
                         client.ViewModel.IsRunning = false;
 
-                        try{
+                        try
+                        {
+                            client.Mypage();
+                            client.Item();
+
                             if (client.ViewModel.IsQuestEnable)
                             {
                                 client.ViewModel.IsRunning = true;
                                 client.Quest();
-                            }
-
-                            if (client.ViewModel.IsRaidEnable)
-                            {
-                                client.ViewModel.IsRunning = true;
-                                client.Raid();
                             }
 
                             if (client.ViewModel.IsGuildBattleEnable)
@@ -119,19 +235,7 @@ namespace Astrum
                                 client.GuildBattle();
                             }
 
-                            var countDown = AstrumClient.MINUTE;
-                            for (var i = 0; i < AstrumClient.MINUTE; i += 100)
-                            {
-                                Thread.Sleep(100);
-                                if (i % 1000 == 0)
-                                {
-                                    Console.WriteLine("wait {0} second", (countDown - i) / 1000);
-                                }
-                                if (!client.ViewModel.IsRunning)
-                                {
-                                    break;
-                                }
-                            }
+                            client.CountDown(AstrumClient.MINUTE);
                         }
                         catch(Exception ex)
                         {
@@ -147,7 +251,6 @@ namespace Astrum
                 StartButton.Content = "Start";
                 StartButton.IsEnabled = true;
                 QuestButton.IsEnabled = true;
-                RaidButton.IsEnabled = true;
                 GuildBattleButton.IsEnabled = true;
 
                 if (!result)
@@ -155,6 +258,7 @@ namespace Astrum
                     LoginPanel.Visibility = Visibility.Visible;
                     StatusPanel.Visibility = Visibility.Hidden;
                     LoginButton.IsEnabled = true;
+                    LoginUserComboBox.IsEnabled = true;
                 }
             }
             else
@@ -162,6 +266,55 @@ namespace Astrum
                 client.ViewModel.IsRunning = false;
                 StartButton.IsEnabled = false;
             }
+        }
+
+
+        private void LoginUserComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            LoginUser user = (LoginUser)LoginUserComboBox.SelectedItem;
+
+            if (user != null)
+            {
+                UsernameBox.Text = user.username;
+                PasswordBox.Password = user.password;
+
+                client.ViewModel.MinStaminaStock = user.minstaminastock;
+
+                if (user.username != null)
+                {
+                    UsernameBox.Visibility = Visibility.Hidden;
+                    PasswordBox.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    UsernameBox.Visibility = Visibility.Visible;
+                    PasswordBox.Visibility = Visibility.Visible;
+                }
+            }
+        }
+
+        private void ProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            var p = (ProgressBar)sender;
+            p.ApplyTemplate();
+
+            Console.WriteLine("{0}: {1} -> {2}", p.Name, e.OldValue, e.NewValue);
+
+            var progress = (e.NewValue / p.Maximum) * 100;
+
+            var foreground = new SolidColorBrush(Color.FromRgb(1,211,40));
+
+            if (progress <= 10d)
+            {
+                foreground = Brushes.Red;
+            }
+            else if (progress <= 40d)
+            {
+                foreground = Brushes.Orange;
+            }
+
+            ((Panel)p.Template.FindName("Animation", p)).Background = foreground;
+
         }
     }
 }

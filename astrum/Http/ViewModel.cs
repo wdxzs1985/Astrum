@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Astrum.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -20,7 +21,112 @@ namespace Astrum.Http
             }
         }
 
+        private List<LoginUser> _login_user_list;
+        public List<LoginUser> LoginUserList
+        {
+            get
+            {
+                return _login_user_list;
+            }
+            set
+            {
+                _login_user_list = value;
+                NotifyPropertyChanged("LoginUserList");
+            }
+        }
+
         public bool IsRunning { get; set; }
+        public bool IsFuryRaidEnable { get; set; }
+        public bool IsFuryRaid { get; set; }
+        public bool CanFullAttack
+        {
+            get
+            {
+                return (IsFuryRaidEnable == IsFuryRaid) && BpValue >= 3;
+            }
+        }
+
+        public string WindowTitle
+        {
+            get
+            {
+                if(Name != null) {
+                    return String.Format("プリンセスコネクト [{0} (Lv {1})]", Name, Level);
+                }
+                return "プリンセスコネクト";
+            }
+        }
+
+        private long _bpMiniStock;
+        private long _bpStock;
+        private long _staminaHalfStock;
+        private long _staminaStock;
+        private long _minStaminaStock;
+
+        public long BpMiniStock
+        {
+            get
+            {
+                return _bpMiniStock;
+            }
+            set
+            {
+                _bpMiniStock = value;
+                NotifyPropertyChanged("BpMiniStock");
+            }
+        }
+
+        public long BpStock
+        {
+            get
+            {
+                return _bpStock;
+            }
+            set
+            {
+                _bpStock = value;
+                NotifyPropertyChanged("BpStock");
+            }
+        }
+
+        public long StaminaHalfStock
+        {
+            get
+            {
+                return _staminaHalfStock;
+            }
+            set
+            {
+                _staminaHalfStock = value;
+                NotifyPropertyChanged("StaminaHalfStock");
+            }
+        }
+
+        public long StaminaStock
+        {
+            get
+            {
+                return _staminaStock;
+            }
+            set
+            {
+                _staminaStock = value;
+                NotifyPropertyChanged("StaminaStock");
+            }
+        }
+
+        public long MinStaminaStock
+        {
+            get
+            {
+                return _minStaminaStock;
+            }
+            set
+            {
+                _minStaminaStock = value;
+                NotifyPropertyChanged("MinStaminaStock");
+            }
+        }
 
         private string _history;
         public string History
@@ -37,10 +143,7 @@ namespace Astrum.Http
         }
 
         private bool _quest_enable;
-        private bool _raid_enable;
         private bool _guild_battle_enable;
-
-        private bool _unlimit_stage;
 
         public bool IsQuestEnable
         {
@@ -54,30 +157,7 @@ namespace Astrum.Http
                 NotifyPropertyChanged("IsQuestEnable");
             }
         }
-        public bool IsUnlimitStage
-        {
-            get
-            {
-                return _unlimit_stage;
-            }
-            set
-            {
-                _unlimit_stage = value;
-                NotifyPropertyChanged("IsUnlimitStage");
-            }
-        }
-        public bool IsRaidEnable
-        {
-            get
-            {
-                return _raid_enable;
-            }
-            set
-            {
-                _raid_enable = value;
-                NotifyPropertyChanged("IsRaidEnable");
-            }
-        }
+
         public bool IsGuildBattleEnable
         {
             get
@@ -113,6 +193,7 @@ namespace Astrum.Http
             {
                 _name = value;
                 NotifyPropertyChanged("Name");
+                NotifyPropertyChanged("WindowTitle");
             }
         }
         public long Level
@@ -125,7 +206,7 @@ namespace Astrum.Http
             {
                 _level = value;
                 NotifyPropertyChanged("Level");
-
+                NotifyPropertyChanged("WindowTitle");
             }
         }
 

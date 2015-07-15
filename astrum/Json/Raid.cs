@@ -23,6 +23,8 @@ namespace Astrum.Json.Raid
     public class RaidBattleInfo
     {
         public string _id { get; set; }
+        public string eventId { get; set; }
+
         public string bossId { get; set; }
         public string type { get; set; }
 
@@ -67,4 +69,14 @@ namespace Astrum.Json.Raid
         public int hp { get; set; }
         public int atk { get; set; }
     }
+
+    public class FuryRaidInfo
+    {
+        public RaidBattleList find { get; set; }
+
+        public RaidBattleList rescue { get; set; }
+
+        public string eventId { get; set; }
+    }
+
 }
