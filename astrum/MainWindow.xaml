@@ -56,94 +56,79 @@
         <Grid Name="StatusPanel" Visibility="Visible">
 
             <Grid HorizontalAlignment="Left" Height="30" Margin="30,220,0,0" VerticalAlignment="Top" Width="180">
-                <Label Content="名前" Margin="0,0,0,0" Foreground="White" Width="60" FontFamily="Microsoft YaHei" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Left">
+                <Label Content="名前" Margin="0,0,0,0" Foreground="White" Width="73" Height="25" FontFamily="Microsoft YaHei" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Left">
                     <Label.Background>
                         <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
                     </Label.Background>
                 </Label>
-                <Label Content="{Binding Name}" HorizontalAlignment="Left" Margin="70,0,0,0" Width="100" Height="28" Background="#66FFFFFF" VerticalAlignment="Center"/>
+                <Label Content="{Binding Name}" HorizontalAlignment="Left" Margin="80,0,0,0" Width="100" Height="28" Background="#88FFFFFF" VerticalAlignment="Center"/>
             </Grid>
 
             <Grid HorizontalAlignment="Left" Height="30" Margin="220,220,0,0" VerticalAlignment="Top" Width="180">
-                <Label Content="Level" Margin="0,0,0,0" Foreground="White" Width="60" FontFamily="Arial Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left">
+                <Label Content="Level" Margin="0,0,0,0" Foreground="White"  Width="73" Height="25"  FontFamily="Arial Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left">
                     <Label.Background>
                         <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
                     </Label.Background>
                 </Label>
-                <Label Content="{Binding Level}" HorizontalAlignment="Left" Margin="70,0,0,0" VerticalAlignment="Top" Width="100" Height="28" Background="#66FFFFFF"/>
+                <Label Content="{Binding Level}" HorizontalAlignment="Left" Margin="80,0,0,0" VerticalAlignment="Top" Width="100" Height="28" Background="#66FFFFFF"/>
             </Grid>
 
             <Grid HorizontalAlignment="Left" Height="30" Margin="30,260,0,0" VerticalAlignment="Top" Width="180">
-                <Label Content="スタミナ" Margin="0,0,0,0" Foreground="White" Width="60" FontFamily="Microsoft YaHei" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Left">
+                <Label Content="スタミナ" Margin="0,0,0,0" Foreground="White"  Width="73" Height="25"  FontFamily="Microsoft YaHei" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Left">
                     <Label.Background>
                         <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
                     </Label.Background>
                 </Label>
-                <ProgressBar Name="StaminaProgress" HorizontalAlignment="Left" Height="10" Margin="70,0,0,0" VerticalAlignment="Center" Width="100" Maximum="100" Value="{Binding StaminaProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Stamina}" ValueChanged="ProgressBar_ValueChanged" />
+                <ProgressBar Name="StaminaProgress" HorizontalAlignment="Left" Height="10" Margin="80,0,0,0" VerticalAlignment="Center" Width="100" Maximum="100" Value="{Binding StaminaProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Stamina}" ValueChanged="ProgressBar_ValueChanged" />
             </Grid>
 
             <Grid HorizontalAlignment="Left" Height="26" Margin="220,260,0,0" VerticalAlignment="Top" Width="180">
-                <Label Content="経験値" Margin="0,0,0,0" Foreground="White" Width="60" FontFamily="Microsoft YaHei" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Left">
+                <Label Content="経験値" Margin="0,0,0,0" Foreground="White"  Width="73" Height="25"  FontFamily="Microsoft YaHei" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Left">
                     <Label.Background>
                         <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
                     </Label.Background>
                 </Label>
-                <ProgressBar Name="ExpProgress" HorizontalAlignment="Left" Height="10" Margin="70,0,0,0" VerticalAlignment="Center" Width="100"
+                <ProgressBar Name="ExpProgress" HorizontalAlignment="Left" Height="10" Margin="80,0,0,0" VerticalAlignment="Center" Width="100"
         		Maximum="100" Minimum="0" Value="{Binding ExpProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}"  ToolTip="{Binding Exp}"/>
             </Grid>
 
             <Grid HorizontalAlignment="Left" Height="26" Margin="30,300,0,0" VerticalAlignment="Top" Width="180">
-                <Label Content="BP" Margin="0,0,0,0" Foreground="White" Width="60" FontFamily="Arial Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left">
+                <Label Content="BP" Margin="0,0,0,0" Foreground="White"  Width="73" Height="25"  FontFamily="Arial Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left">
                     <Label.Background>
                         <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
                     </Label.Background>
                 </Label>
-                <ProgressBar Name="BpProgress" HorizontalAlignment="Left" Height="10" Margin="70,0,0,0" VerticalAlignment="Center" Width="100" Maximum="6" Value="{Binding BpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Bp}" ValueChanged="ProgressBar_ValueChanged" />
+                <ProgressBar Name="BpProgress" HorizontalAlignment="Left" Height="10" Margin="80,0,0,0" VerticalAlignment="Center" Width="100" Maximum="6" Value="{Binding BpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Bp}" ValueChanged="ProgressBar_ValueChanged" />
             </Grid>
 
             <Grid HorizontalAlignment="Left" Height="26" Margin="220,300,0,0" VerticalAlignment="Top" Width="180">
-                <Label Content="TP" Margin="0,0,0,0" Foreground="White" Width="60" FontFamily="Arial Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left">
+                <Label Content="TP" Margin="0,0,0,0" Foreground="White"  Width="73" Height="25"  FontFamily="Arial Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left">
                     <Label.Background>
                         <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
                     </Label.Background>
                 </Label>
-                <ProgressBar Name="TpProgress" HorizontalAlignment="Left" Height="10" Margin="70,0,0,0" VerticalAlignment="Center" Width="100" Maximum="100" Value="{Binding TpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Tp}" ValueChanged="ProgressBar_ValueChanged" />
+                <ProgressBar Name="TpProgress" HorizontalAlignment="Left" Height="10" Margin="80,0,0,0" VerticalAlignment="Center" Width="100" Maximum="100" Value="{Binding TpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Tp}" ValueChanged="ProgressBar_ValueChanged" />
             </Grid>
 
             <Grid HorizontalAlignment="Left" Height="30" Margin="30,340,0,0" VerticalAlignment="Top" Width="180">
-                <Label Content="SP" Margin="0,0,0,0" Foreground="White" Width="60" FontFamily="Microsoft YaHei" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Left">
-                    <Label.Background>
-                        <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
-                    </Label.Background>
-                </Label>
-                <Label Content="{Binding StaminaStock}" HorizontalAlignment="Left" Margin="70,0,0,0" Width="100" Height="28" Background="#66FFFFFF" VerticalAlignment="Center"/>
+                <Image Source="Images/instant-stamina_potion.png" Width="24" Height="24" HorizontalAlignment="Left" Margin="50,0,0,0" ToolTip="SP"/>
+
+                <Label Content="{Binding StaminaStock}" HorizontalAlignment="Left" Margin="80,0,0,0" Width="100" Height="28" Background="#66FFFFFF" VerticalAlignment="Center"/>
             </Grid>
 
             <Grid HorizontalAlignment="Left" Height="30" Margin="220,340,0,0" VerticalAlignment="Top" Width="180">
-                <Label Content="SP Half" Margin="0,0,0,0" Foreground="White" Width="60" FontFamily="Arial Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left">
-                    <Label.Background>
-                        <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
-                    </Label.Background>
-                </Label>
-                <Label Content="{Binding StaminaHalfStock}" HorizontalAlignment="Left" Margin="70,0,0,0" VerticalAlignment="Top" Width="100" Height="28" Background="#66FFFFFF"/>
+                <Image Source="Images/instant-half_stamina_potion.png" Width="24" Height="24" HorizontalAlignment="Left" Margin="50,0,0,0" ToolTip="SP Half"/>
+                <Label Content="{Binding StaminaHalfStock}" HorizontalAlignment="Left" Margin="80,0,0,0" VerticalAlignment="Top" Width="100" Height="28" Background="#66FFFFFF"/>
             </Grid>
 
             <Grid HorizontalAlignment="Left" Height="30" Margin="30,380,0,0" VerticalAlignment="Top" Width="180">
-                <Label Content="BP" Margin="0,0,0,0" Foreground="White" Width="60" FontFamily="Microsoft YaHei" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Left">
-                    <Label.Background>
-                        <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
-                    </Label.Background>
-                </Label>
-                <Label Content="{Binding BpStock}" HorizontalAlignment="Left" Margin="70,0,0,0" Width="100" Height="28" Background="#66FFFFFF" VerticalAlignment="Center"/>
+                <Image Source="Images/instant-bp_ether.png" Width="24" Height="24" HorizontalAlignment="Left" Margin="50,0,0,0" ToolTip="BP"/>
+                <Label Content="{Binding BpStock}" HorizontalAlignment="Left" Margin="80,0,0,0" Width="100" Height="28" Background="#66FFFFFF" VerticalAlignment="Center"/>
             </Grid>
 
             <Grid HorizontalAlignment="Left" Height="30" Margin="220,380,0,0" VerticalAlignment="Top" Width="180">
-                <Label Content="BP Mini" Margin="0,0,0,0" Foreground="White" Width="60" FontFamily="Arial Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left">
-                    <Label.Background>
-                        <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
-                    </Label.Background>
-                </Label>
-                <Label Content="{Binding BpMiniStock}" HorizontalAlignment="Left" Margin="70,0,0,0" VerticalAlignment="Top" Width="100" Height="28" Background="#66FFFFFF"/>
+                <Image Source="Images/instant-mini_bp_ether.png" Width="24" Height="24" HorizontalAlignment="Left" Margin="50,0,0,0" ToolTip="BP MINI"/>
+                <Label Content="{Binding BpMiniStock}" HorizontalAlignment="Left" Margin="80,0,0,0" VerticalAlignment="Top" Width="100" Height="28" Background="#66FFFFFF"/>
             </Grid>
 
             <Grid HorizontalAlignment="Left" Height="200" Margin="410,20,0,0" VerticalAlignment="Top" Width="120" Background="#FF2A4D70">
@@ -182,8 +167,6 @@
                     <TextBlock Text="{Binding History}"/>
                 </ScrollViewer>
             </Grid>
-            <Image Source="Images/staminapotion.png" HorizontalAlignment="Left" Height="32" Margin="414,300,0,0" VerticalAlignment="Top" Width="33"/>
-            <TextBlock HorizontalAlignment="Left" Margin="456,307,0,0" TextWrapping="Wrap" Width="34" Text="{Binding Stock}" VerticalAlignment="Top" Background="White" Opacity="0.7" Height="19"/>
         </Grid>
     </Grid>
 </Window>
