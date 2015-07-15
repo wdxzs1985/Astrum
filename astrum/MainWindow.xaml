@@ -131,7 +131,7 @@
                 <Label Content="{Binding BpMiniStock}" HorizontalAlignment="Left" Margin="80,0,0,0" VerticalAlignment="Top" Width="100" Height="28" Background="#66FFFFFF"/>
             </Grid>
 
-            <Grid HorizontalAlignment="Left" Height="200" Margin="410,20,0,0" VerticalAlignment="Top" Width="120" Background="#FF2A4D70">
+            <Grid HorizontalAlignment="Left" Height="200" Margin="430,20,0,0" VerticalAlignment="Top" Width="120" Background="#FF2A4D70">
 
                 <RadioButton x:Name="QuestButton" Content="Quest" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" IsChecked="{Binding IsQuestEnable}" Foreground="White" Width="100" />
                 <RadioButton x:Name="GuildBattleButton" Content="GuildBattle" HorizontalAlignment="Center" Margin="0,40,0,0" VerticalAlignment="Top" IsChecked="{Binding IsGuildBattleEnable}" Foreground="#FFF7F7F7" Width="100"/>
