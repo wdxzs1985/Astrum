@@ -182,6 +182,8 @@
                     <TextBlock Text="{Binding History}"/>
                 </ScrollViewer>
             </Grid>
+            <Image Source="Images/staminapotion.png" HorizontalAlignment="Left" Height="32" Margin="414,300,0,0" VerticalAlignment="Top" Width="33"/>
+            <TextBlock HorizontalAlignment="Left" Margin="456,307,0,0" TextWrapping="Wrap" Width="34" Text="{Binding Stock}" VerticalAlignment="Top" Background="White" Opacity="0.7" Height="19"/>
         </Grid>
     </Grid>
 </Window>
