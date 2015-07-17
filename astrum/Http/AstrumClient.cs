@@ -717,8 +717,6 @@ namespace Astrum.Http
                     GuildBattleStamp(battleId);
                 }
 
-                GuildBattleChat();
-
                 while (ViewModel.IsRunning)
                 {
                     battleInfo = GuildBattle(battleId);
@@ -749,6 +747,7 @@ namespace Astrum.Http
                         }
                         else if (tpInfo.chat.available)
                         {
+                            GuildBattleChat();
                             GuildBattleTpChat(battleId);
                         }
                         else if (tpInfo.roulette.available)
