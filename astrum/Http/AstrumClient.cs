@@ -13,6 +13,7 @@ using Astrum.Json.Stage;
 using Astrum.Json.Raid;
 using Astrum.Json.Event;
 using Astrum.Json.Item;
+using Astrum.Json.Gift;
 
 namespace Astrum.Http
 {
@@ -218,6 +219,13 @@ namespace Astrum.Http
             this.GetXHR("http://astrum.amebagames.com/_/access?p=" + path);
         }
 
+        public void OnStart()
+        {
+            this.Mypage();
+            this.Gift();
+            this.Item();
+        }
+
         public void Mypage()
         {
             var responseString = GetXHR("http://astrum.amebagames.com/_/mypage");
@@ -257,6 +265,34 @@ namespace Astrum.Http
         private void LoginBonusLongLogin()
         {
             GetXHR("http://astrum.amebagames.com/_/loginbonus/longlogin");
+        }
+
+        public void Gift()
+        {
+            while (true)
+            {
+                var result = GetXHR("http://astrum.amebagames.com/_/gift?page=1&size=10&type=all&limited=1");
+                GiftInfo giftInfo = JsonConvert.DeserializeObject<GiftInfo>(result);
+                Access("gift");
+                Delay(DELAY_SHORT);
+
+
+                if (giftInfo.total > 0)
+                {
+                    var values = new Dictionary<string, string>
+                    {
+                       { "auto", "1" },
+                       { "limited", "1" },
+                       { "type", "all" }
+                    };
+                    PostXHR("http://astrum.amebagames.com/_/gift", values);
+                    Delay(DELAY_SHORT);
+                }
+                else
+                {
+                    return;
+                }
+            }
         }
 
         public void Item()
@@ -596,7 +632,7 @@ namespace Astrum.Http
                     FuryRaidBattleRescue(battleInfo._id);
                 }
 
-                if (ViewModel.CanFullAttack)
+                if (battleInfo.type.Equals("find") && ViewModel.CanFullAttack)
                 {
                     var hp = battleInfo.hp - battleInfo.totalDamage;
                     var attackType = hp > EASY_BOSS_HP ? "full" : "normal";
