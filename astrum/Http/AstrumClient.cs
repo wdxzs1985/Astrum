@@ -226,7 +226,37 @@ namespace Astrum.Http
             PrintMypage(mypage);
             UpdateMypageView(mypage);
 
+            if (mypage.loginBonus != null)
+            {
+                if (mypage.loginBonus.basic)
+                {
+                    LoginBonusBasic();
+                }
+                if (mypage.loginBonus.@event)
+                {
+                    LoginBonusEvent();
+                }
+                if (mypage.loginBonus.longLogin)
+                {
+                    LoginBonusLongLogin();
+                }
+            }
+
             Access("mypage");
+        }
+
+        private void LoginBonusBasic() {
+            GetXHR("http://astrum.amebagames.com/_/loginbonus");
+        }
+
+        private void LoginBonusEvent()
+        {
+            GetXHR("http://astrum.amebagames.com/_/loginbonus/event");
+        }
+
+        private void LoginBonusLongLogin()
+        {
+            GetXHR("http://astrum.amebagames.com/_/loginbonus/longlogin");
         }
 
         public void Item()
