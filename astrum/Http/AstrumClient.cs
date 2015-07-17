@@ -212,6 +212,7 @@ namespace Astrum.Http
             return true;
         }
 
+
         public void Access(string path)
         {
             var p = Uri.EscapeDataString(path);
@@ -229,6 +230,22 @@ namespace Astrum.Http
             Access("mypage");
         }
 
+        public void Getgift()
+        {
+            GetXHR("http://astrum.amebagames.com/_/gift?page=1&size=10&type=all&limited=1");
+            Access("gift");
+            Delay(DELAY_SHORT);
+            var values = new Dictionary<string, string>
+            {
+                {"auto","1"},
+                {"limited","1"},
+                {"type","all"}
+            };
+            PostXHR("http://astrum.amebagames.com/_/gift", values);
+
+        }
+
+
         public void Item()
         {
             var responseString = GetXHR("http://astrum.amebagames.com/_/item");
@@ -242,6 +259,7 @@ namespace Astrum.Http
             }
         }
 
+        
 
         public void Quest()
         {
@@ -326,7 +344,7 @@ namespace Astrum.Http
                                 return;
                             }
                         }
-                        //forward
+                        //forward                        
                         stage = ForwardStage(areaId);
                     }
                 }
