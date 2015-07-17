@@ -86,7 +86,7 @@ namespace Astrum
 
             if (login)
             {
-                client.Mypage();
+                client.Mypage();                
                 client.Item();
 
                 LoginPanel.Visibility = Visibility.Hidden;
@@ -221,6 +221,7 @@ namespace Astrum
                         try
                         {
                             client.Mypage();
+                            client.Getgift();
                             client.Item();
 
                             if (client.ViewModel.IsQuestEnable)
@@ -233,8 +234,7 @@ namespace Astrum
                             {
                                 client.ViewModel.IsRunning = true;
                                 client.GuildBattle();
-                            }
-
+                            }                            
                             client.CountDown(AstrumClient.MINUTE);
                         }
                         catch(Exception ex)
