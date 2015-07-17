@@ -772,54 +772,6 @@ namespace Astrum.Http
             }
         }
 
-        private TpInfo GuildBattleTpInfo(string battleId)
-        {
-            var result = GetXHR("http://astrum.amebagames.com/_/guildbattle/tp?_id=" + Uri.EscapeDataString(battleId));
-            TpInfo tpInfo = JsonConvert.DeserializeObject<TpInfo>(result);
-            Delay(DELAY_SHORT);
-
-            return tpInfo;
-        }
-
-        private void GuildBattleTpNormal(string battleId)
-        {
-            var values = new Dictionary<string, string>
-            {
-                { "_id", battleId }
-            };
-            PostXHR("http://astrum.amebagames.com/_/guildbattle/tp/normal", values);
-            Delay(DELAY_SHORT);
-        }
-
-        private void GuildBattleTpChat(string battleId)
-        {
-            var values = new Dictionary<string, string>
-            {
-                { "_id", battleId }
-            };
-            PostXHR("http://astrum.amebagames.com/_/guildbattle/tp/normal", values);
-            Delay(DELAY_SHORT);
-        }
-
-        private void GuildBattleRoulette(string battleId)
-        {
-            var result = GetXHR("http://astrum.amebagames.com/_/guildbattle/tp/roulette?_id=" + Uri.EscapeDataString(battleId));
-            Roulette roulette = JsonConvert.DeserializeObject<Roulette>(result);
-
-            Delay(DELAY_SHORT);
-
-            int targetPosition = roulette.order.IndexOf(80);
-            int position = roulette.initialPosition - targetPosition;
-
-
-            var values = new Dictionary<string, string>
-            {
-                { "_id", battleId },
-                { "position", position.ToString() }
-            };
-            PostXHR("http://astrum.amebagames.com/_/guildbattle/tp/roulette", values);
-            Delay(DELAY_SHORT);
-        }
 
         private Schedule FindSchedule()
         {
@@ -888,16 +840,54 @@ namespace Astrum.Http
             this.Delay(DELAY_LONG);
         }
 
-        private void GuildBattleTp(string battleId)
+
+        private TpInfo GuildBattleTpInfo(string battleId)
         {
-            var result = GetXHR("http://astrum.amebagames.com/_/guildbattle/tp?_id=" + battleId);
+            var result = GetXHR("http://astrum.amebagames.com/_/guildbattle/tp?_id=" + Uri.EscapeDataString(battleId));
             TpInfo tpInfo = JsonConvert.DeserializeObject<TpInfo>(result);
+            Delay(DELAY_SHORT);
 
-            this.Delay(DELAY_SHORT);
+            return tpInfo;
+        }
+
+        private void GuildBattleTpNormal(string battleId)
+        {
+            var values = new Dictionary<string, string>
+            {
+                { "_id", battleId }
+            };
+            PostXHR("http://astrum.amebagames.com/_/guildbattle/tp/normal", values);
+            Delay(DELAY_SHORT);
+        }
+
+        private void GuildBattleTpChat(string battleId)
+        {
+            var values = new Dictionary<string, string>
+            {
+                { "_id", battleId }
+            };
+            PostXHR("http://astrum.amebagames.com/_/guildbattle/tp/chat", values);
+            Delay(DELAY_SHORT);
+        }
+
+        private void GuildBattleRoulette(string battleId)
+        {
+            var result = GetXHR("http://astrum.amebagames.com/_/guildbattle/tp/roulette?_id=" + Uri.EscapeDataString(battleId));
+            Roulette roulette = JsonConvert.DeserializeObject<Roulette>(result);
+
+            Delay(DELAY_SHORT);
+
+            int targetPosition = roulette.order.IndexOf(80);
+            int position = roulette.initialPosition - targetPosition;
 
 
-            TpQuest();
-
+            var values = new Dictionary<string, string>
+            {
+                { "_id", battleId },
+                { "position", position.ToString() }
+            };
+            PostXHR("http://astrum.amebagames.com/_/guildbattle/tp/roulette", values);
+            Delay(DELAY_SHORT);
         }
 
         private void TpQuest()
