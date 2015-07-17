@@ -230,19 +230,24 @@ namespace Astrum.Http
             Access("mypage");
         }
 
+
         public void Getgift()
         {
-            GetXHR("http://astrum.amebagames.com/_/gift?page=1&size=10&type=all&limited=1");
+            var responsestring = GetXHR("http://astrum.amebagames.com/_/gift?page=1&size=10&type=all&limited=1");
+            var giftlist = JsonConvert.DeserializeObject<Giftbox>(responsestring);
             Access("gift");
             Delay(DELAY_SHORT);
-            var values = new Dictionary<string, string>
-            {
-                {"auto","1"},
-                {"limited","1"},
-                {"type","all"}
-            };
-            PostXHR("http://astrum.amebagames.com/_/gift", values);
-
+            
+            if(giftlist.limited > 0)
+            { 
+               var values = new Dictionary<string, string>
+               {
+                  {"auto","1"},
+                  {"limited","1"},
+                  {"type","all"}
+               };
+               PostXHR("http://astrum.amebagames.com/_/gift", values);
+            }
         }
 
 
