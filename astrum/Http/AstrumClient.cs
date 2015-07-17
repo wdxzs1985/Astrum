@@ -234,6 +234,9 @@ namespace Astrum.Http
             PrintMypage(mypage);
             UpdateMypageView(mypage);
 
+            Access("mypage");
+            Delay(DELAY_SHORT);
+
             if (mypage.loginBonus != null)
             {
                 if (mypage.loginBonus.basic)
@@ -250,21 +253,23 @@ namespace Astrum.Http
                 }
             }
 
-            Access("mypage");
         }
 
         private void LoginBonusBasic() {
             GetXHR("http://astrum.amebagames.com/_/loginbonus");
+            Delay(DELAY_SHORT);
         }
 
         private void LoginBonusEvent()
         {
             GetXHR("http://astrum.amebagames.com/_/loginbonus/event");
+            Delay(DELAY_SHORT);
         }
 
         private void LoginBonusLongLogin()
         {
             GetXHR("http://astrum.amebagames.com/_/loginbonus/longlogin");
+            Delay(DELAY_SHORT);
         }
 
         public void Gift()
@@ -273,9 +278,9 @@ namespace Astrum.Http
             {
                 var result = GetXHR("http://astrum.amebagames.com/_/gift?page=1&size=10&type=all&limited=1");
                 GiftInfo giftInfo = JsonConvert.DeserializeObject<GiftInfo>(result);
+
                 Access("gift");
                 Delay(DELAY_SHORT);
-
 
                 if (giftInfo.total > 0)
                 {
@@ -300,12 +305,14 @@ namespace Astrum.Http
             var responseString = GetXHR("http://astrum.amebagames.com/_/item");
             var itemList = JsonConvert.DeserializeObject<ItemList>(responseString);
 
-            Access("item");
-
             foreach (var item in itemList.list)
             {
                 UpdateItemStock(item);
             }
+
+            Access("item");
+            Delay(DELAY_SHORT);
+
         }
 
 
