@@ -53,6 +53,7 @@ namespace Astrum.Http
         private long _staminaHalfStock;
         private long _staminaStock;
         private long _minStaminaStock;
+        private long _minBpStock;
 
         public long BpMiniStock
         {
@@ -79,6 +80,20 @@ namespace Astrum.Http
                 NotifyPropertyChanged("BpStock");
             }
         }
+
+        public long MinBpStock
+        {
+            get
+            {
+                return _minBpStock;
+            }
+            set
+            {
+                _minBpStock = value;
+                NotifyPropertyChanged("MinBpStock");
+            }
+        }
+
 
         public long StaminaHalfStock
         {

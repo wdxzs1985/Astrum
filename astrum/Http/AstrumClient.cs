@@ -37,7 +37,7 @@ namespace Astrum.Http
         public const string INSTANT_BP = "instant-bp_ether";
         public const string INSTANT_BP_MINI = "instant-mini_bp_ether";
 
-        public const int MIN_STAMINA_STOCK = 9999;
+        public const int MIN_STOCK = 9999;
 
         public const int EASY_BOSS_HP = 1000000;
 
@@ -48,7 +48,8 @@ namespace Astrum.Http
             ViewModel.IsQuestEnable = true;
             ViewModel.IsGuildBattleEnable = false;
 
-            ViewModel.MinStaminaStock = MIN_STAMINA_STOCK;
+            ViewModel.MinStaminaStock = MIN_STOCK;
+            ViewModel.MinBpStock = MIN_STOCK;
         }
 
         public ViewModel ViewModel { get; set; }
@@ -407,7 +408,8 @@ namespace Astrum.Http
                                 var item = stage.items.Find(e => INSTANT_STAMINA_HALF.Equals(e._id));
                                 if (item.stock > ViewModel.MinStaminaStock)
                                 {
-                                    UseItem(item, "stamina");
+                                    UseItem("stamina",INSTANT_STAMINA_HALF, 1);
+
                                     return;
                                 }
                                 else
@@ -455,21 +457,27 @@ namespace Astrum.Http
             return stage;
         }
 
-        public void UseItem(ItemInfo item, string type)
+        public void UseItem(string type,string itemId, int value)
         {
-            GetXHR("http://astrum.amebagames.com/_/item/common?type=" + type);
+            var responseString = GetXHR("http://astrum.amebagames.com/_/item/common?type=" + type);
+            var itemList = JsonConvert.DeserializeObject<ItemList>(responseString);
 
-            var values = new Dictionary<string, string>
+            var item = itemList.list.Find(e => itemId.Equals(e._id));
+
+            if (item.stock >= value)
             {
-                { "itemId", item._id },
-                { "value", "1" }
-            };
-            string result = PostXHR("http://astrum.amebagames.com/_/item/common", values);
-            var useItemResult = JsonConvert.DeserializeObject<UseItemResult>(result);
+                var values = new Dictionary<string, string>
+                {
+                    { "itemId", item._id },
+                    { "value", value.ToString() }
+                };
+                string result = PostXHR("http://astrum.amebagames.com/_/item/common", values);
+                var useItemResult = JsonConvert.DeserializeObject<UseItemResult>(result);
 
-            UpdateItemStock(useItemResult);
+                UpdateItemStock(useItemResult);
 
-            Delay(DELAY_SHORT);
+                Delay(DELAY_SHORT);
+            }
         }
 
         public void AreaBossBattle(string areaId)
@@ -686,12 +694,15 @@ namespace Astrum.Http
                     FuryRaidBattleRescue(battleInfo._id);
                 }
 
-                if (battleInfo.type.Equals("find") && ViewModel.CanFullAttack)
+                if (battleInfo.type.Equals("find"))
                 {
-                    var hp = battleInfo.hp - battleInfo.totalDamage;
-                    var attackType = hp > EASY_BOSS_HP ? "full" : "normal";
-                    FuryRaidBattleAttack(battleInfo._id, attackType);
-                    return true;
+                    if (ViewModel.CanFullAttack)
+                    {
+                        var hp = battleInfo.hp - battleInfo.totalDamage;
+                        var attackType = hp > EASY_BOSS_HP ? "full" : "normal";
+                        FuryRaidBattleAttack(battleInfo._id, attackType);
+                        return true;
+                    }
                 }
             }
             else
@@ -764,6 +775,8 @@ namespace Astrum.Http
                     GuildBattleStamp(battleId);
                 }
 
+                GuildBattleChat();
+
                 while (ViewModel.IsRunning)
                 {
                     battleInfo = GuildBattle(battleId);
@@ -794,7 +807,6 @@ namespace Astrum.Http
                         }
                         else if (tpInfo.chat.available)
                         {
-                            GuildBattleChat();
                             GuildBattleTpChat(battleId);
                         }
                         else if (tpInfo.roulette.available)
@@ -1121,10 +1133,12 @@ namespace Astrum.Http
             else if (INSTANT_BP_MINI.Equals(item._id))
             {
                 ViewModel.BpMiniStock = item.stock.after;
+                ViewModel.BpValue = item.value.after;
             }
             else if (INSTANT_BP.Equals(item._id))
             {
                 ViewModel.BpStock = item.stock.after;
+                ViewModel.BpValue = item.value.after;
             }
         }
 
