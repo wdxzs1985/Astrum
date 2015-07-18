@@ -65,6 +65,14 @@ namespace Astrum.Json.Mypage
         public List<Card> cardList { get; set; }
         public Guild guild { get; set; }
         public Link link { get; set; }
+
+        public LoginBonusInfo loginBonus { get; set; }
     }
 
+    public class LoginBonusInfo
+    {
+        public bool basic { get; set; }
+        public bool @event { get; set; }
+        public bool longLogin { get; set; }
+    }
 }
