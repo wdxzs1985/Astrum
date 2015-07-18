@@ -86,16 +86,27 @@ namespace Astrum
 
             if (login)
             {
-                client.OnStart();
 
                 LoginPanel.Visibility = Visibility.Hidden;
                 StatusPanel.Visibility = Visibility.Visible;
 
-                client.ViewModel.IsRunning = false;
+                StartButton.IsEnabled = false;
+                QuestButton.IsEnabled = false;
+                GuildBattleButton.IsEnabled = false;
+
+                await Task.Run(() =>
+                {
+                    client.ViewModel.IsRunning = false;
+                    client.OnStart();
+                });
 
                 nowUser = new LoginUser { username = username, password = password };
                 //save user
                 SaveUserList();
+                
+                StartButton.IsEnabled = true;
+                QuestButton.IsEnabled = true;
+                GuildBattleButton.IsEnabled = true;
             }
             else
             {

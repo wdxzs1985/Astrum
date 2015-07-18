@@ -496,7 +496,7 @@ namespace Astrum.Http
             {
                 foreach (var battleInfo in raidInfo.rescue.list)
                 {
-                    var loop = battleInfo.isNew || ViewModel.CanFullAttack;
+                    var loop = battleInfo.isNew;
                     while (loop)
                     {
                         loop = RaidBattle(battleInfo._id);
@@ -522,7 +522,7 @@ namespace Astrum.Http
                     return true;
                 }
 
-                if (ViewModel.CanFullAttack)
+                if (battleInfo.type.Equals("find") && ViewModel.CanFullAttack)
                 {
                     var hp = battleInfo.hp - battleInfo.totalDamage;
                     var attackType = hp > EASY_BOSS_HP ? "full" : "normal";
@@ -607,7 +607,7 @@ namespace Astrum.Http
             {
                 foreach (var battleInfo in raidInfo.rescue.list)
                 {
-                    var loop = battleInfo.isNew || ViewModel.CanFullAttack;
+                    var loop = battleInfo.isNew;
                     while (loop)
                     {
                         loop = FuryRaidBattle(battleInfo._id);
