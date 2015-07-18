@@ -90,9 +90,7 @@ namespace Astrum
                 LoginPanel.Visibility = Visibility.Hidden;
                 StatusPanel.Visibility = Visibility.Visible;
 
-                StartButton.IsEnabled = false;
-                QuestButton.IsEnabled = false;
-                GuildBattleButton.IsEnabled = false;
+                Controller.Visibility = Visibility.Hidden;
 
                 await Task.Run(() =>
                 {
@@ -100,13 +98,12 @@ namespace Astrum
                     client.OnStart();
                 });
 
+                Controller.Visibility = Visibility.Visible;
+
                 nowUser = new LoginUser { username = username, password = password };
                 //save user
                 SaveUserList();
-                
-                StartButton.IsEnabled = true;
-                QuestButton.IsEnabled = true;
-                GuildBattleButton.IsEnabled = true;
+
             }
             else
             {

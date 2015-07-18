@@ -36,15 +36,6 @@ namespace Astrum.Http
         }
 
         public bool IsRunning { get; set; }
-        public bool IsFuryRaidEnable { get; set; }
-        public bool IsFuryRaid { get; set; }
-        public bool CanFullAttack
-        {
-            get
-            {
-                return (IsFuryRaidEnable == IsFuryRaid) && BpValue >= 3;
-            }
-        }
 
         public string WindowTitle
         {
@@ -415,6 +406,32 @@ namespace Astrum.Http
             get
             {
                 return _tp_value + " / " + _tp_max;
+            }
+        }
+
+
+        public bool IsFuryRaidEnable { get; set; }
+        public string FuryRaidEventId { get; set; }
+        public bool IsFuryRaid { get; set; }
+        public bool CanFullAttack
+        {
+            get
+            {
+                return (IsFuryRaidEnable == IsFuryRaid) && BpValue >= 3;
+            }
+        }
+
+        private int _fever;
+        public int Fever
+        {
+            get
+            {
+                return _fever;
+            }
+            set
+            {
+                _fever = value;
+                NotifyPropertyChanged("Fever");
             }
         }
     }

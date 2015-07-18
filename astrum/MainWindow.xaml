@@ -54,7 +54,6 @@
         </Grid>
 
         <Grid Name="StatusPanel" Visibility="Visible">
-
             <Grid.Background >
                 <ImageBrush ImageSource="Images/Loginbackground.jpg" AlignmentX="Left" AlignmentY="Top" Stretch="UniformToFill"/>
             </Grid.Background>
@@ -65,6 +64,19 @@
                     </Label.Background>
                 </Label>
                 <Label Content="{Binding Name}" HorizontalAlignment="Left" Margin="80,0,0,0" Width="100" Height="28" Background="#88FFFFFF" VerticalAlignment="Center"/>
+            </Grid>
+
+            <Grid HorizontalAlignment="Left" Height="53" Margin="430,233,0,0" VerticalAlignment="Top" Width="120">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="19*"/>
+                    <RowDefinition Height="11*"/>
+                </Grid.RowDefinitions>
+                <Label Content="Fever" Margin="24,0" Foreground="White"  Width="72" Height="25"  FontFamily="Arial Black" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top">
+                    <Label.Background>
+                        <ImageBrush ImageSource="Images/pop.png" Opacity="0.85"/>
+                    </Label.Background>
+                </Label>
+                <ProgressBar Margin="10,2,10,0" Width="100" Height="10" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="1" Value="{Binding Fever}" ToolTip="{Binding Fever}"/>
             </Grid>
 
             <Grid HorizontalAlignment="Left" Height="30" Margin="220,220,0,0" VerticalAlignment="Top" Width="180">
@@ -134,7 +146,7 @@
                 <Label Content="{Binding BpMiniStock}" HorizontalAlignment="Left" Margin="80,0,0,0" VerticalAlignment="Top" Width="100" Height="28" Background="#66FFFFFF"/>
             </Grid>
 
-            <Grid HorizontalAlignment="Left" Height="200" Margin="430,20,0,0" VerticalAlignment="Top" Width="120" Background="#FF2A4D70">
+            <Grid Name="Controller" HorizontalAlignment="Left" Height="200" Margin="430,20,0,0" VerticalAlignment="Top" Width="120" Background="#FF2A4D70">
 
                 <RadioButton x:Name="QuestButton" Content="Quest" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" IsChecked="{Binding IsQuestEnable}" Foreground="White" Width="100" />
                 <RadioButton x:Name="GuildBattleButton" Content="GuildBattle" HorizontalAlignment="Center" Margin="0,40,0,0" VerticalAlignment="Top" IsChecked="{Binding IsGuildBattleEnable}" Foreground="#FFF7F7F7" Width="100"/>
@@ -170,6 +182,7 @@
                     <TextBlock Text="{Binding History}"/>
                 </ScrollViewer>
             </Grid>
+
         </Grid>
     </Grid>
 </Window>

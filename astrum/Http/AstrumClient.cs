@@ -12,6 +12,7 @@ using Astrum.Json.Mypage;
 using Astrum.Json.Stage;
 using Astrum.Json.Raid;
 using Astrum.Json.Event;
+using Astrum.Json.GuildBattle;
 using Astrum.Json.Item;
 using Astrum.Json.Gift;
 
@@ -224,6 +225,7 @@ namespace Astrum.Http
             this.Mypage();
             this.Gift();
             this.Item();
+            this.EventStatus();
         }
 
         public void Mypage()
@@ -315,6 +317,25 @@ namespace Astrum.Http
 
         }
 
+        public void EventStatus()
+        {
+            var responseString = GetXHR("http://astrum.amebagames.com/_/event/status");
+            var eventStatus = JsonConvert.DeserializeObject<EventStatus>(responseString);
+
+            foreach (var @event in eventStatus.list)
+            {
+                if (@event.status)
+                {
+                    if ("furyraid".Equals(@event.type))
+                    {
+                        ViewModel.IsFuryRaidEnable = true;
+                        ViewModel.FuryRaidEventId = @event._id;
+
+                        FuryRaidFever();
+                    }
+                }
+            }
+        }
 
         public void Quest()
         {
@@ -350,14 +371,13 @@ namespace Astrum.Http
                             ViewModel.IsFuryRaidEnable = true;
                             ViewModel.IsFuryRaid = true;
 
-                            var eventId = stage.status.furyraid.eventId;
                             if (stage.status.furyraid.find != null && (stage.status.furyraid.find.isNew || ViewModel.CanFullAttack))
                             {
-                                FuryRaid(stage.status.furyraid.eventId);
+                                FuryRaid();
                             }
                             if (stage.status.furyraid.rescue != null && (stage.status.furyraid.rescue.isNew || ViewModel.CanFullAttack))
                             {
-                                FuryRaid(stage.status.furyraid.eventId);
+                                FuryRaid();
                             }
 
                         }
@@ -381,10 +401,11 @@ namespace Astrum.Http
 
                         if (stage.staminaEmpty)
                         {
-                            if (stage.items != null)
+                            if (stage.items != null && ViewModel.Fever == 100 && ViewModel.ExpMax - ViewModel.ExpMin > 150)
                             {
+
                                 var item = stage.items.Find(e => INSTANT_STAMINA_HALF.Equals(e._id));
-                                if (item.stock > ViewModel.MinStaminaStock && ViewModel.ExpMax - ViewModel.ExpMin > 150)
+                                if (item.stock > ViewModel.MinStaminaStock)
                                 {
                                     UseItem(item, "stamina");
                                     return;
@@ -581,15 +602,18 @@ namespace Astrum.Http
         {
             var result = GetXHR("http://astrum.amebagames.com/_/raid/battleresult?_id=" + Uri.EscapeDataString(raidId));
             RaidBattleInfo battleInfo = JsonConvert.DeserializeObject<RaidBattleInfo>(result);
-            
+
+            Delay(DELAY_SHORT);
             GetXHR("http://astrum.amebagames.com/_/raid/summary");
+
+            Delay(DELAY_SHORT);
         }
 
 
-        public void FuryRaid(string eventId)
+        public void FuryRaid()
         {
-            string result = GetXHR("http://astrum.amebagames.com/_/event/furyraid/bosses?_id=" + Uri.EscapeDataString(eventId));
-            FuryRaidInfo raidInfo = JsonConvert.DeserializeObject<FuryRaidInfo>(result);
+            FuryRaidFever();
+            FuryRaidInfo raidInfo = FuryRaidInfo();
 
             if (raidInfo.find != null)
             {
@@ -614,6 +638,29 @@ namespace Astrum.Http
                     }
                 }
             }
+        }
+
+        public void FuryRaidFever()
+        {
+            Access("furyraid");
+
+            var eventId = ViewModel.FuryRaidEventId;
+            string result = GetXHR("http://astrum.amebagames.com/_/event/furyraid?_id=" + Uri.EscapeDataString(eventId));
+            FuryRaidInfo raidInfo = JsonConvert.DeserializeObject<FuryRaidInfo>(result);
+
+            ViewModel.Fever = raidInfo.fever.progress;
+
+            Delay(DELAY_SHORT);
+        }
+
+        public FuryRaidInfo FuryRaidInfo()
+        {
+            var eventId = ViewModel.FuryRaidEventId;
+            string result = GetXHR("http://astrum.amebagames.com/_/event/furyraid/bosses?_id=" + Uri.EscapeDataString(eventId));
+            FuryRaidInfo raidInfo = JsonConvert.DeserializeObject<FuryRaidInfo>(result);
+
+            Delay(DELAY_SHORT);
+            return raidInfo;
         }
 
         public bool FuryRaidBattle(string raidId)
@@ -945,12 +992,7 @@ namespace Astrum.Http
             history += String.Format("  Total: {0}", mypage.total) + Environment.NewLine;
             history += String.Format("    ATK: {0},  DF: {1}", mypage.status.atk, mypage.status.df) + Environment.NewLine;
             history += String.Format("    MAT: {0}, MDF: {1}", mypage.status.mat, mypage.status.mdf) + Environment.NewLine;
-            history += String.Format("Stamina: {0} / {1}", mypage.status.stamina_value, mypage.status.stamina_max) + Environment.NewLine;
-            history += String.Format("    EXP: {0} / {1}", mypage.status.exp_value, mypage.status.exp_max) + Environment.NewLine;
-            history += String.Format("     BP: {0} / {1}", mypage.status.bp_value, mypage.status.bp_max) + Environment.NewLine;
-            history += String.Format("     TP: {0} / {1}", mypage.status.tp_value, mypage.status.tp_max) + Environment.NewLine;
             history += String.Format("  Guild: {0}, Rank: {1}", mypage.guild.name, mypage.guild.rank) + Environment.NewLine;
-            history += String.Format("  Quest: {0}", mypage.link.quest._id) + Environment.NewLine;
 
             ViewModel.History = history;
         }
