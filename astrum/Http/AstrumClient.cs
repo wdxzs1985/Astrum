@@ -402,7 +402,7 @@ namespace Astrum.Http
 
                         if (stage.staminaEmpty)
                         {
-                            if (stage.items != null && ViewModel.ExpMax - ViewModel.ExpMin > 150)
+                            if (stage.items != null && ViewModel.ExpMax - ViewModel.ExpValue > 150)
                             {
                                 var item = stage.items.Find(e => INSTANT_STAMINA_HALF.Equals(e._id));
                                 if (item.stock > ViewModel.MinStaminaStock)
@@ -824,6 +824,7 @@ namespace Astrum.Http
                             }
                             else
                             {
+                                ViewModel.IsRunning = false;
                                 return;
                             }
                         }
