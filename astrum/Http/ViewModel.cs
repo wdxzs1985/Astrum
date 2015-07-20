@@ -449,5 +449,7 @@ namespace Astrum.Http
                 NotifyPropertyChanged("Fever");
             }
         }
+
+        public bool IsStaminaEmpty { get; set; }
     }
 }

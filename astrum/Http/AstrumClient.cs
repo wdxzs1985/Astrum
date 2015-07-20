@@ -367,7 +367,7 @@ namespace Astrum.Http
                         ViewModel.IsFuryRaid = false;
 
                         //furyraid
-                        if (stage.status.furyraid != null)
+                        if (stage.status.furyraid.eventId != null)
                         {
                             ViewModel.IsFuryRaidEnable = true;
                             ViewModel.IsFuryRaid = true;
@@ -402,15 +402,12 @@ namespace Astrum.Http
 
                         if (stage.staminaEmpty)
                         {
-                            if (stage.items != null && ViewModel.Fever == 100 && ViewModel.ExpMax - ViewModel.ExpMin > 150)
+                            if (stage.items != null && ViewModel.ExpMax - ViewModel.ExpMin > 150)
                             {
-
                                 var item = stage.items.Find(e => INSTANT_STAMINA_HALF.Equals(e._id));
                                 if (item.stock > ViewModel.MinStaminaStock)
                                 {
                                     UseItem("stamina",INSTANT_STAMINA_HALF, 1);
-
-                                    return;
                                 }
                                 else
                                 {
@@ -551,7 +548,7 @@ namespace Astrum.Http
                     return true;
                 }
 
-                if (battleInfo.type.Equals("find") && ViewModel.CanFullAttack)
+                if (ViewModel.CanFullAttack)
                 {
                     var hp = battleInfo.hp - battleInfo.totalDamage;
                     var attackType = hp > EASY_BOSS_HP ? "full" : "normal";
@@ -696,6 +693,11 @@ namespace Astrum.Http
 
                 if (battleInfo.type.Equals("find"))
                 {
+                    if (ViewModel.BpValue == 2 && ViewModel.BpMiniStock > ViewModel.MinBpStock)
+                    {
+                        UseItem("bp", INSTANT_BP_MINI, 1);
+                    }
+
                     if (ViewModel.CanFullAttack)
                     {
                         var hp = battleInfo.hp - battleInfo.totalDamage;

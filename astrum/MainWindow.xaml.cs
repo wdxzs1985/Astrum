@@ -166,6 +166,7 @@ namespace Astrum
 
                 nowUser.name = client.ViewModel.Name;
                 nowUser.minstaminastock = client.ViewModel.MinStaminaStock;
+                nowUser.minbpstock = client.ViewModel.MinBpStock;
 
                 userList.Insert(0, nowUser);
 
