@@ -86,16 +86,24 @@ namespace Astrum
 
             if (login)
             {
-                client.OnStart();
 
                 LoginPanel.Visibility = Visibility.Hidden;
                 StatusPanel.Visibility = Visibility.Visible;
 
-                client.ViewModel.IsRunning = false;
+                Controller.Visibility = Visibility.Hidden;
+
+                await Task.Run(() =>
+                {
+                    client.ViewModel.IsRunning = false;
+                    client.OnStart();
+                });
+
+                Controller.Visibility = Visibility.Visible;
 
                 nowUser = new LoginUser { username = username, password = password };
                 //save user
                 SaveUserList();
+
             }
             else
             {
@@ -158,6 +166,7 @@ namespace Astrum
 
                 nowUser.name = client.ViewModel.Name;
                 nowUser.minstaminastock = client.ViewModel.MinStaminaStock;
+                nowUser.minbpstock = client.ViewModel.MinBpStock;
 
                 userList.Insert(0, nowUser);
 

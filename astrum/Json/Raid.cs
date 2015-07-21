@@ -77,6 +77,14 @@ namespace Astrum.Json.Raid
         public RaidBattleList rescue { get; set; }
 
         public string eventId { get; set; }
+
+        public Fever fever { get; set; }
     }
 
+    public class Fever
+    {
+        public int progress { get; set; }
+
+        public int effect { get; set; }
+    }
 }

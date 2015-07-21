@@ -76,6 +76,8 @@ namespace Astrum.Json.Stage
         public RaidBattleInfo find { get; set; }
 
         public RaidBattleInfo rescue { get; set; }
+
+        public Fever fever { get; set; }
     }
 
     public class NextStage
