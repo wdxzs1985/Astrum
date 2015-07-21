@@ -210,35 +210,37 @@ namespace Astrum
             QuestButton.IsEnabled = false;
             GuildBattleButton.IsEnabled = false;
 
-            SaveUserList();
 
             if (client.ViewModel.IsRunning == false)
             {
-                client.ViewModel.IsRunning = true;
+                SaveUserList();
 
                 StartButton.Content = "Stop";
                 StartButton.IsEnabled = true;
-                
+
+                client.ViewModel.IsRunning = true;
+
                 bool result = await Task.Run(() =>
                 {
                     while (client.ViewModel.IsRunning)
                     {
                         Console.WriteLine("Start Loop");
-                        client.ViewModel.IsRunning = false;
 
                         try
                         {
                             client.OnStart();
 
+                            //client.ViewModel.IsRunning = false;
+
                             if (client.ViewModel.IsQuestEnable)
                             {
-                                client.ViewModel.IsRunning = true;
+                                //client.ViewModel.IsRunning = true;
                                 client.Quest();
                             }
 
                             if (client.ViewModel.IsGuildBattleEnable)
                             {
-                                client.ViewModel.IsRunning = true;
+                                //client.ViewModel.IsRunning = true;
                                 client.GuildBattle();
                             }
 
