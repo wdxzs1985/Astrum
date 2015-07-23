@@ -4,8 +4,6 @@
         Title="{Binding WindowTitle}" Height="480" Width="580" Icon="Images/Icon.png" ResizeMode="NoResize">
     <Grid>
         <Grid.Background >
-            <!--<SolidColorBrush Color="DarkGray" ></SolidColorBrush>-->
-
             <ImageBrush ImageSource="Images/background.jpg" Stretch="UniformToFill" AlignmentX="Left" AlignmentY="Top"/>
 
         </Grid.Background>
