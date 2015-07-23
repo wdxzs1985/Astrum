@@ -238,7 +238,7 @@ namespace Astrum.Http
             Access("gift");
             Delay(DELAY_SHORT);
             
-            if(giftlist.limited > 0)
+            if(giftlist.total > 0)
             { 
                var values = new Dictionary<string, string>
                {

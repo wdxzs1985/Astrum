@@ -44,6 +44,6 @@ namespace Astrum.Json.Item
 
     public class Giftbox
     {
-        public int limited { get; set; }
+        public int total { get; set; }
     }
 }
