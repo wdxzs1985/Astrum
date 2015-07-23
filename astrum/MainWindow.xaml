@@ -8,18 +8,6 @@
         </Grid.Background>
         <Grid Name="LoginPanel" Visibility="Hidden" VerticalAlignment="Center" HorizontalAlignment="Center" Height="280" Width="220">
             <ComboBox Name="LoginUserComboBox" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Top" Width="131" Height="132" ItemsSource="{Binding LoginUserList}" SelectedIndex="0" SelectionChanged="LoginUserComboBox_SelectionChanged" TextSearch.TextPath="name">
-
-                <ComboBox.Resources>
-                    <Style TargetType="{x:Type ComboBox}">
-                        <Setter Property="IsDropDownOpen" Value="False"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="IsDropDownOpen" Value="True"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </ComboBox.Resources>
-
                 <ComboBox.ItemTemplate >
                     <DataTemplate>
                         <StackPanel Orientation="Vertical" Margin="0,0,0,0">
