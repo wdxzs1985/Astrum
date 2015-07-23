@@ -209,7 +209,7 @@
             </Grid>
 
         </Grid>
-        <Grid Name="LoginPanel" Visibility="Visible">
+        <Grid Name="LoginPanel" Visibility="Hidden">
             <Grid.Background>
                 <ImageBrush ImageSource="pack://siteoforigin:,,,/Images/background2.jpg"/>
             </Grid.Background>
