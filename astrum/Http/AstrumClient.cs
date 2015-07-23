@@ -982,7 +982,22 @@ namespace Astrum.Http
                 }
                 if (stage.staminaEmpty)
                 {
-                    return;
+                    if (stage.items != null)
+                    {
+                        var item = stage.items.Find(e => INSTANT_STAMINA_HALF.Equals(e._id));
+                        if (item.stock > ViewModel.MinStaminaStock)
+                        {
+                            UseItem("stamina", INSTANT_STAMINA_HALF, 1);
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
                 }
                 //forward
                 stage = ForwardTpStage();
