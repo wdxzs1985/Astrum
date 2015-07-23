@@ -195,7 +195,7 @@
                             </StackPanel>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsEnabled" Value="True">
-                                    <Setter Property="Source" Value="Images/OFF.png" TargetName="FunctionButtonUP"/>
+                                    <Setter Property="Source" Value="Images/OFF.png" TargetName="FunctionButtonUP" />
                                 </Trigger>
                                 <Trigger Property="IsEnabled" Value="False">
                                     <Setter Property="Source" Value="Images/ON.png" TargetName="FunctionButtonUP"/>
@@ -209,18 +209,18 @@
             </Grid>
 
         </Grid>
-        <Grid Name="LoginPanel" Visibility="Hidden">
+        <Grid Name="LoginPanel" Visibility="Visible">
             <Grid.Background>
-                <ImageBrush ImageSource="pack://siteoforigin:,,,/Images/background2.jpg"/>
+                <ImageBrush ImageSource="Images/background2.jpg"/>
             </Grid.Background>
             <Grid HorizontalAlignment="Left" Height="180" Margin="22.668,310,0,0" VerticalAlignment="Top" Width="275">
                 <Grid.Background>
                     <ImageBrush/>
                 </Grid.Background>
                 <Image x:Name="Username" Margin="0,40,0,106" Source="Images/username.png" Width="275" Height="34"/>
-                <TextBox Name="UsernameBox" HorizontalAlignment="Left" Height="23" Margin="40,45,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="225"/>
+                <TextBox Name="UsernameBox" HorizontalAlignment="Left" Height="23" Margin="40,45,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="225" TabIndex="1"/>
                 <Image x:Name="Password" Margin="0,99.001,0,46.998" Source="Images/password.png" Stretch="Fill" Width="275" Height="34"/>
-                <Button x:Name="LoginButton" Content="{Binding Content}" Height="34" Margin="0,146,0,0" Style="{DynamicResource ButtonStyle1}" Width="275" Click="LoginButton_Click">
+                <Button x:Name="LoginButton" Content="{Binding Content}" Height="34" Margin="0,146,0,0" Style="{DynamicResource ButtonStyle1}" Width="275" Click="LoginButton_Click" TabIndex="3">
                     <Button.Resources>
                         <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
                             <Setter Property="Template">
@@ -272,9 +272,9 @@
                 </Button>
                 <TextBlock HorizontalAlignment="Left" Margin="0,19.163,0,0" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" Foreground="White"/>
                 <TextBlock HorizontalAlignment="Left" Margin="2.84,79,0,0" TextWrapping="Wrap" Text="Password" VerticalAlignment="Top" Foreground="White"/>
-                <PasswordBox Name="PasswordBox" HorizontalAlignment="Left" Height="23" Margin="40,105,0,0" VerticalAlignment="Top" Width="225"/>
+                <PasswordBox Name="PasswordBox" HorizontalAlignment="Left" Height="23" Margin="40,105,0,0" VerticalAlignment="Top" Width="225" TabIndex="2"/>
             </Grid>
-            <Button x:Name="CloseBtn" Margin="296.167,7.832,9.832,488.167" Style="{DynamicResource ButtonStyle1}" Click="CloseWindow" Width="15" Height="15">
+            <Button x:Name="CloseBtn" Margin="296.167,7.832,9.832,488.167" Style="{DynamicResource ButtonStyle1}" Click="CloseWindow" Width="15" Height="15" TabIndex="6">
                 <Button.Resources>
                     <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
                         <Setter Property="Template">
@@ -332,7 +332,7 @@
                     </Style>
                 </Button.Resources>
             </Button>
-            <Button x:Name="MiniBtn" Content="Button" Margin="274.502,10.498,31.497,485.501" Style="{DynamicResource ButtonStyle1}" Click="MiniWindow" Width="15" Height="15">
+            <Button x:Name="MiniBtn" Content="Button" Margin="274.502,10.498,31.497,485.501" Style="{DynamicResource ButtonStyle1}" Click="MiniWindow" Width="15" Height="15" TabIndex="5">
                 <Button.Resources>
                     <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
                         <Setter Property="Template">
@@ -369,7 +369,7 @@
                     </Style>
                 </Button.Resources>
             </Button>
-            <ComboBox Name="LoginUserComboBox" HorizontalAlignment="Left" Margin="200.336,230,0,0" VerticalAlignment="Top" Width="97.332" Height="90" ItemsSource="{Binding LoginUserList}" SelectedIndex="0" SelectionChanged="LoginUserComboBox_SelectionChanged" TextSearch.TextPath="name">
+            <ComboBox Name="LoginUserComboBox" HorizontalAlignment="Left" Margin="200.336,230,0,0" VerticalAlignment="Top" Width="97.332" Height="90" ItemsSource="{Binding LoginUserList}" SelectedIndex="0" SelectionChanged="LoginUserComboBox_SelectionChanged" TextSearch.TextPath="name" TabIndex="4">
                 <ComboBox.Resources>
                     <Style TargetType="{x:Type ComboBox}">
                         <Setter Property="IsDropDownOpen" Value="False"/>
