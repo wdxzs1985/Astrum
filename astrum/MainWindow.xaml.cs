@@ -203,9 +203,9 @@ namespace Astrum
 
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            StartButton.IsEnabled = false;
-            QuestButton.IsEnabled = false;
-            GuildBattleButton.IsEnabled = false;
+            //StartButton.IsEnabled = false;
+            //QuestButton.IsEnabled = false;
+            //GuildBattleButton.IsEnabled = false;
 
 
             if (client.ViewModel.IsRunning == false)
@@ -213,7 +213,7 @@ namespace Astrum
                 SaveUserList();
 
                 StartButton.Content = "Stop";
-                StartButton.IsEnabled = true;
+                //StartButton.IsEnabled = true;
 
                 client.ViewModel.IsRunning = true;
 
@@ -255,9 +255,9 @@ namespace Astrum
 
 
                 StartButton.Content = "Start";
-                StartButton.IsEnabled = true;
-                QuestButton.IsEnabled = true;
-                GuildBattleButton.IsEnabled = true;
+                //StartButton.IsEnabled = true;
+                //QuestButton.IsEnabled = true;
+                //GuildBattleButton.IsEnabled = true;
 
                 if (!result)
                 {
@@ -270,7 +270,7 @@ namespace Astrum
             else
             {
                 client.ViewModel.IsRunning = false;
-                StartButton.IsEnabled = false;
+                //StartButton.IsEnabled = false;
             }
         }
 
@@ -313,11 +313,11 @@ namespace Astrum
 
             if (progressAfter <= 10d)
             {
-                foreground = Brushes.Red;
+                foreground = new SolidColorBrush(Color.FromRgb(244, 67, 54));
             }
             else if (progressAfter <= 40d)
             {
-                foreground = Brushes.Orange;
+                foreground = new SolidColorBrush(Color.FromRgb(255, 152, 0));
             }
 
 
@@ -338,6 +338,6 @@ namespace Astrum
 		{
 			this.WindowState = WindowState.Minimized;
 		}
-		
+       
     }
 }
