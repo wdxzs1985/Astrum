@@ -167,8 +167,6 @@
     <Resource Include="Images\bppotion.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\FunctionButtonDown.png" />
-    <Resource Include="Images\FunctionButtonUP.png" />
     <Resource Include="Images\halfstaminapotion.png" />
   </ItemGroup>
   <ItemGroup>
@@ -188,6 +186,20 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\background.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ic_account_circle_black_48dp.png" />
+    <Resource Include="Images\ic_account_circle_white_48dp.png" />
+    <Resource Include="Images\ic_clear_black_18dp.png" />
+    <Resource Include="Images\ic_clear_white_18dp.png" />
+    <Resource Include="Images\ic_remove_black_18dp.png" />
+    <Resource Include="Images\ic_remove_white_18dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\username.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\password.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />

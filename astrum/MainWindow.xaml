@@ -102,22 +102,22 @@
 
             <Grid x:Name="Items" HorizontalAlignment="Right" Margin="0,0,0,0" VerticalAlignment="Top" Width="140">
                 <Grid Margin="0,0,0,0" Width="75" Height="32" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Image Margin="0,0,0,0" Source="Images/halfstamina.png" Stretch="Fill" Width="32" Height="32"  HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <Image Margin="0,0,0,0" Source="Images/instant-half_stamina_potion.png" Stretch="Fill" Width="32" Height="32"  HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     <Label Content="{Binding StaminaHalfStock}" HorizontalAlignment="Left" Margin="40,0,0,0" Width="35" VerticalAlignment="Center" Foreground="White"/>
                 </Grid>
 
                 <Grid Margin="75,0,0,0" Width="75" Height="32" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Image Margin="0,0,0,0" Source="Images/staminapotion.png" Stretch="Fill" Width="32" Height="32"  HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <Image Margin="0,0,0,0" Source="Images/instant-stamina_potion.png" Stretch="Fill" Width="32" Height="32"  HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     <Label Content="{Binding StaminaStock}" HorizontalAlignment="Left" Margin="40,0,0,0" Width="35" VerticalAlignment="Center" Foreground="White"/>
                 </Grid>
 
                 <Grid Margin="0,40,0,0" Width="75" Height="32" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Image Margin="0,0,0,0" Source="Images/minibp.png" Stretch="Fill" Width="32" Height="32"  HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <Image Margin="0,0,0,0" Source="Images/instant-mini_bp_ether.png" Stretch="Fill" Width="32" Height="32"  HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     <Label Content="{Binding BpMiniStock}" HorizontalAlignment="Left" Margin="40,0,0,0" Width="35" VerticalAlignment="Center" Foreground="White"/>
                 </Grid>
 
                 <Grid Margin="75,40,0,0" Width="75" Height="32" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Image Margin="0,0,0,0" Source="Images/bp.png" Stretch="Fill" Width="32" Height="32"  HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <Image Margin="0,0,0,0" Source="Images/instant-bp_ether.png" Stretch="Fill" Width="32" Height="32"  HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     <Label Content="{Binding BpStock}" HorizontalAlignment="Left" Margin="40,0,0,0" Width="35" VerticalAlignment="Center" Foreground="White"/>
                 </Grid>
 
