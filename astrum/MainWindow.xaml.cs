@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
 using System.Net;
 using System.IO;
 using System.Collections;
@@ -22,12 +21,10 @@ using Astrum.Http;
 using System.Threading;
 using Astrum.Json;
 
-
 namespace Astrum
 {
-
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// MainWindow.xaml 的交互逻辑
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -203,48 +200,50 @@ namespace Astrum
 
             });
         }
-        
+
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
             StartButton.IsEnabled = false;
             QuestButton.IsEnabled = false;
             GuildBattleButton.IsEnabled = false;
 
-            SaveUserList();
 
             if (client.ViewModel.IsRunning == false)
             {
-                client.ViewModel.IsRunning = true;
+                SaveUserList();
 
                 StartButton.Content = "Stop";
                 StartButton.IsEnabled = true;
-                
+
+                client.ViewModel.IsRunning = true;
+
                 bool result = await Task.Run(() =>
                 {
                     while (client.ViewModel.IsRunning)
                     {
                         Console.WriteLine("Start Loop");
-                        client.ViewModel.IsRunning = false;
 
                         try
                         {
                             client.OnStart();
 
+                            //client.ViewModel.IsRunning = false;
+
                             if (client.ViewModel.IsQuestEnable)
                             {
-                                client.ViewModel.IsRunning = true;
+                                //client.ViewModel.IsRunning = true;
                                 client.Quest();
                             }
 
                             if (client.ViewModel.IsGuildBattleEnable)
                             {
-                                client.ViewModel.IsRunning = true;
+                                //client.ViewModel.IsRunning = true;
                                 client.GuildBattle();
                             }
 
                             client.CountDown(AstrumClient.MINUTE);
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
                             Console.WriteLine(ex.Message);
                             client.ViewModel.IsRunning = false;
@@ -310,7 +309,7 @@ namespace Astrum
             Console.WriteLine("{0}: {1}% -> {2}%", p.Name, progressBefore, progressAfter);
 
 
-            var foreground = new SolidColorBrush(Color.FromRgb(1,211,40));
+            var foreground = new SolidColorBrush(Color.FromRgb(1, 211, 40));
 
             if (progressAfter <= 10d)
             {
@@ -324,5 +323,21 @@ namespace Astrum
 
             p.Foreground = foreground;
         }
+		
+		public void DragWindow(object sender,MouseButtonEventArgs args)
+		{
+			this.DragMove();
+		}
+		
+		public void CloseWindow(object sender,RoutedEventArgs args)
+		{
+			this.Close();
+		}
+		
+		public void MiniWindow(object sender,RoutedEventArgs args)
+		{
+			this.WindowState = WindowState.Minimized;
+		}
+		
     }
 }
