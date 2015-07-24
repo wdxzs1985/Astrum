@@ -87,7 +87,7 @@ namespace Astrum
                 LoginPanel.Visibility = Visibility.Hidden;
                 StatusPanel.Visibility = Visibility.Visible;
 
-                Controller.Visibility = Visibility.Hidden;
+                //Controller.Visibility = Visibility.Hidden;
 
                 await Task.Run(() =>
                 {
@@ -95,7 +95,7 @@ namespace Astrum
                     client.OnStart();
                 });
 
-                Controller.Visibility = Visibility.Visible;
+                //Controller.Visibility = Visibility.Visible;
 
                 nowUser = new LoginUser { username = username, password = password };
                 //save user
@@ -319,8 +319,6 @@ namespace Astrum
             {
                 foreground = new SolidColorBrush(Color.FromRgb(255, 152, 0));
             }
-
-
             p.Foreground = foreground;
         }
 		

@@ -341,25 +341,6 @@ namespace Astrum.Http
 
         public void Quest()
         {
-            if (ViewModel.IsStaminaEmpty)
-            {
-                if(ViewModel.IsFuryRaidEnable)
-                {
-                    FuryRaid();
-                } else
-                {
-                    Raid();
-                }
-                
-                if (ViewModel.StaminaValue >= 100 || ViewModel.StaminaValue >= ViewModel.ExpMax - ViewModel.ExpValue)
-                {
-                    ViewModel.IsStaminaEmpty = false;
-                }
-                else
-                {
-                    return;
-                }
-            }
 
             Access("stage");
 
@@ -412,6 +393,19 @@ namespace Astrum.Http
                         if (stage.status.raid.rescue != null && (stage.status.raid.rescue.isNew || ViewModel.CanFullAttack))
                         {
                             Raid();
+                        }
+                    }
+
+
+                    if (ViewModel.IsStaminaEmpty)
+                    {
+                        if (ViewModel.StaminaValue >= 100 || ViewModel.StaminaValue >= ViewModel.ExpMax - ViewModel.ExpValue)
+                        {
+                            ViewModel.IsStaminaEmpty = false;
+                        }
+                        else
+                        {
+                            return;
                         }
                     }
 
