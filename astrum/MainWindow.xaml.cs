@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
 using System.Net;
 using System.IO;
 using System.Collections;
@@ -22,12 +21,10 @@ using Astrum.Http;
 using System.Threading;
 using Astrum.Json;
 
-
 namespace Astrum
 {
-
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// MainWindow.xaml 的交互逻辑
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -86,17 +83,24 @@ namespace Astrum
 
             if (login)
             {
-                client.Mypage();                
-                client.Item();
 
                 LoginPanel.Visibility = Visibility.Hidden;
                 StatusPanel.Visibility = Visibility.Visible;
 
-                client.ViewModel.IsRunning = false;
+                //Controller.Visibility = Visibility.Hidden;
+
+                await Task.Run(() =>
+                {
+                    client.ViewModel.IsRunning = false;
+                    client.OnStart();
+                });
+
+                //Controller.Visibility = Visibility.Visible;
 
                 nowUser = new LoginUser { username = username, password = password };
                 //save user
                 SaveUserList();
+
             }
             else
             {
@@ -159,6 +163,7 @@ namespace Astrum
 
                 nowUser.name = client.ViewModel.Name;
                 nowUser.minstaminastock = client.ViewModel.MinStaminaStock;
+                nowUser.minbpstock = client.ViewModel.MinBpStock;
 
                 userList.Insert(0, nowUser);
 
@@ -195,49 +200,50 @@ namespace Astrum
 
             });
         }
-        
+
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            StartButton.IsEnabled = false;
-            QuestButton.IsEnabled = false;
-            GuildBattleButton.IsEnabled = false;
+            //StartButton.IsEnabled = false;
+            //QuestButton.IsEnabled = false;
+            //GuildBattleButton.IsEnabled = false;
 
-            SaveUserList();
 
             if (client.ViewModel.IsRunning == false)
             {
-                client.ViewModel.IsRunning = true;
+                SaveUserList();
 
                 StartButton.Content = "Stop";
-                StartButton.IsEnabled = true;
-                
+                //StartButton.IsEnabled = true;
+
+                client.ViewModel.IsRunning = true;
+
                 bool result = await Task.Run(() =>
                 {
                     while (client.ViewModel.IsRunning)
                     {
                         Console.WriteLine("Start Loop");
-                        client.ViewModel.IsRunning = false;
 
                         try
                         {
-                            client.Mypage();
-                            client.Getgift();
-                            client.Item();
+                            client.OnStart();
+
+                            //client.ViewModel.IsRunning = false;
 
                             if (client.ViewModel.IsQuestEnable)
                             {
-                                client.ViewModel.IsRunning = true;
+                                //client.ViewModel.IsRunning = true;
                                 client.Quest();
                             }
 
                             if (client.ViewModel.IsGuildBattleEnable)
                             {
-                                client.ViewModel.IsRunning = true;
+                                //client.ViewModel.IsRunning = true;
                                 client.GuildBattle();
-                            }                            
+                            }
+
                             client.CountDown(AstrumClient.MINUTE);
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
                             Console.WriteLine(ex.Message);
                             client.ViewModel.IsRunning = false;
@@ -249,9 +255,9 @@ namespace Astrum
 
 
                 StartButton.Content = "Start";
-                StartButton.IsEnabled = true;
-                QuestButton.IsEnabled = true;
-                GuildBattleButton.IsEnabled = true;
+                //StartButton.IsEnabled = true;
+                //QuestButton.IsEnabled = true;
+                //GuildBattleButton.IsEnabled = true;
 
                 if (!result)
                 {
@@ -264,7 +270,7 @@ namespace Astrum
             else
             {
                 client.ViewModel.IsRunning = false;
-                StartButton.IsEnabled = false;
+                //StartButton.IsEnabled = false;
             }
         }
 
@@ -296,25 +302,40 @@ namespace Astrum
         private void ProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             var p = (ProgressBar)sender;
-            p.ApplyTemplate();
 
-            Console.WriteLine("{0}: {1} -> {2}", p.Name, e.OldValue, e.NewValue);
+            var progressBefore = (e.OldValue / p.Maximum) * 100;
+            var progressAfter = (e.NewValue / p.Maximum) * 100;
 
-            var progress = (e.NewValue / p.Maximum) * 100;
+            Console.WriteLine("{0}: {1}% -> {2}%", p.Name, progressBefore, progressAfter);
 
-            var foreground = new SolidColorBrush(Color.FromRgb(1,211,40));
 
-            if (progress <= 10d)
+            var foreground = new SolidColorBrush(Color.FromRgb(1, 211, 40));
+
+            if (progressAfter <= 10d)
             {
-                foreground = Brushes.Red;
+                foreground = new SolidColorBrush(Color.FromRgb(244, 67, 54));
             }
-            else if (progress <= 40d)
+            else if (progressAfter <= 40d)
             {
-                foreground = Brushes.Orange;
+                foreground = new SolidColorBrush(Color.FromRgb(255, 152, 0));
             }
-
-            ((Panel)p.Template.FindName("Animation", p)).Background = foreground;
-
+            p.Foreground = foreground;
         }
+		
+		public void DragWindow(object sender,MouseButtonEventArgs args)
+		{
+			this.DragMove();
+		}
+		
+		public void CloseWindow(object sender,RoutedEventArgs args)
+		{
+			this.Close();
+		}
+		
+		public void MiniWindow(object sender,RoutedEventArgs args)
+		{
+			this.WindowState = WindowState.Minimized;
+		}
+       
     }
 }

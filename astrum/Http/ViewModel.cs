@@ -36,15 +36,6 @@ namespace Astrum.Http
         }
 
         public bool IsRunning { get; set; }
-        public bool IsFuryRaidEnable { get; set; }
-        public bool IsFuryRaid { get; set; }
-        public bool CanFullAttack
-        {
-            get
-            {
-                return (IsFuryRaidEnable == IsFuryRaid) && BpValue >= 3;
-            }
-        }
 
         public string WindowTitle
         {
@@ -62,6 +53,7 @@ namespace Astrum.Http
         private long _staminaHalfStock;
         private long _staminaStock;
         private long _minStaminaStock;
+        private long _minBpStock;
 
         public long BpMiniStock
         {
@@ -88,6 +80,20 @@ namespace Astrum.Http
                 NotifyPropertyChanged("BpStock");
             }
         }
+
+        public long MinBpStock
+        {
+            get
+            {
+                return _minBpStock;
+            }
+            set
+            {
+                _minBpStock = value;
+                NotifyPropertyChanged("MinBpStock");
+            }
+        }
+
 
         public long StaminaHalfStock
         {
@@ -417,5 +423,33 @@ namespace Astrum.Http
                 return _tp_value + " / " + _tp_max;
             }
         }
+
+
+        public bool IsFuryRaidEnable { get; set; }
+        public string FuryRaidEventId { get; set; }
+        public bool IsFuryRaid { get; set; }
+        public bool CanFullAttack
+        {
+            get
+            {
+                return (IsFuryRaidEnable == IsFuryRaid) && BpValue >= 3;
+            }
+        }
+
+        private int _fever;
+        public int Fever
+        {
+            get
+            {
+                return _fever;
+            }
+            set
+            {
+                _fever = value;
+                NotifyPropertyChanged("Fever");
+            }
+        }
+
+        public bool IsStaminaEmpty { get; set; }
     }
 }
