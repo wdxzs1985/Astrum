@@ -13,29 +13,29 @@ namespace Astrum.Json.Mypage
         public string _id { get; set; }
         public string name { get; set; }
         public string rank { get; set; }
-        public long memberCount { get; set; }
-        public long memberSpace { get; set; }
+        public int memberCount { get; set; }
+        public int memberSpace { get; set; }
         public bool isRegisterdCenter { get; set; }
     }
 
     public class Status
     {
-        public long level { get; set; }
+        public int level { get; set; }
         public long exp_value { get; set; }
         public long exp_min { get; set; }
         public long exp_max { get; set; }
-        public long stamina_max { get; set; }
-        public long stamina_time { get; set; }
-        public long stamina_value { get; set; }
-        public long stamina_maxTime { get; set; }
-        public long bp_value { get; set; }
-        public long bp_max { get; set; }
-        public long tp_value { get; set; }
-        public long tp_max { get; set; }
+        public int stamina_max { get; set; }
+        //public long stamina_time { get; set; }
+        public int stamina_value { get; set; }
+        //public long stamina_maxTime { get; set; }
+        public int bp_value { get; set; }
+        public int bp_max { get; set; }
+        public int tp_value { get; set; }
+        public int tp_max { get; set; }
         public long gacha { get; set; }
         public long lilu { get; set; }
-        public long card_quantity { get; set; }
-        public long card_max { get; set; }
+        public int card_quantity { get; set; }
+        public int card_max { get; set; }
         public long total { get; set; }
         public long atk { get; set; }
         public long df { get; set; }

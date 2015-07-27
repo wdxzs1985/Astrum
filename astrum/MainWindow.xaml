@@ -6,19 +6,29 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" 
+    xmlns:UI="clr-namespace:Astrum.UI" 
     mc:Ignorable="d" 
     x:Class="Astrum.MainWindow"
     Title="{Binding WindowTitle}" 
-    Height="480" 
-    Width="320" 
+    Height="510" 
+    Width="350" 
     BorderThickness="0" 
     WindowStyle="None" 
     MouseLeftButtonDown="DragWindow"
     Icon="Images\Icon.png" 
     AllowsTransparency="True" 
-    ResizeMode="NoResize">
+    ResizeMode="NoResize" Background="{x:Null}">
+    <Window.Resources>
+        <UI:ProgressBarForegoundConvert x:Key="ProgressBarForegoundConvert"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Window.Resources>
 
-    <Grid Background="#FF00BCD4" >
+    <Grid Background="#FF00BCD4" VerticalAlignment="Center" HorizontalAlignment="Center" 
+		Height="480" 
+		Width="320" >
+        <Grid.Effect>
+            <DropShadowEffect BlurRadius="5" ShadowDepth="0" Direction="0" />
+        </Grid.Effect>
         <Grid Margin="0,10,10,0" Width="44" Height="18" HorizontalAlignment="Right"           VerticalAlignment="Top" >
             <Button x:Name="MiniBtn" Template="{DynamicResource FlatButton}" Click="MiniWindow" Width="18" Height="18" VerticalAlignment="Top" HorizontalAlignment="Left" >
                 <Button.Background>
@@ -33,8 +43,8 @@
             </Button>
         </Grid>
 
-        <Grid Name="LoginPanel" Visibility="Hidden" HorizontalAlignment="Center" VerticalAlignment="Bottom"  Margin="0,0,0,40">
-            <ComboBox Name="LoginUserComboBox" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Top" Width="120" Height="120" ItemsSource="{Binding LoginUserList}" SelectedIndex="0" SelectionChanged="LoginUserComboBox_SelectionChanged" TextSearch.TextPath="name" TabIndex="4" MaxDropDownHeight="120" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#E0F7FA" >
+        <Grid x:Name="LoginPanel" Visibility="Hidden" HorizontalAlignment="Center" VerticalAlignment="Bottom"  Margin="0,0,0,40">
+            <ComboBox x:Name="LoginUserComboBox" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Top" Width="120" Height="120" ItemsSource="{Binding LoginUserList}" SelectedIndex="0" SelectionChanged="LoginUserComboBox_SelectionChanged" TextSearch.TextPath="name" TabIndex="4" MaxDropDownHeight="120" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#E0F7FA" >
                 <ComboBox.ItemTemplate >
                     <DataTemplate>
                         <StackPanel Orientation="Vertical">
@@ -45,22 +55,20 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
 
-            <TextBox Name="UsernameBox" HorizontalAlignment="Center" Height="34" Text="{Binding Username}" VerticalAlignment="Top" Width="275" TabIndex="1" BorderThickness="0" Padding="36,0,0,0" Margin="0,130,0,0" VerticalContentAlignment="Center">
+            <TextBox x:Name="UsernameBox" HorizontalAlignment="Center" Height="34" Text="{Binding Username}" VerticalAlignment="Top" Width="275" TabIndex="1" BorderThickness="0" Padding="36,0,0,0" Margin="0,130,0,0" VerticalContentAlignment="Center">
                 <TextBox.Background>
                     <ImageBrush ImageSource="Images/username.png" />
                 </TextBox.Background>
             </TextBox>
-            <PasswordBox Name="PasswordBox" HorizontalAlignment="Center" Height="34" Margin="0,180,0,0" VerticalAlignment="Top" Width="275" TabIndex="2" BorderThickness="0" Padding="36,0,0,0" VerticalContentAlignment="Center">
+            <PasswordBox x:Name="PasswordBox" HorizontalAlignment="Center" Height="34" Margin="0,180,0,0" VerticalAlignment="Top" Width="275" TabIndex="2" BorderThickness="0" Padding="36,0,0,0" VerticalContentAlignment="Center">
                 <PasswordBox.Background>
                     <ImageBrush ImageSource="Images/password.png" />
                 </PasswordBox.Background>
             </PasswordBox>
-            <Button x:Name="LoginButton" Content="登陆" Width="275" Height="33" Margin="0,230,0,0"  Template="{DynamicResource FlatButton}" Click="LoginButton_Click" TabIndex="3" HorizontalAlignment="Center" VerticalAlignment="Top" Background="Transparent" Foreground="White">
-            </Button>
+            <Button x:Name="LoginButton" Content="登陆" Width="275" Height="33" Margin="0,230,0,0"  Template="{DynamicResource FlatButton}" Click="LoginButton_Click" TabIndex="3" HorizontalAlignment="Center" VerticalAlignment="Top" Background="Transparent" Foreground="White"/>
         </Grid>
 
-        <Grid Name="StatusPanel" Visibility="Visible" Margin="10,40,10,10">
-
+        <Grid x:Name="StatusPanel" Visibility="Visible" Margin="10,40,10,10">
             <Grid x:Name="StatusArea" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="150" Height="180">
                 <Grid Height="25" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Label Content="角色" HorizontalAlignment="Left" VerticalAlignment="Center" Width="50" Foreground="White" FontWeight="Bold" />
@@ -74,28 +82,26 @@
 
                 <Grid Height="25" Margin="0,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Label Content="体力" HorizontalAlignment="Left" VerticalAlignment="Center" Width="50" Foreground="White" FontWeight="Bold" />
-                    <ProgressBar x:Name="StaminaProgress" Margin="50,0,0,0" Width="100" Height="16" Value="{Binding StaminaProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" Maximum="100" ToolTip="{Binding Stamina}" ValueChanged="ProgressBar_ValueChanged"/>
+                    <ProgressBar x:Name="StaminaProgress" Margin="50,0,0,0" Width="100" Height="16" Value="{Binding StaminaProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" Maximum="100" ToolTip="{Binding Stamina}" Foreground="{Binding StaminaProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
                 </Grid>
 
                 <Grid Height="25" Margin="0,75,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Label Content="经验值" HorizontalAlignment="Left" VerticalAlignment="Center" Width="50" Foreground="White" FontWeight="Bold" />
-                    <ProgressBar x:Name="ExpProgress" Margin="50,0,0,0" Width="100" Height="16" Value="{Binding ExpProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Exp}" ValueChanged="ProgressBar_ValueChanged"/>
+                    <ProgressBar x:Name="ExpProgress" Margin="50,0,0,0" Width="100" Height="16" Value="{Binding ExpProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Exp}" Foreground="{Binding ExpProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
                 </Grid>
 
                 <Grid Height="25" Margin="0,100,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Label Content="BP" HorizontalAlignment="Left" VerticalAlignment="Center" Width="50" Foreground="White" FontWeight="Bold" />
-                    <ProgressBar x:Name="BpProgress" Margin="50,0,0,0" Width="100" Height="16" Value="{Binding BpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Bp}" Maximum="6" ValueChanged="ProgressBar_ValueChanged"/>
+                    <ProgressBar x:Name="BpProgress" Margin="50,0,0,0" Width="100" Height="16" Value="{Binding BpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Bp}" Maximum="6" Foreground="{Binding BpProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
                 </Grid>
 
                 <Grid Height="25" Margin="0,125,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Label Content="TP" HorizontalAlignment="Left" VerticalAlignment="Center" Width="50" Foreground="White" FontWeight="Bold" />
-                    <ProgressBar x:Name="TpProgress" Margin="50,0,0,0" Width="100" Height="16" Value="{Binding TpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Tp}" Maximum="100" ValueChanged="ProgressBar_ValueChanged"/>
+                    <ProgressBar x:Name="TpProgress" Margin="50,0,0,0" Width="100" Height="16" Value="{Binding TpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Tp}" Maximum="100"  Foreground="{Binding TpProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
                 </Grid>
 
-                <Grid Height="25" Margin="0,150,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Label Content="Fever" HorizontalAlignment="Left" VerticalAlignment="Center" Width="50" Foreground="White" FontWeight="Bold" />
-                    <ProgressBar x:Name="FeverProgress" Margin="50,0,0,0" Width="100" Height="16" Value="{Binding Fever, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" Maximum="100" ToolTip="{Binding Fever}" ValueChanged="ProgressBar_ValueChanged">
-                    </ProgressBar>
+                <Grid Height="25" Margin="50,150,0,0" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top" Background="{StaticResource Pink_A200}" Visibility="{Binding Fever, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Label Content="Fever" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" />
                 </Grid>
 
             </Grid>
@@ -122,37 +128,35 @@
                 </Grid>
 
 
-                <Grid Margin="0,75,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="25">
-                    <Label Content="体力药库存" HorizontalAlignment="Left" VerticalAlignment="Center" Width="72" Foreground="White"/>
-                    <TextBox HorizontalAlignment="Left" Height="20" Margin="72,0,0,0" Text="{Binding MinStaminaStock}" VerticalAlignment="Center" Width="72" BorderThickness="0,0,0,2" BorderBrush="#FFFF80AB" Background="{x:Null}"/>
+                <Grid Margin="0,75,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50">
+                    <Label Content="体力药库存" HorizontalAlignment="Left" VerticalAlignment="top" Width="72" Foreground="White"/>
+                    <TextBox HorizontalAlignment="Left" Height="20" Margin="72,0,0,0" Text="{Binding MinStaminaStock}" VerticalAlignment="top" Width="72" BorderThickness="0,0,0,2" BorderBrush="#FFFF80AB" Background="{x:Null}" Foreground="White"/>
+                    <Slider Margin="0,25,0,0" Minimum="0" Maximum="999" Value="{Binding MinStaminaStock}" >
+                    </Slider>
                 </Grid>
 
-                <Grid Margin="0,100,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="25">
+                <Grid Margin="0,125,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50">
                     <Label Content="BP药库存" HorizontalAlignment="Left" VerticalAlignment="Top" Width="72" Foreground="White"/>
-                    <TextBox HorizontalAlignment="Left" Height="20" Margin="72,0,0,0" Text="{Binding MinBpStock}" VerticalAlignment="Center" Width="72" BorderThickness="0,0,0,2" BorderBrush="#FFFF80AB" Background="{x:Null}"/>
+                    <TextBox HorizontalAlignment="Left" Height="20" Margin="72,0,0,0" Text="{Binding MinBpStock}" VerticalAlignment="top" Width="72" BorderThickness="0,0,0,2" BorderBrush="#FFFF80AB" Background="{x:Null}" Foreground="White"/>
+                    <Slider Margin="0,25,0,0" Minimum="0" Maximum="999" Value="{Binding MinBpStock}" />
                 </Grid>
             </Grid>
 
-            <Grid x:Name="Controller" HorizontalAlignment="left" VerticalAlignment="Top" Margin="0,180,0,0" Height="30">
-                <Grid Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60" Height="25">
-                    <RadioButton x:Name="QuestButton" Content="任务" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" IsChecked="{Binding IsQuestEnable}"/>
-                </Grid>
-                <Grid Margin="80,0,10,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="60"  Height="25">
-                    <RadioButton x:Name="GuildBattleButton" Content="公会战" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" IsChecked="{Binding IsGuildBattleEnable}"/>
+            <Grid x:Name="Controller" HorizontalAlignment="left" VerticalAlignment="Top" Margin="0,200,0,0" Height="30">
+                <Grid Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="150" Height="25">
+                    <RadioButton x:Name="QuestButton" Content="任务" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" IsChecked="{Binding IsQuestEnable}" Width="70"/>
+                    <RadioButton x:Name="GuildBattleButton" Content="公会战" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" IsChecked="{Binding IsGuildBattleEnable}" Width="70" Margin="80,0,0,0">
+                    </RadioButton>
                 </Grid>
 
                 <Button x:Name="StartButton" HorizontalAlignment="Left" Margin="160,0,0,0" VerticalAlignment="Center" Width="140" Height="30" Click="StartButton_Click"
-                  Template="{DynamicResource FlatButton}" Background="Transparent" Foreground="White"
-                        Content="Start">
-
-                </Button>
-
+					Template="{DynamicResource FlatButton}" Background="Transparent" Foreground="White"
+					Content="Start"/>
             </Grid>
 
             <TextBlock Text="{Binding History}" Height="180" Margin="0,0,0,0" 
-                  VerticalAlignment="Bottom" Width="300" Background="#E0F7FA"
-                       Padding="10"/>
-
+				VerticalAlignment="Bottom" Width="300" Background="#E0F7FA"
+				Padding="10"/>
         </Grid>
     </Grid>
 </Window>

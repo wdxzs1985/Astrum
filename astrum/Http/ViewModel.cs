@@ -48,14 +48,14 @@ namespace Astrum.Http
             }
         }
 
-        private long _bpMiniStock;
-        private long _bpStock;
-        private long _staminaHalfStock;
-        private long _staminaStock;
-        private long _minStaminaStock;
-        private long _minBpStock;
+        private int _bpMiniStock;
+        private int _bpStock;
+        private int _staminaHalfStock;
+        private int _staminaStock;
+        private int _minStaminaStock;
+        private int _minBpStock;
 
-        public long BpMiniStock
+        public int BpMiniStock
         {
             get
             {
@@ -68,7 +68,7 @@ namespace Astrum.Http
             }
         }
 
-        public long BpStock
+        public int BpStock
         {
             get
             {
@@ -81,7 +81,7 @@ namespace Astrum.Http
             }
         }
 
-        public long MinBpStock
+        public int MinBpStock
         {
             get
             {
@@ -95,7 +95,7 @@ namespace Astrum.Http
         }
 
 
-        public long StaminaHalfStock
+        public int StaminaHalfStock
         {
             get
             {
@@ -108,7 +108,7 @@ namespace Astrum.Http
             }
         }
 
-        public long StaminaStock
+        public int StaminaStock
         {
             get
             {
@@ -121,7 +121,7 @@ namespace Astrum.Http
             }
         }
 
-        public long MinStaminaStock
+        public int MinStaminaStock
         {
             get
             {
@@ -178,16 +178,16 @@ namespace Astrum.Http
         }
 
         private string _name;
-        private long _level;
+        private int _level;
         private long _exp_value;
         private long _exp_max;
         private long _exp_min;
-        private long _stamina_max;
-        private long _stamina_value;
-        private long _bp_value;
-        private long _bp_max;
-        private long _tp_value;
-        private long _tp_max;
+        private int _stamina_max;
+        private int _stamina_value;
+        private int _bp_value;
+        private int _bp_max;
+        private int _tp_value;
+        private int _tp_max;
 
         public string Name
         {
@@ -202,7 +202,7 @@ namespace Astrum.Http
                 NotifyPropertyChanged("WindowTitle");
             }
         }
-        public long Level
+        public int Level
         {
             get
             {
@@ -286,7 +286,7 @@ namespace Astrum.Http
             }
         }
 
-        public long StaminaValue
+        public int StaminaValue
         {
             get
             {
@@ -300,7 +300,7 @@ namespace Astrum.Http
                 NotifyPropertyChanged("StaminaProgress");
             }
         }
-        public long StaminaMax
+        public int StaminaMax
         {
             get
             {
@@ -333,7 +333,7 @@ namespace Astrum.Http
             }
         }
 
-        public long BpValue
+        public int BpValue
         {
             get
             {
@@ -344,9 +344,10 @@ namespace Astrum.Http
                 _bp_value = value;
                 NotifyPropertyChanged("Bp");
                 NotifyPropertyChanged("BpValue");
+                NotifyPropertyChanged("BpProgress");
             }
         }
-        public long BpMax
+        public int BpMax
         {
             get
             {
@@ -357,10 +358,29 @@ namespace Astrum.Http
                 _bp_max = value;
                 NotifyPropertyChanged("Bp");
                 NotifyPropertyChanged("BpMax");
+                NotifyPropertyChanged("BpProgress");
             }
         }
 
-        public long TpValue
+
+        public int BpProgress
+        {
+            get
+            {
+                if (_bp_max == 0)
+                {
+                    return 0;
+                }
+                double max = (double)_bp_max;
+                double val = (double)_bp_value;
+
+                double rate = val / max;
+
+                return (int)(rate * 100);
+            }
+        }
+
+        public int TpValue
         {
             get
             {
@@ -371,9 +391,10 @@ namespace Astrum.Http
                 _tp_value = value;
                 NotifyPropertyChanged("Tp");
                 NotifyPropertyChanged("TpValue");
+                NotifyPropertyChanged("TpProgress");
             }
         }
-        public long TpMax
+        public int TpMax
         {
             get
             {
@@ -384,13 +405,32 @@ namespace Astrum.Http
                 _tp_max = value;
                 NotifyPropertyChanged("Tp");
                 NotifyPropertyChanged("TpMax");
+                NotifyPropertyChanged("TpProgress");
+            }
+        }
+
+
+        public int TpProgress
+        {
+            get
+            {
+                if (_tp_max == 0)
+                {
+                    return 0;
+                }
+                double max = (double)_tp_max;
+                double val = (double)_tp_value;
+
+                double rate = val / max;
+
+                return (int)(rate * 100);
             }
         }
 
         public long gacha { get; set; }
         public long lilu { get; set; }
-        public long card_quantity { get; set; }
-        public long card_max { get; set; }
+        public int card_quantity { get; set; }
+        public int card_max { get; set; }
         
         public string Exp
         {
@@ -428,16 +468,29 @@ namespace Astrum.Http
         public bool IsFuryRaidEnable { get; set; }
         public string FuryRaidEventId { get; set; }
         public bool IsFuryRaid { get; set; }
+
+        public bool IsLimitedRaidEnable { get; set; }
+        public string LimitedRaidEventId { get; set; }
+        public bool IsLimitedRaid { get; set; }
+
+        public bool CanAttack
+        {
+            get
+            {
+                return (IsFuryRaidEnable == IsFuryRaid) && (IsLimitedRaidEnable == IsLimitedRaid);
+            }
+        }
+
         public bool CanFullAttack
         {
             get
             {
-                return (IsFuryRaidEnable == IsFuryRaid) && BpValue >= 3;
+                return CanAttack && BpValue >= 3;
             }
         }
 
-        private int _fever;
-        public int Fever
+        private bool _fever;
+        public bool Fever
         {
             get
             {

@@ -23,6 +23,10 @@
                     <Setter TargetName="BackgroundWrap" Property="Background" Value="{StaticResource ResourceKey=Pink_A200}" />
                     <Setter TargetName="ContentLabel" Property="Foreground" Value="White" />
                 </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter TargetName="BackgroundWrap" Property="Background" Value="{StaticResource ResourceKey=Cyan_50}" />
+                    <Setter TargetName="ContentLabel" Property="Foreground" Value="{StaticResource ResourceKey=Cyan_500}" />
+                </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
 
@@ -148,19 +152,24 @@
             </Setter>
         </Style>
 
-        <Style TargetType="{x:Type ProgressBar}">
-            <Setter Property="Foreground" Value="#64DD17"></Setter>
-            <Setter Property="Background" Value="#ffffff"></Setter>
+        <!-- SimpleStyles: ProgressBar -->
+        <Style x:Key="{x:Type ProgressBar}" TargetType="{x:Type ProgressBar}">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ProgressBar}">
-                        <Grid MinHeight="20" MinWidth="240">
-                            <Rectangle Name="PART_Track" Fill="{TemplateBinding Background}" StrokeThickness="1" />
-                            <Rectangle Name="PART_Indicator" Fill="{TemplateBinding Foreground}" StrokeThickness="1" HorizontalAlignment="Left" />
+                        <Grid x:Name="TemplateRoot" SnapsToDevicePixels="True">
+                            <Rectangle Fill="White"/>
+                            <Rectangle x:Name="PART_Track" Margin="1"/>
+                            <Decorator x:Name="PART_Indicator" HorizontalAlignment="Left" Margin="1">
+                                <Grid x:Name="Foreground">
+                                    <Rectangle x:Name="Indicator" Fill="{TemplateBinding Foreground}"/>
+                                </Grid>
+                            </Decorator>
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+
     </Application.Resources>
 </Application>
