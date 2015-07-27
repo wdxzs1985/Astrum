@@ -242,7 +242,11 @@ namespace Astrum
                                 client.GuildBattle();
                             }
 
-                            if(!client.ViewModel.Fever)
+                            if(client.ViewModel.Fever)
+                            {
+                                client.CountDown(AstrumClient.SECOND * 10);
+                            }
+                            else
                             {
                                 client.CountDown(AstrumClient.MINUTE);
                             }

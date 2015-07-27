@@ -52,7 +52,7 @@ namespace Astrum.Http
 
         public const int MIN_STOCK = 9999;
 
-        public const int EASY_BOSS_HP = 1000000;
+        public const int EASY_BOSS_HP = 2000000;
 
         public AstrumClient()
         {
@@ -89,7 +89,7 @@ namespace Astrum.Http
 
         public void CountDown(int countDown)
         {
-            for (var i = 0; i < AstrumClient.MINUTE; i += INTERTAL)
+            for (var i = 0; i < countDown; i += INTERTAL)
             {
                 Thread.Sleep(INTERTAL);
                 if (ViewModel.IsRunning)
@@ -432,7 +432,7 @@ namespace Astrum.Http
 
                     if (ViewModel.IsStaminaEmpty)
                     {
-                        if (ViewModel.StaminaValue >= 100 || ViewModel.StaminaValue >= ViewModel.ExpMax - ViewModel.ExpValue || ViewModel.BpValue >= BP_FULL)
+                        if (ViewModel.StaminaValue >= 100 || ViewModel.StaminaValue >= ViewModel.ExpMax - ViewModel.ExpValue || ViewModel.BpValue >= BP_FULL|| ViewModel.Fever)
                         {
                             ViewModel.IsStaminaEmpty = false;
                         }
@@ -756,11 +756,11 @@ namespace Astrum.Http
                         }
                     }
 
-                    if (ViewModel.BpValue > needBp)
+                    if (ViewModel.BpValue >= needBp)
                     {
-                        LimitedRaidBattleAttack(battleInfo._id, attackType);
+                        FuryRaidBattleAttack(battleInfo._id, attackType);
+                        return true;
                     }
-                    return true;
                 }
             }
             else
@@ -863,11 +863,11 @@ namespace Astrum.Http
                     }
                 }
 
-                if (ViewModel.BpValue > needBp)
+                if (ViewModel.BpValue >= needBp)
                 {
                     LimitedRaidBattleAttack(battleInfo._id, attackType);
+                    return true;
                 }
-                return true;
             }
             return false;
         }
