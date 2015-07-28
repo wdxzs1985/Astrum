@@ -322,6 +322,50 @@ namespace Astrum
 		{
 			this.WindowState = WindowState.Minimized;
 		}
-       
+
+        private async void UseHalfStaminaButton_Click(object sender, RoutedEventArgs e)
+        {
+            await Task.Run(() =>
+            {
+                if (client.ViewModel.StaminaHalfStock > 0)
+                {
+                    client.UseItem(AstrumClient.ITEM_STAMINA, AstrumClient.INSTANT_HALF_STAMINA, 1);
+                }
+            });
+        }
+
+        private async void UseStaminaButton_Click(object sender, RoutedEventArgs e)
+        {
+            await Task.Run(() =>
+            {
+                if (client.ViewModel.StaminaStock > 0)
+                {
+                    client.UseItem(AstrumClient.ITEM_STAMINA, AstrumClient.INSTANT_STAMINA, 1);
+                }
+            });
+        }
+
+        private async void UseMiniBpButton_Click(object sender, RoutedEventArgs e)
+        {
+            await Task.Run(() =>
+            {
+                if (client.ViewModel.BpMiniStock > 0)
+                {
+                    client.UseItem(AstrumClient.ITEM_BP, AstrumClient.INSTANT_MINI_BP, 1);
+                }
+            });
+        }
+
+        private async void UseBpButton_Click(object sender, RoutedEventArgs e)
+        {
+            await Task.Run(() =>
+            {
+                if (client.ViewModel.BpStock > 0)
+                {
+                    client.UseItem(AstrumClient.ITEM_BP, AstrumClient.INSTANT_BP, 1);
+                }
+            });
+        }
+
     }
 }

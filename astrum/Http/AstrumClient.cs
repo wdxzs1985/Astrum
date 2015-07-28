@@ -25,7 +25,7 @@ namespace Astrum.Http
         public const string PUT = "PUT";
 
         public const int INTERTAL = 100;
-        public const int SECOND = 1000;
+        public const int SECOND = 10 * INTERTAL;
         public const int MINUTE = 60 * SECOND;
 
         public const int DELAY_LONG = SECOND;
@@ -35,10 +35,10 @@ namespace Astrum.Http
         public const string ITEM_STAMINA = "stamina";
         public const string ITEM_BP = "bp";
 
-        public const string INSTANT_STAMINA_HALF = "instant-half_stamina_potion";
+        public const string INSTANT_HALF_STAMINA = "instant-half_stamina_potion";
         public const string INSTANT_STAMINA = "instant-stamina_potion";
         public const string INSTANT_BP = "instant-bp_ether";
-        public const string INSTANT_BP_MINI = "instant-mini_bp_ether";
+        public const string INSTANT_MINI_BP = "instant-mini_bp_ether";
 
         public const string FULL = "full";
         public const string NORMAL = "normal";
@@ -446,10 +446,10 @@ namespace Astrum.Http
                     {
                         if (stage.items != null && ViewModel.ExpMax - ViewModel.ExpValue > 150)
                         {
-                            var item = stage.items.Find(e => INSTANT_STAMINA_HALF.Equals(e._id));
+                            var item = stage.items.Find(e => INSTANT_HALF_STAMINA.Equals(e._id));
                             if (item.stock > ViewModel.MinStaminaStock && ViewModel.Fever)
                             {
-                                UseItem(ITEM_STAMINA, INSTANT_STAMINA_HALF, 1);
+                                UseItem(ITEM_STAMINA, INSTANT_HALF_STAMINA, 1);
                             }
                             else
                             {
@@ -752,7 +752,7 @@ namespace Astrum.Http
                         int quantity = needBp - ViewModel.BpValue;
                         if (quantity > ViewModel.BpMiniStock)
                         {
-                            UseItem(ITEM_BP, INSTANT_BP_MINI, quantity);
+                            UseItem(ITEM_BP, INSTANT_MINI_BP, quantity);
                         }
                     }
 
@@ -859,7 +859,7 @@ namespace Astrum.Http
                     int quantity = needBp - ViewModel.BpValue;
                     if (quantity > ViewModel.BpMiniStock)
                     {
-                        UseItem(ITEM_BP, INSTANT_BP_MINI, quantity);
+                        UseItem(ITEM_BP, INSTANT_MINI_BP, quantity);
                     }
                 }
 
@@ -1107,10 +1107,10 @@ namespace Astrum.Http
                 {
                     if (stage.items != null)
                     {
-                        var item = stage.items.Find(e => INSTANT_STAMINA_HALF.Equals(e._id));
+                        var item = stage.items.Find(e => INSTANT_HALF_STAMINA.Equals(e._id));
                         if (item.stock > ViewModel.MinStaminaStock)
                         {
-                            UseItem(ITEM_STAMINA, INSTANT_STAMINA_HALF, 1);
+                            UseItem(ITEM_STAMINA, INSTANT_HALF_STAMINA, 1);
                         }
                         else
                         {
@@ -1257,7 +1257,7 @@ namespace Astrum.Http
 
         private void UpdateItemStock(ItemInfo item)
         {
-            if (INSTANT_STAMINA_HALF.Equals(item._id))
+            if (INSTANT_HALF_STAMINA.Equals(item._id))
             {
                 ViewModel.StaminaHalfStock = item.stock;
             }
@@ -1265,7 +1265,7 @@ namespace Astrum.Http
             {
                 ViewModel.StaminaStock = item.stock;
             }
-            else if (INSTANT_BP_MINI.Equals(item._id))
+            else if (INSTANT_MINI_BP.Equals(item._id))
             {
                 ViewModel.BpMiniStock = item.stock;
             }
@@ -1278,7 +1278,7 @@ namespace Astrum.Http
 
         private void UpdateItemStock(UseItemResult item)
         {
-            if (INSTANT_STAMINA_HALF.Equals(item._id))
+            if (INSTANT_HALF_STAMINA.Equals(item._id))
             {
                 ViewModel.StaminaHalfStock = item.stock.after;
                 ViewModel.StaminaValue = item.value.after;
@@ -1288,7 +1288,7 @@ namespace Astrum.Http
                 ViewModel.StaminaStock = item.stock.after;
                 ViewModel.StaminaValue = item.value.after;
             }
-            else if (INSTANT_BP_MINI.Equals(item._id))
+            else if (INSTANT_MINI_BP.Equals(item._id))
             {
                 ViewModel.BpMiniStock = item.stock.after;
                 ViewModel.BpValue = item.value.after;

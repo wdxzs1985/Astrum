@@ -19,6 +19,7 @@
     AllowsTransparency="True" 
     ResizeMode="NoResize" Background="{x:Null}">
     <Window.Resources>
+        <UI:IntToIsEnabledConverter x:Key="IntToIsEnabledConverter"/>
         <UI:ProgressBarForegoundConvert x:Key="ProgressBarForegoundConvert"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>
@@ -103,28 +104,85 @@
                 <Grid Height="25" Margin="50,150,0,0" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top" Background="{StaticResource Pink_A200}" Visibility="{Binding Fever, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <Label Content="Fever" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" />
                 </Grid>
-
             </Grid>
 
             <Grid x:Name="Items" HorizontalAlignment="Right" Margin="0,0,0,0" VerticalAlignment="Top" Width="140">
-                <Grid Margin="0,0,0,0" Width="75" Height="32" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Image Margin="0,0,0,0" Source="Images/instant-half_stamina_potion.png" Stretch="Fill" Width="32" Height="32"  HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                    <Label Content="{Binding StaminaHalfStock}" HorizontalAlignment="Left" Margin="40,0,0,0" Width="35" VerticalAlignment="Center" Foreground="White"/>
+                <Grid Margin="0,0,0,0" Width="70" Height="32" 
+                      HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Button Name="UseHalfStaminaButton" Margin="0,0,0,0" Width="32" Height="32"
+                            HorizontalAlignment="Left" VerticalAlignment="Center" 
+                            BorderBrush="{x:Null}" Foreground="{x:Null}"
+                            Template="{StaticResource IconButton}"
+                            Click="UseHalfStaminaButton_Click"
+                            IsEnabled="{Binding StaminaHalfStock, Converter={StaticResource IntToIsEnabledConverter}}">
+                        <Button.Background>
+                            <ImageBrush ImageSource="Images/instant-half_stamina_potion.png" Stretch="Uniform"/>
+                        </Button.Background>
+                    </Button>
+                    <Label Content="{Binding StaminaHalfStock, FallbackValue=0, TargetNullValue=0}" 
+                           HorizontalAlignment="Left" VerticalAlignment="Center"
+                           HorizontalContentAlignment="Right"
+                           Margin="35,0,0,0" Width="35" 
+                           Foreground="White"/>
                 </Grid>
 
-                <Grid Margin="75,0,0,0" Width="75" Height="32" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Image Margin="0,0,0,0" Source="Images/instant-stamina_potion.png" Stretch="Fill" Width="32" Height="32"  HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                    <Label Content="{Binding StaminaStock}" HorizontalAlignment="Left" Margin="40,0,0,0" Width="35" VerticalAlignment="Center" Foreground="White"/>
+                <Grid Margin="70,0,0,0" Width="70" Height="32" 
+                      HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Button Name="UseStaminaButton" Margin="0,0,0,0" Width="32" Height="32"
+                            HorizontalAlignment="Left" VerticalAlignment="Center" 
+                            BorderBrush="{x:Null}" Foreground="{x:Null}"
+                            Template="{StaticResource IconButton}"
+                            Click="UseStaminaButton_Click"
+                            IsEnabled="{Binding StaminaStock, Converter={StaticResource IntToIsEnabledConverter}}">
+                        <Button.Background>
+                            <ImageBrush ImageSource="Images/instant-stamina_potion.png" Stretch="Uniform"/>
+                        </Button.Background>
+                    </Button>
+                    <Label Content="{Binding StaminaStock, FallbackValue=0, TargetNullValue=0}" 
+                           HorizontalAlignment="Left" VerticalAlignment="Center"
+                           HorizontalContentAlignment="Right"
+                           Margin="35,0,0,0" Width="35" 
+                           Foreground="White"/>
                 </Grid>
 
-                <Grid Margin="0,40,0,0" Width="75" Height="32" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Image Margin="0,0,0,0" Source="Images/instant-mini_bp_ether.png" Stretch="Fill" Width="32" Height="32"  HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                    <Label Content="{Binding BpMiniStock}" HorizontalAlignment="Left" Margin="40,0,0,0" Width="35" VerticalAlignment="Center" Foreground="White"/>
+                <Grid Margin="0,40,0,0" Width="70" Height="32" 
+                      HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Button Name="UseMiniBpButton" 
+                            Margin="0,0,0,0" Width="32" Height="32"
+                            HorizontalAlignment="Left" VerticalAlignment="Center" 
+                            BorderBrush="{x:Null}" Foreground="{x:Null}"
+                            Template="{StaticResource IconButton}"
+                            Click="UseMiniBpButton_Click"
+                            IsEnabled="{Binding BpMiniStock, Converter={StaticResource IntToIsEnabledConverter}}">
+                        <Button.Background>
+                            <ImageBrush ImageSource="Images/instant-mini_bp_ether.png" Stretch="Uniform"/>
+                        </Button.Background>
+                    </Button>
+                    <Label Content="{Binding BpMiniStock, FallbackValue=0, TargetNullValue=0}" 
+                           HorizontalAlignment="Left" VerticalAlignment="Center"
+                           HorizontalContentAlignment="Right"
+                           Margin="35,0,0,0" Width="35" 
+                           Foreground="White"/>
                 </Grid>
 
-                <Grid Margin="75,40,0,0" Width="75" Height="32" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Image Margin="0,0,0,0" Source="Images/instant-bp_ether.png" Stretch="Fill" Width="32" Height="32"  HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                    <Label Content="{Binding BpStock}" HorizontalAlignment="Left" Margin="40,0,0,0" Width="35" VerticalAlignment="Center" Foreground="White"/>
+                <Grid Margin="70,40,0,0" Width="70" Height="32" 
+                      HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Button Name="UseBpButton" 
+                            Margin="0,0,0,0" Width="32" Height="32"
+                            HorizontalAlignment="Left" VerticalAlignment="Center" 
+                            BorderBrush="{x:Null}" Foreground="{x:Null}"
+                            Template="{StaticResource IconButton}"
+                            Click="UseBpButton_Click"
+                            IsEnabled="{Binding BpStock, Converter={StaticResource IntToIsEnabledConverter}}">
+                        <Button.Background>
+                            <ImageBrush ImageSource="Images/instant-bp_ether.png" Stretch="Uniform"/>
+                        </Button.Background>
+                    </Button>
+                    <Label Content="{Binding BpStock, FallbackValue=0, TargetNullValue=0}" 
+                           HorizontalAlignment="Left" VerticalAlignment="Center"
+                           HorizontalContentAlignment="Right"
+                           Margin="35,0,0,0" Width="35" 
+                           Foreground="White"/>
                 </Grid>
 
 

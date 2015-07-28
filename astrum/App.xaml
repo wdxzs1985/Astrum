@@ -32,6 +32,20 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
 
+        <ControlTemplate x:Key="IconButton" TargetType="{x:Type Button}">
+            <Grid x:Name="BackgroundWrap">
+                <Grid Background="{TemplateBinding Background}"></Grid>
+                <Grid Name="Overlay" Background="White" Opacity="0"></Grid>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="Overlay" Property="Opacity" Value="0.2" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter TargetName="Overlay" Property="Opacity" Value="0.6" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
 
         <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
             <Grid>
@@ -207,11 +221,6 @@
                                  HorizontalAlignment="Center" VerticalAlignment="Center"
                                  Name="Rectangle" 
                                  Fill="{StaticResource Pink_A200}" />
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Rectangle" Property="Fill" Value="{StaticResource Pink_A200}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -225,7 +234,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type RepeatButton}">
-                        <Border Background="{StaticResource Pink_A200}" Height="6" Margin="1,0,0,0"/>
+                        <Border Background="{StaticResource Pink_A200}" Height="2" />
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -239,7 +248,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type RepeatButton}">
-                        <Border Background="White" Height="6" Margin="0,0,1,0"/>
+                        <Border Background="White" Height="2" />
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -248,12 +257,11 @@
         <Style x:Key="{x:Type Slider}" TargetType="{x:Type Slider}">
             <Setter Property="SnapsToDevicePixels" Value="true" />
             <Setter Property="OverridesDefaultStyle" Value="true"/>
-            <Setter Property="Height" Value="8"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Slider">
                         <Grid >
-                            <Rectangle Fill="White"/>
+                            <Rectangle Fill="White" Height="2" VerticalAlignment="Center"/>
                             <Track Name="PART_Track"
                                    HorizontalAlignment="Stretch"
                                    VerticalAlignment="Center">
