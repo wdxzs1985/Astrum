@@ -432,7 +432,7 @@ namespace Astrum.Http
 
                     if (ViewModel.IsStaminaEmpty)
                     {
-                        if (ViewModel.StaminaValue >= 100 || ViewModel.StaminaValue >= ViewModel.ExpMax - ViewModel.ExpValue || ViewModel.BpValue >= BP_FULL|| ViewModel.Fever)
+                        if (ViewModel.StaminaValue >= ViewModel.MaxKeepStamina || ViewModel.StaminaValue >= ViewModel.ExpMax - ViewModel.ExpValue || ViewModel.BpValue >= BP_FULL || ViewModel.Fever)
                         {
                             ViewModel.IsStaminaEmpty = false;
                         }

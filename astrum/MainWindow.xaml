@@ -129,20 +129,38 @@
 
 
                 <Grid Margin="0,75,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50">
-                    <Label Content="体力药库存" HorizontalAlignment="Left" VerticalAlignment="top" Width="72" Foreground="White"/>
-                    <TextBox HorizontalAlignment="Left" Height="20" Margin="72,0,0,0" Text="{Binding MinStaminaStock}" VerticalAlignment="top" Width="72" BorderThickness="0,0,0,2" BorderBrush="#FFFF80AB" Background="{x:Null}" Foreground="White"/>
+                    <Label Content="体力药库存" HorizontalAlignment="Left" VerticalAlignment="top"
+                           Foreground="White"/>
+                    <TextBox Width="40"  Height="20" Margin="100,0,0,0" 
+                             Text="{Binding MinStaminaStock}" 
+                             VerticalAlignment="top" HorizontalAlignment="Left" HorizontalContentAlignment="Right"
+                             BorderThickness="0,0,0,1" BorderBrush="#FFFF80AB" Background="{x:Null}" Foreground="White"/>
                     <Slider Margin="0,25,0,0" Minimum="0" Maximum="999" Value="{Binding MinStaminaStock}" >
                     </Slider>
                 </Grid>
 
                 <Grid Margin="0,125,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50">
-                    <Label Content="BP药库存" HorizontalAlignment="Left" VerticalAlignment="Top" Width="72" Foreground="White"/>
-                    <TextBox HorizontalAlignment="Left" Height="20" Margin="72,0,0,0" Text="{Binding MinBpStock}" VerticalAlignment="top" Width="72" BorderThickness="0,0,0,2" BorderBrush="#FFFF80AB" Background="{x:Null}" Foreground="White"/>
+                    <Label Content="BP药库存" HorizontalAlignment="Left" VerticalAlignment="Top"
+                           Foreground="White"/>
+                    <TextBox Width="40"  Height="20" Margin="100,0,0,0" 
+                             Text="{Binding MinBpStock}" 
+                             VerticalAlignment="top" HorizontalAlignment="Left"  HorizontalContentAlignment="Right"
+                             BorderThickness="0,0,0,1" BorderBrush="#FFFF80AB" Background="{x:Null}" Foreground="White"/>
                     <Slider Margin="0,25,0,0" Minimum="0" Maximum="999" Value="{Binding MinBpStock}" />
+                </Grid>
+
+                <Grid Margin="0,175,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50">
+                    <Label Content="Keep Stamina" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White"/>
+                    <TextBox Width="40" Height="20" Margin="100,0,0,0"
+                             HorizontalAlignment="Left" VerticalAlignment="top" HorizontalContentAlignment="Right"
+                             BorderThickness="0,0,0,1" BorderBrush="#FFFF80AB" 
+                             Background="{x:Null}" Foreground="White"
+                             Text="{Binding MaxKeepStamina}" />
+                    <Slider Margin="0,25,0,0" Minimum="0" Maximum="200" Value="{Binding MaxKeepStamina}" />
                 </Grid>
             </Grid>
 
-            <Grid x:Name="Controller" HorizontalAlignment="left" VerticalAlignment="Top" Margin="0,200,0,0" Height="30">
+            <Grid x:Name="Controller" HorizontalAlignment="left" VerticalAlignment="Top" Margin="0,230,0,0" Height="30">
                 <Grid Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="150" Height="30">
                     <RadioButton x:Name="QuestButton" Content="任务" 
                                  HorizontalAlignment="Left" VerticalAlignment="Center" 
@@ -164,7 +182,7 @@
 					Content="Start"/>
             </Grid>
 
-            <TextBlock Text="{Binding History}" Height="180" Margin="0,0,0,0" 
+            <TextBlock Text="{Binding History}" Height="160" Margin="0,0,0,0" 
 				VerticalAlignment="Bottom" Width="300" Background="#E0F7FA"
 				Padding="10"/>
         </Grid>

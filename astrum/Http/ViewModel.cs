@@ -504,5 +504,19 @@ namespace Astrum.Http
         }
 
         public bool IsStaminaEmpty { get; set; }
+
+        private int _maxKeepStamina = 100;
+        public int MaxKeepStamina
+        {
+            get
+            {
+                return _maxKeepStamina;
+            }
+            set
+            {
+                _maxKeepStamina = value;
+                NotifyPropertyChanged("MaxKeepStamina");
+            }
+        }
     }
 }
