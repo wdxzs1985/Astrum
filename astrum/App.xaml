@@ -6,6 +6,7 @@
 
         <SolidColorBrush x:Key="Pink_A100" Color="#FF80AB"/>
         <SolidColorBrush x:Key="Pink_A200" Color="#FF4081"/>
+        <SolidColorBrush x:Key="Pink_A400" Color="#F50057"/>
         <SolidColorBrush x:Key="Cyan_50" Color="#E0F7FA"/>
         <SolidColorBrush x:Key="Cyan_500" Color="#00BCD4"/>
         <SolidColorBrush x:Key="Cyan_700" Color="#0097A7"/>
@@ -158,8 +159,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ProgressBar}">
-                        <Grid x:Name="TemplateRoot" SnapsToDevicePixels="True">
-                            <Rectangle Fill="White"/>
+                        <Grid x:Name="TemplateRoot" SnapsToDevicePixels="True" Background="White">
                             <Rectangle x:Name="PART_Track" Margin="1"/>
                             <Decorator x:Name="PART_Indicator" HorizontalAlignment="Left" Margin="1">
                                 <Grid x:Name="Foreground">
@@ -194,5 +194,85 @@
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
+
+        <Style x:Key="{x:Type Thumb}" TargetType="{x:Type Thumb}">
+            <Setter Property="SnapsToDevicePixels" Value="true"/>
+            <Setter Property="OverridesDefaultStyle" Value="false"/>
+            <Setter Property="Width" Value="8"/>
+            <Setter Property="Height" Value="8"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Rectangle Width="8" Height="8"
+                                 HorizontalAlignment="Center" VerticalAlignment="Center"
+                                 Name="Rectangle" 
+                                 Fill="{StaticResource Pink_A200}" />
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Rectangle" Property="Fill" Value="{StaticResource Pink_A200}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="DecreaseRepeatButton" TargetType="{x:Type RepeatButton}">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="IsTabStop" Value="false" />
+            <Setter Property="Focusable" Value="false" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Border Background="{StaticResource Pink_A200}" Height="6" Margin="1,0,0,0"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="IncreaseRepeatButton" TargetType="{x:Type RepeatButton}">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="IsTabStop" Value="false" />
+            <Setter Property="Focusable" Value="false" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Border Background="White" Height="6" Margin="0,0,1,0"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="{x:Type Slider}" TargetType="{x:Type Slider}">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="Height" Value="8"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Slider">
+                        <Grid >
+                            <Rectangle Fill="White"/>
+                            <Track Name="PART_Track"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Center">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Style="{StaticResource DecreaseRepeatButton}"
+                                                  Command="Slider.DecreaseLarge" />
+                                </Track.DecreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb />
+                                </Track.Thumb>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Style="{StaticResource IncreaseRepeatButton}"
+                                                  Command="Slider.IncreaseLarge" />
+                                </Track.IncreaseRepeatButton>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Application.Resources>
 </Application>

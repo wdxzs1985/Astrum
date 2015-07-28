@@ -82,22 +82,22 @@
 
                 <Grid Height="25" Margin="0,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Label Content="体力" HorizontalAlignment="Left" VerticalAlignment="Center" Width="50" Foreground="White" FontWeight="Bold" />
-                    <ProgressBar x:Name="StaminaProgress" Margin="50,0,0,0" Width="100" Height="16" Value="{Binding StaminaProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" Maximum="100" ToolTip="{Binding Stamina}" Foreground="{Binding StaminaProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
+                    <ProgressBar x:Name="StaminaProgress" Margin="50,0,0,0" Width="100" Height="8" Value="{Binding StaminaProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" Maximum="100" ToolTip="{Binding Stamina}" Foreground="{Binding StaminaProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
                 </Grid>
 
                 <Grid Height="25" Margin="0,75,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Label Content="经验值" HorizontalAlignment="Left" VerticalAlignment="Center" Width="50" Foreground="White" FontWeight="Bold" />
-                    <ProgressBar x:Name="ExpProgress" Margin="50,0,0,0" Width="100" Height="16" Value="{Binding ExpProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Exp}" Foreground="{Binding ExpProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
+                    <ProgressBar x:Name="ExpProgress" Margin="50,0,0,0" Width="100" Height="8" Value="{Binding ExpProgress, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Exp}" Foreground="{Binding ExpProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
                 </Grid>
 
                 <Grid Height="25" Margin="0,100,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Label Content="BP" HorizontalAlignment="Left" VerticalAlignment="Center" Width="50" Foreground="White" FontWeight="Bold" />
-                    <ProgressBar x:Name="BpProgress" Margin="50,0,0,0" Width="100" Height="16" Value="{Binding BpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Bp}" Maximum="6" Foreground="{Binding BpProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
+                    <ProgressBar x:Name="BpProgress" Margin="50,0,0,0" Width="100" Height="8" Value="{Binding BpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Bp}" Maximum="6" Foreground="{Binding BpProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
                 </Grid>
 
                 <Grid Height="25" Margin="0,125,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Label Content="TP" HorizontalAlignment="Left" VerticalAlignment="Center" Width="50" Foreground="White" FontWeight="Bold" />
-                    <ProgressBar x:Name="TpProgress" Margin="50,0,0,0" Width="100" Height="16" Value="{Binding TpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Tp}" Maximum="100"  Foreground="{Binding TpProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
+                    <ProgressBar x:Name="TpProgress" Margin="50,0,0,0" Width="100" Height="8" Value="{Binding TpValue, FallbackValue=0, Mode=OneWay, NotifyOnSourceUpdated=True, TargetNullValue=0}" Minimum="0" ToolTip="{Binding Tp}" Maximum="100"  Foreground="{Binding TpProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
                 </Grid>
 
                 <Grid Height="25" Margin="50,150,0,0" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top" Background="{StaticResource Pink_A200}" Visibility="{Binding Fever, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -135,7 +135,7 @@
                              Text="{Binding MinStaminaStock}" 
                              VerticalAlignment="top" HorizontalAlignment="Left" HorizontalContentAlignment="Right"
                              BorderThickness="0,0,0,1" BorderBrush="#FFFF80AB" Background="{x:Null}" Foreground="White"/>
-                    <Slider Margin="0,25,0,0" Minimum="0" Maximum="999" Value="{Binding MinStaminaStock}" >
+                    <Slider Margin="0,25,0,0" Minimum="0" Maximum="999" Value="{Binding MinStaminaStock}" LargeChange="100" SmallChange="1" >
                     </Slider>
                 </Grid>
 
@@ -146,7 +146,7 @@
                              Text="{Binding MinBpStock}" 
                              VerticalAlignment="top" HorizontalAlignment="Left"  HorizontalContentAlignment="Right"
                              BorderThickness="0,0,0,1" BorderBrush="#FFFF80AB" Background="{x:Null}" Foreground="White"/>
-                    <Slider Margin="0,25,0,0" Minimum="0" Maximum="999" Value="{Binding MinBpStock}" />
+                    <Slider Margin="0,25,0,0" Minimum="0" Maximum="999" Value="{Binding MinBpStock}" LargeChange="100" SmallChange="1" />
                 </Grid>
 
                 <Grid Margin="0,175,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50">
@@ -156,7 +156,8 @@
                              BorderThickness="0,0,0,1" BorderBrush="#FFFF80AB" 
                              Background="{x:Null}" Foreground="White"
                              Text="{Binding MaxKeepStamina}" />
-                    <Slider Margin="0,25,0,0" Minimum="0" Maximum="200" Value="{Binding MaxKeepStamina}" />
+                    <Slider Margin="0,25,0,0"
+                            Minimum="0" Maximum="200" Value="{Binding MaxKeepStamina}" LargeChange="10" SmallChange="1" />
                 </Grid>
             </Grid>
 
