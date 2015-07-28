@@ -17,6 +17,14 @@ namespace Astrum.Json.Event
         public string _id { get; set; }
         public string type { get; set; }
         public bool status { get; set; }
+        public Term term { get; set; }
     }
 
+
+    public class Term
+    {
+        public long start;
+
+        public long end;
+    }
 }

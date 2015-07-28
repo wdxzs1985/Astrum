@@ -29,20 +29,20 @@ namespace Astrum.Json.Raid
         public string type { get; set; }
 
         public string name { get; set; }
-        public long level { get; set; }
-        public long rare { get; set; }
+        public int level { get; set; }
+        public int rare { get; set; }
 
-        public long bpValue { get; set; }
-        public long bpMax { get; set; }
-        public long combo { get; set; }
+        public int bpValue { get; set; }
+        public int bpMax { get; set; }
+        public int combo { get; set; }
         public bool canCombo { get; set; }
-        public long hp { get; set; }
-        public long totalDamage { get; set; }
+        public int hp { get; set; }
+        public int totalDamage { get; set; }
         public bool isWin { get; set; }
         public bool isPlaying { get; set; }
         public bool isLose { get; set; }
         public bool isNew { get; set; }
-        public long joinNum { get; set; }
+        public int joinNum { get; set; }
 
         public RescueInfo rescue { get; set; }
     }
@@ -86,5 +86,21 @@ namespace Astrum.Json.Raid
         public int progress { get; set; }
 
         public int effect { get; set; }
+
+        public object gachaTicket { get; set; }
+    }
+
+    
+    public class LimitedRaidInfo
+    {
+        public string _id { get; set; }
+
+        public string eventId { get; set; }
+
+        public Fever fever { get; set; }
+
+        public bool isNew { get; set; }
+
+        public RaidBattleInfo target { get; set; }
     }
 }

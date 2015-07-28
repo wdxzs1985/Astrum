@@ -87,7 +87,7 @@ namespace Astrum
                 LoginPanel.Visibility = Visibility.Hidden;
                 StatusPanel.Visibility = Visibility.Visible;
 
-                //Controller.Visibility = Visibility.Hidden;
+                Controller.Visibility = Visibility.Hidden;
 
                 await Task.Run(() =>
                 {
@@ -95,7 +95,7 @@ namespace Astrum
                     client.OnStart();
                 });
 
-                //Controller.Visibility = Visibility.Visible;
+                Controller.Visibility = Visibility.Visible;
 
                 nowUser = new LoginUser { username = username, password = password };
                 //save user
@@ -203,9 +203,9 @@ namespace Astrum
 
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            //StartButton.IsEnabled = false;
-            //QuestButton.IsEnabled = false;
-            //GuildBattleButton.IsEnabled = false;
+            StartButton.IsEnabled = false;
+            QuestButton.IsEnabled = false;
+            GuildBattleButton.IsEnabled = false;
 
 
             if (client.ViewModel.IsRunning == false)
@@ -213,9 +213,10 @@ namespace Astrum
                 SaveUserList();
 
                 StartButton.Content = "Stop";
-                //StartButton.IsEnabled = true;
+                StartButton.IsEnabled = true;
 
                 client.ViewModel.IsRunning = true;
+                client.ViewModel.IsStaminaEmpty = false;
 
                 bool result = await Task.Run(() =>
                 {
@@ -241,7 +242,14 @@ namespace Astrum
                                 client.GuildBattle();
                             }
 
-                            client.CountDown(AstrumClient.MINUTE);
+                            if(client.ViewModel.Fever)
+                            {
+                                client.CountDown(AstrumClient.SECOND * 10);
+                            }
+                            else
+                            {
+                                client.CountDown(AstrumClient.MINUTE);
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -255,9 +263,9 @@ namespace Astrum
 
 
                 StartButton.Content = "Start";
-                //StartButton.IsEnabled = true;
-                //QuestButton.IsEnabled = true;
-                //GuildBattleButton.IsEnabled = true;
+                StartButton.IsEnabled = true;
+                QuestButton.IsEnabled = true;
+                GuildBattleButton.IsEnabled = true;
 
                 if (!result)
                 {
@@ -270,7 +278,7 @@ namespace Astrum
             else
             {
                 client.ViewModel.IsRunning = false;
-                //StartButton.IsEnabled = false;
+                StartButton.IsEnabled = false;
             }
         }
 
@@ -285,6 +293,7 @@ namespace Astrum
                 PasswordBox.Password = user.password;
 
                 client.ViewModel.MinStaminaStock = user.minstaminastock;
+                client.ViewModel.MinBpStock = user.minbpstock;
 
                 if (user.username != null)
                 {
@@ -297,29 +306,6 @@ namespace Astrum
                     PasswordBox.Visibility = Visibility.Visible;
                 }
             }
-        }
-
-        private void ProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            var p = (ProgressBar)sender;
-
-            var progressBefore = (e.OldValue / p.Maximum) * 100;
-            var progressAfter = (e.NewValue / p.Maximum) * 100;
-
-            Console.WriteLine("{0}: {1}% -> {2}%", p.Name, progressBefore, progressAfter);
-
-
-            var foreground = new SolidColorBrush(Color.FromRgb(1, 211, 40));
-
-            if (progressAfter <= 10d)
-            {
-                foreground = new SolidColorBrush(Color.FromRgb(244, 67, 54));
-            }
-            else if (progressAfter <= 40d)
-            {
-                foreground = new SolidColorBrush(Color.FromRgb(255, 152, 0));
-            }
-            p.Foreground = foreground;
         }
 		
 		public void DragWindow(object sender,MouseButtonEventArgs args)

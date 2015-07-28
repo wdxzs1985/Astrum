@@ -32,14 +32,27 @@ namespace Astrum.Http
         public const int DELAY_SHORT = SECOND;
         public const int NO_DELAY = 0;
 
+        public const string ITEM_STAMINA = "stamina";
+        public const string ITEM_BP = "bp";
+
         public const string INSTANT_STAMINA_HALF = "instant-half_stamina_potion";
         public const string INSTANT_STAMINA = "instant-stamina_potion";
         public const string INSTANT_BP = "instant-bp_ether";
         public const string INSTANT_BP_MINI = "instant-mini_bp_ether";
 
+        public const string FULL = "full";
+        public const string NORMAL = "normal";
+        public const int BP_FULL = 3;
+        public const int BP_NORMAL = 1;
+
+        public const string FIRST = "first";
+        public const string FIND = "find";
+        public const string RESCUE = "rescue";
+
+
         public const int MIN_STOCK = 9999;
 
-        public const int EASY_BOSS_HP = 1000000;
+        public const int EASY_BOSS_HP = 2000000;
 
         public AstrumClient()
         {
@@ -76,7 +89,7 @@ namespace Astrum.Http
 
         public void CountDown(int countDown)
         {
-            for (var i = 0; i < AstrumClient.MINUTE; i += INTERTAL)
+            for (var i = 0; i < countDown; i += INTERTAL)
             {
                 Thread.Sleep(INTERTAL);
                 if (ViewModel.IsRunning)
@@ -272,7 +285,7 @@ namespace Astrum.Http
 
         private void LoginBonusLongLogin()
         {
-            GetXHR("http://astrum.amebagames.com/_/loginbonus/longlogin");
+            GetXHR("http://astrum.amebagames.com/_/loginbonus/long");
             Delay(DELAY_SHORT);
         }
 
@@ -335,6 +348,14 @@ namespace Astrum.Http
 
                         FuryRaidFever();
                     }
+                    else if ("limitedraid".Equals(@event.type))
+                    {
+                        ViewModel.IsLimitedRaidEnable = true;
+                        ViewModel.LimitedRaidEventId = @event._id;
+                        
+                        LimitedRaidInfo();
+
+                    }
                 }
             }
         }
@@ -364,13 +385,12 @@ namespace Astrum.Http
                 }
                 else
                 {
-                    //ViewModel.IsFuryRaidEnable = false;
                     ViewModel.IsFuryRaid = false;
+                    ViewModel.IsLimitedRaid = false;
 
                     //furyraid
                     if (ViewModel.IsFuryRaidEnable)
                     {
-                        //ViewModel.IsFuryRaidEnable = true;
                         ViewModel.IsFuryRaid = true;
 
                         if (stage.status.furyraid.find != null && (stage.status.furyraid.find.isNew || ViewModel.CanFullAttack))
@@ -382,10 +402,23 @@ namespace Astrum.Http
                             FuryRaid();
                         }
                     }
-                    //raid
+
+                    if (ViewModel.IsLimitedRaidEnable)
+                    {
+                        ViewModel.IsLimitedRaid = true;
+
+                        var limitedRaidId = stage.status.limitedraid._id;
+                        if (limitedRaidId != null && ViewModel.CanFullAttack)
+                        {
+                            LimitedRaid();
+                        }
+                    }
+
                     if (stage.status.raid != null)
                     {
                         ViewModel.IsFuryRaid = false;
+                        ViewModel.IsLimitedRaid = false;
+
                         if (stage.status.raid.find != null && (stage.status.raid.find.isNew || ViewModel.CanFullAttack))
                         {
                             Raid();
@@ -399,7 +432,7 @@ namespace Astrum.Http
 
                     if (ViewModel.IsStaminaEmpty)
                     {
-                        if (ViewModel.StaminaValue >= 100 || ViewModel.StaminaValue >= ViewModel.ExpMax - ViewModel.ExpValue)
+                        if (ViewModel.StaminaValue >= ViewModel.MaxKeepStamina || ViewModel.StaminaValue >= ViewModel.ExpMax - ViewModel.ExpValue || ViewModel.BpValue >= BP_FULL || ViewModel.Fever)
                         {
                             ViewModel.IsStaminaEmpty = false;
                         }
@@ -414,9 +447,9 @@ namespace Astrum.Http
                         if (stage.items != null && ViewModel.ExpMax - ViewModel.ExpValue > 150)
                         {
                             var item = stage.items.Find(e => INSTANT_STAMINA_HALF.Equals(e._id));
-                            if (item.stock > ViewModel.MinStaminaStock)
+                            if (item.stock > ViewModel.MinStaminaStock && ViewModel.Fever)
                             {
-                                UseItem("stamina", INSTANT_STAMINA_HALF, 1);
+                                UseItem(ITEM_STAMINA, INSTANT_STAMINA_HALF, 1);
                             }
                             else
                             {
@@ -549,7 +582,7 @@ namespace Astrum.Http
             {
                 if (battleInfo.isNew)
                 {
-                    RaidBattleAttack(battleInfo._id, "first");
+                    RaidBattleAttack(battleInfo._id, FIRST);
                     return true;
                 }
 
@@ -559,12 +592,17 @@ namespace Astrum.Http
                     return true;
                 }
 
-                if (ViewModel.CanFullAttack)
+                if (ViewModel.CanAttack)
                 {
                     var hp = battleInfo.hp - battleInfo.totalDamage;
-                    var attackType = hp > EASY_BOSS_HP ? "full" : "normal";
-                    RaidBattleAttack(battleInfo._id, attackType);
-                    return true;
+                    var attackType = hp > EASY_BOSS_HP ? FULL : NORMAL;
+                    var needBp = hp > EASY_BOSS_HP ? BP_FULL : BP_NORMAL;
+
+                    if (ViewModel.BpValue >= needBp)
+                    {
+                        RaidBattleAttack(battleInfo._id, attackType);
+                        return true;
+                    }
                 }
             }
             else
@@ -664,7 +702,7 @@ namespace Astrum.Http
             string result = GetXHR("http://astrum.amebagames.com/_/event/furyraid?_id=" + Uri.EscapeDataString(eventId));
             FuryRaidInfo raidInfo = JsonConvert.DeserializeObject<FuryRaidInfo>(result);
 
-            ViewModel.Fever = raidInfo.fever.progress;
+            ViewModel.Fever = raidInfo.fever.progress == 100;
 
             Delay(DELAY_SHORT);
         }
@@ -688,9 +726,9 @@ namespace Astrum.Http
                 if (battleInfo.isNew)
                 {
                     var attackType = "first";
-                    if ("rescue".Equals(battleInfo.type))
+                    if (RESCUE.Equals(battleInfo.type))
                     {
-                        attackType = "rescue";
+                        attackType = RESCUE;
                     }
 
                     FuryRaidBattleAttack(battleInfo._id, attackType);
@@ -702,17 +740,24 @@ namespace Astrum.Http
                     FuryRaidBattleRescue(battleInfo._id);
                 }
 
-                if (battleInfo.type.Equals("find"))
+                if (FIND.Equals(battleInfo.type))
                 {
-                    if (ViewModel.BpValue == 2 && ViewModel.BpMiniStock > ViewModel.MinBpStock)
+                    var hp = battleInfo.hp - battleInfo.totalDamage;
+
+                    var attackType = hp > EASY_BOSS_HP ? FULL : NORMAL;
+                    var needBp = hp > EASY_BOSS_HP ? BP_FULL : BP_NORMAL;
+
+                    if (ViewModel.Fever)
                     {
-                        UseItem("bp", INSTANT_BP_MINI, 1);
+                        int quantity = needBp - ViewModel.BpValue;
+                        if (quantity > ViewModel.BpMiniStock)
+                        {
+                            UseItem(ITEM_BP, INSTANT_BP_MINI, quantity);
+                        }
                     }
 
-                    if (ViewModel.CanFullAttack)
+                    if (ViewModel.BpValue >= needBp)
                     {
-                        var hp = battleInfo.hp - battleInfo.totalDamage;
-                        var attackType = hp > EASY_BOSS_HP ? "full" : "normal";
                         FuryRaidBattleAttack(battleInfo._id, attackType);
                         return true;
                     }
@@ -772,6 +817,90 @@ namespace Astrum.Http
 
             var eventId = battleInfo.eventId;
             GetXHR("http://astrum.amebagames.com/_/event/furyraid/summary?_id=" + Uri.EscapeDataString(eventId));
+        }
+
+        public void LimitedRaid()
+        {
+            var raidInfo = LimitedRaidInfo();
+
+            var loop = raidInfo.target != null && ViewModel.CanFullAttack;
+
+            while (loop)
+            {
+                loop = LimitedRaidBattle(raidInfo.target._id);
+            }
+        }
+
+        public LimitedRaidInfo LimitedRaidInfo()
+        {
+            var eventId = ViewModel.LimitedRaidEventId;
+            string result = GetXHR("http://astrum.amebagames.com/_/event/limitedraid?_id=" + Uri.EscapeDataString(eventId));
+            var raidInfo = JsonConvert.DeserializeObject<LimitedRaidInfo>(result);
+
+            ViewModel.Fever = raidInfo.fever.gachaTicket != null;
+
+            Delay(DELAY_SHORT);
+            return raidInfo;
+        }
+        
+        public bool LimitedRaidBattle(string raidId)
+        {
+            var battleInfo = LimitedRaidBattleInfo(raidId);
+
+            if (battleInfo.isPlaying)
+            {
+                var hp = battleInfo.hp - battleInfo.totalDamage;
+
+                var attackType = hp > EASY_BOSS_HP ? FULL : NORMAL;
+                var needBp = hp > EASY_BOSS_HP ? BP_FULL : BP_NORMAL;
+
+                if (ViewModel.Fever)
+                {
+                    int quantity = needBp - ViewModel.BpValue;
+                    if (quantity > ViewModel.BpMiniStock)
+                    {
+                        UseItem(ITEM_BP, INSTANT_BP_MINI, quantity);
+                    }
+                }
+
+                if (ViewModel.BpValue >= needBp)
+                {
+                    LimitedRaidBattleAttack(battleInfo._id, attackType);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private RaidBattleInfo LimitedRaidBattleInfo(string raidId)
+        {
+            var result = GetXHR("http://astrum.amebagames.com/_/limitedraid/battle?_id=" + Uri.EscapeDataString(raidId));
+            var battleInfo = JsonConvert.DeserializeObject<RaidBattleInfo>(result);
+
+            PrintRaidBattleInfo(battleInfo);
+
+            UpdateBpAfterRaidBattle(battleInfo);
+
+            Delay(DELAY_SHORT);
+
+            return battleInfo;
+        }
+
+
+        private void LimitedRaidBattleAttack(string raidId, string attackType)
+        {
+            var values = new Dictionary<string, string>
+            {
+                { "_id", raidId },
+                { "attackType", attackType }
+            };
+            //first
+            var battleResult = PostXHR("http://astrum.amebagames.com/_/limitedraid/battle", values);
+            var battleResultInfo = JsonConvert.DeserializeObject<BossBattleResultInfo>(battleResult);
+
+            PrintBossBattleResult(battleResultInfo);
+            Delay(DELAY_LONG);
+
         }
 
         public void GuildBattle()
@@ -981,7 +1110,7 @@ namespace Astrum.Http
                         var item = stage.items.Find(e => INSTANT_STAMINA_HALF.Equals(e._id));
                         if (item.stock > ViewModel.MinStaminaStock)
                         {
-                            UseItem("stamina", INSTANT_STAMINA_HALF, 1);
+                            UseItem(ITEM_STAMINA, INSTANT_STAMINA_HALF, 1);
                         }
                         else
                         {

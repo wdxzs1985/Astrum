@@ -64,13 +64,15 @@ namespace Astrum.Json.Stage
         public int lilu { get; set; }
         public int gacha { get; set; }
         public StageRaidInfo raid { get; set; }
-        //public StageRaidInfo limitedraid { get; set; }
+        public LimitedRaidInfo limitedraid { get; set; }
         public StageRaidInfo furyraid { get; set; }
         public bool guild { get; set; }
     }
 
     public class StageRaidInfo
     {
+        public string _id { get; set; }
+
         public string eventId { get; set; }
 
         public RaidBattleInfo find { get; set; }
