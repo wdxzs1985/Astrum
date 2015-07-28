@@ -4,6 +4,7 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 
+        <SolidColorBrush x:Key="Pink_A100" Color="#FF80AB"/>
         <SolidColorBrush x:Key="Pink_A200" Color="#FF4081"/>
         <SolidColorBrush x:Key="Cyan_50" Color="#E0F7FA"/>
         <SolidColorBrush x:Key="Cyan_500" Color="#00BCD4"/>
@@ -171,5 +172,23 @@
             </Setter>
         </Style>
 
+        <ControlTemplate x:Key="ToggleButton" TargetType="{x:Type ToggleButton}">
+            <Border
+                Name="Border"
+                Background="Transparent">
+                <ContentPresenter
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Content="{TemplateBinding Content}"/>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter TargetName="Border" Property="Background" Value="{StaticResource Pink_A100}"/>
+                </Trigger>
+                <Trigger Property="IsChecked" Value="true">
+                    <Setter TargetName="Border" Property="Background" Value="{StaticResource Pink_A200}"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
     </Application.Resources>
 </Application>

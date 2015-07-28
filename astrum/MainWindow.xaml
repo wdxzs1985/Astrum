@@ -143,9 +143,19 @@
             </Grid>
 
             <Grid x:Name="Controller" HorizontalAlignment="left" VerticalAlignment="Top" Margin="0,200,0,0" Height="30">
-                <Grid Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="150" Height="25">
-                    <RadioButton x:Name="QuestButton" Content="任务" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" IsChecked="{Binding IsQuestEnable}" Width="70"/>
-                    <RadioButton x:Name="GuildBattleButton" Content="公会战" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" IsChecked="{Binding IsGuildBattleEnable}" Width="70" Margin="80,0,0,0">
+                <Grid Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="150" Height="30">
+                    <RadioButton x:Name="QuestButton" Content="任务" 
+                                 HorizontalAlignment="Left" VerticalAlignment="Center" 
+                                 Foreground="White" 
+                                 IsChecked="{Binding IsQuestEnable}" 
+                                 Width="75" Height="30" 
+                                 Template="{StaticResource ToggleButton}"/>
+                    <RadioButton Name="GuildBattleButton" Content="公会战" 
+                                 HorizontalAlignment="Left" VerticalAlignment="Center" 
+                                 Foreground="White" 
+                                 IsChecked="{Binding IsGuildBattleEnable}" 
+                                 Width="75" Height="30"  Margin="75,0,0,0" 
+                                 Template="{StaticResource ToggleButton}">
                     </RadioButton>
                 </Grid>
 
