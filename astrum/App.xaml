@@ -173,20 +173,24 @@
         </Style>
 
         <ControlTemplate x:Key="ToggleButton" TargetType="{x:Type ToggleButton}">
-            <Border
+            <Grid
                 Name="Border"
                 Background="Transparent">
-                <ContentPresenter
+                <Label
+                    Name="Content"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
+                    Foreground="White"
                     Content="{TemplateBinding Content}"/>
-            </Border>
+            </Grid>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsMouseOver" Value="true">
-                    <Setter TargetName="Border" Property="Background" Value="{StaticResource Pink_A100}"/>
+                    <Setter TargetName="Border" Property="Background" Value="{StaticResource Cyan_50}"/>
+                    <Setter TargetName="Content" Property="Foreground" Value="{StaticResource Cyan_500}"/>
                 </Trigger>
                 <Trigger Property="IsChecked" Value="true">
                     <Setter TargetName="Border" Property="Background" Value="{StaticResource Pink_A200}"/>
+                    <Setter TargetName="Content" Property="Foreground" Value="White"/>
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
