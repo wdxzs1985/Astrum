@@ -393,11 +393,11 @@ namespace Astrum.Http
                     {
                         ViewModel.IsFuryRaid = true;
 
-                        if (stage.status.furyraid.find != null && (stage.status.furyraid.find.isNew || ViewModel.CanFullAttack))
+                        if (stage.status.furyraid.find != null && (stage.status.furyraid.find.isNew || ViewModel.CanFullAttack || ViewModel.Fever))
                         {
                             FuryRaid();
                         }
-                        if (stage.status.furyraid.rescue != null && (stage.status.furyraid.rescue.isNew || ViewModel.CanFullAttack))
+                        if (stage.status.furyraid.rescue != null && (stage.status.furyraid.rescue.isNew || ViewModel.CanFullAttack || ViewModel.Fever))
                         {
                             FuryRaid();
                         }
@@ -408,7 +408,7 @@ namespace Astrum.Http
                         ViewModel.IsLimitedRaid = true;
 
                         var limitedRaidId = stage.status.limitedraid._id;
-                        if (limitedRaidId != null && ViewModel.CanFullAttack)
+                        if (limitedRaidId != null && (ViewModel.CanFullAttack || ViewModel.Fever))
                         {
                             LimitedRaid();
                         }
@@ -444,7 +444,7 @@ namespace Astrum.Http
 
                     if (stage.staminaEmpty)
                     {
-                        if (stage.items != null && ViewModel.ExpMax - ViewModel.ExpValue > 150)
+                        if (stage.items != null && ViewModel.ExpMax - ViewModel.ExpValue > 100)
                         {
                             var item = stage.items.Find(e => INSTANT_HALF_STAMINA.Equals(e._id));
                             if (item.stock > ViewModel.MinStaminaStock && ViewModel.Fever)
@@ -673,7 +673,7 @@ namespace Astrum.Http
             {
                 foreach (var battleInfo in raidInfo.find.list)
                 {
-                    var loop = battleInfo.isNew || ViewModel.CanFullAttack;
+                    var loop = battleInfo.isNew || (ViewModel.CanFullAttack || ViewModel.Fever);
                     while (loop)
                     {
                         loop = FuryRaidBattle(battleInfo._id);
@@ -725,7 +725,7 @@ namespace Astrum.Http
             {
                 if (battleInfo.isNew)
                 {
-                    var attackType = "first";
+                    var attackType = FIRST;
                     if (RESCUE.Equals(battleInfo.type))
                     {
                         attackType = RESCUE;
@@ -750,7 +750,7 @@ namespace Astrum.Http
                     if (ViewModel.Fever)
                     {
                         int quantity = needBp - ViewModel.BpValue;
-                        if (quantity > ViewModel.BpMiniStock)
+                        if (quantity <= ViewModel.BpMiniStock && quantity > ViewModel.MinBpStock)
                         {
                             UseItem(ITEM_BP, INSTANT_MINI_BP, quantity);
                         }
@@ -823,7 +823,7 @@ namespace Astrum.Http
         {
             var raidInfo = LimitedRaidInfo();
 
-            var loop = raidInfo.target != null && ViewModel.CanFullAttack;
+            var loop = raidInfo.target != null && (ViewModel.CanFullAttack || ViewModel.Fever);
 
             while (loop)
             {
@@ -854,10 +854,10 @@ namespace Astrum.Http
                 var attackType = hp > EASY_BOSS_HP ? FULL : NORMAL;
                 var needBp = hp > EASY_BOSS_HP ? BP_FULL : BP_NORMAL;
 
-                if (ViewModel.Fever)
+                if(ViewModel.Fever)
                 {
                     int quantity = needBp - ViewModel.BpValue;
-                    if (quantity > ViewModel.BpMiniStock)
+                    if (quantity <= ViewModel.BpMiniStock && quantity > ViewModel.MinBpStock)
                     {
                         UseItem(ITEM_BP, INSTANT_MINI_BP, quantity);
                     }
@@ -1252,6 +1252,21 @@ namespace Astrum.Http
 
                 ViewModel.TpValue = stage.status.tp.value;
                 ViewModel.TpMax = stage.status.tp.max;
+
+                if (stage.status.furyraid != null && stage.status.furyraid.fever != null)
+                {
+                    var raidInfo = stage.status.furyraid;
+                    ViewModel.Fever = raidInfo.fever.progress == 100;
+                }
+
+
+                if (stage.status.limitedraid != null && stage.status.limitedraid.fever != null)
+                {
+                    var raidInfo = stage.status.limitedraid;
+                    ViewModel.Fever = raidInfo.fever.gachaTicket != null;
+                }
+
+
             }
         }
 

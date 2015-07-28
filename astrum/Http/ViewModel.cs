@@ -436,7 +436,7 @@ namespace Astrum.Http
         {
             get
             {
-                return ExpValue + " / " + ExpMax;
+                return (ExpValue - ExpMin) + " / " + (ExpMax - ExpMin);
             }
         }
 
