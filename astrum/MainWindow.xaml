@@ -27,7 +27,7 @@
           VerticalAlignment="Center" HorizontalAlignment="Center"
           Height="480" Width="320" >
         <Grid.Effect>
-            <DropShadowEffect BlurRadius="30" ShadowDepth="0" Direction="0" Opacity="0.6" />
+            <DropShadowEffect BlurRadius="20" ShadowDepth="0" Direction="0" Opacity="0.6" />
         </Grid.Effect>
         <Grid Margin="0,0,0,0" Height="30" VerticalAlignment="Top" Background="Transparent">
             <Label Margin="10,0,0,0" VerticalAlignment="Center" 
