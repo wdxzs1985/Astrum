@@ -42,7 +42,7 @@ namespace Astrum.Http
             get
             {
                 if(Name != null) {
-                    return String.Format("プリンセスコネクト [{0} (Lv {1})]", Name, Level);
+                    return String.Format("プリコネ [{0} (Lv {1})]", Name, Level);
                 }
                 return "プリンセスコネクト";
             }
@@ -485,7 +485,28 @@ namespace Astrum.Http
         {
             get
             {
-                return CanAttack && BpValue >= 3;
+                bool hasBp = BpValue >= 3;
+                return CanAttack && hasBp;
+            }
+        }
+
+        public bool CanFullAttackForEvent
+        {
+            get
+            {
+                bool hasBp = BpValue >= 3;
+                bool hasBpStock = BpValue + CanUseBpQuantity >= 3;
+
+                return CanAttack && (hasBp || (Fever && hasBpStock));
+            }
+        }
+
+        public int CanUseBpQuantity
+        {
+            get
+            {
+                int quantity = BpMiniStock - MinBpStock;
+                return quantity > 0 ? quantity : 0;
             }
         }
 
@@ -518,5 +539,6 @@ namespace Astrum.Http
                 NotifyPropertyChanged("MaxKeepStamina");
             }
         }
+
     }
 }

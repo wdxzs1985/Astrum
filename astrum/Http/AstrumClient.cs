@@ -393,11 +393,11 @@ namespace Astrum.Http
                     {
                         ViewModel.IsFuryRaid = true;
 
-                        if (stage.status.furyraid.find != null && (stage.status.furyraid.find.isNew || ViewModel.CanFullAttack || ViewModel.Fever))
+                        if (stage.status.furyraid.find != null && (stage.status.furyraid.find.isNew || ViewModel.CanFullAttackForEvent))
                         {
                             FuryRaid();
                         }
-                        if (stage.status.furyraid.rescue != null && (stage.status.furyraid.rescue.isNew || ViewModel.CanFullAttack || ViewModel.Fever))
+                        if (stage.status.furyraid.rescue != null && (stage.status.furyraid.rescue.isNew || ViewModel.CanFullAttack))
                         {
                             FuryRaid();
                         }
@@ -408,7 +408,7 @@ namespace Astrum.Http
                         ViewModel.IsLimitedRaid = true;
 
                         var limitedRaidId = stage.status.limitedraid._id;
-                        if (limitedRaidId != null && (ViewModel.CanFullAttack || ViewModel.Fever))
+                        if (limitedRaidId != null && (ViewModel.CanFullAttackForEvent))
                         {
                             LimitedRaid();
                         }
@@ -673,7 +673,7 @@ namespace Astrum.Http
             {
                 foreach (var battleInfo in raidInfo.find.list)
                 {
-                    var loop = battleInfo.isNew || (ViewModel.CanFullAttack || ViewModel.Fever);
+                    var loop = battleInfo.isNew || (ViewModel.CanFullAttackForEvent);
                     while (loop)
                     {
                         loop = FuryRaidBattle(battleInfo._id);
@@ -750,7 +750,7 @@ namespace Astrum.Http
                     if (ViewModel.Fever)
                     {
                         int quantity = needBp - ViewModel.BpValue;
-                        if (quantity <= ViewModel.BpMiniStock && quantity > ViewModel.MinBpStock)
+                        if (quantity > 0 && quantity <= ViewModel.CanUseBpQuantity)
                         {
                             UseItem(ITEM_BP, INSTANT_MINI_BP, quantity);
                         }
@@ -857,7 +857,7 @@ namespace Astrum.Http
                 if(ViewModel.Fever)
                 {
                     int quantity = needBp - ViewModel.BpValue;
-                    if (quantity <= ViewModel.BpMiniStock && quantity > ViewModel.MinBpStock)
+                    if (quantity > 0 && quantity <= ViewModel.CanUseBpQuantity)
                     {
                         UseItem(ITEM_BP, INSTANT_MINI_BP, quantity);
                     }
