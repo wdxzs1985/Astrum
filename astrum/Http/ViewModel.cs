@@ -37,6 +37,17 @@ namespace Astrum.Http
 
         public bool IsRunning { get; set; }
 
+        private bool _ready;
+        public bool IsReady
+        {
+            get { return _ready; }
+            set
+            {
+                _ready = value;
+                NotifyPropertyChanged("IsReady");
+            }
+        }
+
         public string WindowTitle
         {
             get

@@ -346,14 +346,14 @@ namespace Astrum.Http
                         ViewModel.IsFuryRaidEnable = true;
                         ViewModel.FuryRaidEventId = @event._id;
 
-                        FuryRaidFever();
+                        //FuryRaidFever();
                     }
                     else if ("limitedraid".Equals(@event.type))
                     {
                         ViewModel.IsLimitedRaidEnable = true;
                         ViewModel.LimitedRaidEventId = @event._id;
                         
-                        LimitedRaidInfo();
+                        //LimitedRaidInfo();
 
                     }
                 }
@@ -937,7 +937,7 @@ namespace Astrum.Http
                     GuildBattleStamp(battleId);
                 }
 
-                GuildBattleChat();
+                //GuildBattleChat();
 
                 while (ViewModel.IsRunning)
                 {
@@ -960,7 +960,6 @@ namespace Astrum.Http
                     }
                     else
                     {
-                        //http://astrum.amebagames.com/_/guildbattle/tp?_id=B4e00c0644ed6fcfddd354c5cd714246994f6c7f9f3065b289bbd8ed1815d065d
                         TpInfo tpInfo = GuildBattleTpInfo(battleId);
 
                         if (tpInfo.normal.available)
@@ -978,15 +977,7 @@ namespace Astrum.Http
                         else
                         {
                             // quest
-                            if (ViewModel.StaminaValue >= 5)
-                            {
-                                TpQuest();
-                            }
-                            else
-                            {
-                                ViewModel.IsRunning = false;
-                                return;
-                            }
+                            TpQuest();
                         }
                     }
                 }
@@ -1119,28 +1110,14 @@ namespace Astrum.Http
 
             while (ViewModel.IsRunning)
             {
-                if (stage.status.tp.value >= 80)
+                if (stage.status.tp.value > 80)
                 {
                     return;
                 }
                 if (stage.staminaEmpty)
                 {
-                    if (stage.items != null)
-                    {
-                        var item = stage.items.Find(e => INSTANT_HALF_STAMINA.Equals(e._id));
-                        if (item.stock > ViewModel.MinStaminaStock)
-                        {
-                            UseItem(ITEM_STAMINA, INSTANT_HALF_STAMINA, 1);
-                        }
-                        else
-                        {
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        return;
-                    }
+                    CountDown(10 * SECOND);
+                    return;
                 }
                 //forward
                 stage = ForwardTpStage();
