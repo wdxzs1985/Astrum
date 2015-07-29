@@ -48,6 +48,7 @@ namespace Astrum
             
             LoginPanel.Visibility = Visibility.Visible;
             StatusPanel.Visibility = Visibility.Hidden;
+            LoginButton.Content = "登陆";
             LoginButton.IsEnabled = true;
             LoginUserComboBox.IsEnabled = true;
 
@@ -61,17 +62,17 @@ namespace Astrum
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             Console.WriteLine("login start");
-            LoginButton.IsEnabled = false;
             LoginButton.Content = "少女祈祷中";
+            LoginButton.IsEnabled = false;
             LoginUserComboBox.IsEnabled = false;
 
             var username = UsernameBox.Text;
-            var password = this.PasswordBox.Password;
+            var password = PasswordBox.Password;
 
-            var login = false;
+            client.ViewModel.IsLogin = false;
             if (!"".Equals(username) && !"".Equals(password))
             {
-                login = await Task.Run(() =>
+                client.ViewModel.IsLogin = await Task.Run(() =>
                 {
                     try
                     {
@@ -86,23 +87,21 @@ namespace Astrum
                 });
             }
 
-            if (login)
+            if (client.ViewModel.IsLogin)
             {
+                
+                client.ViewModel.IsReady = false;
+                client.ViewModel.IsRunning = false;
 
                 LoginPanel.Visibility = Visibility.Hidden;
                 StatusPanel.Visibility = Visibility.Visible;
 
-                //Controller.Visibility = Visibility.Hidden;
-                client.ViewModel.IsReady = false;
-
                 await Task.Run(() =>
                 {
-                    client.ViewModel.IsRunning = false;
-                    client.OnStart();
+                    client.StartQuest();
                 });
 
                 client.ViewModel.IsReady = true;
-                //Controller.Visibility = Visibility.Visible;
 
                 nowUser = new LoginUser { username = username, password = password };
                 //save user
@@ -233,7 +232,7 @@ namespace Astrum
 
                         try
                         {
-                            client.OnStart();
+                            client.StartQuest();
                             
                             client.Quest();
 
@@ -369,8 +368,6 @@ namespace Astrum
             
             if (client.ViewModel.IsRunning == false)
             {
-                SaveUserList();
-
                 StartGuildBattleButton.Content = "Stop";
                 StartGuildBattleButton.IsEnabled = true;
 
@@ -407,6 +404,37 @@ namespace Astrum
             {
                 client.ViewModel.IsRunning = false;
                 StartGuildBattleButton.IsEnabled = false;
+            }
+        }
+
+        private async void QuestButton_Checked(object sender, RoutedEventArgs e)
+        {
+            if (client != null && client.ViewModel.IsLogin)
+            {
+                client.ViewModel.IsReady = false;
+                await Task.Run(() =>
+                {
+                    client.StartQuest();
+                });
+
+                client.ViewModel.IsReady = true;
+            }
+        }
+
+        private async void GuildBattleButton_Checked(object sender, RoutedEventArgs e)
+        {
+            if (client != null && client.ViewModel.IsLogin)
+            {
+                client.ViewModel.IsReady = false;
+                await Task.Run(() =>
+                {
+                    client.StartGuildBattle();
+                });
+
+                if (client.ViewModel.GuildBattleId !=null)
+                {
+                    client.ViewModel.IsReady = true;
+                }
             }
         }
     }

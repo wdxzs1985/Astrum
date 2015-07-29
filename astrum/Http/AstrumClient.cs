@@ -234,7 +234,7 @@ namespace Astrum.Http
             this.GetXHR("http://astrum.amebagames.com/_/access?p=" + path);
         }
 
-        public void OnStart()
+        public void StartQuest()
         {
             this.Mypage();
             this.Gift();
@@ -352,7 +352,7 @@ namespace Astrum.Http
                     {
                         ViewModel.IsLimitedRaidEnable = true;
                         ViewModel.LimitedRaidEventId = @event._id;
-                        
+
                         //LimitedRaidInfo();
 
                     }
@@ -416,7 +416,7 @@ namespace Astrum.Http
                         var limitedRaidId = stage.status.limitedraid._id;
                         if (limitedRaidId != null)
                         {
-                            if(ViewModel.CanFullAttackForEvent)
+                            if (ViewModel.CanFullAttackForEvent)
                             {
                                 LimitedRaid();
                             }
@@ -428,7 +428,7 @@ namespace Astrum.Http
                         ViewModel.IsFuryRaid = false;
                         ViewModel.IsLimitedRaid = false;
 
-                        if (stage.status.raid.find != null )
+                        if (stage.status.raid.find != null)
                         {
                             if (stage.status.raid.find.isNew || ViewModel.CanFullAttack)
                             {
@@ -862,7 +862,7 @@ namespace Astrum.Http
             Delay(DELAY_SHORT);
             return raidInfo;
         }
-        
+
         public bool LimitedRaidBattle(string raidId)
         {
             var battleInfo = LimitedRaidBattleInfo(raidId);
@@ -874,7 +874,7 @@ namespace Astrum.Http
                 var attackType = hp > EASY_BOSS_HP ? FULL : NORMAL;
                 var needBp = hp > EASY_BOSS_HP ? BP_FULL : BP_NORMAL;
 
-                if(ViewModel.Fever)
+                if (ViewModel.Fever)
                 {
                     int quantity = needBp - ViewModel.BpValue;
                     if (quantity > 0 && quantity <= ViewModel.CanUseBpQuantity)
@@ -923,64 +923,71 @@ namespace Astrum.Http
 
         }
 
-        public void GuildBattle()
-        {
-            Schedule schedule = FindSchedule();
 
+        public void StartGuildBattle()
+        {
+            this.Mypage();
+            this.Item();
+
+            Schedule schedule = FindSchedule();
             if (schedule != null)
             {
-                var battleId = schedule._id;
-                GuildBattleInfo battleInfo = GuildBattle(battleId);
+                ViewModel.GuildBattleId = schedule._id;
+                GuildBattleInfo battleInfo = GuildBattle(ViewModel.GuildBattleId);
 
                 if (battleInfo.stamp.status)
                 {
-                    GuildBattleStamp(battleId);
+                    GuildBattleStamp(ViewModel.GuildBattleId);
                 }
 
-                //GuildBattleChat();
+                GuildBattleChat();
+            } else
+            {
+                ViewModel.GuildBattleId = null;
+                ViewModel.History = "没有工会战";
+            }
+        }
 
-                while (ViewModel.IsRunning)
+        public void GuildBattle()
+        {
+            var battleId = ViewModel.GuildBattleId;
+            
+            while (ViewModel.IsRunning)
+            {
+                GuildBattleInfo battleInfo = GuildBattle(battleId);
+
+                ViewModel.TpValue = battleInfo.status.tp.value;
+
+                if (battleInfo.status.tp.value >= 10)
                 {
-                    battleInfo = GuildBattle(battleId);
+                    // attack
+                    var type = "front".Equals(battleInfo.status.position) ? "attack" : "yell";
+                    var ablility = "front".Equals(battleInfo.status.position) ? "ability_front_attack_default" : "ability_back_yell_default_1";
 
-                    ViewModel.TpValue = battleInfo.status.tp.value;
-
-                    if (battleInfo.status.tp.value >= 10)
+                    GuildBattleCmdInfo cmdInfo = GuildBattleCmd(battleId, type);
+                    var cmd = cmdInfo.cmd.Find(item => ablility.Equals(item._id));
+                    if (cmd != null)
                     {
-                        // attack
-                        var type = "front".Equals(battleInfo.status.position) ? "attack" : "yell";
-                        var ablility = "front".Equals(battleInfo.status.position) ? "ability_front_attack_default" : "ability_back_yell_default_1";
+                        if ("attack".Equals(type))
+                        {
+                            ViewModel.History = ("正在前排攻击");
+                        }
+                        else if ("yell".Equals(type))
+                        {
+                            ViewModel.History = ("正在后排应援");
+                        }
 
-                        GuildBattleCmdInfo cmdInfo = GuildBattleCmd(battleId, type);
-                        var cmd = cmdInfo.cmd.Find(item => ablility.Equals(item._id));
-                        if (cmd != null)
-                        {
-                            GuildBattleCmd(battleId, ablility, type);
-                        }
-                    }
-                    else
-                    {
-                        TpInfo tpInfo = GuildBattleTpInfo(battleId);
-
-                        if (tpInfo.normal.available)
-                        {
-                            GuildBattleTpNormal(battleId);
-                        }
-                        else if (tpInfo.chat.available)
-                        {
-                            GuildBattleTpChat(battleId);
-                        }
-                        else if (tpInfo.roulette.available)
-                        {
-                            GuildBattleRoulette(battleId);
-                        }
-                        else
-                        {
-                            // quest
-                            TpQuest();
-                        }
+                        GuildBattleCmd(battleId, ablility, type);
                     }
                 }
+                else
+                {
+                    TpInfo tpInfo = GuildBattleTpInfo(battleId);
+
+                    // quest
+                    TpQuest();
+                }
+
             }
         }
 
@@ -1058,6 +1065,10 @@ namespace Astrum.Http
             var result = GetXHR("http://astrum.amebagames.com/_/guildbattle/tp?_id=" + Uri.EscapeDataString(battleId));
             TpInfo tpInfo = JsonConvert.DeserializeObject<TpInfo>(result);
             Delay(DELAY_SHORT);
+            
+            ViewModel.IsTpNormalAvailable = tpInfo.normal.available;
+            ViewModel.IsTpChatAvailable = tpInfo.chat.available;
+            ViewModel.IsTpRouletteAvailable = tpInfo.roulette.available;
 
             return tpInfo;
         }
@@ -1069,6 +1080,10 @@ namespace Astrum.Http
                 { "_id", battleId }
             };
             PostXHR("http://astrum.amebagames.com/_/guildbattle/tp/normal", values);
+
+            ViewModel.History = "回复TP";
+            ViewModel.IsTpNormalAvailable = false;
+
             Delay(DELAY_SHORT);
         }
 
@@ -1079,6 +1094,10 @@ namespace Astrum.Http
                 { "_id", battleId }
             };
             PostXHR("http://astrum.amebagames.com/_/guildbattle/tp/chat", values);
+
+            ViewModel.History = "回复TP";
+            ViewModel.IsTpChatAvailable = false;
+
             Delay(DELAY_SHORT);
         }
 
@@ -1099,6 +1118,10 @@ namespace Astrum.Http
                 { "position", position.ToString() }
             };
             PostXHR("http://astrum.amebagames.com/_/guildbattle/tp/roulette", values);
+
+            ViewModel.History = "回复TP";
+            ViewModel.IsTpRouletteAvailable = false;
+
             Delay(DELAY_SHORT);
         }
 
@@ -1119,8 +1142,11 @@ namespace Astrum.Http
                     CountDown(10 * SECOND);
                     return;
                 }
-                //forward
-                stage = ForwardTpStage();
+                else
+                {
+                    //forward
+                    stage = ForwardTpStage();
+                }
             }
         }
 

@@ -35,6 +35,7 @@ namespace Astrum.Http
             }
         }
 
+        public bool IsLogin { get; set; }
         public bool IsRunning { get; set; }
 
         private bool _ready;
@@ -551,5 +552,51 @@ namespace Astrum.Http
             }
         }
 
+
+        public string GuildBattleId { get; set; }
+
+        private bool _tpNormalAvailable;
+        private bool _tpChatAvailable;
+        private bool _tpRouletteAvailable;
+
+
+        public bool IsTpNormalAvailable
+        {
+            get
+            {
+                return _tpNormalAvailable;
+            }
+            set
+            {
+                _tpNormalAvailable = value;
+                NotifyPropertyChanged("IsTpNormalAvailable");
+            }
+        }
+
+        public bool IsTpChatAvailable
+        {
+            get
+            {
+                return _tpChatAvailable;
+            }
+            set
+            {
+                _tpChatAvailable = value;
+                NotifyPropertyChanged("IsTpNormalAvailable");
+            }
+        }
+
+        public bool IsTpRouletteAvailable
+        {
+            get
+            {
+                return _tpRouletteAvailable;
+            }
+            set
+            {
+                _tpRouletteAvailable = value;
+                NotifyPropertyChanged("IsTpRouletteAvailable");
+            }
+        }
     }
 }
