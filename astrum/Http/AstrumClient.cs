@@ -393,13 +393,19 @@ namespace Astrum.Http
                     {
                         ViewModel.IsFuryRaid = true;
 
-                        if (stage.status.furyraid.find != null && (stage.status.furyraid.find.isNew || ViewModel.CanFullAttackForEvent))
+                        if (stage.status.furyraid.find != null)
                         {
-                            FuryRaid();
+                            if (stage.status.furyraid.find.isNew || ViewModel.CanFullAttackForEvent)
+                            {
+                                FuryRaid();
+                            }
                         }
-                        if (stage.status.furyraid.rescue != null && (stage.status.furyraid.rescue.isNew || ViewModel.CanFullAttack))
+                        if (stage.status.furyraid.rescue != null)
                         {
-                            FuryRaid();
+                            if (stage.status.furyraid.rescue.isNew || ViewModel.CanFullAttack)
+                            {
+                                FuryRaid();
+                            }
                         }
                     }
 
@@ -408,9 +414,12 @@ namespace Astrum.Http
                         ViewModel.IsLimitedRaid = true;
 
                         var limitedRaidId = stage.status.limitedraid._id;
-                        if (limitedRaidId != null && (ViewModel.CanFullAttackForEvent))
+                        if (limitedRaidId != null)
                         {
-                            LimitedRaid();
+                            if(ViewModel.CanFullAttackForEvent)
+                            {
+                                LimitedRaid();
+                            }
                         }
                     }
 
@@ -419,20 +428,31 @@ namespace Astrum.Http
                         ViewModel.IsFuryRaid = false;
                         ViewModel.IsLimitedRaid = false;
 
-                        if (stage.status.raid.find != null && (stage.status.raid.find.isNew || ViewModel.CanFullAttack))
+                        if (stage.status.raid.find != null )
                         {
-                            Raid();
+                            if (stage.status.raid.find.isNew || ViewModel.CanFullAttack)
+                            {
+                                Raid();
+                            }
                         }
-                        if (stage.status.raid.rescue != null && (stage.status.raid.rescue.isNew || ViewModel.CanFullAttack))
+                        if (stage.status.raid.rescue != null)
                         {
-                            Raid();
+                            if (stage.status.raid.rescue.isNew || ViewModel.CanFullAttack)
+                            {
+                                Raid();
+                            }
                         }
                     }
 
 
                     if (ViewModel.IsStaminaEmpty)
                     {
-                        if (ViewModel.StaminaValue >= ViewModel.MaxKeepStamina || ViewModel.StaminaValue >= ViewModel.ExpMax - ViewModel.ExpValue || ViewModel.BpValue >= BP_FULL || ViewModel.Fever)
+                        bool staminaGreaterThanKeep = ViewModel.StaminaValue >= ViewModel.MaxKeepStamina;
+                        bool staminaGreaterThanExp = ViewModel.StaminaValue >= (ViewModel.ExpMax - ViewModel.ExpValue);
+                        bool isBpFull = ViewModel.BpValue >= BP_FULL;
+                        bool isFever = ViewModel.Fever;
+
+                        if (staminaGreaterThanKeep || staminaGreaterThanExp || isBpFull || isFever)
                         {
                             ViewModel.IsStaminaEmpty = false;
                         }
@@ -823,7 +843,7 @@ namespace Astrum.Http
         {
             var raidInfo = LimitedRaidInfo();
 
-            var loop = raidInfo.target != null && (ViewModel.CanFullAttack || ViewModel.Fever);
+            var loop = raidInfo.target != null && ViewModel.CanFullAttackForEvent;
 
             while (loop)
             {
