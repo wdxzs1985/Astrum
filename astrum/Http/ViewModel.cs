@@ -582,7 +582,7 @@ namespace Astrum.Http
             set
             {
                 _tpChatAvailable = value;
-                NotifyPropertyChanged("IsTpNormalAvailable");
+                NotifyPropertyChanged("IsTpChatAvailable");
             }
         }
 

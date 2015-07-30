@@ -982,7 +982,7 @@ namespace Astrum.Http
                 }
                 else
                 {
-                    TpInfo tpInfo = GuildBattleTpInfo(battleId);
+                    TpInfo tpInfo = GuildBattleTpInfo();
 
                     // quest
                     TpQuest();
@@ -1060,8 +1060,10 @@ namespace Astrum.Http
         }
 
 
-        private TpInfo GuildBattleTpInfo(string battleId)
+        private TpInfo GuildBattleTpInfo()
         {
+            var battleId = ViewModel.GuildBattleId;
+
             var result = GetXHR("http://astrum.amebagames.com/_/guildbattle/tp?_id=" + Uri.EscapeDataString(battleId));
             TpInfo tpInfo = JsonConvert.DeserializeObject<TpInfo>(result);
             Delay(DELAY_SHORT);
@@ -1073,8 +1075,10 @@ namespace Astrum.Http
             return tpInfo;
         }
 
-        private void GuildBattleTpNormal(string battleId)
+        public void GuildBattleTpNormal()
         {
+
+            var battleId = ViewModel.GuildBattleId;
             var values = new Dictionary<string, string>
             {
                 { "_id", battleId }
@@ -1087,8 +1091,9 @@ namespace Astrum.Http
             Delay(DELAY_SHORT);
         }
 
-        private void GuildBattleTpChat(string battleId)
+        public void GuildBattleTpChat()
         {
+            var battleId = ViewModel.GuildBattleId;
             var values = new Dictionary<string, string>
             {
                 { "_id", battleId }
@@ -1101,8 +1106,9 @@ namespace Astrum.Http
             Delay(DELAY_SHORT);
         }
 
-        private void GuildBattleRoulette(string battleId)
+        public void GuildBattleTpRoulette()
         {
+            var battleId = ViewModel.GuildBattleId;
             var result = GetXHR("http://astrum.amebagames.com/_/guildbattle/tp/roulette?_id=" + Uri.EscapeDataString(battleId));
             Roulette roulette = JsonConvert.DeserializeObject<Roulette>(result);
 

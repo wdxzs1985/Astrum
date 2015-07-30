@@ -437,5 +437,41 @@ namespace Astrum
                 }
             }
         }
+
+        private async void UseGuildBattleTpNormal(object sender, RoutedEventArgs e)
+        {
+            if (client.ViewModel.IsReady)
+            {
+                await Task.Run(() =>
+                {
+                    client.GuildBattleTpNormal();
+                });
+                
+            }
+        }
+
+        private async void UseGuildBattleTpChat(object sender, RoutedEventArgs e)
+        {
+            if (client.ViewModel.IsReady)
+            {
+                await Task.Run(() =>
+                {
+                    client.GuildBattleTpChat();
+                });
+
+            }
+        }
+
+        private async void UseGuildBattleTpRoulette(object sender, RoutedEventArgs e)
+        {
+            if (client.ViewModel.IsReady)
+            {
+                await Task.Run(() =>
+                {
+                    client.GuildBattleTpRoulette();
+                });
+
+            }
+        }
     }
 }

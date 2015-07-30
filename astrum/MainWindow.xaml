@@ -69,14 +69,10 @@
         </Grid>
 
         <Grid x:Name="StatusPanel" Visibility="Visible" Margin="0,24,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="9*"/>
-                <ColumnDefinition Width="7*"/>
-            </Grid.ColumnDefinitions>
             <Grid x:Name="QuestPanel" Margin="0,112,0,0"
             	Height="224" VerticalAlignment="Top"
             	Background="{StaticResource Background}"
-            	Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True" Grid.ColumnSpan="2">
+            	Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True">
                 <Grid HorizontalAlignment="Left" VerticalAlignment="Top" 
             		Width="136" Height="96" Margin="16,16,0,0" >
                     <Grid Margin="0,0,0,0" Width="64" Height="48" 
@@ -229,7 +225,7 @@
             	Margin="0,112,0,0" Height="224"
             	VerticalAlignment="Top"
             	Background="{StaticResource Background}"
-            	Visibility="{Binding IsGuildBattleEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsHidden="True" Grid.ColumnSpan="2">
+            	Visibility="{Binding IsGuildBattleEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsHidden="False">
                 <Grid HorizontalAlignment="Left" VerticalAlignment="Top" 
             		Width="136" Height="48" Margin="16,16,0,0" >
                     <Grid Margin="0,0,0,0" Width="64" Height="48" 
@@ -279,17 +275,23 @@
             			HorizontalAlignment="Left" VerticalAlignment="Center"
             			Content="Normal"
             			Template="{StaticResource FlatButton}" 
-            			Background="{StaticResource Cyan_500}" Foreground="White"/>
+            			Background="{StaticResource Cyan_500}" Foreground="White"
+                            Click="UseGuildBattleTpNormal"
+                            IsEnabled="{Binding IsTpNormalAvailable}"/>
                     <Button Width="40" Height="36" Margin="48,0,0,0"
             			HorizontalAlignment="Left" VerticalAlignment="Center"
             			Content="Roulette"
             			Template="{StaticResource FlatButton}" 
-            			Background="{StaticResource Cyan_500}" Foreground="White"/>
+            			Background="{StaticResource Cyan_500}" Foreground="White"
+                            Click="UseGuildBattleTpRoulette"
+                            IsEnabled="{Binding IsTpRouletteAvailable}"/>
                     <Button Width="40" Height="36" Margin="96,0,0,0"
             			HorizontalAlignment="Left" VerticalAlignment="Center"
             			Content="Chat"
             			Template="{StaticResource FlatButton}" 
-            			Background="{StaticResource Cyan_500}" Foreground="White"/>
+            			Background="{StaticResource Cyan_500}" Foreground="White"
+                            Click="UseGuildBattleTpChat"
+                            IsEnabled="{Binding IsTpChatAvailable}"/>
                 </Grid>
 
                 <Grid Height="48" 
@@ -318,13 +320,15 @@
                                  IsChecked="{Binding IsQuestEnable}" 
                                  Width="160" Height="48" 
                              Margin="0,0,0,0"
-                                 Template="{StaticResource TabButton}"/>
+                                 Template="{StaticResource TabButton}"
+                             Checked="QuestButton_Checked"/>
                 <RadioButton Name="GuildBattleButton" Content="公会战" 
                                  HorizontalAlignment="Left" VerticalAlignment="Bottom" 
                                  Foreground="White" 
                                  IsChecked="{Binding IsGuildBattleEnable}" 
                                  Width="160" Height="48"  Margin="160,0,0,0" 
-                                 Template="{StaticResource TabButton}"/>
+                                 Template="{StaticResource TabButton}"
+                             Checked="GuildBattleButton_Checked"/>
             </Grid>
             <Grid x:Name="StatusArea"
                   HorizontalAlignment="Left" VerticalAlignment="Top" 
@@ -406,10 +410,10 @@
                        VerticalAlignment="Bottom"
                        Background="{DynamicResource StatusBar_Light}" Grid.ColumnSpan="2"/>
         </Grid>
-        <Grid x:Name="StatusBar" Margin="0,0,0,0" Height="24" VerticalAlignment="Top" Background="{DynamicResource StatusBar_Dark}" d:IsLocked="True">
+        <Grid x:Name="StatusBar" Margin="0,0,0,0" Height="24" VerticalAlignment="Top" Background="{DynamicResource StatusBar_Dark}" d:IsLocked="False">
             <Label Margin="0,0,0,0" 
                    VerticalAlignment="Center" HorizontalAlignment="Left"
-                   Height="24" Width="272"
+                   Height="24" Width="272" FontSize="9"
         		Content="{Binding WindowTitle, FallbackValue=プリコネ}" 
         		Foreground="White"/>
 
