@@ -550,6 +550,6 @@ namespace Astrum.Http
                 NotifyPropertyChanged("MaxKeepStamina");
             }
         }
-
+        
     }
 }

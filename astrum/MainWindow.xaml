@@ -17,11 +17,6 @@
     Icon="Images\Icon.png" 
     AllowsTransparency="True" 
     ResizeMode="NoResize" Background="{x:Null}">
-    <Window.Resources>
-        <UI:IntToIsEnabledConverter x:Key="IntToIsEnabledConverter"/>
-        <UI:ProgressBarForegoundConvert x:Key="ProgressBarForegoundConvert"/>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-    </Window.Resources>
 
     <Grid Background="#00BCD4" 
           VerticalAlignment="Center" HorizontalAlignment="Center"
@@ -29,31 +24,10 @@
         <Grid.Effect>
             <DropShadowEffect BlurRadius="20" ShadowDepth="0" Direction="0" Opacity="0.6" />
         </Grid.Effect>
-        <Grid Margin="0,0,0,0" Height="30" VerticalAlignment="Top" Background="Transparent">
-            <Label Margin="10,0,0,0" VerticalAlignment="Center" 
-                   Content="{Binding WindowTitle, FallbackValue=プリコネ}" 
-                   Foreground="White"></Label>
 
-            <Button x:Name="MiniBtn" Template="{DynamicResource FlatButton}" Click="MiniWindow" 
-                    Width="18" Height="18" Margin="0,0,30,0"
-                    VerticalAlignment="Center" HorizontalAlignment="Right" >
-                <Button.Background>
-                    <ImageBrush ImageSource="Images/ic_remove_white_18dp.png"/>
-                </Button.Background>
-            </Button>
-
-            <Button x:Name="CloseBtn" Template="{DynamicResource FlatButton}" Click="CloseWindow" 
-                    Width="18" Height="18" Margin="0,0,6,0"
-                    HorizontalAlignment="Right" VerticalAlignment="Center">
-                <Button.Background>
-                    <ImageBrush ImageSource="Images/ic_clear_white_18dp.png"/>
-                </Button.Background>
-            </Button>
-        </Grid>
-
-        <Grid x:Name="LoginPanel" Visibility="Hidden" 
+        <Grid x:Name="LoginPanel"
               HorizontalAlignment="Center"
-              VerticalAlignment="Center">
+              VerticalAlignment="Center" d:IsLocked="True" d:IsHidden="True">
             <ComboBox x:Name="LoginUserComboBox" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Top" Width="120" Height="120" ItemsSource="{Binding LoginUserList}" SelectedIndex="0" SelectionChanged="LoginUserComboBox_SelectionChanged" TextSearch.TextPath="name" TabIndex="4" MaxDropDownHeight="120" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#E0F7FA" >
                 <ComboBox.ItemTemplate >
                     <DataTemplate>
@@ -85,324 +59,375 @@
                     <ImageBrush ImageSource="Images/password.png" />
                 </PasswordBox.Background>
             </PasswordBox>
+
             <Button x:Name="LoginButton" Content="登陆" 
-                    Margin="0,0,0,0" VerticalAlignment="Bottom"
+                    Width="240" Height="36"
+                    Margin="0,230,0,0" 
+                    VerticalAlignment="Top" HorizontalAlignment="Center"
                     Click="LoginButton_Click" TabIndex="3"
                     Style="{StaticResource RaiseButton}"/>
         </Grid>
 
-        <Grid x:Name="StatusPanel" Visibility="Visible" Margin="0,30,0,0">
-            <Grid x:Name="StatusArea"
-                  HorizontalAlignment="Left" VerticalAlignment="Top" 
-                  Width="300" Height="50" Margin="10,10,10,0" >
-                <Grid Width="150" Height="25" Margin="0,0,0,0" 
-                      HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Label Content="体力" Foreground="White" 
-                           HorizontalAlignment="Left" VerticalAlignment="Center" 
-                           HorizontalContentAlignment="Right"
-                           Width="50" Height="25" />
-                    <ProgressBar x:Name="StaminaProgress" 
-                                 Margin="50,0,0,0" Width="100" Height="8" 
-                                 HorizontalAlignment="Left" VerticalAlignment="Center" 
-                                 Value="{Binding StaminaProgress, Mode=OneWay, FallbackValue=0, TargetNullValue=0}" 
-                                 Minimum="0" Maximum="100" 
-                                 ToolTip="{Binding Stamina}" 
-                                 Foreground="{Binding StaminaProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
-                </Grid>
-
-                <Grid Width="150" Height="25" Margin="0,25,0,0" 
-                      HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Label Content="经验值" Foreground="White"
-                           HorizontalAlignment="Left" VerticalAlignment="Center" 
-                           HorizontalContentAlignment="Right"
-                           Width="50" />
-                    <ProgressBar x:Name="ExpProgress" 
-                                 Margin="50,0,0,0" Width="100" Height="8" 
-                                 HorizontalAlignment="Left" VerticalAlignment="Center" 
-                                 Value="{Binding ExpProgress, Mode=OneWay, FallbackValue=0, TargetNullValue=0}" 
-                                 Minimum="0" Maximum="100" 
-                                 ToolTip="{Binding Exp}" 
-                                 Foreground="{Binding ExpProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
-                </Grid>
-
-                <Grid Width="150" Height="25" Margin="150,0,0,0" 
-                      HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Label Content="BP" 
-                           HorizontalAlignment="Left" VerticalAlignment="Center" 
-                           HorizontalContentAlignment="Right"
-                           Width="50" Foreground="White" />
-                    <ProgressBar x:Name="BpProgress" 
-                                 Margin="50,0,0,0" Width="100" Height="8" 
-                                 Value="{Binding BpValue, Mode=OneWay, FallbackValue=0, TargetNullValue=0}" 
-                                 Minimum="0" Maximum="6" 
-                                 ToolTip="{Binding Bp}" 
-                                 Foreground="{Binding BpProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
-                </Grid>
-                <Grid Width="150" Height="25" Margin="150,25,0,0" 
-                      HorizontalAlignment="Left" VerticalAlignment="Top"
-                      Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}">
-                    <Label Content="Fever" 
-                       Width="100" Height="25"  Margin="50,0,0,0" 
-                       Background="{StaticResource Pink_A200}" Foreground="White" FontWeight="Bold"
-                       Visibility="{Binding Fever, Converter={StaticResource BooleanToVisibilityConverter}}"
-                       HorizontalAlignment="Left" VerticalAlignment="Top" 
-                       HorizontalContentAlignment="Center"/>
-                </Grid>
-                <Grid Width="150" Height="25" Margin="150,25,0,0" 
-                      HorizontalAlignment="Left" VerticalAlignment="Top"
-                      Visibility="{Binding IsGuildBattleEnable, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}">
-                    <Label Content="TP" 
-                           HorizontalAlignment="Left" VerticalAlignment="Center" 
-                           HorizontalContentAlignment="Right"
-                           Width="50" 
-                           Foreground="White" />
-                    <ProgressBar x:Name="TpProgress" 
-                                 Margin="50,0,0,0" Width="100" Height="8" 
-                                 Value="{Binding TpValue, Mode=OneWay, FallbackValue=0, TargetNullValue=0}" 
-                                 Minimum="0" Maximum="100"  
-                                 ToolTip="{Binding Tp}" 
-                                 Foreground="{Binding TpProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
-                </Grid>
-            </Grid>
-
-            <Grid Name="Tabs" VerticalAlignment="Top" HorizontalAlignment="Left" 
-                  Height="48" Margin="0,60,0,0">
-                <RadioButton x:Name="QuestButton" Content="任务" 
-                                 HorizontalAlignment="Left" VerticalAlignment="Center" 
-                                 Foreground="White" 
-                                 IsChecked="{Binding IsQuestEnable}" 
-                                 Width="70" Height="48" 
-                                 Template="{StaticResource TabButton}"/>
-                <RadioButton Name="GuildBattleButton" Content="公会战" 
-                                 HorizontalAlignment="Left" VerticalAlignment="Center" 
-                                 Foreground="White" 
-                                 IsChecked="{Binding IsGuildBattleEnable}" 
-                                 Width="70" Height="48"  Margin="70,0,0,0" 
-                                 Template="{StaticResource TabButton}">
-                </RadioButton>
-            </Grid>
-
-            <Grid Name="QuestPanel" Margin="0,108,0,0"
-                  Height="222" VerticalAlignment="Top"
-                  Background="{StaticResource Background}"
-                  Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Hidden}">
+        <Grid x:Name="StatusPanel" Visibility="Visible" Margin="0,24,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="9*"/>
+                <ColumnDefinition Width="7*"/>
+            </Grid.ColumnDefinitions>
+            <Grid x:Name="QuestPanel" Margin="0,112,0,0"
+            	Height="224" VerticalAlignment="Top"
+            	Background="{StaticResource Background}"
+            	Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True" Grid.ColumnSpan="2">
                 <Grid HorizontalAlignment="Left" VerticalAlignment="Top" 
-                  Width="150" Height="70" Margin="10,10,0,0" >
-                    <Grid Margin="0,0,0,0" Width="70" Height="32" 
-                      HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <Button Name="UseHalfStaminaButton" Margin="0,0,0,0" Width="32" Height="32"
-                            HorizontalAlignment="Left" VerticalAlignment="Center" 
-                            BorderBrush="{x:Null}" Foreground="{x:Null}"
-                            Template="{StaticResource IconButton}"
-                            Click="UseHalfStaminaButton_Click"
-                            IsEnabled="{Binding StaminaHalfStock, Converter={StaticResource IntToIsEnabledConverter}}">
+            		Width="136" Height="96" Margin="16,16,0,0" >
+                    <Grid Margin="0,0,0,0" Width="64" Height="48" 
+            			HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <Button x:Name="UseHalfStaminaButton" 
+                                Margin="0,0,0,0" Width="32" Height="32"
+                                HorizontalAlignment="Left" VerticalAlignment="Center" 
+            				BorderBrush="{x:Null}" Foreground="{x:Null}"
+            				Template="{StaticResource IconButton}"
+            				Click="UseHalfStaminaButton_Click"
+            				IsEnabled="{Binding StaminaHalfStock, Converter={StaticResource IntToIsEnabledConverter}}">
                             <Button.Background>
                                 <ImageBrush ImageSource="Images/instant-half_stamina_potion.png" Stretch="Uniform"/>
                             </Button.Background>
                         </Button>
                         <Label Content="{Binding StaminaHalfStock, FallbackValue=0, TargetNullValue=0}" 
-                           HorizontalAlignment="Left" VerticalAlignment="Center"
-                           HorizontalContentAlignment="Right"
-                           Margin="35,0,0,0" Width="35" 
-                           Foreground="#FF212121"/>
+            				HorizontalAlignment="Left" VerticalAlignment="Center"
+            				HorizontalContentAlignment="Right"
+            				Margin="32,0,0,0" Width="32" 
+            				Foreground="{StaticResource PrimaryText}"/>
                     </Grid>
 
-                    <Grid Margin="80,0,0,0" Width="70" Height="32" 
-                      HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <Button Name="UseStaminaButton" Margin="0,0,0,0" Width="32" Height="32"
-                            HorizontalAlignment="Left" VerticalAlignment="Center" 
-                            BorderBrush="{x:Null}" Foreground="{x:Null}"
-                            Template="{StaticResource IconButton}"
-                            Click="UseStaminaButton_Click"
-                            IsEnabled="{Binding StaminaStock, Converter={StaticResource IntToIsEnabledConverter}}">
+                    <Grid Margin="72,0,0,0" Width="64" Height="48" 
+            			HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <Button x:Name="UseStaminaButton" Margin="0,0,0,0" Width="32" Height="32"
+            				HorizontalAlignment="Left" VerticalAlignment="Center" 
+            				BorderBrush="{x:Null}" Foreground="{x:Null}"
+            				Template="{StaticResource IconButton}"
+            				Click="UseStaminaButton_Click"
+            				IsEnabled="{Binding StaminaStock, Converter={StaticResource IntToIsEnabledConverter}}">
                             <Button.Background>
                                 <ImageBrush ImageSource="Images/instant-stamina_potion.png" Stretch="Uniform"/>
                             </Button.Background>
                         </Button>
                         <Label Content="{Binding StaminaStock, FallbackValue=0, TargetNullValue=0}" 
-                           HorizontalAlignment="Left" VerticalAlignment="Center"
-                           HorizontalContentAlignment="Right"
-                           Margin="35,0,0,0" Width="35" 
-                           Foreground="#FF212121"/>
+            				HorizontalAlignment="Left" VerticalAlignment="Center"
+            				HorizontalContentAlignment="Right"
+            				Margin="32,0,0,0" Width="32" 
+            				Foreground="#FF212121"/>
                     </Grid>
 
-                    <Grid Margin="0,38,0,0" Width="70" Height="32" 
-                      HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <Button Name="UseMiniBpButton" 
-                            Margin="0,0,0,0" Width="32" Height="32"
-                            HorizontalAlignment="Left" VerticalAlignment="Center" 
-                            BorderBrush="{x:Null}" Foreground="{x:Null}"
-                            Template="{StaticResource IconButton}"
-                            Click="UseMiniBpButton_Click"
-                            IsEnabled="{Binding BpMiniStock, Converter={StaticResource IntToIsEnabledConverter}}">
+                    <Grid Margin="0,48,0,0" Width="64" Height="48" 
+            			HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <Button x:Name="UseMiniBpButton" 
+            				Margin="0,0,0,0" Width="32" Height="32"
+            				HorizontalAlignment="Left" VerticalAlignment="Center" 
+            				BorderBrush="{x:Null}" Foreground="{x:Null}"
+            				Template="{StaticResource IconButton}"
+            				Click="UseMiniBpButton_Click"
+            				IsEnabled="{Binding BpMiniStock, Converter={StaticResource IntToIsEnabledConverter}}">
                             <Button.Background>
                                 <ImageBrush ImageSource="Images/instant-mini_bp_ether.png" Stretch="Uniform"/>
                             </Button.Background>
                         </Button>
                         <Label Content="{Binding BpMiniStock, FallbackValue=0, TargetNullValue=0}" 
-                           HorizontalAlignment="Left" VerticalAlignment="Center"
-                           HorizontalContentAlignment="Right"
-                           Margin="35,0,0,0" Width="35" 
-                           Foreground="#FF212121"/>
+            				HorizontalAlignment="Left" VerticalAlignment="Center"
+            				HorizontalContentAlignment="Right"
+            				Margin="32,0,0,0" Width="32" 
+            				Foreground="#FF212121"/>
                     </Grid>
 
-                    <Grid Margin="80,38,0,0" Width="70" Height="32" 
-                      HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <Button Name="UseBpButton" 
-                            Margin="0,0,0,0" Width="32" Height="32"
-                            HorizontalAlignment="Left" VerticalAlignment="Center" 
-                            BorderBrush="{x:Null}" Foreground="{x:Null}"
-                            Template="{StaticResource IconButton}"
-                            Click="UseBpButton_Click"
-                            IsEnabled="{Binding BpStock, Converter={StaticResource IntToIsEnabledConverter}}">
+                    <Grid Margin="72,48,0,0" Width="64" Height="48" 
+            			HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <Button x:Name="UseBpButton" 
+            				Margin="0,0,0,0" Width="32" Height="32"
+            				HorizontalAlignment="Left" VerticalAlignment="Center" 
+            				BorderBrush="{x:Null}" Foreground="{x:Null}"
+            				Template="{StaticResource IconButton}"
+            				Click="UseBpButton_Click"
+            				IsEnabled="{Binding BpStock, Converter={StaticResource IntToIsEnabledConverter}}">
                             <Button.Background>
                                 <ImageBrush ImageSource="Images/instant-bp_ether.png" Stretch="Uniform"/>
                             </Button.Background>
                         </Button>
                         <Label Content="{Binding BpStock, FallbackValue=0, TargetNullValue=0}" 
-                           HorizontalAlignment="Left" VerticalAlignment="Center"
-                           HorizontalContentAlignment="Right"
-                           Margin="35,0,0,0" Width="35" 
-                           Foreground="#FF212121"/>
+            				HorizontalAlignment="Left" VerticalAlignment="Center"
+            				HorizontalContentAlignment="Right"
+            				Margin="32,0,0,0" Width="32" 
+            				Foreground="#FF212121"/>
                     </Grid>
                 </Grid>
 
-                <Grid HorizontalAlignment="Right" VerticalAlignment="Top" 
-                      Width="140" Height="150" Margin="0,10,10,0" >
-                    <Grid Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50">
+                <Grid HorizontalAlignment="Left" VerticalAlignment="Top" 
+            		Width="136" Height="144" Margin="168,16,16,0" >
+                    <Grid Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                          Width="136" Height="48">
                         <Label Content="体力药库存" Foreground="{StaticResource PrimaryText}"
-                               HorizontalAlignment="Left" VerticalAlignment="top"/>
-                        <TextBox Width="40" Margin="100,0,0,0" 
-                                 Text="{Binding MinStaminaStock, FallbackValue=0}" 
-                                 VerticalAlignment="top" HorizontalAlignment="Left" 
-                                 HorizontalContentAlignment="Right"
-                                 BorderThickness="0,0,0,1" BorderBrush="{StaticResource Cyan_500}" 
-                                 Background="{x:Null}" Foreground="{StaticResource SecondaryText}"/>
-                        <Slider Margin="0,30,0,0" Height="20"
-                                Minimum="0" Maximum="999" Value="{Binding MinStaminaStock}" 
-                                LargeChange="100" SmallChange="1" >
-                        </Slider>
+                               HorizontalAlignment="Left" VerticalAlignment="top"
+                               Margin="0,0,0,0" Width="72" Height="24"/>
+                        <TextBox Width="48" Height="24" Margin="88,0,0,0" 
+            				Text="{Binding MinStaminaStock, FallbackValue=0}" 
+            				VerticalAlignment="top" HorizontalAlignment="Left" 
+            				HorizontalContentAlignment="Right"
+            				BorderThickness="0,0,0,1" BorderBrush="{StaticResource Cyan_500}" 
+            				Background="{x:Null}" Foreground="{StaticResource SecondaryText}"/>
+                        <Slider Margin="0,24,0,0" Height="16"
+            				Minimum="0" Maximum="999" Value="{Binding MinStaminaStock}" 
+            				LargeChange="100" SmallChange="1" />
                     </Grid>
 
-                    <Grid Margin="0,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50">
+                    <Grid Margin="0,48,0,0" 
+                          HorizontalAlignment="Left" VerticalAlignment="Top" 
+                          Width="136" Height="48">
                         <Label Content="BP药库存" Foreground="{StaticResource PrimaryText}" 
-                               HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                        <TextBox Width="40" Margin="100,0,0,0" 
-                                 Text="{Binding MinBpStock, FallbackValue=0}" 
-                                 VerticalAlignment="top" HorizontalAlignment="Left" 
-                                 HorizontalContentAlignment="Right"
-                                 BorderThickness="0,0,0,1" BorderBrush="{StaticResource Cyan_500}" 
-                                 Background="{x:Null}" Foreground="{StaticResource SecondaryText}"/>
-                        <Slider Margin="0,30,0,0" 
-                                Minimum="0" Maximum="999" Value="{Binding MinBpStock}" 
-                                LargeChange="100" SmallChange="1" />
+                               HorizontalAlignment="Left" VerticalAlignment="top"
+                               Margin="0,0,0,0" Width="72" Height="24"/>
+                        <TextBox Width="48" Height="24" Margin="88,0,0,0" 
+            				Text="{Binding MinBpStock, FallbackValue=0}" 
+            				VerticalAlignment="top" HorizontalAlignment="Left" 
+            				HorizontalContentAlignment="Right"
+            				BorderThickness="0,0,0,1" BorderBrush="{StaticResource Cyan_500}" 
+            				Background="{x:Null}" Foreground="{StaticResource SecondaryText}"/>
+                        <Slider Margin="0,24,0,0" Height="16"
+            				Minimum="0" Maximum="999" Value="{Binding MinBpStock}" 
+            				LargeChange="100" SmallChange="1" />
                     </Grid>
 
-                    <Grid Margin="0,100,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="50">
-                        <Label Content="Keep Stamina" 
-                               HorizontalAlignment="Left" VerticalAlignment="Top" 
-                               Foreground="{StaticResource PrimaryText}"/>
-                        <TextBox Width="40" Margin="100,0,0,0"
-                                 HorizontalAlignment="Left" VerticalAlignment="top" 
-                                 HorizontalContentAlignment="Right"
-                                 BorderThickness="0,0,0,1" BorderBrush="{StaticResource Cyan_500}" 
-                                 Background="{x:Null}" Foreground="{StaticResource SecondaryText}"
-                                 Text="{Binding MaxKeepStamina, FallbackValue=0}" />
-                        <Slider Margin="0,30,0,0" Height="20"
-                                Minimum="0" Maximum="200" Value="{Binding MaxKeepStamina}" 
-                                LargeChange="10" SmallChange="1" />
+                    <Grid Margin="0,96,0,0" 
+                          HorizontalAlignment="Left" VerticalAlignment="Top"
+                          Width="136" Height="48">
+                        <Label Content="体力"
+                               Foreground="{StaticResource PrimaryText}"
+                               HorizontalAlignment="Left" VerticalAlignment="top"
+                               Margin="0,0,0,0" Width="72" Height="24"/>
+                        <TextBox Width="48" Height="24" Margin="88,0,0,0" 
+            				HorizontalAlignment="Left" VerticalAlignment="top" 
+            				HorizontalContentAlignment="Right"
+            				BorderThickness="0,0,0,1" BorderBrush="{StaticResource Cyan_500}" 
+            				Background="{x:Null}" Foreground="{StaticResource SecondaryText}"
+            				Text="{Binding MaxKeepStamina, FallbackValue=0}" />
+                        <Slider Margin="0,24,0,0" Height="16"
+            				Minimum="0" Maximum="200" Value="{Binding MaxKeepStamina}" 
+            				LargeChange="10" SmallChange="1" />
                     </Grid>
                 </Grid>
 
-                <Grid VerticalAlignment="Bottom" Margin="0,0,0,0" Height="36"
-                      Visibility="{Binding IsReady, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid VerticalAlignment="Bottom" Margin="0,0,0,0" Height="48"
+            		Visibility="{Binding IsReady, Converter={StaticResource BooleanToVisibilityConverter}}" Background="{StaticResource Background}">
                     <Button x:Name="StartQuestButton" 
-                            VerticalAlignment="Bottom" Margin="0,0,0,0"  
-                            Click="StartQuestButton_Click"
-                            Content="Start" 
-                            Style="{DynamicResource RaiseButton}"/>
+                            Margin="0,0,8,0"  
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Right"
+                            Width="96" Height="36"
+            			Click="StartQuestButton_Click"
+            			Content="Start" 
+            			Style="{DynamicResource RaiseButton}"/>
                 </Grid>
             </Grid>
-
-            <Grid Name="GuildBattlePanel" 
-                  Margin="0,108,0,0" Height="222"
-                  VerticalAlignment="Top"
-                  Background="{StaticResource Background}"
-                  Visibility="{Binding IsGuildBattleEnable, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Visible}">
+            <Grid x:Name="GuildBattlePanel" 
+            	Margin="0,112,0,0" Height="224"
+            	VerticalAlignment="Top"
+            	Background="{StaticResource Background}"
+            	Visibility="{Binding IsGuildBattleEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsHidden="True" Grid.ColumnSpan="2">
                 <Grid HorizontalAlignment="Left" VerticalAlignment="Top" 
-                  Width="150" Height="35" Margin="10,90,0,0" >
-                    <Grid Margin="0,0,0,0" Width="70" Height="32" 
-                      HorizontalAlignment="Left" VerticalAlignment="Top">
+            		Width="136" Height="48" Margin="16,16,0,0" >
+                    <Grid Margin="0,0,0,0" Width="64" Height="48" 
+            			HorizontalAlignment="Left" VerticalAlignment="Top">
                         <Button Margin="0,0,0,0" Width="32" Height="32"
-                            HorizontalAlignment="Left" VerticalAlignment="Center" 
-                            BorderBrush="{x:Null}" Foreground="{x:Null}"
-                            Template="{StaticResource IconButton}"
-                            Click="UseHalfStaminaButton_Click"
-                            IsEnabled="{Binding StaminaHalfStock, Converter={StaticResource IntToIsEnabledConverter}}">
+            				HorizontalAlignment="Left" VerticalAlignment="Center" 
+            				BorderBrush="{x:Null}" Foreground="{x:Null}"
+            				Template="{StaticResource IconButton}"
+            				Click="UseHalfStaminaButton_Click"
+            				IsEnabled="{Binding StaminaHalfStock, Converter={StaticResource IntToIsEnabledConverter}}">
                             <Button.Background>
                                 <ImageBrush ImageSource="Images/instant-half_stamina_potion.png" Stretch="Uniform"/>
                             </Button.Background>
                         </Button>
                         <Label Content="{Binding StaminaHalfStock, FallbackValue=0, TargetNullValue=0}" 
-                           HorizontalAlignment="Left" VerticalAlignment="Center"
-                           HorizontalContentAlignment="Right"
-                           Margin="35,0,0,0" Width="35" 
-                           Foreground="{StaticResource PrimaryText}"/>
+            				HorizontalAlignment="Left" VerticalAlignment="Center"
+            				HorizontalContentAlignment="Right"
+            				Margin="32,0,0,0" Width="32" 
+            				Foreground="{StaticResource PrimaryText}"/>
                     </Grid>
 
-                    <Grid Margin="80,0,0,0" Width="70" Height="32" 
-                      HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Grid Margin="72,0,0,0" Width="64" Height="48" 
+            			HorizontalAlignment="Left" VerticalAlignment="Top">
                         <Button Margin="0,0,0,0" Width="32" Height="32"
-                            HorizontalAlignment="Left" VerticalAlignment="Center" 
-                            BorderBrush="{x:Null}" Foreground="{x:Null}"
-                            Template="{StaticResource IconButton}"
-                            Click="UseStaminaButton_Click"
-                            IsEnabled="{Binding StaminaStock, Converter={StaticResource IntToIsEnabledConverter}}">
+            				HorizontalAlignment="Left" VerticalAlignment="Center" 
+            				BorderBrush="{x:Null}" Foreground="{x:Null}"
+            				Template="{StaticResource IconButton}"
+            				Click="UseStaminaButton_Click"
+            				IsEnabled="{Binding StaminaStock, Converter={StaticResource IntToIsEnabledConverter}}">
                             <Button.Background>
                                 <ImageBrush ImageSource="Images/instant-stamina_potion.png" Stretch="Uniform"/>
                             </Button.Background>
                         </Button>
                         <Label Content="{Binding StaminaStock, FallbackValue=0, TargetNullValue=0}" 
-                           HorizontalAlignment="Left" VerticalAlignment="Center"
-                           HorizontalContentAlignment="Right"
-                           Margin="35,0,0,0" Width="35" 
-                           Foreground="{StaticResource PrimaryText}"/>
+            				HorizontalAlignment="Left" VerticalAlignment="Center"
+            				HorizontalContentAlignment="Right"
+            				Margin="32,0,0,0" Width="32" 
+            				Foreground="{StaticResource PrimaryText}"/>
                     </Grid>
                 </Grid>
 
-                <Grid Width="150" Height="70" 
-                      VerticalAlignment="Top" HorizontalAlignment="Left"
-                      Margin="10,10,0,0">
-                    <Button Width="70" Height="32" Margin="0,0,0,0"
-                            HorizontalAlignment="Left" VerticalAlignment="Top"
-                            Content="Normal"/>
-                    <Button Width="70" Height="32" Margin="80,0,0,0"
-                            HorizontalAlignment="Left" VerticalAlignment="Top"
-                            Content="Roulette"/>
-                    <Button Width="70" Height="32" Margin="0,35,0,0"
-                            HorizontalAlignment="Left" VerticalAlignment="Top"
-                            Content="Chat"/>
-                    <Button Width="70" Height="32" Margin="80,35,0,0"
-                            HorizontalAlignment="Left" VerticalAlignment="Top"
-                            Content="Quest"/>
+                <Grid Width="136" Height="48" 
+                      VerticalAlignment="Top" 
+                      HorizontalAlignment="Left" 
+                      Margin="168,16,0,0">
+                    <Button Width="40" Height="36" Margin="0,0,0,0"
+            			HorizontalAlignment="Left" VerticalAlignment="Center"
+            			Content="Normal"
+            			Template="{StaticResource FlatButton}" 
+            			Background="{StaticResource Cyan_500}" Foreground="White"/>
+                    <Button Width="40" Height="36" Margin="48,0,0,0"
+            			HorizontalAlignment="Left" VerticalAlignment="Center"
+            			Content="Roulette"
+            			Template="{StaticResource FlatButton}" 
+            			Background="{StaticResource Cyan_500}" Foreground="White"/>
+                    <Button Width="40" Height="36" Margin="96,0,0,0"
+            			HorizontalAlignment="Left" VerticalAlignment="Center"
+            			Content="Chat"
+            			Template="{StaticResource FlatButton}" 
+            			Background="{StaticResource Cyan_500}" Foreground="White"/>
                 </Grid>
 
-                <Grid VerticalAlignment="Bottom"
-                      Height="36" Margin="0,0,0,0"
+                <Grid Height="48" 
+                      Margin="0,0,0,0"
+                      VerticalAlignment="Bottom"
                       Visibility="{Binding IsReady, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <Button Name="StartGuildBattleButton"
-                            VerticalAlignment="Bottom" 
-                            Margin="0,0,0,0"
-                            Click="StartGuildBattleButton_Click"
-                            Content="Start" Style="{Binding Mode=OneWay, Source={StaticResource RaiseButton}}"/>
+                    <Button x:Name="StartGuildBattleButton"
+            			Margin="0,0,8,0"
+                            Width="96" Height="36"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+            			Click="StartGuildBattleButton_Click"
+            			Content="Start" Style="{StaticResource RaiseButton}"/>
                 </Grid>
-                
+            </Grid>
+
+            <Grid Name="Tabs" VerticalAlignment="Top"
+                  Height="48" Margin="0,64,0,0"
+                  Background="{StaticResource Cyan_500}" d:IsLocked="True" Grid.ColumnSpan="2">
+                <Grid.Effect>
+                    <DropShadowEffect Direction="270" Opacity="0.3"/>
+                </Grid.Effect>
+                <RadioButton x:Name="QuestButton" Content="任务" 
+                                 HorizontalAlignment="Left" VerticalAlignment="Bottom" 
+                                 Foreground="White" 
+                                 IsChecked="{Binding IsQuestEnable}" 
+                                 Width="160" Height="48" 
+                             Margin="0,0,0,0"
+                                 Template="{StaticResource TabButton}"/>
+                <RadioButton Name="GuildBattleButton" Content="公会战" 
+                                 HorizontalAlignment="Left" VerticalAlignment="Bottom" 
+                                 Foreground="White" 
+                                 IsChecked="{Binding IsGuildBattleEnable}" 
+                                 Width="160" Height="48"  Margin="160,0,0,0" 
+                                 Template="{StaticResource TabButton}"/>
+            </Grid>
+            <Grid x:Name="StatusArea"
+                  HorizontalAlignment="Left" VerticalAlignment="Top" 
+                  Height="64" Margin="0,0,0,0" Grid.ColumnSpan="2" >
+                <Grid Width="160" Height="32" Margin="0,0,0,0" 
+            		HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Label Content="体力" Foreground="White" 
+            			HorizontalAlignment="Left" VerticalAlignment="Center" 
+            			HorizontalContentAlignment="Right"
+            			Width="56" Height="32" />
+                    <ProgressBar x:Name="StaminaProgress" 
+            			Margin="64,0,0,0" Width="88" Height="8" 
+            			HorizontalAlignment="Left" VerticalAlignment="Center"
+            			Value="{Binding StaminaProgress, FallbackValue=0, Mode=OneWay, TargetNullValue=0}" 
+            			Minimum="0" Maximum="100" 
+            			ToolTip="{Binding Stamina}" 
+            			Foreground="{Binding StaminaProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
+                </Grid>
+
+                <Grid Width="160" Height="32" Margin="0,32,0,0" 
+            		HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Label Content="经验值" Foreground="White"
+            			HorizontalAlignment="Left" VerticalAlignment="Center" 
+            			HorizontalContentAlignment="Right"
+            			Width="56" />
+                    <ProgressBar x:Name="ExpProgress" 
+            			Margin="64,0,0,0" Width="88" Height="8" 
+            			HorizontalAlignment="Left" VerticalAlignment="Center"
+            			Value="{Binding ExpProgress, FallbackValue=0, Mode=OneWay, TargetNullValue=0}" 
+            			Minimum="0" Maximum="100" 
+            			ToolTip="{Binding Exp}" 
+            			Foreground="{Binding ExpProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
+                </Grid>
+
+                <Grid Width="160" Height="32" Margin="160,0,0,0" 
+            		HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Label Content="BP" 
+            			HorizontalAlignment="Left" VerticalAlignment="Center" 
+            			HorizontalContentAlignment="Right"
+            			Width="56" Foreground="White" />
+                    <ProgressBar x:Name="BpProgress" 
+            			Margin="64,0,0,0" Width="88" Height="8" 
+            			HorizontalAlignment="Left" VerticalAlignment="Center"
+            			Value="{Binding BpValue, FallbackValue=0, Mode=OneWay, TargetNullValue=0}" 
+            			Minimum="0" Maximum="6" 
+            			ToolTip="{Binding Bp}" 
+            			Foreground="{Binding BpProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
+                </Grid>
+                <Grid Width="160" Height="32" Margin="160,32,0,0" 
+            		HorizontalAlignment="Left" VerticalAlignment="Top"
+            		Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsHidden="True">
+                    <Label Content="Fever" 
+            			Width="88" Height="32"  Margin="64,0,0,0" 
+            			Background="{StaticResource Pink_A200}" Foreground="White" FontWeight="Bold"
+            			Visibility="{Binding Fever, Converter={StaticResource BooleanToVisibilityConverter}}"
+            			HorizontalAlignment="Left" VerticalAlignment="Top" 
+            			HorizontalContentAlignment="Center"/>
+                </Grid>
+                <Grid Width="160" Height="32" Margin="160,32,0,0" 
+            		HorizontalAlignment="Left" VerticalAlignment="Top"
+            		Visibility="{Binding IsGuildBattleEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Label Content="TP" 
+            			HorizontalAlignment="Left" VerticalAlignment="Center" 
+            			HorizontalContentAlignment="Right"
+            			Width="56" 
+            			Foreground="White" />
+                    <ProgressBar x:Name="TpProgress" 
+            			Margin="64,0,0,0" Width="88" Height="8" 
+            			HorizontalAlignment="Left" VerticalAlignment="Center"
+            			Value="{Binding TpValue, FallbackValue=0, Mode=OneWay, TargetNullValue=0}" 
+            			Minimum="0" Maximum="100"  
+            			ToolTip="{Binding Tp}" 
+            			Foreground="{Binding TpProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
+                </Grid>
             </Grid>
 
             <TextBlock Text="{Binding History}" 
                        Height="120" Margin="0,0,0,0" Padding="10"
                        VerticalAlignment="Bottom"
-                       Background="{StaticResource StatusBar}"/>
+                       Background="{DynamicResource StatusBar_Light}" Grid.ColumnSpan="2"/>
+        </Grid>
+        <Grid x:Name="StatusBar" Margin="0,0,0,0" Height="24" VerticalAlignment="Top" Background="{DynamicResource StatusBar_Dark}" d:IsLocked="True">
+            <Label Margin="0,0,0,0" 
+                   VerticalAlignment="Center" HorizontalAlignment="Left"
+                   Height="24" Width="272"
+        		Content="{Binding WindowTitle, FallbackValue=プリコネ}" 
+        		Foreground="White"/>
+
+            <Button x:Name="MiniBtn" Template="{DynamicResource FlatButton}" Click="MiniWindow" 
+        		Width="24" Height="24" Margin="0,0,24,0"
+        		VerticalAlignment="Center" HorizontalAlignment="Right" >
+                <Button.Background>
+                    <ImageBrush ImageSource="Images/ic_remove_white_18dp.png" Stretch="None"/>
+                </Button.Background>
+            </Button>
+
+            <Button x:Name="CloseBtn" Template="{DynamicResource FlatButton}" Click="CloseWindow" 
+        		Width="24" Height="24" Margin="0,0,0,0"
+        		HorizontalAlignment="Right" VerticalAlignment="Center">
+                <Button.Background>
+                    <ImageBrush ImageSource="Images/ic_clear_white_18dp.png" Stretch="None"/>
+                </Button.Background>
+            </Button>
         </Grid>
     </Grid>
 </Window>
