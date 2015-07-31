@@ -18,6 +18,7 @@
     AllowsTransparency="True" 
     ResizeMode="NoResize" Background="{x:Null}">
 
+
     <Grid Background="#00BCD4" 
           VerticalAlignment="Center" HorizontalAlignment="Center"
           Height="480" Width="320" >
@@ -26,8 +27,8 @@
         </Grid.Effect>
 
         <Grid x:Name="LoginPanel"
-              HorizontalAlignment="Center"
-              VerticalAlignment="Center" d:IsLocked="True" d:IsHidden="True">
+              HorizontalAlignment="Center" VerticalAlignment="Center" 
+              d:Locked="True" d:Hidden="True" d:IsLocked="True" d:IsHidden="True">
             <ComboBox x:Name="LoginUserComboBox" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Top" Width="120" Height="120" ItemsSource="{Binding LoginUserList}" SelectedIndex="0" SelectionChanged="LoginUserComboBox_SelectionChanged" TextSearch.TextPath="name" TabIndex="4" MaxDropDownHeight="120" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#E0F7FA" >
                 <ComboBox.ItemTemplate >
                     <DataTemplate>
@@ -60,19 +61,23 @@
                 </PasswordBox.Background>
             </PasswordBox>
 
-            <Button x:Name="LoginButton" Content="登陆" 
-                    Width="240" Height="36"
-                    Margin="0,230,0,0" 
-                    VerticalAlignment="Top" HorizontalAlignment="Center"
-                    Click="LoginButton_Click" TabIndex="3"
-                    Style="{StaticResource RaiseButton}"/>
+            <UI:ProgressButton x:Name="LoginButton"
+                               IsShowProgress="False"
+                               Width="96" Height="96"
+                               Margin="0,230,0,0" 
+                               VerticalAlignment="Top" HorizontalAlignment="Center"
+                               TabIndex="3"
+                               Click="LoginButton_Click"
+                               ButtonContent="Login"
+                               />
+
         </Grid>
 
         <Grid x:Name="StatusPanel" Visibility="Visible" Margin="0,24,0,0">
             <Grid x:Name="QuestPanel" Margin="0,112,0,0"
-            	Height="224" VerticalAlignment="Top"
+            	Height="256" VerticalAlignment="Top"
             	Background="{StaticResource Background}"
-            	Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True">
+            	Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Grid HorizontalAlignment="Left" VerticalAlignment="Top" 
             		Width="136" Height="96" Margin="16,16,0,0" >
                     <Grid Margin="0,0,0,0" Width="64" Height="48" 
@@ -208,18 +213,6 @@
             				LargeChange="10" SmallChange="1" />
                     </Grid>
                 </Grid>
-
-                <Grid VerticalAlignment="Bottom" Margin="0,0,0,0" Height="48"
-            		Visibility="{Binding IsReady, Converter={StaticResource BooleanToVisibilityConverter}}" Background="{StaticResource Background}">
-                    <Button x:Name="StartQuestButton" 
-                            Margin="0,0,8,0"  
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Right"
-                            Width="96" Height="36"
-            			Click="StartQuestButton_Click"
-            			Content="Start" 
-            			Style="{DynamicResource RaiseButton}"/>
-                </Grid>
             </Grid>
             <Grid x:Name="GuildBattlePanel" 
             	Margin="0,112,0,0" Height="224"
@@ -292,19 +285,6 @@
             			Background="{StaticResource Cyan_500}" Foreground="White"
                             Click="UseGuildBattleTpChat"
                             IsEnabled="{Binding IsTpChatAvailable}"/>
-                </Grid>
-
-                <Grid Height="48" 
-                      Margin="0,0,0,0"
-                      VerticalAlignment="Bottom"
-                      Visibility="{Binding IsReady, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <Button x:Name="StartGuildBattleButton"
-            			Margin="0,0,8,0"
-                            Width="96" Height="36"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Center"
-            			Click="StartGuildBattleButton_Click"
-            			Content="Start" Style="{StaticResource RaiseButton}"/>
                 </Grid>
             </Grid>
 
@@ -409,8 +389,29 @@
                        Height="120" Margin="0,0,0,0" Padding="10"
                        VerticalAlignment="Bottom"
                        Background="{DynamicResource StatusBar_Light}" Grid.ColumnSpan="2"/>
+            <Grid Margin="0,304,16,0" Width="64" Height="64"
+                  HorizontalAlignment="Right" VerticalAlignment="Top" 
+                  Visibility="{Binding IsReady, Converter={StaticResource BooleanToVisibilityConverter}}"  >
+                <UI:ProgressButton x:Name="StartGuildBattleButton"
+                               Click="StartGuildBattleButton_Click"
+                               ButtonContent="StartGuildBattle"
+                  Visibility="{Binding IsGuildBattleEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <UI:ProgressButton.Effect>
+                        <DropShadowEffect Direction="270" Opacity="0.3"/>
+                    </UI:ProgressButton.Effect>
+                </UI:ProgressButton>
+                <UI:ProgressButton x:Name="StartQuestButton"
+                               ButtonContent="StartQuest"
+                               Click="StartQuestButton_Click"
+                                   Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <UI:ProgressButton.Effect>
+                        <DropShadowEffect Direction="270" Opacity="0.3"/>
+                    </UI:ProgressButton.Effect>
+                </UI:ProgressButton>
+
+            </Grid>
         </Grid>
-        <Grid x:Name="StatusBar" Margin="0,0,0,0" Height="24" VerticalAlignment="Top" Background="{DynamicResource StatusBar_Dark}" d:IsLocked="False">
+        <Grid x:Name="StatusBar" Margin="0,0,0,0" Height="24" VerticalAlignment="Top" Background="{DynamicResource StatusBar_Dark}" d:IsLocked="True">
             <Label Margin="0,0,0,0" 
                    VerticalAlignment="Center" HorizontalAlignment="Left"
                    Height="24" Width="272" FontSize="9"
@@ -432,6 +433,10 @@
                     <ImageBrush ImageSource="Images/ic_clear_white_18dp.png" Stretch="None"/>
                 </Button.Background>
             </Button>
+        </Grid>
+        <Grid Name="Playground"
+                Width="64" Height="64">
+
         </Grid>
     </Grid>
 </Window>

@@ -48,7 +48,7 @@ namespace Astrum
             
             LoginPanel.Visibility = Visibility.Visible;
             StatusPanel.Visibility = Visibility.Hidden;
-            LoginButton.Content = "登陆";
+            LoginButton.ButtonContent = "登陆";
             LoginButton.IsEnabled = true;
             LoginUserComboBox.IsEnabled = true;
 
@@ -62,7 +62,7 @@ namespace Astrum
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             Console.WriteLine("login start");
-            LoginButton.Content = "少女祈祷中";
+            LoginButton.ButtonContent = "少女祈祷中";
             LoginButton.IsEnabled = false;
             LoginUserComboBox.IsEnabled = false;
 
@@ -112,7 +112,7 @@ namespace Astrum
             {
                 MessageBoxResult result = MessageBox.Show("登入失败");
                 LoginButton.IsEnabled = true;
-                LoginButton.Content = "登陆";
+                LoginButton.ButtonContent = "登陆";
                 LoginUserComboBox.IsEnabled = true;
             }
         }
@@ -218,7 +218,7 @@ namespace Astrum
             {
                 SaveUserList();
 
-                StartQuestButton.Content = "Stop";
+                StartQuestButton.ButtonContent = "Stop";
                 StartQuestButton.IsEnabled = true;
 
                 client.ViewModel.IsRunning = true;
@@ -257,7 +257,7 @@ namespace Astrum
                 });
 
 
-                StartQuestButton.Content = "Start";
+                StartQuestButton.ButtonContent = "Start";
                 StartQuestButton.IsEnabled = true;
                 QuestButton.IsEnabled = true;
                 GuildBattleButton.IsEnabled = true;
@@ -368,7 +368,7 @@ namespace Astrum
             
             if (client.ViewModel.IsRunning == false)
             {
-                StartGuildBattleButton.Content = "Stop";
+                StartGuildBattleButton.ButtonContent = "Stop";
                 StartGuildBattleButton.IsEnabled = true;
 
                 client.ViewModel.IsRunning = true;
@@ -390,7 +390,7 @@ namespace Astrum
                 });
 
 
-                StartGuildBattleButton.Content = "Start";
+                StartGuildBattleButton.ButtonContent = "Start";
                 StartGuildBattleButton.IsEnabled = true;
                 QuestButton.IsEnabled = true;
                 GuildBattleButton.IsEnabled = true;
