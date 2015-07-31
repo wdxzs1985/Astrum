@@ -111,67 +111,69 @@ namespace Astrum.Http
 
         protected string GetXHR(string url)
         {
-            Console.WriteLine("[GET ] " + url);
-
-            var request = this.CreateRequest(url);
-            ConfigXHRHeaders(request);
-
-            HttpWebResponse response = null;
-            string result = null;
-            try
+            lock(this)
             {
-                response = (HttpWebResponse)request.GetResponse();
-                result = ResponseToString(response);
-                //Console.WriteLine(result);
+                Console.WriteLine("[GET ] " + url);
 
-                RefreshToken(response);
-            }
-            catch (Exception ex)
-            {
-                ViewModel.History = ex.Message;
-            }
-            finally
-            {
-                if (response != null)
+                var request = this.CreateRequest(url);
+                ConfigXHRHeaders(request);
+
+                HttpWebResponse response = null;
+                string result = null;
+                try
                 {
-                    response.Close();
+                    response = (HttpWebResponse)request.GetResponse();
+                    result = ResponseToString(response);
+                    RefreshToken(response);
                 }
+                catch (Exception ex)
+                {
+                    ViewModel.History = ex.Message;
+                }
+                finally
+                {
+                    if (response != null)
+                    {
+                        response.Close();
+                    }
+                }
+                return result;
             }
-            return result;
         }
 
         protected string PostXHR(string url, Dictionary<string, string> values)
         {
-            Console.WriteLine("[POST] " + url);
-
-            var request = this.CreateRequest(url);
-            request.Headers.Add("X-HTTP-Method-Override", PUT);
-            ConfigXHRHeaders(request);
-
-            PostJson(request, values);
-
-            HttpWebResponse response = null;
-            string result = null;
-            try
+            lock (this)
             {
-                response = (HttpWebResponse)request.GetResponse();
-                result = ResponseToString(response);
-                //Console.WriteLine(result);
+                Console.WriteLine("[POST] " + url);
 
-                RefreshToken(response);
-            }
-            catch (Exception ex)
-            {
-                ViewModel.History = ex.Message;
-            }
-            finally
-            {
-                if (response != null)
+                var request = this.CreateRequest(url);
+                request.Headers.Add("X-HTTP-Method-Override", PUT);
+                ConfigXHRHeaders(request);
+
+                PostJson(request, values);
+
+                HttpWebResponse response = null;
+                string result = null;
+                try
                 {
-                    response.Close();
+                    response = (HttpWebResponse)request.GetResponse();
+                    result = ResponseToString(response);
+                    RefreshToken(response);
                 }
+                catch (Exception ex)
+                {
+                    ViewModel.History = ex.Message;
+                }
+                finally
+                {
+                    if (response != null)
+                    {
+                        response.Close();
+                    }
+                }
+                return result;
             }
-            return result;
         }
 
         protected void ConfigXHRHeaders(HttpWebRequest request)
@@ -234,7 +236,7 @@ namespace Astrum.Http
             this.GetXHR("http://astrum.amebagames.com/_/access?p=" + path);
         }
 
-        public void OnStart()
+        public void StartQuest()
         {
             this.Mypage();
             this.Gift();
@@ -346,14 +348,14 @@ namespace Astrum.Http
                         ViewModel.IsFuryRaidEnable = true;
                         ViewModel.FuryRaidEventId = @event._id;
 
-                        FuryRaidFever();
+                        //FuryRaidFever();
                     }
                     else if ("limitedraid".Equals(@event.type))
                     {
                         ViewModel.IsLimitedRaidEnable = true;
                         ViewModel.LimitedRaidEventId = @event._id;
-                        
-                        LimitedRaidInfo();
+
+                        //LimitedRaidInfo();
 
                     }
                 }
@@ -393,13 +395,19 @@ namespace Astrum.Http
                     {
                         ViewModel.IsFuryRaid = true;
 
-                        if (stage.status.furyraid.find != null && (stage.status.furyraid.find.isNew || ViewModel.CanFullAttackForEvent))
+                        if (stage.status.furyraid.find != null)
                         {
-                            FuryRaid();
+                            if (stage.status.furyraid.find.isNew || ViewModel.CanFullAttackForEvent)
+                            {
+                                FuryRaid();
+                            }
                         }
-                        if (stage.status.furyraid.rescue != null && (stage.status.furyraid.rescue.isNew || ViewModel.CanFullAttack))
+                        if (stage.status.furyraid.rescue != null)
                         {
-                            FuryRaid();
+                            if (stage.status.furyraid.rescue.isNew || ViewModel.CanFullAttack)
+                            {
+                                FuryRaid();
+                            }
                         }
                     }
 
@@ -408,9 +416,12 @@ namespace Astrum.Http
                         ViewModel.IsLimitedRaid = true;
 
                         var limitedRaidId = stage.status.limitedraid._id;
-                        if (limitedRaidId != null && (ViewModel.CanFullAttackForEvent))
+                        if (limitedRaidId != null)
                         {
-                            LimitedRaid();
+                            if (ViewModel.CanFullAttackForEvent)
+                            {
+                                LimitedRaid();
+                            }
                         }
                     }
 
@@ -419,20 +430,31 @@ namespace Astrum.Http
                         ViewModel.IsFuryRaid = false;
                         ViewModel.IsLimitedRaid = false;
 
-                        if (stage.status.raid.find != null && (stage.status.raid.find.isNew || ViewModel.CanFullAttack))
+                        if (stage.status.raid.find != null)
                         {
-                            Raid();
+                            if (stage.status.raid.find.isNew || ViewModel.CanFullAttack)
+                            {
+                                Raid();
+                            }
                         }
-                        if (stage.status.raid.rescue != null && (stage.status.raid.rescue.isNew || ViewModel.CanFullAttack))
+                        if (stage.status.raid.rescue != null)
                         {
-                            Raid();
+                            if (stage.status.raid.rescue.isNew || ViewModel.CanFullAttack)
+                            {
+                                Raid();
+                            }
                         }
                     }
 
 
                     if (ViewModel.IsStaminaEmpty)
                     {
-                        if (ViewModel.StaminaValue >= ViewModel.MaxKeepStamina || ViewModel.StaminaValue >= ViewModel.ExpMax - ViewModel.ExpValue || ViewModel.BpValue >= BP_FULL || ViewModel.Fever)
+                        bool staminaGreaterThanKeep = ViewModel.StaminaValue >= ViewModel.MaxKeepStamina;
+                        bool staminaGreaterThanExp = ViewModel.StaminaValue >= (ViewModel.ExpMax - ViewModel.ExpValue);
+                        bool isBpFull = ViewModel.BpValue >= BP_FULL;
+                        bool isFever = ViewModel.Fever;
+
+                        if (staminaGreaterThanKeep || staminaGreaterThanExp || isBpFull || isFever)
                         {
                             ViewModel.IsStaminaEmpty = false;
                         }
@@ -823,7 +845,7 @@ namespace Astrum.Http
         {
             var raidInfo = LimitedRaidInfo();
 
-            var loop = raidInfo.target != null && (ViewModel.CanFullAttack || ViewModel.Fever);
+            var loop = raidInfo.target != null && ViewModel.CanFullAttackForEvent;
 
             while (loop)
             {
@@ -842,7 +864,7 @@ namespace Astrum.Http
             Delay(DELAY_SHORT);
             return raidInfo;
         }
-        
+
         public bool LimitedRaidBattle(string raidId)
         {
             var battleInfo = LimitedRaidBattleInfo(raidId);
@@ -854,7 +876,7 @@ namespace Astrum.Http
                 var attackType = hp > EASY_BOSS_HP ? FULL : NORMAL;
                 var needBp = hp > EASY_BOSS_HP ? BP_FULL : BP_NORMAL;
 
-                if(ViewModel.Fever)
+                if (ViewModel.Fever)
                 {
                     int quantity = needBp - ViewModel.BpValue;
                     if (quantity > 0 && quantity <= ViewModel.CanUseBpQuantity)
@@ -903,73 +925,71 @@ namespace Astrum.Http
 
         }
 
-        public void GuildBattle()
-        {
-            Schedule schedule = FindSchedule();
 
+        public void StartGuildBattle()
+        {
+            this.Mypage();
+            this.Item();
+
+            Schedule schedule = FindSchedule();
             if (schedule != null)
             {
-                var battleId = schedule._id;
-                GuildBattleInfo battleInfo = GuildBattle(battleId);
+                ViewModel.GuildBattleId = schedule._id;
+                GuildBattleInfo battleInfo = GuildBattle(ViewModel.GuildBattleId);
 
                 if (battleInfo.stamp.status)
                 {
-                    GuildBattleStamp(battleId);
+                    GuildBattleStamp(ViewModel.GuildBattleId);
                 }
 
                 GuildBattleChat();
+            } else
+            {
+                ViewModel.GuildBattleId = null;
+                ViewModel.History = "没有工会战";
+            }
+        }
 
-                while (ViewModel.IsRunning)
+        public void GuildBattle()
+        {
+            var battleId = ViewModel.GuildBattleId;
+            
+            while (ViewModel.IsRunning)
+            {
+                GuildBattleInfo battleInfo = GuildBattle(battleId);
+
+                ViewModel.TpValue = battleInfo.status.tp.value;
+
+                if (battleInfo.status.tp.value >= 10)
                 {
-                    battleInfo = GuildBattle(battleId);
+                    // attack
+                    var type = "front".Equals(battleInfo.status.position) ? "attack" : "yell";
+                    var ablility = "front".Equals(battleInfo.status.position) ? "ability_front_attack_default" : "ability_back_yell_default_1";
 
-                    ViewModel.TpValue = battleInfo.status.tp.value;
-
-                    if (battleInfo.status.tp.value >= 10)
+                    GuildBattleCmdInfo cmdInfo = GuildBattleCmd(battleId, type);
+                    var cmd = cmdInfo.cmd.Find(item => ablility.Equals(item._id));
+                    if (cmd != null)
                     {
-                        // attack
-                        var type = "front".Equals(battleInfo.status.position) ? "attack" : "yell";
-                        var ablility = "front".Equals(battleInfo.status.position) ? "ability_front_attack_default" : "ability_back_yell_default_1";
+                        if ("attack".Equals(type))
+                        {
+                            ViewModel.History = ("正在前排攻击");
+                        }
+                        else if ("yell".Equals(type))
+                        {
+                            ViewModel.History = ("正在后排应援");
+                        }
 
-                        GuildBattleCmdInfo cmdInfo = GuildBattleCmd(battleId, type);
-                        var cmd = cmdInfo.cmd.Find(item => ablility.Equals(item._id));
-                        if (cmd != null)
-                        {
-                            GuildBattleCmd(battleId, ablility, type);
-                        }
-                    }
-                    else
-                    {
-                        //http://astrum.amebagames.com/_/guildbattle/tp?_id=B4e00c0644ed6fcfddd354c5cd714246994f6c7f9f3065b289bbd8ed1815d065d
-                        TpInfo tpInfo = GuildBattleTpInfo(battleId);
-
-                        if (tpInfo.normal.available)
-                        {
-                            GuildBattleTpNormal(battleId);
-                        }
-                        else if (tpInfo.chat.available)
-                        {
-                            GuildBattleTpChat(battleId);
-                        }
-                        else if (tpInfo.roulette.available)
-                        {
-                            GuildBattleRoulette(battleId);
-                        }
-                        else
-                        {
-                            // quest
-                            if (ViewModel.StaminaValue >= 5)
-                            {
-                                TpQuest();
-                            }
-                            else
-                            {
-                                ViewModel.IsRunning = false;
-                                return;
-                            }
-                        }
+                        GuildBattleCmd(battleId, ablility, type);
                     }
                 }
+                else
+                {
+                    TpInfo tpInfo = GuildBattleTpInfo();
+
+                    // quest
+                    TpQuest();
+                }
+
             }
         }
 
@@ -1042,37 +1062,55 @@ namespace Astrum.Http
         }
 
 
-        private TpInfo GuildBattleTpInfo(string battleId)
+        private TpInfo GuildBattleTpInfo()
         {
+            var battleId = ViewModel.GuildBattleId;
+
             var result = GetXHR("http://astrum.amebagames.com/_/guildbattle/tp?_id=" + Uri.EscapeDataString(battleId));
             TpInfo tpInfo = JsonConvert.DeserializeObject<TpInfo>(result);
             Delay(DELAY_SHORT);
+            
+            ViewModel.IsTpNormalAvailable = tpInfo.normal.available;
+            ViewModel.IsTpChatAvailable = tpInfo.chat.available;
+            ViewModel.IsTpRouletteAvailable = tpInfo.roulette.available;
 
             return tpInfo;
         }
 
-        private void GuildBattleTpNormal(string battleId)
+        public void GuildBattleTpNormal()
         {
+
+            var battleId = ViewModel.GuildBattleId;
             var values = new Dictionary<string, string>
             {
                 { "_id", battleId }
             };
             PostXHR("http://astrum.amebagames.com/_/guildbattle/tp/normal", values);
+
+            ViewModel.History = "回复TP";
+            ViewModel.IsTpNormalAvailable = false;
+
             Delay(DELAY_SHORT);
         }
 
-        private void GuildBattleTpChat(string battleId)
+        public void GuildBattleTpChat()
         {
+            var battleId = ViewModel.GuildBattleId;
             var values = new Dictionary<string, string>
             {
                 { "_id", battleId }
             };
             PostXHR("http://astrum.amebagames.com/_/guildbattle/tp/chat", values);
+
+            ViewModel.History = "回复TP";
+            ViewModel.IsTpChatAvailable = false;
+
             Delay(DELAY_SHORT);
         }
 
-        private void GuildBattleRoulette(string battleId)
+        public void GuildBattleTpRoulette()
         {
+            var battleId = ViewModel.GuildBattleId;
             var result = GetXHR("http://astrum.amebagames.com/_/guildbattle/tp/roulette?_id=" + Uri.EscapeDataString(battleId));
             Roulette roulette = JsonConvert.DeserializeObject<Roulette>(result);
 
@@ -1088,6 +1126,10 @@ namespace Astrum.Http
                 { "position", position.ToString() }
             };
             PostXHR("http://astrum.amebagames.com/_/guildbattle/tp/roulette", values);
+
+            ViewModel.History = "回复TP";
+            ViewModel.IsTpRouletteAvailable = false;
+
             Delay(DELAY_SHORT);
         }
 
@@ -1099,31 +1141,20 @@ namespace Astrum.Http
 
             while (ViewModel.IsRunning)
             {
-                if (stage.status.tp.value >= 80)
+                if (stage.status.tp.value > 80)
                 {
                     return;
                 }
                 if (stage.staminaEmpty)
                 {
-                    if (stage.items != null)
-                    {
-                        var item = stage.items.Find(e => INSTANT_HALF_STAMINA.Equals(e._id));
-                        if (item.stock > ViewModel.MinStaminaStock)
-                        {
-                            UseItem(ITEM_STAMINA, INSTANT_HALF_STAMINA, 1);
-                        }
-                        else
-                        {
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        return;
-                    }
+                    CountDown(10 * SECOND);
+                    return;
                 }
-                //forward
-                stage = ForwardTpStage();
+                else
+                {
+                    //forward
+                    stage = ForwardTpStage();
+                }
             }
         }
 

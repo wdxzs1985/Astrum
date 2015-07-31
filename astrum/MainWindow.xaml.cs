@@ -38,13 +38,19 @@ namespace Astrum
 
             this.DataContext = client.ViewModel;
 
+            initLoginPanel();
+        }
+
+        private void initLoginPanel()
+        {
             this.UsernameBox.Text = "";
             this.PasswordBox.Password = "";
-
+            
             LoginPanel.Visibility = Visibility.Visible;
             StatusPanel.Visibility = Visibility.Hidden;
-
+            LoginButton.ButtonContent = "登陆";
             LoginButton.IsEnabled = true;
+            LoginUserComboBox.IsEnabled = true;
 
             LoadUserList();
         }
@@ -56,17 +62,17 @@ namespace Astrum
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             Console.WriteLine("login start");
+            LoginButton.ButtonContent = "少女祈祷中";
             LoginButton.IsEnabled = false;
-            LoginButton.Content = "少女祈祷中";
             LoginUserComboBox.IsEnabled = false;
 
             var username = UsernameBox.Text;
-            var password = this.PasswordBox.Password;
+            var password = PasswordBox.Password;
 
-            var login = false;
+            client.ViewModel.IsLogin = false;
             if (!"".Equals(username) && !"".Equals(password))
             {
-                login = await Task.Run(() =>
+                client.ViewModel.IsLogin = await Task.Run(() =>
                 {
                     try
                     {
@@ -81,21 +87,21 @@ namespace Astrum
                 });
             }
 
-            if (login)
+            if (client.ViewModel.IsLogin)
             {
+                
+                client.ViewModel.IsReady = false;
+                client.ViewModel.IsRunning = false;
 
                 LoginPanel.Visibility = Visibility.Hidden;
                 StatusPanel.Visibility = Visibility.Visible;
 
-                Controller.Visibility = Visibility.Hidden;
-
                 await Task.Run(() =>
                 {
-                    client.ViewModel.IsRunning = false;
-                    client.OnStart();
+                    client.StartQuest();
                 });
 
-                Controller.Visibility = Visibility.Visible;
+                client.ViewModel.IsReady = true;
 
                 nowUser = new LoginUser { username = username, password = password };
                 //save user
@@ -106,7 +112,7 @@ namespace Astrum
             {
                 MessageBoxResult result = MessageBox.Show("登入失败");
                 LoginButton.IsEnabled = true;
-                LoginButton.Content = "登陆";
+                LoginButton.ButtonContent = "登陆";
                 LoginUserComboBox.IsEnabled = true;
             }
         }
@@ -201,9 +207,9 @@ namespace Astrum
             });
         }
 
-        private async void StartButton_Click(object sender, RoutedEventArgs e)
+        private async void StartQuestButton_Click(object sender, RoutedEventArgs e)
         {
-            StartButton.IsEnabled = false;
+            StartQuestButton.IsEnabled = false;
             QuestButton.IsEnabled = false;
             GuildBattleButton.IsEnabled = false;
 
@@ -212,8 +218,8 @@ namespace Astrum
             {
                 SaveUserList();
 
-                StartButton.Content = "Stop";
-                StartButton.IsEnabled = true;
+                StartQuestButton.ButtonContent = "Stop";
+                StartQuestButton.IsEnabled = true;
 
                 client.ViewModel.IsRunning = true;
                 client.ViewModel.IsStaminaEmpty = false;
@@ -226,21 +232,9 @@ namespace Astrum
 
                         try
                         {
-                            client.OnStart();
-
-                            //client.ViewModel.IsRunning = false;
-
-                            if (client.ViewModel.IsQuestEnable)
-                            {
-                                //client.ViewModel.IsRunning = true;
-                                client.Quest();
-                            }
-
-                            if (client.ViewModel.IsGuildBattleEnable)
-                            {
-                                //client.ViewModel.IsRunning = true;
-                                client.GuildBattle();
-                            }
+                            client.StartQuest();
+                            
+                            client.Quest();
 
                             if(client.ViewModel.Fever)
                             {
@@ -255,6 +249,7 @@ namespace Astrum
                         {
                             Console.WriteLine(ex.Message);
                             client.ViewModel.IsRunning = false;
+                            client.ViewModel.IsReady = false;
                             return false;
                         }
                     }
@@ -262,25 +257,23 @@ namespace Astrum
                 });
 
 
-                StartButton.Content = "Start";
-                StartButton.IsEnabled = true;
+                StartQuestButton.ButtonContent = "Start";
+                StartQuestButton.IsEnabled = true;
                 QuestButton.IsEnabled = true;
                 GuildBattleButton.IsEnabled = true;
 
                 if (!result)
                 {
-                    LoginPanel.Visibility = Visibility.Visible;
-                    StatusPanel.Visibility = Visibility.Hidden;
-                    LoginButton.IsEnabled = true;
-                    LoginUserComboBox.IsEnabled = true;
+                    initLoginPanel();
                 }
             }
             else
             {
                 client.ViewModel.IsRunning = false;
-                StartButton.IsEnabled = false;
+                StartQuestButton.IsEnabled = false;
             }
         }
+
 
 
         private void LoginUserComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -367,5 +360,118 @@ namespace Astrum
             });
         }
 
+        private async void StartGuildBattleButton_Click(object sender, RoutedEventArgs e)
+        {
+            StartGuildBattleButton.IsEnabled = false;
+            QuestButton.IsEnabled = false;
+            GuildBattleButton.IsEnabled = false;
+            
+            if (client.ViewModel.IsRunning == false)
+            {
+                StartGuildBattleButton.ButtonContent = "Stop";
+                StartGuildBattleButton.IsEnabled = true;
+
+                client.ViewModel.IsRunning = true;
+                client.ViewModel.IsStaminaEmpty = false;
+
+                bool result = await Task.Run(() =>
+                {
+                        try
+                        {
+                            client.GuildBattle();
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                            client.ViewModel.IsRunning = false;
+                            return false;
+                        }
+                    return true;
+                });
+
+
+                StartGuildBattleButton.ButtonContent = "Start";
+                StartGuildBattleButton.IsEnabled = true;
+                QuestButton.IsEnabled = true;
+                GuildBattleButton.IsEnabled = true;
+
+                if (!result)
+                {
+                    initLoginPanel();
+                }
+            }
+            else
+            {
+                client.ViewModel.IsRunning = false;
+                StartGuildBattleButton.IsEnabled = false;
+            }
+        }
+
+        private async void QuestButton_Checked(object sender, RoutedEventArgs e)
+        {
+            if (client != null && client.ViewModel.IsLogin)
+            {
+                client.ViewModel.IsReady = false;
+                await Task.Run(() =>
+                {
+                    client.StartQuest();
+                });
+
+                client.ViewModel.IsReady = true;
+            }
+        }
+
+        private async void GuildBattleButton_Checked(object sender, RoutedEventArgs e)
+        {
+            if (client != null && client.ViewModel.IsLogin)
+            {
+                client.ViewModel.IsReady = false;
+                await Task.Run(() =>
+                {
+                    client.StartGuildBattle();
+                });
+
+                if (client.ViewModel.GuildBattleId !=null)
+                {
+                    client.ViewModel.IsReady = true;
+                }
+            }
+        }
+
+        private async void UseGuildBattleTpNormal(object sender, RoutedEventArgs e)
+        {
+            if (client.ViewModel.IsReady)
+            {
+                await Task.Run(() =>
+                {
+                    client.GuildBattleTpNormal();
+                });
+                
+            }
+        }
+
+        private async void UseGuildBattleTpChat(object sender, RoutedEventArgs e)
+        {
+            if (client.ViewModel.IsReady)
+            {
+                await Task.Run(() =>
+                {
+                    client.GuildBattleTpChat();
+                });
+
+            }
+        }
+
+        private async void UseGuildBattleTpRoulette(object sender, RoutedEventArgs e)
+        {
+            if (client.ViewModel.IsReady)
+            {
+                await Task.Run(() =>
+                {
+                    client.GuildBattleTpRoulette();
+                });
+
+            }
+        }
     }
 }

@@ -88,10 +88,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="UI\Convert.cs" />
-    <Page Include="Themes\Generic.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <Compile Include="UI\ProgressButton.xaml.cs">
+      <DependentUpon>ProgressButton.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -116,6 +115,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UI\ProgressButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -169,41 +172,14 @@
     <Resource Include="Images\UserIcon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\pop.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\textpop.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\bppotion.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\halfstaminapotion.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\minibppotion.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\staminapotion.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\instant-bp_ether.png" />
     <Resource Include="Images\instant-half_stamina_potion.png" />
     <Resource Include="Images\instant-mini_bp_ether.png" />
     <Resource Include="Images\instant-stamina_potion.png" />
-    <Resource Include="Images\Loginbackground.jpg" />
-    <Resource Include="Images\LoginButtonDown.png" />
-    <Resource Include="Images\LoginButtonUP.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\background.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\ic_account_circle_black_48dp.png" />
     <Resource Include="Images\ic_account_circle_white_48dp.png" />
-    <Resource Include="Images\ic_clear_black_18dp.png" />
     <Resource Include="Images\ic_clear_white_18dp.png" />
-    <Resource Include="Images\ic_remove_black_18dp.png" />
     <Resource Include="Images\ic_remove_white_18dp.png" />
   </ItemGroup>
   <ItemGroup>
