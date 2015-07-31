@@ -111,67 +111,69 @@ namespace Astrum.Http
 
         protected string GetXHR(string url)
         {
-            Console.WriteLine("[GET ] " + url);
-
-            var request = this.CreateRequest(url);
-            ConfigXHRHeaders(request);
-
-            HttpWebResponse response = null;
-            string result = null;
-            try
+            lock(this)
             {
-                response = (HttpWebResponse)request.GetResponse();
-                result = ResponseToString(response);
-                //Console.WriteLine(result);
+                Console.WriteLine("[GET ] " + url);
 
-                RefreshToken(response);
-            }
-            catch (Exception ex)
-            {
-                ViewModel.History = ex.Message;
-            }
-            finally
-            {
-                if (response != null)
+                var request = this.CreateRequest(url);
+                ConfigXHRHeaders(request);
+
+                HttpWebResponse response = null;
+                string result = null;
+                try
                 {
-                    response.Close();
+                    response = (HttpWebResponse)request.GetResponse();
+                    result = ResponseToString(response);
+                    RefreshToken(response);
                 }
+                catch (Exception ex)
+                {
+                    ViewModel.History = ex.Message;
+                }
+                finally
+                {
+                    if (response != null)
+                    {
+                        response.Close();
+                    }
+                }
+                return result;
             }
-            return result;
         }
 
         protected string PostXHR(string url, Dictionary<string, string> values)
         {
-            Console.WriteLine("[POST] " + url);
-
-            var request = this.CreateRequest(url);
-            request.Headers.Add("X-HTTP-Method-Override", PUT);
-            ConfigXHRHeaders(request);
-
-            PostJson(request, values);
-
-            HttpWebResponse response = null;
-            string result = null;
-            try
+            lock (this)
             {
-                response = (HttpWebResponse)request.GetResponse();
-                result = ResponseToString(response);
-                //Console.WriteLine(result);
+                Console.WriteLine("[POST] " + url);
 
-                RefreshToken(response);
-            }
-            catch (Exception ex)
-            {
-                ViewModel.History = ex.Message;
-            }
-            finally
-            {
-                if (response != null)
+                var request = this.CreateRequest(url);
+                request.Headers.Add("X-HTTP-Method-Override", PUT);
+                ConfigXHRHeaders(request);
+
+                PostJson(request, values);
+
+                HttpWebResponse response = null;
+                string result = null;
+                try
                 {
-                    response.Close();
+                    response = (HttpWebResponse)request.GetResponse();
+                    result = ResponseToString(response);
+                    RefreshToken(response);
                 }
+                catch (Exception ex)
+                {
+                    ViewModel.History = ex.Message;
+                }
+                finally
+                {
+                    if (response != null)
+                    {
+                        response.Close();
+                    }
+                }
+                return result;
             }
-            return result;
         }
 
         protected void ConfigXHRHeaders(HttpWebRequest request)

@@ -36,7 +36,22 @@ namespace Astrum.Http
         }
 
         public bool IsLogin { get; set; }
-        public bool IsRunning { get; set; }
+
+        private bool _running;
+        public bool IsRunning
+        {
+            get { return _running; }
+            set
+            {
+                _running = value;
+                NotifyPropertyChanged("IsRunning");
+                NotifyPropertyChanged("CanUseStaminaHalf");
+                NotifyPropertyChanged("CanUseStamina");
+                NotifyPropertyChanged("CanUseBpMini");
+                NotifyPropertyChanged("CanUseBp");
+
+            }
+        }
 
         private bool _ready;
         public bool IsReady
@@ -77,6 +92,7 @@ namespace Astrum.Http
             {
                 _bpMiniStock = value;
                 NotifyPropertyChanged("BpMiniStock");
+                NotifyPropertyChanged("CanUseBpMini");
             }
         }
 
@@ -90,6 +106,7 @@ namespace Astrum.Http
             {
                 _bpStock = value;
                 NotifyPropertyChanged("BpStock");
+                NotifyPropertyChanged("CanUseBp");
             }
         }
 
@@ -117,6 +134,7 @@ namespace Astrum.Http
             {
                 _staminaHalfStock = value;
                 NotifyPropertyChanged("StaminaHalfStock");
+                NotifyPropertyChanged("CanUseStaminaHalf");
             }
         }
 
@@ -130,6 +148,7 @@ namespace Astrum.Http
             {
                 _staminaStock = value;
                 NotifyPropertyChanged("StaminaStock");
+                NotifyPropertyChanged("CanUseStamina");
             }
         }
 
@@ -596,6 +615,39 @@ namespace Astrum.Http
             {
                 _tpRouletteAvailable = value;
                 NotifyPropertyChanged("IsTpRouletteAvailable");
+            }
+        }
+
+        public bool CanUseStaminaHalf
+        {
+            get
+            {
+                //return StaminaHalfStock > 0 && !IsRunning;
+                return StaminaHalfStock > 0;
+            }
+        }
+
+        public bool CanUseStamina
+        {
+            get
+            {
+                return StaminaStock > 0;
+            }
+        }
+
+        public bool CanUseBpMini
+        {
+            get
+            {
+                return BpMiniStock > 0;
+            }
+        }
+
+        public bool CanUseBp
+        {
+            get
+            {
+                return BpStock > 0;
             }
         }
     }
