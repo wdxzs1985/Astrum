@@ -27,8 +27,8 @@
         </Grid.Effect>
 
         <Grid x:Name="LoginPanel"
-              HorizontalAlignment="Center" VerticalAlignment="Center" 
-              d:Locked="True" d:Hidden="True" d:IsLocked="True" d:IsHidden="True">
+              HorizontalAlignment="Center" 
+              d:Locked="True" d:Hidden="True" Margin="22.5,118.292,22.5,35.646" d:LayoutOverrides="Height" d:IsLocked="True" d:IsHidden="True">
             <ComboBox x:Name="LoginUserComboBox" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Top" Width="120" Height="120" ItemsSource="{Binding LoginUserList}" SelectedIndex="0" SelectionChanged="LoginUserComboBox_SelectionChanged" TextSearch.TextPath="name" TabIndex="4" MaxDropDownHeight="120" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#E0F7FA" >
                 <ComboBox.ItemTemplate >
                     <DataTemplate>
@@ -403,7 +403,7 @@
                 <UI:ProgressButton x:Name="StartQuestButton"
                                ButtonContent="StartQuest"
                                Click="StartQuestButton_Click"
-                                   Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                               Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <UI:ProgressButton.Effect>
                         <DropShadowEffect Direction="270" Opacity="0.3"/>
                     </UI:ProgressButton.Effect>
@@ -436,7 +436,6 @@
         </Grid>
         <Grid Name="Playground"
                 Width="64" Height="64">
-
         </Grid>
     </Grid>
 </Window>

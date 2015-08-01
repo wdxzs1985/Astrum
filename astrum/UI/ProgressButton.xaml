@@ -20,7 +20,8 @@
                         <Label x:Name="ContentLabel"   SnapsToDevicePixels="True"
                            Content="{Binding ButtonContent}"
                            VerticalAlignment="Center" HorizontalAlignment="Center" 
-                           Foreground="White"></Label>
+                           Foreground="White">
+                        </Label>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
