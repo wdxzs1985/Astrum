@@ -403,7 +403,7 @@
                 <UI:ProgressButton x:Name="StartQuestButton"
                                ButtonContent="StartQuest"
                                Click="StartQuestButton_Click"
-                               Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                   Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <UI:ProgressButton.Effect>
                         <DropShadowEffect Direction="270" Opacity="0.3"/>
                     </UI:ProgressButton.Effect>
@@ -436,6 +436,7 @@
         </Grid>
         <Grid Name="Playground"
                 Width="64" Height="64">
+
         </Grid>
     </Grid>
 </Window>
