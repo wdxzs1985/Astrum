@@ -59,33 +59,31 @@
             <ed:Arc.RenderTransform>
                 <RotateTransform/>
             </ed:Arc.RenderTransform>
-            <ed:Arc.Triggers>
-                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation Storyboard.TargetName="PART_indicator" 
-                                             Storyboard.TargetProperty="(RenderTransform).(RotateTransform.Angle)" 
-                                             To="360" Duration="0:0:1" 
-                                             RepeatBehavior="Forever"/>
-                            <DoubleAnimation Storyboard.TargetName="PART_indicator"  
-                                             Storyboard.TargetProperty="EndAngle" 
-                                             From="30" To="330" 
-                                             Duration="0:0:2" 
-                                             RepeatBehavior="Forever" AutoReverse="True"  >
-                                <DoubleAnimation.EasingFunction>
-                                    <QuadraticEase EasingMode="EaseInOut"/>
-                                </DoubleAnimation.EasingFunction>
-                            </DoubleAnimation>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-            </ed:Arc.Triggers>
         </ed:Arc>
     </Grid>
 
     <UserControl.Resources>
+        <Storyboard x:Key="Rotation">
+            <DoubleAnimation Storyboard.TargetName="PART_indicator" 
+                                             Storyboard.TargetProperty="(RenderTransform).(RotateTransform.Angle)" 
+                                             To="360" Duration="0:0:1" 
+                                             RepeatBehavior="Forever"/>
+            <DoubleAnimation Storyboard.TargetName="PART_indicator"  
+                                             Storyboard.TargetProperty="EndAngle" 
+                                             From="30" To="330" 
+                                             Duration="0:0:2" 
+                                             RepeatBehavior="Forever" AutoReverse="True"  >
+                <DoubleAnimation.EasingFunction>
+                    <QuadraticEase EasingMode="EaseInOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
         <Style TargetType="{x:Type local:ProgressButton}">
             <Style.Triggers>
+                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                    <BeginStoryboard Storyboard="{StaticResource Rotation}">
+                    </BeginStoryboard>
+                </EventTrigger>
                 <Trigger Property="IsShowProgress" Value="True">
                     <Setter Property="ArcThickness" Value="2"></Setter>
                 </Trigger>
