@@ -343,15 +343,13 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
-                <RadioButton x:Name="QuestButton" Content="任务"  
-                             VerticalAlignment="Bottom" 
+                <RadioButton x:Name="QuestButton" Content="任务"
                              Foreground="White" 
                              Grid.Column="0"
                              IsChecked="{Binding IsQuestEnable}" 
                              Template="{StaticResource TabButton}"
                              Checked="QuestButton_Checked"/>
                 <RadioButton Name="GuildBattleButton" Content="公会战" 
-                             VerticalAlignment="Bottom" 
                              Foreground="White" 
                              Grid.Column="1"
                              IsChecked="{Binding IsGuildBattleEnable}" 

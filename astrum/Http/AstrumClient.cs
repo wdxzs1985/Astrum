@@ -953,13 +953,12 @@ namespace Astrum.Http
         public void GuildBattle()
         {
             var battleId = ViewModel.GuildBattleId;
-            
-            GuildBattleInfo battleInfo = GuildBattle(battleId);
 
-            ViewModel.TpValue = battleInfo.status.tp.value;
-
-            while (battleInfo.status.tp.value >= 10)
+            while (ViewModel.TpValue >= 10)
             {
+                GuildBattleInfo battleInfo = GuildBattle(battleId);
+                ViewModel.TpValue = battleInfo.status.tp.value;
+
                 // attack
                 var type = "front".Equals(battleInfo.status.position) ? "attack" : "yell";
                 var ablility = "front".Equals(battleInfo.status.position) ? "ability_front_attack_default" : "ability_back_yell_default_1";
@@ -980,7 +979,7 @@ namespace Astrum.Http
                     GuildBattleCmd(battleId, ablility, type);
                 }
             }
-
+            
             TpInfo tpInfo = GuildBattleTpInfo();
             // quest
             TpQuest();
