@@ -17,6 +17,7 @@
     Icon="Images\Icon.png" 
     AllowsTransparency="True" 
     ResizeMode="NoResize" Background="{x:Null}">
+
     <Grid Background="{StaticResource Cyan_500}" 
           VerticalAlignment="Center" HorizontalAlignment="Center"
           Height="732" Width="412" >
@@ -25,7 +26,7 @@
         </Grid.Effect>
 
         <Grid x:Name="LoginPanel"
-              HorizontalAlignment="Center" VerticalAlignment="Center" 
+              HorizontalAlignment="Center" VerticalAlignment="Center"
               d:Locked="True" d:Hidden="True" d:IsLocked="True">
             <ComboBox x:Name="LoginUserComboBox" 
                       HorizontalAlignment="Center" Margin="0,0,0,0" 
@@ -38,7 +39,7 @@
                       TabIndex="4" MaxDropDownHeight="120" 
                       Background="{x:Null}" BorderBrush="{x:Null}" 
                       Foreground="White" >
-                <ComboBox.ItemTemplate >
+            <ComboBox.ItemTemplate >
                     <DataTemplate>
                         <StackPanel Orientation="Vertical">
                             <Image Height="96" Source="Images/ic_account_circle_white_48dp.png" Stretch="Fill"/>

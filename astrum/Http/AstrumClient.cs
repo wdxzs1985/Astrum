@@ -26,7 +26,7 @@ namespace Astrum.Http
 
         public const int INTERTAL = 100;
         public const int SECOND = 10 * INTERTAL;
-        public const int MINUTE = 60 * SECOND;
+        public const int MINUTE = 30 * SECOND;
 
         public const int DELAY_LONG = SECOND;
         public const int DELAY_SHORT = SECOND;
