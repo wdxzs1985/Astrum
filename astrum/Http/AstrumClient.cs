@@ -953,44 +953,36 @@ namespace Astrum.Http
         public void GuildBattle()
         {
             var battleId = ViewModel.GuildBattleId;
-            
-            while (ViewModel.IsRunning)
+
+            while (ViewModel.TpValue >= 10)
             {
                 GuildBattleInfo battleInfo = GuildBattle(battleId);
-
                 ViewModel.TpValue = battleInfo.status.tp.value;
 
-                if (battleInfo.status.tp.value >= 10)
-                {
-                    // attack
-                    var type = "front".Equals(battleInfo.status.position) ? "attack" : "yell";
-                    var ablility = "front".Equals(battleInfo.status.position) ? "ability_front_attack_default" : "ability_back_yell_default_1";
+                // attack
+                var type = "front".Equals(battleInfo.status.position) ? "attack" : "yell";
+                var ablility = "front".Equals(battleInfo.status.position) ? "ability_front_attack_default" : "ability_back_yell_default_1";
 
-                    GuildBattleCmdInfo cmdInfo = GuildBattleCmd(battleId, type);
-                    var cmd = cmdInfo.cmd.Find(item => ablility.Equals(item._id));
-                    if (cmd != null)
+                GuildBattleCmdInfo cmdInfo = GuildBattleCmd(battleId, type);
+                var cmd = cmdInfo.cmd.Find(item => ablility.Equals(item._id));
+                if (cmd != null)
+                {
+                    if ("attack".Equals(type))
                     {
-                        if ("attack".Equals(type))
-                        {
-                            ViewModel.History = ("正在前排攻击");
-                        }
-                        else if ("yell".Equals(type))
-                        {
-                            ViewModel.History = ("正在后排应援");
-                        }
-
-                        GuildBattleCmd(battleId, ablility, type);
+                        ViewModel.History = ("正在前排攻击");
                     }
-                }
-                else
-                {
-                    TpInfo tpInfo = GuildBattleTpInfo();
+                    else if ("yell".Equals(type))
+                    {
+                        ViewModel.History = ("正在后排应援");
+                    }
 
-                    // quest
-                    TpQuest();
+                    GuildBattleCmd(battleId, ablility, type);
                 }
-
             }
+            
+            TpInfo tpInfo = GuildBattleTpInfo();
+            // quest
+            TpQuest();
         }
 
 
@@ -1147,14 +1139,11 @@ namespace Astrum.Http
                 }
                 if (stage.staminaEmpty)
                 {
-                    CountDown(10 * SECOND);
                     return;
                 }
-                else
-                {
-                    //forward
-                    stage = ForwardTpStage();
-                }
+
+                //forward
+                stage = ForwardTpStage();
             }
         }
 

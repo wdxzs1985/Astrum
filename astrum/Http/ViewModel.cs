@@ -45,10 +45,10 @@ namespace Astrum.Http
             {
                 _running = value;
                 NotifyPropertyChanged("IsRunning");
-                NotifyPropertyChanged("CanUseStaminaHalf");
-                NotifyPropertyChanged("CanUseStamina");
-                NotifyPropertyChanged("CanUseBpMini");
-                NotifyPropertyChanged("CanUseBp");
+                //NotifyPropertyChanged("CanUseStaminaHalf");
+               // NotifyPropertyChanged("CanUseStamina");
+                //NotifyPropertyChanged("CanUseBpMini");
+                //NotifyPropertyChanged("CanUseBp");
 
             }
         }
@@ -61,6 +61,10 @@ namespace Astrum.Http
             {
                 _ready = value;
                 NotifyPropertyChanged("IsReady");
+                NotifyPropertyChanged("CanUseStaminaHalf");
+                NotifyPropertyChanged("CanUseStamina");
+                NotifyPropertyChanged("CanUseBpMini");
+                NotifyPropertyChanged("CanUseBp");
             }
         }
 
@@ -623,7 +627,7 @@ namespace Astrum.Http
             get
             {
                 //return StaminaHalfStock > 0 && !IsRunning;
-                return StaminaHalfStock > 0;
+                return StaminaHalfStock > 0 && IsReady;
             }
         }
 
@@ -631,7 +635,7 @@ namespace Astrum.Http
         {
             get
             {
-                return StaminaStock > 0;
+                return StaminaStock > 0 && IsReady;
             }
         }
 
@@ -639,7 +643,7 @@ namespace Astrum.Http
         {
             get
             {
-                return BpMiniStock > 0;
+                return BpMiniStock > 0 && IsReady;
             }
         }
 
@@ -647,7 +651,7 @@ namespace Astrum.Http
         {
             get
             {
-                return BpStock > 0;
+                return BpStock > 0 && IsReady;
             }
         }
     }
