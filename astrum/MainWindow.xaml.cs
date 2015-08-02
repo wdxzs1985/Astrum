@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using System.Net;
 using System.IO;
 using System.Collections;
+using System.Windows.Forms;
+using System.Drawing;
 
 using Newtonsoft.Json;
 using Astrum.Http;
@@ -29,6 +31,7 @@ namespace Astrum
     public partial class MainWindow : Window
     {
         public const string USER_LIST_FILE = "./userlist.json";
+        private NotifyIcon notifyIcon = null;
 
         public MainWindow()
         {
@@ -37,8 +40,64 @@ namespace Astrum
             client = new AstrumClient();
 
             this.DataContext = client.ViewModel;
+            InitialTray();
 
             initLoginPanel();
+        }
+
+        private void InitialTray()
+        {            
+
+            //设置托盘的各个属性
+            notifyIcon = new NotifyIcon();
+            notifyIcon.BalloonTipText = "少女外出中...";
+            notifyIcon.Text = client.ViewModel.WindowTitle;
+            notifyIcon.Icon = new System.Drawing.Icon("../../Images/Astrum.ico");
+            notifyIcon.Visible = false;
+            notifyIcon.ShowBalloonTip(2000);
+            notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(notifyIcon_MouseClick);
+
+            //关于选项
+            System.Windows.Forms.MenuItem stop = new System.Windows.Forms.MenuItem("停止");
+
+            //退出菜单项
+            System.Windows.Forms.MenuItem exit = new System.Windows.Forms.MenuItem("退出");
+            exit.Click += new EventHandler(exit_Click);
+
+            //关联托盘控件
+            System.Windows.Forms.MenuItem[] childen = new System.Windows.Forms.MenuItem[] { stop, exit };
+            notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu(childen);
+
+            //窗体状态改变时候触发
+            this.StateChanged += new EventHandler(SysTray_StateChanged);
+        }
+
+        private void notifyIcon_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            //鼠标左键单击
+            if (e.Button == MouseButtons.Left)
+            {
+                if (this.Visibility == Visibility.Hidden)
+                {
+                    this.Visibility = Visibility.Visible;                    
+                    notifyIcon.Visible = false;                    
+                }
+                
+            }
+        }
+
+        private void SysTray_StateChanged(object sender, EventArgs e)
+        {
+            if (this.WindowState == WindowState.Minimized)
+            {
+                this.Visibility = Visibility.Hidden;
+                notifyIcon.Visible = true;
+            }
+        }
+
+        private void exit_Click(object sender, EventArgs e)
+        {
+            this.Close();           
         }
 
         private void initLoginPanel()
@@ -120,7 +179,7 @@ namespace Astrum
                 }
             }
             initLoginPanel();
-            MessageBoxResult result = MessageBox.Show("登入失败");
+            MessageBoxResult result = System.Windows.MessageBox.Show("登入失败");
         }
 
         private async void LoadUserList()
