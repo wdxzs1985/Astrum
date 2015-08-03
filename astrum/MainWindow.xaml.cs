@@ -97,7 +97,8 @@ namespace Astrum
             StatusPanel.Visibility = Visibility.Hidden;
             LoginButton.Content = "登陆";
             LoginButton.IsEnabled = true;
-            LoginUserComboBox.IsEnabled = true;
+            //LoginUserComboBox.IsEnabled = true;
+            UserSelector.IsEnabled = true;
 
             LoadUserList();
         }
@@ -111,7 +112,8 @@ namespace Astrum
             Console.WriteLine("login start");
             LoginButton.Content = "少女祈祷中";
             LoginButton.IsEnabled = false;
-            LoginUserComboBox.IsEnabled = false;
+            //LoginUserComboBox.IsEnabled = false;
+            UserSelector.IsEnabled = false;
 
             var username = UsernameBox.Text;
             var password = PasswordBox.Password;
@@ -172,7 +174,6 @@ namespace Astrum
 
         private async void LoadUserList()
         {
-            int index = 0;
             List<LoginUser> loginUserList = await Task.Run(() =>
             {
                 loginUserList = new List<LoginUser>();
@@ -211,7 +212,7 @@ namespace Astrum
             });
 
             client.ViewModel.LoginUserList = loginUserList;
-            LoginUserComboBox.SelectedIndex = index;
+            UserSelector.SelectedIndex = 0;
         }
 
         private async void SaveUserList()
@@ -328,9 +329,10 @@ namespace Astrum
 
 
 
-        private void LoginUserComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+
+        private void UserSelector_UserChanged(object sender, RoutedEventArgs e)
         {
-            LoginUser user = (LoginUser)LoginUserComboBox.SelectedItem;
+            LoginUser user = UserSelector.SelectedUser;
 
             if (user != null)
             {
