@@ -426,7 +426,7 @@
                     <Label Content="Fever" 
                            Background="{StaticResource Pink_A200}" Foreground="White"
                            Visibility="{Binding Fever, Converter={StaticResource BooleanToVisibilityConverter}}"
-                           HorizontalContentAlignment="Right"
+                           HorizontalContentAlignment="Center"
                            VerticalAlignment="Center"
                            Grid.Column="1" Width="100"/>
                 </Grid>
