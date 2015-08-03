@@ -358,7 +358,7 @@
                              Checked="GuildBattleButton_Checked"/>
             </Grid>
             <Grid x:Name="StatusArea" VerticalAlignment="Top" Background="{StaticResource Cyan_500}"
-                  Height="96" Margin="0,0,0,0">
+                  Height="96" Margin="0,0,0,0" d:IsLocked="True">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />

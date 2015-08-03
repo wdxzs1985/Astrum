@@ -1,27 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Net;
 using System.IO;
-using System.Collections;
-using System.Windows.Forms;
-using System.Drawing;
 
 using Newtonsoft.Json;
 using Astrum.Http;
-using System.Threading;
 using Astrum.Json;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace Astrum
 {
@@ -46,58 +36,56 @@ namespace Astrum
         }
 
         private void InitialTray()
-        {            
-
+        {
             //设置托盘的各个属性
             notifyIcon = new NotifyIcon();
-            notifyIcon.BalloonTipText = "少女外出中...";
             notifyIcon.Text = client.ViewModel.WindowTitle;
-            notifyIcon.Icon = new System.Drawing.Icon("../../Images/Astrum.ico");
+
+            notifyIcon.Icon = new Icon("./Astrum.ico");
             notifyIcon.Visible = false;
-            notifyIcon.ShowBalloonTip(2000);
-            notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(notifyIcon_MouseClick);
-
-            //关于选项
-            System.Windows.Forms.MenuItem stop = new System.Windows.Forms.MenuItem("停止");
-
-            //退出菜单项
-            System.Windows.Forms.MenuItem exit = new System.Windows.Forms.MenuItem("退出");
-            exit.Click += new EventHandler(exit_Click);
-
-            //关联托盘控件
-            System.Windows.Forms.MenuItem[] childen = new System.Windows.Forms.MenuItem[] { stop, exit };
-            notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu(childen);
-
+            notifyIcon.MouseClick += NotifyIcon_MouseClick;
+            
+            notifyIcon.ContextMenuStrip = new ContextMenuStrip();
+            //ToolStripMenuItem stopItem = new ToolStripMenuItem("停止", null, StopItem_Click);
+            ToolStripMenuItem exitItem = new ToolStripMenuItem("退出", null, ExitItem_Click);
+            //notifyIcon.ContextMenuStrip.Items.Add(stopItem);
+            notifyIcon.ContextMenuStrip.Items.Add(exitItem);
+            
             //窗体状态改变时候触发
-            this.StateChanged += new EventHandler(SysTray_StateChanged);
+            this.StateChanged += MainWindow_StateChanged;
         }
 
-        private void notifyIcon_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void NotifyIcon_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            //鼠标左键单击
             if (e.Button == MouseButtons.Left)
             {
-                if (this.Visibility == Visibility.Hidden)
-                {
-                    this.Visibility = Visibility.Visible;                    
-                    notifyIcon.Visible = false;                    
-                }
-                
+                this.WindowState = WindowState.Normal;
             }
         }
 
-        private void SysTray_StateChanged(object sender, EventArgs e)
+        private void StopItem_Click(object sender, EventArgs e)
+        {
+            client.ViewModel.IsRunning = false;
+        }
+
+        private void ExitItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void MainWindow_StateChanged(object sender, EventArgs e)
         {
             if (this.WindowState == WindowState.Minimized)
             {
-                this.Visibility = Visibility.Hidden;
                 notifyIcon.Visible = true;
+                ShowInTaskbar = false;
+                notifyIcon.ShowBalloonTip(1000, client.ViewModel.WindowTitle, "少女隐身中...", ToolTipIcon.None);
             }
-        }
-
-        private void exit_Click(object sender, EventArgs e)
-        {
-            this.Close();           
+            else
+            {
+                notifyIcon.Visible = false;
+                this.ShowInTaskbar = true;
+            }
         }
 
         private void initLoginPanel()
