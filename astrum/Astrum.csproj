@@ -87,6 +87,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Json\Gacha.cs" />
     <Compile Include="UI\Convert.cs" />
     <Compile Include="UI\UserSelector.xaml.cs">
       <DependentUpon>UserSelector.xaml</DependentUpon>

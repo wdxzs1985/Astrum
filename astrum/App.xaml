@@ -5,6 +5,7 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 
+        <!-- color -->
         <SolidColorBrush x:Key="StatusBar_Dark" Color="#33000000"/>
         <SolidColorBrush x:Key="StatusBar_Light" Color="#E0E0E0"/>
         <SolidColorBrush x:Key="AppBar" Color="#F5F5F5"/>
@@ -23,38 +24,41 @@
         <SolidColorBrush x:Key="Cyan_50" Color="#E0F7FA"/>
         <SolidColorBrush x:Key="Cyan_500" Color="#00BCD4"/>
         <SolidColorBrush x:Key="Cyan_700" Color="#0097A7"/>
+        
 
         <UI:IntToIsEnabledConverter x:Key="IntToIsEnabledConverter"/>
         <UI:ProgressBarForegoundConvert x:Key="ProgressBarForegoundConvert"/>
+        <UI:ProgressBarInverseForegoundConvert x:Key="ProgressBarInverseForegoundConvert"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
-        <ControlTemplate x:Key="FlatButton" TargetType="{x:Type Button}">
-            <Grid x:Name="BackgroundWrap">
-                <Grid.Background>
-                    <SolidColorBrush Color="Transparent"  />
-                </Grid.Background>
-                <Grid Background="{TemplateBinding Background}">
-                    <Label x:Name="ContentLabel"  
-                           Content="{TemplateBinding Content}" 
-                           VerticalAlignment="Center" HorizontalAlignment="Center" 
-                           Foreground="{TemplateBinding Foreground}"></Label>
-                </Grid>
-            </Grid>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter TargetName="BackgroundWrap" Property="Background" 
+        <Style x:Key="FlatButton" TargetType="{x:Type Button}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <Rectangle Name="BackgroundWrap" Fill="{TemplateBinding Background}"></Rectangle>
+                            <ContentPresenter Name="ContentPresenter" 
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"></ContentPresenter>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="BackgroundWrap" Property="Fill" 
                             Value="{StaticResource Pink_A200}" />
-                    <Setter TargetName="ContentLabel" Property="Foreground" 
+                                <Setter TargetName="ContentPresenter" Property="TextElement.Foreground" 
                             Value="White" />
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="False">
-                    <Setter TargetName="BackgroundWrap" Property="Background" 
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="BackgroundWrap" Property="Fill" 
                             Value="{StaticResource DisabledBackground}" />
-                    <Setter TargetName="ContentLabel" Property="Foreground" 
+                                <Setter TargetName="ContentPresenter" Property="TextElement.Foreground" 
                             Value="{StaticResource DisabledText}" />
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
         <Style x:Key="FloatButton" TargetType="{x:Type Button}">
             <Setter Property="Template">
@@ -67,7 +71,7 @@
                            Content="{TemplateBinding Content}" 
                            VerticalAlignment="Center" HorizontalAlignment="Center" 
                            Foreground="{TemplateBinding Foreground}"></Label>
-                            </Grid>
+                        </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="BackgroundWrap" Property="Fill" 
@@ -87,135 +91,24 @@
             </Setter>
         </Style>
 
-        <ControlTemplate x:Key="IconButton" TargetType="{x:Type Button}">
-            <Grid x:Name="BackgroundWrap">
-                <Grid Background="{TemplateBinding Background}"></Grid>
-                <Grid Name="Overlay" Background="White" Opacity="0"></Grid>
-            </Grid>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter TargetName="Overlay" Property="Opacity" Value="0.2" />
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="False">
-                    <Setter TargetName="Overlay" Property="Opacity" Value="0.6" />
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-
-        <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="20" />
-                </Grid.ColumnDefinitions>
-                <Border 
-                  Grid.Column="0"
-                  Background="{StaticResource ResourceKey=Cyan_500}" 
-                  BorderBrush="{x:Null}"
-                  BorderThickness="0" />
-                <Border
-                  x:Name="Border" 
-                  Grid.ColumnSpan="2"
-                  Background="{StaticResource ResourceKey=Cyan_500}"
-                  BorderBrush="{x:Null}"
-                  BorderThickness="0" />
-                <Path 
-                  x:Name="Arrow"
-                  Grid.Column="1"     
-                  Fill="White"
-                  HorizontalAlignment="Center"
-                  VerticalAlignment="Center"
-                  Data="M 0 0 L 4 4 L 8 0 Z"/>
-            </Grid>
-            <ControlTemplate.Triggers>
-                <Trigger Property="ToggleButton.IsMouseOver" Value="true">
-                    <Setter TargetName="Border" Property="Background" Value="#4DD0E1" />
-                </Trigger>
-                <Trigger Property="ToggleButton.IsChecked" Value="true">
-                    <Setter TargetName="Border" Property="Background" Value="#4DD0E1" />
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-
-        <Style x:Key="{x:Type ComboBox}" TargetType="{x:Type ComboBox}">
-            <Setter Property="SnapsToDevicePixels" Value="true"/>
-            <Setter Property="OverridesDefaultStyle" Value="true"/>
-            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
-            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
-            <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
-            <Setter Property="MinWidth" Value="120"/>
-            <Setter Property="MinHeight" Value="20"/>
+        <Style x:Key="IconButton" TargetType="{x:Type Button}">
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ComboBox}">
+                    <ControlTemplate TargetType="{x:Type Button}">
                         <Grid>
-                            <ToggleButton 
-                                Name="ToggleButton" 
-                                Template="{StaticResource ComboBoxToggleButton}" 
-                                Grid.Column="2" 
-                                Focusable="false"
-                                IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
-                                ClickMode="Press">
-                            </ToggleButton>
-                            <ContentPresenter
-                                Name="ContentSite"
-                                IsHitTestVisible="False" 
-                                Content="{TemplateBinding SelectionBoxItem}"
-                                ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                Margin="0,0,24,0"
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Left" />
-                            <Popup 
-                                Name="Popup"
-                                Placement="Bottom"
-                                IsOpen="{TemplateBinding IsDropDownOpen}"
-                                AllowsTransparency="True" 
-                                Focusable="False"
-                                PopupAnimation="Slide">
-                                <Grid 
-                                  Name="DropDown"
-                                  SnapsToDevicePixels="True"                
-                                  MinWidth="{TemplateBinding ActualWidth}"
-                                  MaxHeight="{TemplateBinding MaxDropDownHeight}">
-                                    <Border 
-                                        x:Name="DropDownBorder"
-                                        Background="#80DEEA"/>
-                                    <ScrollViewer Margin="0" SnapsToDevicePixels="True">
-                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
-                                    </ScrollViewer>
-                                </Grid>
-                            </Popup>
+                            <ContentPresenter Name="ContentPresenter" 
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"></ContentPresenter>
+                            <Grid Name="Overlay" Background="White" Opacity="0"></Grid>
                         </Grid>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="HasItems" Value="false">
-                                <Setter TargetName="DropDownBorder" Property="MinHeight" Value="120"/>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Overlay" Property="Opacity" 
+                            Value="0.2" />
                             </Trigger>
-                            <Trigger Property="IsGrouping" Value="true">
-                                <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!-- SimpleStyles: ComboBoxItem -->
-        <Style x:Key="{x:Type ComboBoxItem}" TargetType="{x:Type ComboBoxItem}">
-            <Setter Property="SnapsToDevicePixels" Value="true"/>
-            <Setter Property="OverridesDefaultStyle" Value="true"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ComboBoxItem}">
-                        <Border 
-                              Name="Border"
-                              Padding="2"
-                              SnapsToDevicePixels="true">
-                            <ContentPresenter />
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsHighlighted" Value="true">
-                                <Setter TargetName="Border" Property="Background" Value="#26C6DA"/>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Overlay" Property="Opacity" 
+                            Value="0.6" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>

@@ -185,6 +185,7 @@ namespace Astrum.Http
 
         private bool _quest_enable;
         private bool _guild_battle_enable;
+        private bool _gacha_enable;
 
         public bool IsQuestEnable
         {
@@ -212,6 +213,19 @@ namespace Astrum.Http
             }
         }
 
+        public bool IsGachaEnable
+        {
+            get
+            {
+                return _gacha_enable;
+            }
+            set
+            {
+                _gacha_enable = value;
+                NotifyPropertyChanged("IsGachaEnable");
+            }
+        }
+
         private string _name;
         private int _level;
         private long _exp_value;
@@ -223,6 +237,8 @@ namespace Astrum.Http
         private int _bp_max;
         private int _tp_value;
         private int _tp_max;
+        private int _card_quantity;
+        private int _card_max;
 
         public string Name
         {
@@ -429,6 +445,7 @@ namespace Astrum.Http
                 NotifyPropertyChanged("TpProgress");
             }
         }
+
         public int TpMax
         {
             get
@@ -462,11 +479,53 @@ namespace Astrum.Http
             }
         }
 
-        public long gacha { get; set; }
-        public long lilu { get; set; }
-        public int card_quantity { get; set; }
-        public int card_max { get; set; }
-        
+        public int CardQuantity
+        {
+            get
+            {
+                return _card_quantity;
+            }
+            set
+            {
+                _card_quantity = value;
+                NotifyPropertyChanged("Card");
+                NotifyPropertyChanged("CardQuantity");
+                NotifyPropertyChanged("CardProgress");
+            }
+        }
+
+        public int CardMax
+        {
+            get
+            {
+                return _card_max;
+            }
+            set
+            {
+                _card_max = value;
+                NotifyPropertyChanged("Card");
+                NotifyPropertyChanged("CardMax");
+                NotifyPropertyChanged("CardProgress");
+            }
+        }
+
+        public int CardProgress
+        {
+            get
+            {
+                if (_card_max == 0)
+                {
+                    return 0;
+                }
+                double max = (double)_card_max;
+                double val = (double)_card_quantity;
+
+                double rate = val / max;
+
+                return (int)(rate * 100);
+            }
+        }
+
         public string Exp
         {
             get
@@ -498,6 +557,15 @@ namespace Astrum.Http
                 return _tp_value + " / " + _tp_max;
             }
         }
+
+        public string Card
+        {
+            get
+            {
+                return _card_quantity + " / " + _card_max;
+            }
+        }
+
 
 
         public bool IsFuryRaidEnable { get; set; }
@@ -654,5 +722,187 @@ namespace Astrum.Http
                 return BpStock > 0 && IsReady;
             }
         }
+
+        private string _rare_raid_gacha_name;
+        private bool _rare_raid_gacha_enable;
+        private bool _rare_raid_gacha_sequence;
+        private int _rare_raid_medal;
+
+        private string _raid_gacha_name;
+        private bool _raid_gacha_enable;
+        private bool _raid_gacha_sequence;
+        private int _raid_medal;
+
+        private string _normal_gacha_name;
+        private bool _normal_gacha_enable;
+        private bool _normal_gacha_sequence;
+        private int _gacha_point;
+
+        public string RareRaidGachaId { get; set; }
+        public string RaidGachaId { get; set; }
+        public string NormalGachaId { get; set; }
+
+        public string RareRaidGachaName
+        {
+            get
+            {
+                return _rare_raid_gacha_name;
+            }
+            set
+            {
+                _rare_raid_gacha_name = value;
+                NotifyPropertyChanged("RareRaidGachaName");
+            }
+        }
+
+        public bool IsRareRaidGachaEnable
+        {
+            get
+            {
+                return _rare_raid_gacha_enable;
+            }
+            set
+            {
+                _rare_raid_gacha_enable = value;
+                NotifyPropertyChanged("IsRareRaidGachaEnable");
+            }
+        }
+
+        public bool IsRareRaidGachaSequence
+        {
+            get
+            {
+                return _rare_raid_gacha_sequence;
+            }
+            set
+            {
+                _rare_raid_gacha_sequence = value;
+                NotifyPropertyChanged("IsRareRaidGachaSequence");
+            }
+        }
+
+        public int RareRaidMedal
+        {
+            get
+            {
+                return _rare_raid_medal;
+            }
+            set
+            {
+                _rare_raid_medal = value;
+                NotifyPropertyChanged("RareRaidMedal");
+            }
+        }
+
+
+        public string RaidGachaName
+        {
+            get
+            {
+                return _raid_gacha_name;
+            }
+            set
+            {
+                _raid_gacha_name = value;
+                NotifyPropertyChanged("RaidGachaName");
+            }
+        }
+
+        public bool IsRaidGachaEnable
+        {
+            get
+            {
+                return _raid_gacha_enable;
+            }
+            set
+            {
+                _raid_gacha_enable = value;
+                NotifyPropertyChanged("IsRaidGachaEnable");
+            }
+        }
+
+        public bool IsRaidGachaSequence
+        {
+            get
+            {
+                return _raid_gacha_sequence;
+            }
+            set
+            {
+                _raid_gacha_sequence = value;
+                NotifyPropertyChanged("IsRaidGachaSequence");
+            }
+        }
+
+
+        public int RaidMedal
+        {
+            get
+            {
+                return _raid_medal;
+            }
+            set
+            {
+                _raid_medal = value;
+                NotifyPropertyChanged("RaidMedal");
+            }
+        }
+
+        public string NormalGachaName
+        {
+            get
+            {
+                return _normal_gacha_name;
+            }
+            set
+            {
+                _normal_gacha_name = value;
+                NotifyPropertyChanged("NormalGachaName");
+            }
+        }
+
+        public bool IsNormalGachaEnable
+        {
+            get
+            {
+                return _normal_gacha_enable;
+            }
+            set
+            {
+                _normal_gacha_enable = value;
+                NotifyPropertyChanged("IsNormalGachaEnable");
+            }
+        }
+
+        public bool IsNormalGachaSequence
+        {
+            get
+            {
+                return _normal_gacha_sequence;
+            }
+            set
+            {
+                _normal_gacha_sequence = value;
+                NotifyPropertyChanged("IsNormalGachaSequence");
+            }
+        }
+
+
+        public int GachaPoint
+        {
+            get
+            {
+                return _gacha_point;
+            }
+            set
+            {
+                _gacha_point = value;
+                NotifyPropertyChanged("GachaPoint");
+            }
+        }
+
+
+
+
     }
 }
