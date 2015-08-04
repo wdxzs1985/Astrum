@@ -97,7 +97,8 @@ namespace Astrum
             StatusPanel.Visibility = Visibility.Hidden;
             LoginButton.Content = "登陆";
             LoginButton.IsEnabled = true;
-            LoginUserComboBox.IsEnabled = true;
+            //LoginUserComboBox.IsEnabled = true;
+            UserSelector.IsEnabled = true;
 
             LoadUserList();
         }
@@ -111,7 +112,8 @@ namespace Astrum
             Console.WriteLine("login start");
             LoginButton.Content = "少女祈祷中";
             LoginButton.IsEnabled = false;
-            LoginUserComboBox.IsEnabled = false;
+            //LoginUserComboBox.IsEnabled = false;
+            UserSelector.IsEnabled = false;
 
             var username = UsernameBox.Text;
             var password = PasswordBox.Password;
@@ -142,17 +144,27 @@ namespace Astrum
 
                 LoginPanel.Visibility = Visibility.Hidden;
                 StatusPanel.Visibility = Visibility.Visible;
-                await Task.Run(() =>
+                client.ViewModel.IsReady = await Task.Run(() =>
                 {
-                    if (client.ViewModel.IsQuestEnable)
+
+                    try
                     {
-                        client.StartQuest();
-                        client.ViewModel.IsReady = true;
+                        if (client.ViewModel.IsQuestEnable)
+                        {
+                            client.StartQuest();
+                            return true;
+                        }
+                        else if (client.ViewModel.IsGuildBattleEnable)
+                        {
+                            client.StartGuildBattle();
+                            return true;
+                        }
+                        return false;
                     }
-                    else if (client.ViewModel.IsGuildBattleEnable)
+                    catch (Exception ex)
                     {
-                        client.StartGuildBattle();
-                        client.ViewModel.IsReady = true;
+                        Console.WriteLine(ex.Message);
+                        return false;
                     }
                 });
 
@@ -172,7 +184,6 @@ namespace Astrum
 
         private async void LoadUserList()
         {
-            int index = 0;
             List<LoginUser> loginUserList = await Task.Run(() =>
             {
                 loginUserList = new List<LoginUser>();
@@ -211,7 +222,7 @@ namespace Astrum
             });
 
             client.ViewModel.LoginUserList = loginUserList;
-            LoginUserComboBox.SelectedIndex = index;
+            UserSelector.SelectedIndex = 0;
         }
 
         private async void SaveUserList()
@@ -328,9 +339,10 @@ namespace Astrum
 
 
 
-        private void LoginUserComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+
+        private void UserSelector_UserChanged(object sender, RoutedEventArgs e)
         {
-            LoginUser user = (LoginUser)LoginUserComboBox.SelectedItem;
+            LoginUser user = UserSelector.SelectedUser;
 
             if (user != null)
             {
@@ -372,9 +384,16 @@ namespace Astrum
         {
             await Task.Run(() =>
             {
-                if (client.ViewModel.StaminaHalfStock > 0)
+                try
                 {
-                    client.UseItem(AstrumClient.ITEM_STAMINA, AstrumClient.INSTANT_HALF_STAMINA, 1);
+                    if (client.ViewModel.StaminaHalfStock > 0)
+                    {
+                        client.UseItem(AstrumClient.ITEM_STAMINA, AstrumClient.INSTANT_HALF_STAMINA, 1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
                 }
             });
         }
@@ -383,9 +402,16 @@ namespace Astrum
         {
             await Task.Run(() =>
             {
-                if (client.ViewModel.StaminaStock > 0)
+                try
                 {
-                    client.UseItem(AstrumClient.ITEM_STAMINA, AstrumClient.INSTANT_STAMINA, 1);
+                    if (client.ViewModel.StaminaStock > 0)
+                    {
+                        client.UseItem(AstrumClient.ITEM_STAMINA, AstrumClient.INSTANT_STAMINA, 1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
                 }
             });
         }
@@ -394,9 +420,16 @@ namespace Astrum
         {
             await Task.Run(() =>
             {
-                if (client.ViewModel.BpMiniStock > 0)
+                try
                 {
-                    client.UseItem(AstrumClient.ITEM_BP, AstrumClient.INSTANT_MINI_BP, 1);
+                    if (client.ViewModel.BpMiniStock > 0)
+                    {
+                        client.UseItem(AstrumClient.ITEM_BP, AstrumClient.INSTANT_MINI_BP, 1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
                 }
             });
         }
@@ -405,9 +438,16 @@ namespace Astrum
         {
             await Task.Run(() =>
             {
-                if (client.ViewModel.BpStock > 0)
+                try
                 {
-                    client.UseItem(AstrumClient.ITEM_BP, AstrumClient.INSTANT_BP, 1);
+                    if (client.ViewModel.BpStock > 0)
+                    {
+                        client.UseItem(AstrumClient.ITEM_BP, AstrumClient.INSTANT_BP, 1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
                 }
             });
         }
