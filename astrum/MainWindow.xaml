@@ -28,7 +28,7 @@
         <Grid x:Name="LoginPanel"
               HorizontalAlignment="Center" 
               VerticalAlignment="Center"
-              d:Locked="True" d:Hidden="True">
+              d:Locked="True" d:Hidden="True" d:IsHidden="True" d:IsLocked="True">
 
             <UI:UserSelector x:Name="UserSelector" 
                              Width="160" Height="160"
@@ -67,13 +67,13 @@
                                TabIndex="3"
                                Click="LoginButton_Click"
                                Content="Login" 
-                    Template="{StaticResource FlatButton}"
+                    Style="{StaticResource FlatButton}"
                     Background="Transparent" Foreground="White" d:IsLocked="True"/>
 
         </Grid>
-        <Grid x:Name="StatusPanel" Visibility="Visible" Margin="0,32,0,0" Background="{StaticResource Background}" d:IsLocked="True" d:IsHidden="True">
+        <Grid x:Name="StatusPanel" Visibility="Visible" Margin="0,32,0,0" Background="{StaticResource Background}">
             <Grid x:Name="QuestPanel" Margin="16,144,16,240"
-            	Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True">
+            	Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsHidden="True" d:IsLocked="True">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="4*"/>
                     <ColumnDefinition Width="6*"/>
@@ -91,13 +91,10 @@
                         <Button x:Name="UseHalfStaminaButton" 
                                 Margin="8,0,8,0" Width="32" Height="32"
                                 HorizontalAlignment="Left" VerticalAlignment="Center" 
-            				BorderBrush="{x:Null}" Foreground="{x:Null}"
-            				Template="{StaticResource IconButton}"
+            				Style="{StaticResource IconButton}"
             				Click="UseHalfStaminaButton_Click"
             				IsEnabled="{Binding CanUseStaminaHalf}">
-                            <Button.Background>
-                                <ImageBrush ImageSource="Images/instant-half_stamina_potion.png" Stretch="Uniform"/>
-                            </Button.Background>
+                            <Image Source="Images/instant-half_stamina_potion.png"></Image>
                         </Button>
                         <Label Content="{Binding StaminaHalfStock, FallbackValue=999, TargetNullValue=0}" 
                                VerticalAlignment="Center"
@@ -109,13 +106,10 @@
                     <Grid Grid.Row="0" Grid.Column="1">
                         <Button x:Name="UseStaminaButton" Margin="8,0,8,0" Width="32" Height="32"
             				HorizontalAlignment="Left" VerticalAlignment="Center" 
-            				BorderBrush="{x:Null}" Foreground="{x:Null}"
-            				Template="{StaticResource IconButton}"
+            				Style="{StaticResource IconButton}"
             				Click="UseStaminaButton_Click"
             				IsEnabled="{Binding CanUseStamina}">
-                            <Button.Background>
-                                <ImageBrush ImageSource="Images/instant-stamina_potion.png" Stretch="Uniform"/>
-                            </Button.Background>
+                            <Image Source="Images/instant-stamina_potion.png"></Image>
                         </Button>
                         <Label Content="{Binding StaminaStock, FallbackValue=999, TargetNullValue=0}" 
                                VerticalAlignment="Center"
@@ -128,13 +122,10 @@
                         <Button x:Name="UseMiniBpButton" 
             				Margin="8,0,8,0" Width="32" Height="32"
             				HorizontalAlignment="Left" VerticalAlignment="Center" 
-            				BorderBrush="{x:Null}" Foreground="{x:Null}"
-            				Template="{StaticResource IconButton}"
+            				Style="{StaticResource IconButton}"
             				Click="UseMiniBpButton_Click"
             				IsEnabled="{Binding CanUseBpMini}">
-                            <Button.Background>
-                                <ImageBrush ImageSource="Images/instant-mini_bp_ether.png" Stretch="Uniform"/>
-                            </Button.Background>
+                            <Image Source="Images/instant-mini_bp_ether.png"></Image>
                         </Button>
                         <Label Content="{Binding BpMiniStock, FallbackValue=999, TargetNullValue=0}" 
                                VerticalAlignment="Center"
@@ -147,13 +138,10 @@
                         <Button x:Name="UseBpButton" 
             				Margin="8,0,8,0" Width="32" Height="32"
             				HorizontalAlignment="Left" VerticalAlignment="Center" 
-            				BorderBrush="{x:Null}" Foreground="{x:Null}"
-            				Template="{StaticResource IconButton}"
+            				Style="{StaticResource IconButton}"
             				Click="UseBpButton_Click"
             				IsEnabled="{Binding CanUseBp}">
-                            <Button.Background>
-                                <ImageBrush ImageSource="Images/instant-bp_ether.png" Stretch="Uniform"/>
-                            </Button.Background>
+                            <Image Source="Images/instant-bp_ether.png"></Image>
                         </Button>
                         <Label Content="{Binding BpStock, FallbackValue=999, TargetNullValue=0}" 
                                VerticalAlignment="Center"
@@ -245,7 +233,7 @@
             <Grid x:Name="GuildBattlePanel" 
             	Margin="16,144,16,240"
             	Background="{StaticResource Background}"
-            	Visibility="{Binding IsGuildBattleEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True">
+            	Visibility="{Binding IsGuildBattleEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsHidden="True" d:IsLocked="True">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="4*" />
                     <ColumnDefinition Width="6*" />
@@ -259,13 +247,10 @@
                     <Grid Grid.Column="0" >
                         <Button Margin="8,0,8,0" Width="32" Height="32"
             				HorizontalAlignment="Left" VerticalAlignment="Center" 
-            				BorderBrush="{x:Null}" Foreground="{x:Null}"
-            				Template="{StaticResource IconButton}"
+            				Style="{StaticResource IconButton}"
             				Click="UseHalfStaminaButton_Click"
             				IsEnabled="{Binding CanUseStaminaHalf}">
-                            <Button.Background>
-                                <ImageBrush ImageSource="Images/instant-half_stamina_potion.png" Stretch="Uniform"/>
-                            </Button.Background>
+                            <Image Source="Images/instant-half_stamina_potion.png"></Image>
                         </Button>
                         <Label Content="{Binding StaminaHalfStock, FallbackValue=999, TargetNullValue=0}" 
                                VerticalAlignment="Center"
@@ -277,13 +262,10 @@
                     <Grid Grid.Column="1" >
                         <Button Margin="8,0,8,0" Width="32" Height="32"
             				HorizontalAlignment="Left" VerticalAlignment="Center" 
-            				BorderBrush="{x:Null}" Foreground="{x:Null}"
-            				Template="{StaticResource IconButton}"
+            				Style="{StaticResource IconButton}"
             				Click="UseStaminaButton_Click"
             				IsEnabled="{Binding CanUseStamina}">
-                            <Button.Background>
-                                <ImageBrush ImageSource="Images/instant-stamina_potion.png" Stretch="Uniform"/>
-                            </Button.Background>
+                            <Image Source="Images/instant-stamina_potion.png"></Image>
                         </Button>
                         <Label Content="{Binding StaminaStock, FallbackValue=999, TargetNullValue=0}" 
                                VerticalAlignment="Center"
@@ -303,25 +285,130 @@
 
                     <Button Grid.Column="0" Margin="16,0,0,0"
             			Content="Normal"
-            			Template="{StaticResource FlatButton}" 
-            			Background="{StaticResource Cyan_500}" Foreground="White"
+            			Style="{StaticResource FlatButton}" 
+                            Background="{StaticResource Cyan_500}"
+                            Foreground="White"
                             Click="UseGuildBattleTpNormal"
                             IsEnabled="{Binding IsTpNormalAvailable}"/>
                     <Button Grid.Column="1" Margin="16,0,0,0"
             			Content="Roulette"
-            			Template="{StaticResource FlatButton}" 
-            			Background="{StaticResource Cyan_500}" Foreground="White"
+            			Style="{StaticResource FlatButton}" 
+                            Background="{StaticResource Cyan_500}"
+                            Foreground="White"
                             Click="UseGuildBattleTpRoulette"
                             IsEnabled="{Binding IsTpRouletteAvailable}"/>
                     <Button Grid.Column="2" Margin="16,0,0,0"
             			Content="Chat"
-            			Template="{StaticResource FlatButton}" 
-            			Background="{StaticResource Cyan_500}" Foreground="White"
+            			Style="{StaticResource FlatButton}" 
+                            Background="{StaticResource Cyan_500}"
+                            Foreground="White"
                             Click="UseGuildBattleTpChat"
                             IsEnabled="{Binding IsTpChatAvailable}"/>
                 </Grid>
             </Grid>
 
+            <Grid Name="GachaPanel" Margin="16,144,16,240" 
+                  Visibility="{Binding IsGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid Name="RareRaidGacha" VerticalAlignment="Top" 
+                      Margin="0,16,0,0" Grid.Row="0"
+                      Visibility="{Binding IsRareRaidGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="24" />
+                        <RowDefinition Height="64" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="{Binding RareRaidGachaName}" Grid.Row="0" Grid.Column="0"></Label>
+                    <Label Content="{Binding RareRaidMedal, FallbackValue=999}" 
+                           Grid.Row="0" Grid.Column="1"
+                           HorizontalContentAlignment="Right"></Label>
+                    <Button Name="RareRaidGachaButton" Content="ガチャを引く"  
+                            Background="{StaticResource Cyan_500}"
+                            Foreground="White"
+                            Margin="0,8,8,8" 
+                            Grid.Row="1" Grid.Column="0"
+                            Style="{StaticResource FlatButton}"
+                            Click="RareRaidGachaButton_Click"></Button>
+                    <Button Name="RareRaidGachaSequenceButton" Content="10回連続で引く"  
+                            Background="{StaticResource Cyan_500}"
+                            Foreground="White"
+                            Margin="8,8,0,8" 
+                            Grid.Row="1" Grid.Column="1"
+                            Style="{StaticResource FlatButton}"
+                            IsEnabled="{Binding IsRareRaidGachaSequence}"
+                            Click="RareRaidGachaSequenceButton_Click"></Button>
+                </Grid>
+                <Grid Name="RaidGacha" VerticalAlignment="Top" 
+                      Margin="0,16,0,0" Grid.Row="1"
+                      Visibility="{Binding IsRaidGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="24" />
+                            <RowDefinition Height="64" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                    <Label Content="{Binding RaidGachaName}" Grid.Row="0" Grid.Column="0"></Label>
+                    <Label Content="{Binding RaidMedal, FallbackValue=999}" 
+                           Grid.Row="0" Grid.Column="1"
+                           HorizontalContentAlignment="Right"></Label>
+                    <Button Name="RaidGachaButton" Content="ガチャを引く"  
+                            Background="{StaticResource Cyan_500}"
+                            Foreground="White"
+                            Margin="0,8,8,8" 
+                            Grid.Row="2" Grid.Column="0"
+                            Style="{StaticResource FlatButton}"
+                            Click="RaidGachaButton_Click"></Button>
+                    <Button Name="RaidGachaSequenceButton" Content="10回連続で引く"  
+                            Background="{StaticResource Cyan_500}"
+                            Foreground="White"
+                            Margin="8,8,0,8" 
+                            Grid.Row="2" Grid.Column="1"
+                            Style="{StaticResource FlatButton}"
+                            IsEnabled="{Binding IsRaidGachaSequence}"
+                            Click="RaidGachaSequenceButton_Click"></Button>
+                </Grid>
+                <Grid Name="NormalGacha" VerticalAlignment="Top" 
+                      Margin="0,16,0,0" Grid.Row="2" 
+                      Visibility="{Binding IsNormalGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="24" />
+                        <RowDefinition Height="64" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="{Binding NormalGachaName}" Grid.Row="0" Grid.Column="0"></Label>
+                    <Label Content="{Binding GachaPoint, FallbackValue=999}" 
+                           Grid.Row="0" Grid.Column="1"
+                           HorizontalContentAlignment="Right"></Label>
+                    <Button Name="NormalGachaButton" Content="ガチャを引く" 
+                            Background="{StaticResource Cyan_500}"
+                            Foreground="White"
+                            Margin="0,8,8,8" 
+                            Grid.Row="1" Grid.Column="0"
+                            Style="{StaticResource FlatButton}"
+                            Click="NormalGachaButton_Click"></Button>
+                    <Button Name="NormalGachaSequenceButton" Content="10回連続で引く" 
+                            Background="{StaticResource Cyan_500}"
+                            Foreground="White"
+                            Margin="8,8,0,8" 
+                            Grid.Row="1" Grid.Column="1"
+                            Style="{StaticResource FlatButton}"
+                            IsEnabled="{Binding IsNormalGachaSequence}"
+                            Click="NormalGachaSequenceButton_Click"></Button>
+                </Grid>
+            </Grid>
+            
             <Grid Name="Tabs" VerticalAlignment="Top"
                   Height="48" Margin="0,96,0,0"
                   Background="{StaticResource Cyan_500}" d:IsLocked="True">
@@ -339,13 +426,19 @@
                              Grid.Column="0"
                              IsChecked="{Binding IsQuestEnable}" 
                              Template="{StaticResource TabButton}"
-                             Checked="QuestButton_Checked"/>
+                             Checked="QuestButton_Checked" d:IsLocked="True"/>
                 <RadioButton Name="GuildBattleButton" Content="公会战" 
                              Foreground="White" 
                              Grid.Column="1"
                              IsChecked="{Binding IsGuildBattleEnable}" 
                              Template="{StaticResource TabButton}"
-                             Checked="GuildBattleButton_Checked"/>
+                             Checked="GuildBattleButton_Checked" d:IsLocked="True"/>
+                <RadioButton Name="GachaButton" Content="Africa" 
+                             Foreground="White" 
+                             Grid.Column="2"
+                             IsChecked="{Binding IsGachaEnable}" 
+                             Template="{StaticResource TabButton}"
+                             Checked="GachaButton_Checked" d:IsLocked="True"/>
             </Grid>
             <Grid x:Name="StatusArea" VerticalAlignment="Top" Background="{StaticResource Cyan_500}"
                   Height="96" Margin="0,0,0,0" d:IsLocked="True">
@@ -357,7 +450,7 @@
                     <ColumnDefinition />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Grid Grid.Row="0" Grid.Column="0">
+                <Grid Grid.Row="0" Grid.Column="0" d:IsLocked="True">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="2*"/>
@@ -374,7 +467,7 @@
                                  Foreground="{Binding StaminaProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
                 </Grid>
 
-                <Grid Grid.Row="0" Grid.Column="1">
+                <Grid Grid.Row="0" Grid.Column="1" d:IsLocked="True">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="2*"/>
@@ -391,7 +484,7 @@
                                  Foreground="{Binding ExpProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
                 </Grid>
 
-                <Grid Grid.Row="1" Grid.Column="0">
+                <Grid Grid.Row="1" Grid.Column="0" d:IsLocked="True">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="2*"/>
@@ -402,13 +495,13 @@
                            Grid.Column="0"/>
                     <ProgressBar x:Name="BpProgress" 
                                  Grid.Column="1" Height="8" Width="100"
-                                 Value="{Binding BpValue, FallbackValue=3, Mode=OneWay, TargetNullValue=0}" 
-                                 Minimum="0" Maximum="6" 
+                                 Value="{Binding BpProgress, FallbackValue=50, Mode=OneWay, TargetNullValue=0}" 
+                                 Minimum="0" Maximum="100" 
                                  ToolTip="{Binding Bp}" 
                                  Foreground="{Binding BpProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
                 </Grid>
                 <Grid Grid.Row="1" Grid.Column="1"
-            		Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsHidden="True">
+            		Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsHidden="True" d:IsLocked="True">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="2*"/>
@@ -421,7 +514,7 @@
                            Grid.Column="1" Width="100"/>
                 </Grid>
                 <Grid Grid.Row="1" Grid.Column="1"
-            		Visibility="{Binding IsGuildBattleEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+            		Visibility="{Binding IsGuildBattleEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True" d:IsHidden="True">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="2*"/>
@@ -432,10 +525,27 @@
                            Grid.Column="0"/>
                     <ProgressBar x:Name="TpProgress" 
                                  Grid.Column="1" Height="8" Width="100"
-                                 Value="{Binding TpValue, FallbackValue=50, Mode=OneWay, TargetNullValue=0}" 
+                                 Value="{Binding TpProgress, FallbackValue=50, Mode=OneWay, TargetNullValue=0}" 
                                  Minimum="0" Maximum="100"  
                                  ToolTip="{Binding Tp}" 
                                  Foreground="{Binding TpProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
+                </Grid>
+                <Grid Grid.Row="1" Grid.Column="1"
+            		Visibility="{Binding IsGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Card"  Foreground="White" 
+                           VerticalAlignment="Center"
+                           HorizontalContentAlignment="Right"
+                           Grid.Column="0"/>
+                    <ProgressBar x:Name="CardProgress" 
+                                 Grid.Column="1" Height="8" Width="100"
+                                 Value="{Binding CardProgress, FallbackValue=50, Mode=OneWay, TargetNullValue=0}" 
+                                 Minimum="0" Maximum="100"  
+                                 ToolTip="{Binding Card}" 
+                                 Foreground="{Binding CardProgress, Converter={StaticResource ProgressBarInverseForegoundConvert}}"/>
                 </Grid>
             </Grid>
 
@@ -446,7 +556,7 @@
             
             <Grid Margin="0,0,16,208" Width="64" Height="64"
                   HorizontalAlignment="Right" VerticalAlignment="Bottom" 
-                  Visibility="{Binding IsReady, Converter={StaticResource BooleanToVisibilityConverter}}" >
+                  Visibility="{Binding IsReady, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True" d:IsHidden="True" >
                 <Button x:Name="StartButton"
                         Content="Start"
                         Click="StartButton_Click"
@@ -462,20 +572,18 @@
         		Content="{Binding WindowTitle, FallbackValue=プリコネ}" 
         		Foreground="White"/>
 
-            <Button x:Name="MiniBtn" Template="{DynamicResource FlatButton}" Click="MiniWindow" 
+            <Button x:Name="MiniBtn" Style="{StaticResource FlatButton}" Click="MiniWindow" 
         		Width="32" Height="32" Margin="0,0,32,0"
-        		VerticalAlignment="Center" HorizontalAlignment="Right" >
-                <Button.Background>
-                    <ImageBrush ImageSource="Images/ic_remove_white_18dp.png" Stretch="None"/>
-                </Button.Background>
+        		VerticalAlignment="Center" HorizontalAlignment="Right"
+                    Background="Transparent">
+                <Image Source="Images/ic_remove_white_18dp.png" Stretch="None"></Image>
             </Button>
 
-            <Button x:Name="CloseBtn" Template="{DynamicResource FlatButton}" Click="CloseWindow" 
+            <Button x:Name="CloseBtn" Style="{StaticResource FlatButton}" Click="CloseWindow" 
         		Width="32" Height="32" Margin="0,0,0,0"
-        		HorizontalAlignment="Right" VerticalAlignment="Center">
-                <Button.Background>
-                    <ImageBrush ImageSource="Images/ic_clear_white_18dp.png" Stretch="None"/>
-                </Button.Background>
+        		VerticalAlignment="Center" HorizontalAlignment="Right"
+                    Background="Transparent">
+                <Image Source="Images/ic_clear_white_18dp.png" Stretch="None"></Image>
             </Button>
         </Grid>
     </Grid>

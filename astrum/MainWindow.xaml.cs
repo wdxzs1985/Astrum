@@ -151,13 +151,11 @@ namespace Astrum
                     {
                         if (client.ViewModel.IsQuestEnable)
                         {
-                            client.StartQuest();
-                            return true;
+                            return client.StartQuest();
                         }
                         else if (client.ViewModel.IsGuildBattleEnable)
                         {
-                            client.StartGuildBattle();
-                            return true;
+                            return client.StartGuildBattle();
                         }
                         return false;
                     }
@@ -167,19 +165,17 @@ namespace Astrum
                         return false;
                     }
                 });
-
-                if(client.ViewModel.IsReady)
-                {
-
-                    nowUser = new LoginUser { username = username, password = password };
-                    //save user
-                    SaveUserList();
-
-                    return;
-                }
+                
+                nowUser = new LoginUser { username = username, password = password };
+                //save user
+                SaveUserList();
+                    
             }
-            initLoginPanel();
-            MessageBoxResult result = System.Windows.MessageBox.Show("登入失败");
+            else
+            {
+                initLoginPanel();
+                MessageBoxResult result = System.Windows.MessageBox.Show("登入失败");
+            }
         }
 
         private async void LoadUserList()
@@ -457,12 +453,18 @@ namespace Astrum
             if (client != null && client.ViewModel.IsLogin)
             {
                 client.ViewModel.IsReady = false;
-                await Task.Run(() =>
+                client.ViewModel.IsReady = await Task.Run(() =>
                 {
-                    client.StartQuest();
+                    try
+                    {
+                        return client.StartQuest();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        return false;
+                    }
                 });
-
-                client.ViewModel.IsReady = true;
             }
         }
 
@@ -471,15 +473,39 @@ namespace Astrum
             if (client != null && client.ViewModel.IsLogin)
             {
                 client.ViewModel.IsReady = false;
+                client.ViewModel.IsReady = await Task.Run(() =>
+                {
+                    try
+                    {
+                        return client.StartGuildBattle();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        return false;
+                    }
+                });
+                
+            }
+        }
+
+        private async void GachaButton_Checked(object sender, RoutedEventArgs e)
+        {
+            if (client != null && client.ViewModel.IsLogin)
+            {
+                client.ViewModel.IsReady = false;
                 await Task.Run(() =>
                 {
-                    client.StartGuildBattle();
+                    try
+                    {
+                       return client.StartGacha();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        return false;
+                    }
                 });
-
-                if (client.ViewModel.GuildBattleId !=null)
-                {
-                    client.ViewModel.IsReady = true;
-                }
             }
         }
 
@@ -489,7 +515,14 @@ namespace Astrum
             {
                 await Task.Run(() =>
                 {
-                    client.GuildBattleTpNormal();
+                    try
+                    {
+                        client.GuildBattleTpNormal();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
                 });
                 
             }
@@ -501,7 +534,14 @@ namespace Astrum
             {
                 await Task.Run(() =>
                 {
-                    client.GuildBattleTpChat();
+                    try
+                    {
+                        client.GuildBattleTpChat();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
                 });
 
             }
@@ -513,9 +553,147 @@ namespace Astrum
             {
                 await Task.Run(() =>
                 {
-                    client.GuildBattleTpRoulette();
+                    try
+                    {
+                        client.GuildBattleTpRoulette();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
                 });
+            }
+        }
 
+        private async void RareRaidGachaButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (client.ViewModel.IsRareRaidGachaEnable)
+            {
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        var gachaId = client.ViewModel.RareRaidGachaId;
+                        var sequence = false;
+
+                        client.Gacha(gachaId, sequence);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                });
+            }
+        }
+
+        private async void RareRaidGachaSequenceButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (client.ViewModel.IsRareRaidGachaEnable && client.ViewModel.IsRareRaidGachaSequence)
+            {
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        var gachaId = client.ViewModel.RareRaidGachaId;
+                        var sequence = true;
+
+                        client.Gacha(gachaId, sequence);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                });
+            }
+        }
+
+        private async void RaidGachaButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (client.ViewModel.IsRaidGachaEnable)
+            {
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        var gachaId = client.ViewModel.RaidGachaId;
+                        var sequence = false;
+
+                        client.Gacha(gachaId, sequence);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                });
+            }
+        }
+
+        private async void RaidGachaSequenceButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (client.ViewModel.IsRaidGachaEnable && client.ViewModel.IsRaidGachaSequence)
+            {
+                await Task.Run(() =>
+                {
+                    try
+                    {
+
+                        var gachaId = client.ViewModel.RaidGachaId;
+                        var sequence = true;
+
+                        client.Gacha(gachaId, sequence);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                });
+            }
+        }
+
+        private async void NormalGachaButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (client.ViewModel.IsNormalGachaEnable)
+            {
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        var gachaId = client.ViewModel.NormalGachaId;
+                        var sequence = false;
+
+                        client.Gacha(gachaId, sequence);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                });
+            }
+        }
+
+        private async void NormalGachaSequenceButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (client.ViewModel.IsNormalGachaEnable && client.ViewModel.IsNormalGachaSequence)
+            {
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        var gachaId = client.ViewModel.NormalGachaId;
+                        var sequence = true;
+
+                        client.Gacha(gachaId, sequence);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                });
             }
         }
     }

@@ -39,13 +39,24 @@ namespace Astrum.UI
         }
     }
 
-    public class BoolToVisibilityConverter : IValueConverter
+    public class ProgressBarInverseForegoundConvert : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            bool state = (bool)value;
+            int target = (int)value;
 
-            return state ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden;
+            var foreground = new SolidColorBrush(Color.FromRgb(1, 211, 40));
+
+            if (target > 90)
+            {
+                foreground = new SolidColorBrush(Color.FromRgb(244, 67, 54));
+            }
+            else if (target > 60)
+            {
+                foreground = new SolidColorBrush(Color.FromRgb(255, 152, 0));
+            }
+
+            return foreground;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
