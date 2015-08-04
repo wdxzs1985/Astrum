@@ -1184,7 +1184,7 @@ namespace Astrum.Http
             initNormalGacha();
 
             ViewModel.History = "";
-            return false;
+            return true;
         }
 
         private void initRaidGacha()

@@ -309,20 +309,22 @@ namespace Astrum
                     catch (Exception ex)
                     {
                         Console.WriteLine(ex.Message);
-                        client.ViewModel.IsRunning = false;
-                        client.ViewModel.IsReady = false;
                         return false;
                     }
                     return true;
                 });
 
-                StartButton.Content = "Start";
-                StartButton.IsEnabled = true;
-                QuestButton.IsEnabled = true;
-                GuildBattleButton.IsEnabled = true;
-
-                if (!result)
+                if(result)
                 {
+                    StartButton.Content = "Start";
+                    StartButton.IsEnabled = true;
+                    QuestButton.IsEnabled = true;
+                    GuildBattleButton.IsEnabled = true;
+                }
+                else
+                {
+                    client.ViewModel.IsRunning = false;
+                    client.ViewModel.IsReady = false;
                     initLoginPanel();
                 }
             }
@@ -453,18 +455,27 @@ namespace Astrum
             if (client != null && client.ViewModel.IsLogin)
             {
                 client.ViewModel.IsReady = false;
-                client.ViewModel.IsReady = await Task.Run(() =>
+                try
                 {
-                    try
+                    var result = await Task.Run(() =>
                     {
                         return client.StartQuest();
-                    }
-                    catch (Exception ex)
+                    });
+                    if (result)
                     {
-                        Console.WriteLine(ex.Message);
-                        return false;
+                        client.ViewModel.IsReady = true;
                     }
-                });
+                    else
+                    {
+                        client.ViewModel.IsRunning = false;
+                        client.ViewModel.IsReady = false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    initLoginPanel();
+                    Console.WriteLine(ex.Message);
+                }
             }
         }
 
@@ -473,19 +484,27 @@ namespace Astrum
             if (client != null && client.ViewModel.IsLogin)
             {
                 client.ViewModel.IsReady = false;
-                client.ViewModel.IsReady = await Task.Run(() =>
+                try
                 {
-                    try
+                    var result = await Task.Run(() =>
                     {
                         return client.StartGuildBattle();
-                    }
-                    catch (Exception ex)
+                    });
+                    if (result)
                     {
-                        Console.WriteLine(ex.Message);
-                        return false;
+                        client.ViewModel.IsReady = true;
                     }
-                });
-                
+                    else
+                    {
+                        client.ViewModel.IsRunning = false;
+                        client.ViewModel.IsReady = false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    initLoginPanel();
+                    Console.WriteLine(ex.Message);
+                }
             }
         }
 
@@ -494,18 +513,18 @@ namespace Astrum
             if (client != null && client.ViewModel.IsLogin)
             {
                 client.ViewModel.IsReady = false;
-                await Task.Run(() =>
+                try
                 {
-                    try
+                    var result = await Task.Run(() =>
                     {
-                       return client.StartGacha();
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                        return false;
-                    }
-                });
+                        return client.StartGacha();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    initLoginPanel();
+                    Console.WriteLine(ex.Message);
+                }
             }
         }
 
