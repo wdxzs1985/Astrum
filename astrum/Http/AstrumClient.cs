@@ -1253,6 +1253,11 @@ namespace Astrum.Http
             return JsonConvert.DeserializeObject<GachaResult>(result);
         }
 
+        public void StartTraining()
+        {
+            //GetXHR("http://astrum.amebagames.com/_/training");
+        }
+
         private void PrintMypage(MypageInfo mypage)
         {
             string history = "";

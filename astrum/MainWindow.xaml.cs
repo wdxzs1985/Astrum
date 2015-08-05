@@ -637,5 +637,11 @@ namespace Astrum
                 }
             });
         }
+
+        private void TrainingButton_Click(object sender, RoutedEventArgs e)
+        {
+            client.ViewModel.IsTrainingEnable = true;
+
+        }
     }
 }

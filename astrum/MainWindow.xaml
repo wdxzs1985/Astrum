@@ -20,10 +20,7 @@
 
     <Grid Background="{StaticResource Cyan_500}" 
           VerticalAlignment="Center" HorizontalAlignment="Center"
-          Height="732" Width="412" >
-        <Grid.Effect>
-            <DropShadowEffect BlurRadius="20" ShadowDepth="0" Direction="0" Opacity="0.6" />
-        </Grid.Effect>
+          Height="732" Width="412"  Effect="{StaticResource DropShadowEffect}">
 
         <Grid x:Name="LoginPanel"
               HorizontalAlignment="Center" 
@@ -308,8 +305,47 @@
             </Grid>
 
             <Grid Name="GachaPanel" Margin="0,144,0,240" 
+                  Background="{StaticResource Background}"
                   Visibility="{Binding IsGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <UI:GachaListView Margin="0,0,0,0" GachaList="{Binding GachaList}" Gacha="GachaListView_Gacha"></UI:GachaListView>
+                <UI:GachaListView GachaList="{Binding GachaList}" Gacha="GachaListView_Gacha"/>
+
+                <Grid Visibility="{Binding IsTrainingEnable, Converter={StaticResource BooleanToVisibilityConverter}}"
+                      Background="{StaticResource Cyan_50}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="96"/>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="16,16,16,16">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="64"/>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Image Source="Images/ic_account_circle_white_48dp.png" 
+                               VerticalAlignment="Center" HorizontalAlignment="Left"
+                               Grid.RowSpan="2"></Image>
+                        <Label Content="Name" 
+                               Grid.Row="0" Grid.Column="1" 
+                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Width="100"></Label>
+                        <ProgressBar Name="Level"
+                                     Grid.Row="1" Grid.Column="1"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Width="100" Height="8"></ProgressBar>
+                        <ProgressBar Name="Skill"
+                                     Grid.Row="1" Grid.Column="2"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Width="100" Height="8"></ProgressBar>
+                    </Grid>
+
+                </Grid>
             </Grid>
 
             <Grid Name="Tabs" VerticalAlignment="Top"
@@ -441,11 +477,18 @@
                            HorizontalContentAlignment="Right"
                            Grid.Column="0"/>
                     <ProgressBar x:Name="CardProgress" 
-                                 Grid.Column="1" Height="8" Width="100"
+                                 Grid.Column="1" 
+Height="8" Width="100"
                                  Value="{Binding CardProgress, FallbackValue=50, Mode=OneWay, TargetNullValue=0}" 
                                  Minimum="0" Maximum="100"  
                                  ToolTip="{Binding Card}" 
                                  Foreground="{Binding CardProgress, Converter={StaticResource ProgressBarInverseForegoundConvert}}"/>
+
+                    <Button Name="TrainingButton" 
+                            Grid.Column="0" Grid.ColumnSpan="2" 
+                            Background="Transparent"
+                            Click="TrainingButton_Click"
+                            Style="{StaticResource IconButton}"></Button>
                 </Grid>
             </Grid>
 
