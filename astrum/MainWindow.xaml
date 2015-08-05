@@ -316,7 +316,7 @@
                 </Grid.RowDefinitions>
                 <Grid Name="RareRaidGacha" VerticalAlignment="Top" 
                       Margin="0,16,0,0" Grid.Row="0"
-                      Visibility="{Binding IsRareRaidGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                      Visibility="{Binding IsRareRaidGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True" d:IsHidden="True">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="24" />
                         <RowDefinition Height="64" />
@@ -347,7 +347,7 @@
                 </Grid>
                 <Grid Name="RaidGacha" VerticalAlignment="Top" 
                       Margin="0,16,0,0" Grid.Row="1"
-                      Visibility="{Binding IsRaidGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                      Visibility="{Binding IsRaidGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True" d:IsHidden="True">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="24" />
                             <RowDefinition Height="64" />
@@ -378,7 +378,7 @@
                 </Grid>
                 <Grid Name="NormalGacha" VerticalAlignment="Top" 
                       Margin="0,16,0,0" Grid.Row="2" 
-                      Visibility="{Binding IsNormalGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                      Visibility="{Binding IsNormalGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True" d:IsHidden="True">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="24" />
                         <RowDefinition Height="64" />
@@ -422,22 +422,19 @@
                 </Grid.ColumnDefinitions>
 
                 <RadioButton x:Name="QuestButton" Content="任务"
-                             Foreground="White" 
                              Grid.Column="0"
                              IsChecked="{Binding IsQuestEnable}" 
-                             Template="{StaticResource TabButton}"
+                             Style="{StaticResource TabButton}"
                              Checked="QuestButton_Checked" d:IsLocked="True"/>
                 <RadioButton Name="GuildBattleButton" Content="公会战" 
-                             Foreground="White" 
                              Grid.Column="1"
                              IsChecked="{Binding IsGuildBattleEnable}" 
-                             Template="{StaticResource TabButton}"
+                             Style="{StaticResource TabButton}"
                              Checked="GuildBattleButton_Checked" d:IsLocked="True"/>
                 <RadioButton Name="GachaButton" Content="Africa" 
-                             Foreground="White" 
                              Grid.Column="2"
                              IsChecked="{Binding IsGachaEnable}" 
-                             Template="{StaticResource TabButton}"
+                             Style="{StaticResource TabButton}"
                              Checked="GachaButton_Checked" d:IsLocked="True"/>
             </Grid>
             <Grid x:Name="StatusArea" VerticalAlignment="Top" Background="{StaticResource Cyan_500}"

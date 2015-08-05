@@ -12,6 +12,7 @@ using Astrum.Http;
 using Astrum.Json;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace Astrum
 {
@@ -144,32 +145,45 @@ namespace Astrum
 
                 LoginPanel.Visibility = Visibility.Hidden;
                 StatusPanel.Visibility = Visibility.Visible;
-                client.ViewModel.IsReady = await Task.Run(() =>
-                {
+                Tabs.IsEnabled = false;
 
-                    try
+                try
+                {
+                    await Task.Run(() =>
                     {
                         if (client.ViewModel.IsQuestEnable)
                         {
-                            return client.StartQuest();
+                            var result = client.StartQuest();
+                            client.ViewModel.IsReady = result;
+                            return result;
                         }
                         else if (client.ViewModel.IsGuildBattleEnable)
                         {
-                            return client.StartGuildBattle();
+                            var result = client.StartGuildBattle();
+                            client.ViewModel.IsReady = result;
+                            return result;
+                        }
+                        else if (client.ViewModel.IsGachaEnable)
+                        {
+                            var result = client.StartGacha();
+                            return result;
                         }
                         return false;
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                        return false;
-                    }
-                });
-                
-                nowUser = new LoginUser { username = username, password = password };
-                //save user
-                SaveUserList();
-                    
+                    });
+
+                    nowUser = new LoginUser { username = username, password = password };
+                    //save user
+                    SaveUserList();
+                }
+                catch (Exception ex)
+                {
+                    initLoginPanel();
+                    Console.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    Tabs.IsEnabled = true;
+                }
             }
             else
             {
@@ -270,8 +284,9 @@ namespace Astrum
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
             StartButton.IsEnabled = false;
-            QuestButton.IsEnabled = false;
-            GuildBattleButton.IsEnabled = false;
+            Tabs.IsEnabled = false;
+            //QuestButton.IsEnabled = false;
+            //GuildBattleButton.IsEnabled = false;
 
 
             if (client.ViewModel.IsRunning == false)
@@ -318,8 +333,9 @@ namespace Astrum
                 {
                     StartButton.Content = "Start";
                     StartButton.IsEnabled = true;
-                    QuestButton.IsEnabled = true;
-                    GuildBattleButton.IsEnabled = true;
+                    Tabs.IsEnabled = true;
+                    //QuestButton.IsEnabled = true;
+                    //GuildBattleButton.IsEnabled = true;
                 }
                 else
                 {
@@ -455,12 +471,15 @@ namespace Astrum
             if (client != null && client.ViewModel.IsLogin)
             {
                 client.ViewModel.IsReady = false;
+                Tabs.IsEnabled = false;
+
                 try
                 {
                     var result = await Task.Run(() =>
                     {
                         return client.StartQuest();
                     });
+
                     if (result)
                     {
                         client.ViewModel.IsReady = true;
@@ -476,6 +495,10 @@ namespace Astrum
                     initLoginPanel();
                     Console.WriteLine(ex.Message);
                 }
+                finally
+                {
+                    Tabs.IsEnabled = true;
+                }
             }
         }
 
@@ -484,6 +507,8 @@ namespace Astrum
             if (client != null && client.ViewModel.IsLogin)
             {
                 client.ViewModel.IsReady = false;
+                Tabs.IsEnabled = false;
+
                 try
                 {
                     var result = await Task.Run(() =>
@@ -505,6 +530,10 @@ namespace Astrum
                     initLoginPanel();
                     Console.WriteLine(ex.Message);
                 }
+                finally
+                {
+                    Tabs.IsEnabled = true;
+                }
             }
         }
 
@@ -513,6 +542,8 @@ namespace Astrum
             if (client != null && client.ViewModel.IsLogin)
             {
                 client.ViewModel.IsReady = false;
+                Tabs.IsEnabled = false;
+
                 try
                 {
                     var result = await Task.Run(() =>
@@ -524,6 +555,10 @@ namespace Astrum
                 {
                     initLoginPanel();
                     Console.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    Tabs.IsEnabled = true;
                 }
             }
         }

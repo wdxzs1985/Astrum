@@ -1243,6 +1243,11 @@ namespace Astrum.Http
 
             PrintGachaResult(result);
             UpdataGachaResult(result);
+
+
+            initRaidGacha();
+            initNormalGacha();
+
         }
 
         private GachaList GachaListInfo(string type)
