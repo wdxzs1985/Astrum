@@ -36,7 +36,7 @@
                              HorizontalAlignment="Center"
                              SelectedIndex="0"
                              UserList="{Binding LoginUserList}"
-                             UserChanged="UserSelector_UserChanged">
+                             UserChanged="UserSelector_UserChanged" d:IsLocked="True">
             </UI:UserSelector>
 
             <TextBox x:Name="UsernameBox" 
@@ -217,13 +217,13 @@
                         <Label Content="体力"
                                HorizontalAlignment="Left" VerticalAlignment="top"
                                Grid.Column="0" Grid.Row="0"/>
-                        <TextBox Text="{Binding MaxKeepStamina, FallbackValue=999}" 
+                        <TextBox Text="{Binding KeepStamina, FallbackValue=999}" 
                                  Grid.Column="1" Grid.Row="0"
                                  HorizontalContentAlignment="Right"
                                  BorderThickness="0,0,0,1" 
                                  BorderBrush="{StaticResource Cyan_500}" 
                                  Background="{x:Null}" Foreground="{StaticResource SecondaryText}"/>
-                        <Slider Value="{Binding MaxKeepStamina}" 
+                        <Slider Value="{Binding KeepStamina}" 
                                 Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
                                 Minimum="0" Maximum="200" 
                                 LargeChange="100" SmallChange="1" />
@@ -307,108 +307,11 @@
                 </Grid>
             </Grid>
 
-            <Grid Name="GachaPanel" Margin="16,144,16,240" 
+            <Grid Name="GachaPanel" Margin="0,144,0,240" 
                   Visibility="{Binding IsGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <Grid Name="RareRaidGacha" VerticalAlignment="Top" 
-                      Margin="0,16,0,0" Grid.Row="0"
-                      Visibility="{Binding IsRareRaidGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True" d:IsHidden="True">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="24" />
-                        <RowDefinition Height="64" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Content="{Binding RareRaidGachaName}" Grid.Row="0" Grid.Column="0"></Label>
-                    <Label Content="{Binding RareRaidMedal, FallbackValue=999}" 
-                           Grid.Row="0" Grid.Column="1"
-                           HorizontalContentAlignment="Right"></Label>
-                    <Button Name="RareRaidGachaButton" Content="ガチャを引く"  
-                            Background="{StaticResource Cyan_500}"
-                            Foreground="White"
-                            Margin="0,8,8,8" 
-                            Grid.Row="1" Grid.Column="0"
-                            Style="{StaticResource FlatButton}"
-                            Click="RareRaidGachaButton_Click"></Button>
-                    <Button Name="RareRaidGachaSequenceButton" Content="10回連続で引く"  
-                            Background="{StaticResource Cyan_500}"
-                            Foreground="White"
-                            Margin="8,8,0,8" 
-                            Grid.Row="1" Grid.Column="1"
-                            Style="{StaticResource FlatButton}"
-                            IsEnabled="{Binding IsRareRaidGachaSequence}"
-                            Click="RareRaidGachaSequenceButton_Click"></Button>
-                </Grid>
-                <Grid Name="RaidGacha" VerticalAlignment="Top" 
-                      Margin="0,16,0,0" Grid.Row="1"
-                      Visibility="{Binding IsRaidGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True" d:IsHidden="True">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="24" />
-                            <RowDefinition Height="64" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                    <Label Content="{Binding RaidGachaName}" Grid.Row="0" Grid.Column="0"></Label>
-                    <Label Content="{Binding RaidMedal, FallbackValue=999}" 
-                           Grid.Row="0" Grid.Column="1"
-                           HorizontalContentAlignment="Right"></Label>
-                    <Button Name="RaidGachaButton" Content="ガチャを引く"  
-                            Background="{StaticResource Cyan_500}"
-                            Foreground="White"
-                            Margin="0,8,8,8" 
-                            Grid.Row="2" Grid.Column="0"
-                            Style="{StaticResource FlatButton}"
-                            Click="RaidGachaButton_Click"></Button>
-                    <Button Name="RaidGachaSequenceButton" Content="10回連続で引く"  
-                            Background="{StaticResource Cyan_500}"
-                            Foreground="White"
-                            Margin="8,8,0,8" 
-                            Grid.Row="2" Grid.Column="1"
-                            Style="{StaticResource FlatButton}"
-                            IsEnabled="{Binding IsRaidGachaSequence}"
-                            Click="RaidGachaSequenceButton_Click"></Button>
-                </Grid>
-                <Grid Name="NormalGacha" VerticalAlignment="Top" 
-                      Margin="0,16,0,0" Grid.Row="2" 
-                      Visibility="{Binding IsNormalGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True" d:IsHidden="True">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="24" />
-                        <RowDefinition Height="64" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Content="{Binding NormalGachaName}" Grid.Row="0" Grid.Column="0"></Label>
-                    <Label Content="{Binding GachaPoint, FallbackValue=999}" 
-                           Grid.Row="0" Grid.Column="1"
-                           HorizontalContentAlignment="Right"></Label>
-                    <Button Name="NormalGachaButton" Content="ガチャを引く" 
-                            Background="{StaticResource Cyan_500}"
-                            Foreground="White"
-                            Margin="0,8,8,8" 
-                            Grid.Row="1" Grid.Column="0"
-                            Style="{StaticResource FlatButton}"
-                            Click="NormalGachaButton_Click"></Button>
-                    <Button Name="NormalGachaSequenceButton" Content="10回連続で引く" 
-                            Background="{StaticResource Cyan_500}"
-                            Foreground="White"
-                            Margin="8,8,0,8" 
-                            Grid.Row="1" Grid.Column="1"
-                            Style="{StaticResource FlatButton}"
-                            IsEnabled="{Binding IsNormalGachaSequence}"
-                            Click="NormalGachaSequenceButton_Click"></Button>
-                </Grid>
+                <UI:GachaListView Margin="0,0,0,0" GachaList="{Binding GachaList}" Gacha="GachaListView_Gacha"></UI:GachaListView>
             </Grid>
-            
+
             <Grid Name="Tabs" VerticalAlignment="Top"
                   Height="48" Margin="0,96,0,0"
                   Background="{StaticResource Cyan_500}" d:IsLocked="True">
@@ -550,7 +453,7 @@
                        Height="240" Margin="0,0,0,0" Padding="10"
                        VerticalAlignment="Bottom"
                        Background="{DynamicResource StatusBar_Light}" Grid.ColumnSpan="2" d:IsLocked="True"/>
-            
+
             <Grid Margin="0,0,16,208" Width="64" Height="64"
                   HorizontalAlignment="Right" VerticalAlignment="Bottom" 
                   Visibility="{Binding IsReady, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True" d:IsHidden="True" >

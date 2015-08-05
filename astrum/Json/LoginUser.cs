@@ -22,5 +22,7 @@ namespace Astrum.Json
         public int minstaminastock { get; set; }
 
         public int minbpstock { get; set; }
+
+        public int keepstamina { get; set; }
     }
 }

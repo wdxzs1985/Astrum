@@ -44,13 +44,13 @@ namespace Astrum.UI
 
         private static void OnUserChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
-            UserSelector thisCtrl = (UserSelector)obj;
-            thisCtrl.User.Content = thisCtrl.SelectedUserName;
+            UserSelector self = (UserSelector)obj;
+            self.User.Content = self.SelectedUserName;
 
-            thisCtrl.DecreaseIndexButton.IsEnabled = !thisCtrl.IsFirst;
-            thisCtrl.IncreaseIndexButton.IsEnabled = !thisCtrl.IsLast;
+            self.DecreaseIndexButton.IsEnabled = !self.IsFirst;
+            self.IncreaseIndexButton.IsEnabled = !self.IsLast;
 
-            thisCtrl.RaiseUserChangedEvent();
+            self.RaiseUserChangedEvent();
         }
 
         public static readonly RoutedEvent UserChangedEvent = EventManager.RegisterRoutedEvent(

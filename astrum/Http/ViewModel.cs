@@ -1,4 +1,5 @@
 ﻿using Astrum.Json;
+using Astrum.Json.Gacha;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -32,6 +33,20 @@ namespace Astrum.Http
             {
                 _login_user_list = value;
                 NotifyPropertyChanged("LoginUserList");
+            }
+        }
+
+        private List<GachaInfo> _gacha_list;
+        public List<GachaInfo> GachaList
+        {
+            get
+            {
+                return _gacha_list;
+            }
+            set
+            {
+                _gacha_list = value;
+                NotifyPropertyChanged("GachaList");
             }
         }
 
@@ -629,17 +644,17 @@ namespace Astrum.Http
 
         public bool IsStaminaEmpty { get; set; }
 
-        private int _maxKeepStamina = 100;
-        public int MaxKeepStamina
+        private int _keepStamina = 100;
+        public int KeepStamina
         {
             get
             {
-                return _maxKeepStamina;
+                return _keepStamina;
             }
             set
             {
-                _maxKeepStamina = value;
-                NotifyPropertyChanged("MaxKeepStamina");
+                _keepStamina = value;
+                NotifyPropertyChanged("KeepStamina");
             }
         }
 
@@ -722,187 +737,6 @@ namespace Astrum.Http
                 return BpStock > 0 && IsReady;
             }
         }
-
-        private string _rare_raid_gacha_name;
-        private bool _rare_raid_gacha_enable;
-        private bool _rare_raid_gacha_sequence;
-        private int _rare_raid_medal;
-
-        private string _raid_gacha_name;
-        private bool _raid_gacha_enable;
-        private bool _raid_gacha_sequence;
-        private int _raid_medal;
-
-        private string _normal_gacha_name;
-        private bool _normal_gacha_enable;
-        private bool _normal_gacha_sequence;
-        private int _gacha_point;
-
-        public string RareRaidGachaId { get; set; }
-        public string RaidGachaId { get; set; }
-        public string NormalGachaId { get; set; }
-
-        public string RareRaidGachaName
-        {
-            get
-            {
-                return _rare_raid_gacha_name;
-            }
-            set
-            {
-                _rare_raid_gacha_name = value;
-                NotifyPropertyChanged("RareRaidGachaName");
-            }
-        }
-
-        public bool IsRareRaidGachaEnable
-        {
-            get
-            {
-                return _rare_raid_gacha_enable;
-            }
-            set
-            {
-                _rare_raid_gacha_enable = value;
-                NotifyPropertyChanged("IsRareRaidGachaEnable");
-            }
-        }
-
-        public bool IsRareRaidGachaSequence
-        {
-            get
-            {
-                return _rare_raid_gacha_sequence;
-            }
-            set
-            {
-                _rare_raid_gacha_sequence = value;
-                NotifyPropertyChanged("IsRareRaidGachaSequence");
-            }
-        }
-
-        public int RareRaidMedal
-        {
-            get
-            {
-                return _rare_raid_medal;
-            }
-            set
-            {
-                _rare_raid_medal = value;
-                NotifyPropertyChanged("RareRaidMedal");
-            }
-        }
-
-
-        public string RaidGachaName
-        {
-            get
-            {
-                return _raid_gacha_name;
-            }
-            set
-            {
-                _raid_gacha_name = value;
-                NotifyPropertyChanged("RaidGachaName");
-            }
-        }
-
-        public bool IsRaidGachaEnable
-        {
-            get
-            {
-                return _raid_gacha_enable;
-            }
-            set
-            {
-                _raid_gacha_enable = value;
-                NotifyPropertyChanged("IsRaidGachaEnable");
-            }
-        }
-
-        public bool IsRaidGachaSequence
-        {
-            get
-            {
-                return _raid_gacha_sequence;
-            }
-            set
-            {
-                _raid_gacha_sequence = value;
-                NotifyPropertyChanged("IsRaidGachaSequence");
-            }
-        }
-
-
-        public int RaidMedal
-        {
-            get
-            {
-                return _raid_medal;
-            }
-            set
-            {
-                _raid_medal = value;
-                NotifyPropertyChanged("RaidMedal");
-            }
-        }
-
-        public string NormalGachaName
-        {
-            get
-            {
-                return _normal_gacha_name;
-            }
-            set
-            {
-                _normal_gacha_name = value;
-                NotifyPropertyChanged("NormalGachaName");
-            }
-        }
-
-        public bool IsNormalGachaEnable
-        {
-            get
-            {
-                return _normal_gacha_enable;
-            }
-            set
-            {
-                _normal_gacha_enable = value;
-                NotifyPropertyChanged("IsNormalGachaEnable");
-            }
-        }
-
-        public bool IsNormalGachaSequence
-        {
-            get
-            {
-                return _normal_gacha_sequence;
-            }
-            set
-            {
-                _normal_gacha_sequence = value;
-                NotifyPropertyChanged("IsNormalGachaSequence");
-            }
-        }
-
-
-        public int GachaPoint
-        {
-            get
-            {
-                return _gacha_point;
-            }
-            set
-            {
-                _gacha_point = value;
-                NotifyPropertyChanged("GachaPoint");
-            }
-        }
-
-
-
-
+        
     }
 }

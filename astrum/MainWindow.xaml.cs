@@ -12,7 +12,7 @@ using Astrum.Http;
 using Astrum.Json;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Threading;
+using Astrum.UI;
 
 namespace Astrum
 {
@@ -244,6 +244,7 @@ namespace Astrum
                 nowUser.name = client.ViewModel.Name;
                 nowUser.minstaminastock = client.ViewModel.MinStaminaStock;
                 nowUser.minbpstock = client.ViewModel.MinBpStock;
+                nowUser.keepstamina = client.ViewModel.KeepStamina;
 
                 userList.Insert(0, nowUser);
 
@@ -365,6 +366,7 @@ namespace Astrum
 
                 client.ViewModel.MinStaminaStock = user.minstaminastock;
                 client.ViewModel.MinBpStock = user.minbpstock;
+                client.ViewModel.KeepStamina = user.keepstamina;
 
                 if (user.username != null)
                 {
@@ -618,137 +620,22 @@ namespace Astrum
                 });
             }
         }
-
-        private async void RareRaidGachaButton_Click(object sender, RoutedEventArgs e)
+        
+        private async void GachaListView_Gacha(object sender, RoutedEventArgs e)
         {
-            if (client.ViewModel.IsRareRaidGachaEnable)
+            await Task.Run(() =>
             {
-                await Task.Run(() =>
+                try
                 {
-                    try
-                    {
-                        var gachaId = client.ViewModel.RareRaidGachaId;
-                        var sequence = false;
-
-                        client.Gacha(gachaId, sequence);
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-                });
-            }
-        }
-
-        private async void RareRaidGachaSequenceButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (client.ViewModel.IsRareRaidGachaEnable && client.ViewModel.IsRareRaidGachaSequence)
-            {
-                await Task.Run(() =>
+                    var ge = (GachaEventArgs)e;
+                    client.Gacha(ge.GachaId, ge.Sequence);
+                }
+                catch (Exception ex)
                 {
-                    try
-                    {
-                        var gachaId = client.ViewModel.RareRaidGachaId;
-                        var sequence = true;
-
-                        client.Gacha(gachaId, sequence);
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-                });
-            }
-        }
-
-        private async void RaidGachaButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (client.ViewModel.IsRaidGachaEnable)
-            {
-                await Task.Run(() =>
-                {
-                    try
-                    {
-                        var gachaId = client.ViewModel.RaidGachaId;
-                        var sequence = false;
-
-                        client.Gacha(gachaId, sequence);
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-                });
-            }
-        }
-
-        private async void RaidGachaSequenceButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (client.ViewModel.IsRaidGachaEnable && client.ViewModel.IsRaidGachaSequence)
-            {
-                await Task.Run(() =>
-                {
-                    try
-                    {
-
-                        var gachaId = client.ViewModel.RaidGachaId;
-                        var sequence = true;
-
-                        client.Gacha(gachaId, sequence);
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-                });
-            }
-        }
-
-        private async void NormalGachaButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (client.ViewModel.IsNormalGachaEnable)
-            {
-                await Task.Run(() =>
-                {
-                    try
-                    {
-                        var gachaId = client.ViewModel.NormalGachaId;
-                        var sequence = false;
-
-                        client.Gacha(gachaId, sequence);
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-                });
-            }
-        }
-
-        private async void NormalGachaSequenceButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (client.ViewModel.IsNormalGachaEnable && client.ViewModel.IsNormalGachaSequence)
-            {
-                await Task.Run(() =>
-                {
-                    try
-                    {
-                        var gachaId = client.ViewModel.NormalGachaId;
-                        var sequence = true;
-
-                        client.Gacha(gachaId, sequence);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-                });
-            }
+                    Console.WriteLine(ex.Message);
+                    Console.WriteLine(ex.StackTrace);
+                }
+            });
         }
     }
 }
