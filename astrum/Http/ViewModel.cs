@@ -201,6 +201,7 @@ namespace Astrum.Http
         private bool _quest_enable;
         private bool _guild_battle_enable;
         private bool _gacha_enable;
+        private bool _training_enable;
 
         public bool IsQuestEnable
         {
@@ -238,6 +239,19 @@ namespace Astrum.Http
             {
                 _gacha_enable = value;
                 NotifyPropertyChanged("IsGachaEnable");
+            }
+        }
+
+        public bool IsTrainingEnable
+        {
+            get
+            {
+                return _training_enable;
+            }
+            set
+            {
+                _training_enable = value;
+                NotifyPropertyChanged("IsTrainingEnable");
             }
         }
 
