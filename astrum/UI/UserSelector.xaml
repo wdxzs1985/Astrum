@@ -5,18 +5,18 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Astrum.UI"
     x:Class="Astrum.UI.UserSelector"
-    Name="userSelector"
+    x:Name="userSelector"
              mc:Ignorable="d" 
-             d:DesignHeight="160" d:DesignWidth="160">
+             d:DesignHeight="300" d:DesignWidth="300" >
     <UserControl.Resources>
         <Style x:Key="{x:Type RepeatButton}" TargetType="{x:Type RepeatButton}">
-            <Setter Property="OverridesDefaultStyle" Value="True"></Setter>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type RepeatButton}">
                         <Grid>
-                            <Rectangle Name="Background" Fill="Transparent"></Rectangle>
-                            <ContentPresenter Name="Content" Opacity="0.54"></ContentPresenter>
+                            <Rectangle x:Name="Background" Fill="Transparent"/>
+                            <ContentPresenter x:Name="Content" Opacity="0.54"/>
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
@@ -33,37 +33,33 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
-        <Style x:Key="{x:Type local:UserSelector}" TargetType="{x:Type local:UserSelector}">
-            <Style.Triggers>
-
-            </Style.Triggers>
-        </Style>
     </UserControl.Resources>
 
     <Grid Background="{StaticResource Cyan_500}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="32"/>
-            <ColumnDefinition Width="96"/>
-            <ColumnDefinition Width="32"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        <RepeatButton Name="DecreaseIndexButton" Grid.Column="0" 
-                      Click="DecreaseIndexButton_Click" 
-                      IsEnabled="False" >
-            <Image Source="/Astrum;component/Images/ic_keyboard_arrow_left_white_48dp.png" ></Image>
+        <RepeatButton x:Name="DecreaseIndexButton" Grid.Column="0" 
+			Click="DecreaseIndexButton_Click" 
+			IsEnabled="False" >
+            <Image Source="/Astrum;component/Images/ic_keyboard_arrow_left_white_48dp.png" />
         </RepeatButton>
         <Grid Grid.Column="1">
             <Image x:Name="Avatar" Source="/Astrum;component/Images/ic_account_circle_white_48dp.png"
-                   Width="96" Height="96"
-                   VerticalAlignment="Center"/>
+                   Stretch="None"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
             <Label x:Name="User"
                    VerticalAlignment="Bottom"
-                   HorizontalAlignment="Center" 
+                   HorizontalAlignment="Center"
                    Foreground="White"/>
         </Grid>
-        <RepeatButton Name="IncreaseIndexButton" Grid.Column="2" 
-                      Click="IncreaseIndexButton_Click">
-            <Image Source="/Astrum;component/Images/ic_keyboard_arrow_right_white_48dp.png" ></Image>
+        <RepeatButton x:Name="IncreaseIndexButton" Grid.Column="2" 
+			Click="IncreaseIndexButton_Click">
+            <Image Source="/Astrum;component/Images/ic_keyboard_arrow_right_white_48dp.png"
+                   Stretch="Uniform" />
         </RepeatButton>
     </Grid>
 </UserControl>

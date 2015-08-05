@@ -12,6 +12,7 @@ using Astrum.Http;
 using Astrum.Json;
 using System.Drawing;
 using System.Windows.Forms;
+using Astrum.UI;
 
 namespace Astrum
 {
@@ -144,32 +145,45 @@ namespace Astrum
 
                 LoginPanel.Visibility = Visibility.Hidden;
                 StatusPanel.Visibility = Visibility.Visible;
-                client.ViewModel.IsReady = await Task.Run(() =>
-                {
+                Tabs.IsEnabled = false;
 
-                    try
+                try
+                {
+                    await Task.Run(() =>
                     {
                         if (client.ViewModel.IsQuestEnable)
                         {
-                            return client.StartQuest();
+                            var result = client.StartQuest();
+                            client.ViewModel.IsReady = result;
+                            return result;
                         }
                         else if (client.ViewModel.IsGuildBattleEnable)
                         {
-                            return client.StartGuildBattle();
+                            var result = client.StartGuildBattle();
+                            client.ViewModel.IsReady = result;
+                            return result;
+                        }
+                        else if (client.ViewModel.IsGachaEnable)
+                        {
+                            var result = client.StartGacha();
+                            return result;
                         }
                         return false;
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                        return false;
-                    }
-                });
-                
-                nowUser = new LoginUser { username = username, password = password };
-                //save user
-                SaveUserList();
-                    
+                    });
+
+                    nowUser = new LoginUser { username = username, password = password };
+                    //save user
+                    SaveUserList();
+                }
+                catch (Exception ex)
+                {
+                    initLoginPanel();
+                    Console.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    Tabs.IsEnabled = true;
+                }
             }
             else
             {
@@ -230,6 +244,7 @@ namespace Astrum
                 nowUser.name = client.ViewModel.Name;
                 nowUser.minstaminastock = client.ViewModel.MinStaminaStock;
                 nowUser.minbpstock = client.ViewModel.MinBpStock;
+                nowUser.keepstamina = client.ViewModel.KeepStamina;
 
                 userList.Insert(0, nowUser);
 
@@ -270,8 +285,9 @@ namespace Astrum
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
             StartButton.IsEnabled = false;
-            QuestButton.IsEnabled = false;
-            GuildBattleButton.IsEnabled = false;
+            Tabs.IsEnabled = false;
+            //QuestButton.IsEnabled = false;
+            //GuildBattleButton.IsEnabled = false;
 
 
             if (client.ViewModel.IsRunning == false)
@@ -309,20 +325,23 @@ namespace Astrum
                     catch (Exception ex)
                     {
                         Console.WriteLine(ex.Message);
-                        client.ViewModel.IsRunning = false;
-                        client.ViewModel.IsReady = false;
                         return false;
                     }
                     return true;
                 });
 
-                StartButton.Content = "Start";
-                StartButton.IsEnabled = true;
-                QuestButton.IsEnabled = true;
-                GuildBattleButton.IsEnabled = true;
-
-                if (!result)
+                if(result)
                 {
+                    StartButton.Content = "Start";
+                    StartButton.IsEnabled = true;
+                    Tabs.IsEnabled = true;
+                    //QuestButton.IsEnabled = true;
+                    //GuildBattleButton.IsEnabled = true;
+                }
+                else
+                {
+                    client.ViewModel.IsRunning = false;
+                    client.ViewModel.IsReady = false;
                     initLoginPanel();
                 }
             }
@@ -347,6 +366,7 @@ namespace Astrum
 
                 client.ViewModel.MinStaminaStock = user.minstaminastock;
                 client.ViewModel.MinBpStock = user.minbpstock;
+                client.ViewModel.KeepStamina = user.keepstamina;
 
                 if (user.username != null)
                 {
@@ -453,18 +473,34 @@ namespace Astrum
             if (client != null && client.ViewModel.IsLogin)
             {
                 client.ViewModel.IsReady = false;
-                client.ViewModel.IsReady = await Task.Run(() =>
+                Tabs.IsEnabled = false;
+
+                try
                 {
-                    try
+                    var result = await Task.Run(() =>
                     {
                         return client.StartQuest();
-                    }
-                    catch (Exception ex)
+                    });
+
+                    if (result)
                     {
-                        Console.WriteLine(ex.Message);
-                        return false;
+                        client.ViewModel.IsReady = true;
                     }
-                });
+                    else
+                    {
+                        client.ViewModel.IsRunning = false;
+                        client.ViewModel.IsReady = false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    initLoginPanel();
+                    Console.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    Tabs.IsEnabled = true;
+                }
             }
         }
 
@@ -473,19 +509,33 @@ namespace Astrum
             if (client != null && client.ViewModel.IsLogin)
             {
                 client.ViewModel.IsReady = false;
-                client.ViewModel.IsReady = await Task.Run(() =>
+                Tabs.IsEnabled = false;
+
+                try
                 {
-                    try
+                    var result = await Task.Run(() =>
                     {
                         return client.StartGuildBattle();
-                    }
-                    catch (Exception ex)
+                    });
+                    if (result)
                     {
-                        Console.WriteLine(ex.Message);
-                        return false;
+                        client.ViewModel.IsReady = true;
                     }
-                });
-                
+                    else
+                    {
+                        client.ViewModel.IsRunning = false;
+                        client.ViewModel.IsReady = false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    initLoginPanel();
+                    Console.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    Tabs.IsEnabled = true;
+                }
             }
         }
 
@@ -494,18 +544,24 @@ namespace Astrum
             if (client != null && client.ViewModel.IsLogin)
             {
                 client.ViewModel.IsReady = false;
-                await Task.Run(() =>
+                Tabs.IsEnabled = false;
+
+                try
                 {
-                    try
+                    var result = await Task.Run(() =>
                     {
-                       return client.StartGacha();
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                        return false;
-                    }
-                });
+                        return client.StartGacha();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    initLoginPanel();
+                    Console.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    Tabs.IsEnabled = true;
+                }
             }
         }
 
@@ -564,137 +620,22 @@ namespace Astrum
                 });
             }
         }
-
-        private async void RareRaidGachaButton_Click(object sender, RoutedEventArgs e)
+        
+        private async void GachaListView_Gacha(object sender, RoutedEventArgs e)
         {
-            if (client.ViewModel.IsRareRaidGachaEnable)
+            await Task.Run(() =>
             {
-                await Task.Run(() =>
+                try
                 {
-                    try
-                    {
-                        var gachaId = client.ViewModel.RareRaidGachaId;
-                        var sequence = false;
-
-                        client.Gacha(gachaId, sequence);
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-                });
-            }
-        }
-
-        private async void RareRaidGachaSequenceButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (client.ViewModel.IsRareRaidGachaEnable && client.ViewModel.IsRareRaidGachaSequence)
-            {
-                await Task.Run(() =>
+                    var ge = (GachaEventArgs)e;
+                    client.Gacha(ge.GachaId, ge.Sequence);
+                }
+                catch (Exception ex)
                 {
-                    try
-                    {
-                        var gachaId = client.ViewModel.RareRaidGachaId;
-                        var sequence = true;
-
-                        client.Gacha(gachaId, sequence);
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-                });
-            }
-        }
-
-        private async void RaidGachaButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (client.ViewModel.IsRaidGachaEnable)
-            {
-                await Task.Run(() =>
-                {
-                    try
-                    {
-                        var gachaId = client.ViewModel.RaidGachaId;
-                        var sequence = false;
-
-                        client.Gacha(gachaId, sequence);
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-                });
-            }
-        }
-
-        private async void RaidGachaSequenceButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (client.ViewModel.IsRaidGachaEnable && client.ViewModel.IsRaidGachaSequence)
-            {
-                await Task.Run(() =>
-                {
-                    try
-                    {
-
-                        var gachaId = client.ViewModel.RaidGachaId;
-                        var sequence = true;
-
-                        client.Gacha(gachaId, sequence);
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-                });
-            }
-        }
-
-        private async void NormalGachaButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (client.ViewModel.IsNormalGachaEnable)
-            {
-                await Task.Run(() =>
-                {
-                    try
-                    {
-                        var gachaId = client.ViewModel.NormalGachaId;
-                        var sequence = false;
-
-                        client.Gacha(gachaId, sequence);
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-                });
-            }
-        }
-
-        private async void NormalGachaSequenceButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (client.ViewModel.IsNormalGachaEnable && client.ViewModel.IsNormalGachaSequence)
-            {
-                await Task.Run(() =>
-                {
-                    try
-                    {
-                        var gachaId = client.ViewModel.NormalGachaId;
-                        var sequence = true;
-
-                        client.Gacha(gachaId, sequence);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-                });
-            }
+                    Console.WriteLine(ex.Message);
+                    Console.WriteLine(ex.StackTrace);
+                }
+            });
         }
     }
 }

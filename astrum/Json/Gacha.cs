@@ -12,7 +12,6 @@ namespace Astrum.Json.Gacha
         public Stock stock { get; set; }
         public string type { get; set; }
         public List<GachaInfo> list { get; set; }
-
     }
 
     public class Card
@@ -26,10 +25,10 @@ namespace Astrum.Json.Gacha
         public string _id { get; set; }
         public string type { get; set; }
         public string name { get; set; }
-        public Sequence sequence { get; set; }
-        public int order { get; set; }
+        public Price price { get; set; }
         public Enable enable { get; set; }
-        public bool isStartDash { get; set; }
+        public Sequence sequence { get; set; }
+        public int stock { get; set; }
     }
     
     public class Sequence
@@ -67,5 +66,13 @@ namespace Astrum.Json.Gacha
         public string type { get; set; }
         public int value { get; set; }
         public int rare { get; set; }
+    }
+
+    public class Price
+    {
+        public string _id { get; set; }
+        public string type { get; set; }
+        public int value { get; set; }
+        public string name { get; set; }
     }
 }
