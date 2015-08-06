@@ -320,7 +320,7 @@ namespace Astrum.Http
                        { "type", "all" }
                     };
                     PostXHR("http://astrum.amebagames.com/_/gift", values);
-                    Delay(DELAY_SHORT);
+                    Delay(DELAY_SHORT);                    
                 }
                 else
                 {
