@@ -1272,6 +1272,9 @@ namespace Astrum.Http
         {
             RaiseInfo raiseInfo = RaiseSearch(baseId, 1, true);
 
+            ViewModel.CardQuantity = raiseInfo.card.value;
+            ViewModel.CardMax = raiseInfo.card.max;
+
             ViewModel.TrainingBaseId = raiseInfo.@base._id;
             ViewModel.TrainingBaseRare = raiseInfo.@base.rare;
             ViewModel.TrainingBaseName = raiseInfo.@base.name;
