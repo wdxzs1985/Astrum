@@ -545,8 +545,21 @@ namespace Astrum.Http
                             break;
                         }
                     }
+<<<<<<< HEAD
                     stage = ForwardStage(areaId);
                     FuryRaidFever();                    
+=======
+                    //forward
+
+                    if (ViewModel.StaminaValue > ViewModel.KeepStamina)
+                    {
+                        stage = ForwardStage(areaId);  
+                    }
+                    else
+                    {
+                        ViewModel.IsStaminaEmpty = true;
+                    }                                                          
+>>>>>>> stamina value
                 }
 
                 if (ViewModel.FuryRaidFull == false)

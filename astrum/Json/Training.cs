@@ -40,8 +40,7 @@ namespace Astrum.Json
         public int maxAbilityLevel { get; set; }
         public Ability ability { get; set; }
         public bool isMaxAbilitLevel { get; set; }
-        public bool isMaxGrowth { get; set; }
-        public Md5 md5 { get; set; }
+        public bool isMaxGrowth { get; set; }        
         public long total { get; set; }
         public long atk { get; set; }
         public long df { get; set; }
