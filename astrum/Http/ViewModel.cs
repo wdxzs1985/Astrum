@@ -1,4 +1,5 @@
 ﻿using Astrum.Json;
+using Astrum.Json.Card;
 using Astrum.Json.Gacha;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace Astrum.Http
 {
     public class ViewModel : INotifyPropertyChanged
     {
+        #region Interface
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
@@ -21,6 +23,7 @@ namespace Astrum.Http
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+        #endregion
 
         private List<LoginUser> _login_user_list;
         public List<LoginUser> LoginUserList
@@ -202,6 +205,7 @@ namespace Astrum.Http
         private bool _guild_battle_enable;
         private bool _gacha_enable;
         private bool _training_enable;
+        private bool _training_base_enable;
 
         public bool IsQuestEnable
         {
@@ -252,6 +256,19 @@ namespace Astrum.Http
             {
                 _training_enable = value;
                 NotifyPropertyChanged("IsTrainingEnable");
+            }
+        }
+
+        public bool IsTrainingBaseEnable
+        {
+            get
+            {
+                return _training_base_enable;
+            }
+            set
+            {
+                _training_base_enable = value;
+                NotifyPropertyChanged("IsTrainingBaseEnable");
             }
         }
 
@@ -751,6 +768,326 @@ namespace Astrum.Http
                 return BpStock > 0 && IsReady;
             }
         }
+
+
+        #region Training/Raise
+
+        private string _training_base_id;
+        private string _training_base_name;
+        private int _training_base_level;
+        private int _training_base_ability_level;
+        private int _training_base_rare;
+        private int _training_base_exp_growth;
+        private int _training_base_ability_growth;
+
+        private List<CardInfo> _training_base_list;
         
+        public string TrainingBaseId
+        {
+            get
+            {
+                return _training_base_id;
+            }
+            set
+            {
+                _training_base_id = value;
+                NotifyPropertyChanged("TrainingBaseId");
+            }
+        }
+
+        public string TrainingBase
+        {
+            get
+            {
+                string rare = "";
+                switch (TrainingBaseRare)
+                {
+                    case 4:
+                        rare = "[SSR]";
+                        break;
+                    case 3:
+                        rare = "[ SR]";
+                        break;
+                    case 2:
+                        rare = "[  R]";
+                        break;
+                    case 1:
+                        rare = "[  N]";
+                        break;
+                    default:
+                        rare = "[???]";
+                        break;
+                }
+                return string.Format("{0}{1}", rare, TrainingBaseName);
+            }
+        }
+
+        public string TrainingBaseName
+        {
+            get
+            {
+                return _training_base_name;
+            }
+            set
+            {
+                _training_base_name = value;
+                NotifyPropertyChanged("TrainingBaseName");
+                NotifyPropertyChanged("TrainingBase");
+            }
+        }
+
+        public int TrainingBaseRare
+        {
+            get
+            {
+                return _training_base_rare;
+            }
+            set
+            {
+                _training_base_rare = value;
+                NotifyPropertyChanged("TrainingBaseRare");
+                NotifyPropertyChanged("TrainingBase");
+            }
+        }
+
+        public int TrainingBaseLevel
+        {
+            get
+            {
+                return _training_base_level;
+            }
+            set
+            {
+                _training_base_level = value;
+                NotifyPropertyChanged("TrainingBaseLevel");
+            }
+        }
+
+        public int TrainingBaseAbilityLevel
+        {
+            get
+            {
+                return _training_base_ability_level;
+            }
+            set
+            {
+                _training_base_ability_level = value;
+                NotifyPropertyChanged("TrainingBaseAbilityLevel");
+            }
+        }
+
+        public int TrainingBaseExpGrowth
+        {
+            get
+            {
+                return _training_base_exp_growth;
+            }
+            set
+            {
+                _training_base_exp_growth = value;
+                NotifyPropertyChanged("TrainingBaseExpGrowth");
+            }
+        }
+
+        public int TrainingBaseAbilityGrowth
+        {
+            get
+            {
+                return _training_base_ability_growth;
+            }
+            set
+            {
+                _training_base_ability_growth = value;
+                NotifyPropertyChanged("TrainingBaseAbilityGrowth");
+            }
+        }
+
+        public List<CardInfo> TrainingBaseList
+        {
+            get
+            {
+                return _training_base_list;
+            }
+            set
+            {
+                _training_base_list = value;
+                NotifyPropertyChanged("TrainingBaseList");
+            }
+        }
+
+        private int _ablility_book_gold_stock;
+        private int _ablility_book_gold_available;
+        private int _ablility_book_silver_stock;
+        private int _ablility_book_silver_available;
+        private int _ablility_book_bronze_stock;
+        private int _ablility_book_bronze_available;
+
+        private int _strength_statue_gold_stock;
+        private int _strength_statue_gold_available;
+        private int _strength_statue_silver_stock;
+        private int _strength_statue_silver_available;
+        private int _strength_statue_bronze_stock;
+        private int _strength_statue_bronze_available;
+
+        public int AbilityBookGoldStock
+        {
+            get
+            {
+                return _ablility_book_gold_stock;
+            }
+            set
+            {
+                _ablility_book_gold_stock = value;
+                NotifyPropertyChanged("AbilityBookGoldStock");
+            }
+        }
+
+        public int AbilityBookGoldAvailable
+        {
+            get
+            {
+                return _ablility_book_gold_available;
+            }
+            set
+            {
+                _ablility_book_gold_available = value;
+                NotifyPropertyChanged("AbilityBookGoldAvailable");
+            }
+        }
+
+
+        public int AbilityBookSilverStock
+        {
+            get
+            {
+                return _ablility_book_silver_stock;
+            }
+            set
+            {
+                _ablility_book_silver_stock = value;
+                NotifyPropertyChanged("AbilityBookSilverStock");
+            }
+        }
+
+        public int AbilityBookSilverAvailable
+        {
+            get
+            {
+                return _ablility_book_silver_available;
+            }
+            set
+            {
+                _ablility_book_silver_available = value;
+                NotifyPropertyChanged("AbilityBookSilverAvailable");
+            }
+        }
+
+        public int AbilityBookBronzeStock
+        {
+            get
+            {
+                return _ablility_book_bronze_stock;
+            }
+            set
+            {
+                _ablility_book_bronze_stock = value;
+                NotifyPropertyChanged("AbilityBookBronzeStock");
+            }
+        }
+
+        public int AbilityBookBronzeAvailable
+        {
+            get
+            {
+                return _ablility_book_bronze_available;
+            }
+            set
+            {
+                _ablility_book_bronze_available = value;
+                NotifyPropertyChanged("AbilityBookBronzeAvailable");
+            }
+        }
+
+
+        public int StrengthStatueGoldStock
+        {
+            get
+            {
+                return _strength_statue_gold_stock;
+            }
+            set
+            {
+                _strength_statue_gold_stock = value;
+                NotifyPropertyChanged("StrengthStatueGoldStock");
+            }
+        }
+
+        public int StrengthStatueGoldAvailable
+        {
+            get
+            {
+                return _strength_statue_gold_available;
+            }
+            set
+            {
+                _strength_statue_gold_available = value;
+                NotifyPropertyChanged("StrengthStatueGoldAvailable");
+            }
+        }
+
+
+        public int StrengthStatueSilverStock
+        {
+            get
+            {
+                return _strength_statue_silver_stock;
+            }
+            set
+            {
+                _strength_statue_silver_stock = value;
+                NotifyPropertyChanged("StrengthStatueSilverStock");
+            }
+        }
+
+        public int StrengthStatueSilverAvailable
+        {
+            get
+            {
+                return _strength_statue_silver_available;
+            }
+            set
+            {
+                _strength_statue_silver_available = value;
+                NotifyPropertyChanged("StrengthStatueSilverAvailable");
+            }
+        }
+
+        public int StrengthStatueBronzeStock
+        {
+            get
+            {
+                return _strength_statue_bronze_stock;
+            }
+            set
+            {
+                _strength_statue_bronze_stock = value;
+                NotifyPropertyChanged("StrengthStatueBronzeStock");
+            }
+        }
+
+        public int StrengthStatueBronzeAvailable
+        {
+            get
+            {
+                return _strength_statue_bronze_available;
+            }
+            set
+            {
+                _strength_statue_bronze_available = value;
+                NotifyPropertyChanged("StrengthStatueBronzeAvailable");
+            }
+        }
+
+        #endregion
     }
 }
