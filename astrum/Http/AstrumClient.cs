@@ -16,6 +16,8 @@ using Astrum.Json.GuildBattle;
 using Astrum.Json.Item;
 using Astrum.Json.Gift;
 using Astrum.Json.Gacha;
+using Astrum.Json;
+using Astrum.Json.Card;
 
 namespace Astrum.Http
 {
@@ -40,6 +42,13 @@ namespace Astrum.Http
         public const string INSTANT_STAMINA = "instant-stamina_potion";
         public const string INSTANT_BP = "instant-bp_ether";
         public const string INSTANT_MINI_BP = "instant-mini_bp_ether";
+        
+        public const string INSTANT_ABILITY_BOOK_GOLD = "instant-ability_book_gold";
+        public const string INSTANT_ABILITY_BOOK_SILVER = "instant-ability_book_silver";
+        public const string INSTANT_ABILITY_BOOK_BRONZE = "instant-ability_book_bronze";
+        public const string INSTANT_STRENGTH_STATUE_GOLD = "instant-strength_statue_gold";
+        public const string INSTANT_STRENGTH_STATUE_SILVER = "instant-strength_statue_silver";
+        public const string INSTANT_STRENGTH_STATUE_BRONZE = "instant-strength_statue_bronze";
 
         public const string FULL = "full";
         public const string NORMAL = "normal";
@@ -144,7 +153,7 @@ namespace Astrum.Http
             }
         }
 
-        protected string PostXHR(string url, Dictionary<string, string> values)
+        protected string PostXHR(string url, Dictionary<string, object> values)
         {
             lock (this)
             {
@@ -304,7 +313,7 @@ namespace Astrum.Http
 
                 if (giftInfo.total > 0)
                 {
-                    var values = new Dictionary<string, string>
+                    var values = new Dictionary<string, object>
                     {
                        { "auto", "1" },
                        { "limited", "1" },
@@ -507,7 +516,7 @@ namespace Astrum.Http
 
         private StageInfo ForwardStage(string areaId)
         {
-            var values = new Dictionary<string, string>
+            var values = new Dictionary<string, object>
                 {
                    { "areaId", areaId }
                 };
@@ -530,10 +539,10 @@ namespace Astrum.Http
 
             if (item.stock >= value)
             {
-                var values = new Dictionary<string, string>
+                var values = new Dictionary<string, object>
                 {
                     { "itemId", item._id },
-                    { "value", value.ToString() }
+                    { "value", value }
                 };
                 string result = PostXHR("http://astrum.amebagames.com/_/item/common", values);
                 var useItemResult = JsonConvert.DeserializeObject<UseItemResult>(result);
@@ -554,7 +563,7 @@ namespace Astrum.Http
 
             Delay(DELAY_SHORT);
 
-            var values = new Dictionary<string, string>
+            var values = new Dictionary<string, object>
             {
                 { "_id", areaId }
             };
@@ -650,7 +659,7 @@ namespace Astrum.Http
 
         private void RaidBattleAttack(string raidId, string attackType)
         {
-            var values = new Dictionary<string, string>
+            var values = new Dictionary<string, object>
             {
                 { "_id", raidId },
                 { "attackType", attackType }
@@ -666,7 +675,7 @@ namespace Astrum.Http
 
         private void RaidBattleRescue(string raidId)
         {
-            var values = new Dictionary<string, string>
+            var values = new Dictionary<string, object>
             {
                 { "_id", raidId }
             };
@@ -809,7 +818,7 @@ namespace Astrum.Http
 
         private void FuryRaidBattleAttack(string raidId, string attackType)
         {
-            var values = new Dictionary<string, string>
+            var values = new Dictionary<string, object>
             {
                 { "_id", raidId },
                 { "attackType", attackType }
@@ -825,7 +834,7 @@ namespace Astrum.Http
 
         private void FuryRaidBattleRescue(string raidId)
         {
-            var values = new Dictionary<string, string>
+            var values = new Dictionary<string, object>
             {
                 { "_id", raidId }
             };
@@ -912,7 +921,7 @@ namespace Astrum.Http
 
         private void LimitedRaidBattleAttack(string raidId, string attackType)
         {
-            var values = new Dictionary<string, string>
+            var values = new Dictionary<string, object>
             {
                 { "_id", raidId },
                 { "attackType", attackType }
@@ -1011,7 +1020,7 @@ namespace Astrum.Http
 
         private void GuildBattleStamp(string battleId)
         {
-            var values = new Dictionary<string, string>
+            var values = new Dictionary<string, object>
                 {
                     { "_id", battleId }
                 };
@@ -1021,9 +1030,10 @@ namespace Astrum.Http
 
         private void GuildBattleChat()
         {
-            var values = new Dictionary<string, string>
+            var values = new Dictionary<string, object>
             {
-                { "stampId", "chat-stamp-004" }, { "type", "stamp" }
+                { "stampId", "chat-stamp-004" },
+                { "type", "stamp" }
             };
             PostXHR("http://astrum.amebagames.com/_/guild/chat", values);
             this.Delay(DELAY_SHORT);
@@ -1042,7 +1052,7 @@ namespace Astrum.Http
 
         private void GuildBattleCmd(string battleId, string abilityId, string cmd)
         {
-            var values = new Dictionary<string, string>
+            var values = new Dictionary<string, object>
             {
                 { "_id", battleId },
                 { "abilityId", abilityId },
@@ -1073,7 +1083,7 @@ namespace Astrum.Http
         {
 
             var battleId = ViewModel.GuildBattleId;
-            var values = new Dictionary<string, string>
+            var values = new Dictionary<string, object>
             {
                 { "_id", battleId }
             };
@@ -1088,7 +1098,7 @@ namespace Astrum.Http
         public void GuildBattleTpChat()
         {
             var battleId = ViewModel.GuildBattleId;
-            var values = new Dictionary<string, string>
+            var values = new Dictionary<string, object>
             {
                 { "_id", battleId }
             };
@@ -1112,10 +1122,10 @@ namespace Astrum.Http
             int position = roulette.initialPosition - targetPosition;
 
 
-            var values = new Dictionary<string, string>
+            var values = new Dictionary<string, object>
             {
                 { "_id", battleId },
-                { "position", position.ToString() }
+                { "position", position }
             };
             PostXHR("http://astrum.amebagames.com/_/guildbattle/tp/roulette", values);
 
@@ -1161,7 +1171,7 @@ namespace Astrum.Http
 
         private StageInfo ForwardTpStage()
         {
-            var values = new Dictionary<string, string>
+            var values = new Dictionary<string, object>
                 {
                    { "areaId", "recovery_tp" }
                 };
@@ -1239,14 +1249,14 @@ namespace Astrum.Http
 
         private GachaResult GachaResult(string _id, bool sequence)
         {
-            var values = new Dictionary<string, string>
+            var values = new Dictionary<string, object>
                 {
                    { "_id", _id }
                 };
 
             if (sequence)
             {
-                values.Add("sequence", "true");
+                values.Add("sequence", true);
             }
 
             var result = PostXHR("http://astrum.amebagames.com/_/gacha", values);
@@ -1255,8 +1265,196 @@ namespace Astrum.Http
 
         public void StartTraining()
         {
-            //GetXHR("http://astrum.amebagames.com/_/training");
+            StartTraining(ViewModel.TrainingBaseId == null ? "" : ViewModel.TrainingBaseId);
         }
+
+        public void StartTraining(string baseId)
+        {
+            RaiseInfo raiseInfo = RaiseSearch(baseId, 1, true);
+
+            ViewModel.CardQuantity = raiseInfo.card.value;
+            ViewModel.CardMax = raiseInfo.card.max;
+
+            ViewModel.TrainingBaseId = raiseInfo.@base._id;
+            ViewModel.TrainingBaseRare = raiseInfo.@base.rare;
+            ViewModel.TrainingBaseName = raiseInfo.@base.name;
+            ViewModel.TrainingBaseLevel = raiseInfo.@base.level;
+            ViewModel.TrainingBaseAbilityLevel = raiseInfo.@base.abilityLevel;
+            ViewModel.TrainingBaseExpGrowth = raiseInfo.@base.growth.exp;
+            ViewModel.TrainingBaseAbilityGrowth = raiseInfo.@base.growth.ability;
+            
+            RaiseInfo raiseItemInfo = RaiseItem(ViewModel.TrainingBaseId);
+            foreach(var item in raiseItemInfo.items.ability)
+            {
+                switch (item._id)
+                {
+                    case INSTANT_ABILITY_BOOK_GOLD:
+                        ViewModel.AbilityBookGoldStock = item.stock;
+                        ViewModel.AbilityBookGoldAvailable = item.available;
+                        break;
+                    case INSTANT_ABILITY_BOOK_SILVER:
+                        ViewModel.AbilityBookSilverStock = item.stock;
+                        ViewModel.AbilityBookSilverAvailable = item.available;
+                        break;
+                    case INSTANT_ABILITY_BOOK_BRONZE:
+                        ViewModel.AbilityBookBronzeStock = item.stock;
+                        ViewModel.AbilityBookBronzeAvailable = item.available;
+                        break;
+                }
+            }
+            foreach (var item in raiseItemInfo.items.exp)
+            {
+                switch (item._id)
+                {
+                    case INSTANT_STRENGTH_STATUE_GOLD:
+                        ViewModel.StrengthStatueGoldStock = item.stock;
+                        ViewModel.StrengthStatueGoldAvailable = item.available;
+                        break;
+                    case INSTANT_STRENGTH_STATUE_SILVER:
+                        ViewModel.StrengthStatueSilverStock = item.stock;
+                        ViewModel.StrengthStatueSilverAvailable = item.available;
+                        break;
+                    case INSTANT_STRENGTH_STATUE_BRONZE:
+                        ViewModel.StrengthStatueBronzeStock = item.stock;
+                        ViewModel.StrengthStatueBronzeAvailable = item.available;
+                        break;
+                }
+            }
+
+        }
+        private RaiseInfo RaiseSearch(string baseId, int rare, bool level1)
+        {
+            var page = 1;
+            var size = 20;
+            var target = "time";
+            //var target = "cost";
+            //var target = "rare";
+            //var target = "level";
+            //var target = "atk";
+            //var target = "df";
+            //var target = "mat";
+            //var target = "mdf";
+            //var target = "total";
+            var sort = "desc";
+
+            var url = string.Format("http://astrum.amebagames.com/_/raise?page={0}&size={1}&base={2}&target={3}&sort={4}&rare={5}&level1={6}", page, size, Uri.EscapeDataString(baseId), target, sort, rare, level1);
+
+            var result = GetXHR(url);
+
+            return JsonConvert.DeserializeObject<RaiseInfo>(result);
+        }
+
+        private RaiseInfo RaiseItem(string baseId)
+        {
+            var url = string.Format("http://astrum.amebagames.com/_/raise?type=item&base={0}",  Uri.EscapeDataString(baseId));
+
+            var result = GetXHR(url);
+
+            return JsonConvert.DeserializeObject<RaiseInfo>(result);
+        }
+
+
+        public bool ExecuteRaiseNormal()
+        {
+            var baseId = ViewModel.TrainingBaseId;
+            RaiseInfo raiseInfo = RaiseSearch(baseId, 1, true);
+            var type = "card";
+
+            if(raiseInfo.total > 0)
+            {
+                IEnumerable<string> materials = from card in raiseInfo.list
+                                                select card._id;
+
+                ExecuteRaise(baseId, materials, type);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool ExecuteRaiseRare()
+        {
+            var baseId = ViewModel.TrainingBaseId;
+            RaiseInfo raiseInfo = RaiseSearch(baseId, 2, true);
+            var type = "card";
+
+            if (raiseInfo.total > 0)
+            {
+                IEnumerable<string> materials = from card in raiseInfo.list
+                                                select card._id;
+
+                ExecuteRaise(baseId, materials, type);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool ExecuteRaiseItem(string itemId, int quantity)
+        {
+            var baseId = ViewModel.TrainingBaseId;
+            var materials = new Dictionary<string, object>
+                {
+                   { itemId, quantity }
+                };
+            var type = "item";
+
+            ExecuteRaise(baseId, materials, type);
+            return true;
+        }
+
+        public RaiseExecuteInfo ExecuteRaiseRecommend()
+        {
+            var baseId = ViewModel.TrainingBaseId;
+            var type = "card";
+            var recommend = true;
+
+            var url = string.Format("http://astrum.amebagames.com/_/raise/execute?base={0}&type=card&recommend=true", Uri.EscapeDataString(baseId), type, recommend);
+
+            var result = GetXHR(url);
+
+            return JsonConvert.DeserializeObject<RaiseExecuteInfo>(result);
+        }
+
+        public void ExecuteRaise(string baseId, object materials,string type)
+        {
+            var values = new Dictionary<string, object>
+                {
+                   { "base", baseId },
+                   { "materials", materials },
+                   { "type", type }
+                };
+
+            PostXHR("http://astrum.amebagames.com/_/raise/execute", values);
+        }
+
+        public void TrainingBase()
+        {
+            var page = 1;
+            var size = 150;
+
+            var url = string.Format("http://astrum.amebagames.com/_/raise/base?page={0}&size={1}", page, size);
+
+            var result = GetXHR(url);
+
+            RaiseInfo search = JsonConvert.DeserializeObject<RaiseInfo>(result);
+
+            if(search.total > 0)
+            {
+                ViewModel.IsTrainingBaseEnable = true;
+                ViewModel.TrainingBaseList = search.list;
+            }
+            else
+            {
+                ViewModel.IsTrainingBaseEnable = false;
+            }
+
+        }
+
 
         private void PrintMypage(MypageInfo mypage)
         {
@@ -1334,23 +1532,23 @@ namespace Astrum.Http
                     switch (item.rare)
                     {
                         case 4:
-                            rare = "[SSR]";
+                            rare = "[欧皇]";
                             break;
-
                         case 3:
-                            rare = "[ SR]";
+                            rare = "[脸帝]";
                             break;
-
                         case 2:
-                            rare = "[  R]";
+                            rare = "[狗粮]";
                             break;
-
+                        case 1:
+                            rare = "[渣渣]";
+                            break;
                         default:
-                            rare = "[  N]";
+                            rare = "[???]";
                             break;
                     }
 
-                    history += String.Format("{0} {1} x {2}", rare, item.name, item.value) + Environment.NewLine;
+                    history += String.Format("{0}{1} x {2}", rare, item.name, item.value) + Environment.NewLine;
                 }
             }
             ViewModel.History = history;

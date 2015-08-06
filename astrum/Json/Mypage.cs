@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Astrum.Json.Raid;
+using Astrum.Json.Card;
 
 namespace Astrum.Json.Mypage
 {
@@ -62,7 +63,7 @@ namespace Astrum.Json.Mypage
     {
         public Status status { get; set; }
         public long total { get; set; }
-        public List<Card> cardList { get; set; }
+        public List<CardInfo> cardList { get; set; }
         public Guild guild { get; set; }
         public Link link { get; set; }
 

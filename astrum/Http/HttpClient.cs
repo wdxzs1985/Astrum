@@ -105,7 +105,7 @@ namespace Astrum.Http
             return request;
         }
 
-        public HttpWebRequest PostJson(HttpWebRequest request, Dictionary<string, string> values)
+        public HttpWebRequest PostJson(HttpWebRequest request, Dictionary<string, object> values)
         {
             request.Method = "POST";
             request.ContentType = "application/json";

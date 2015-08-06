@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Astrum.Json.Card;
 
 namespace Astrum.Json.Gacha
 {
     public class GachaList
     {
-        public Card card { get; set; }
+        public CardStock card { get; set; }
         public Stock stock { get; set; }
         public string type { get; set; }
         public List<GachaInfo> list { get; set; }
     }
 
-    public class Card
+    public class CardStock
     {
         public int max { get; set; }
         public int value { get; set; }
@@ -53,7 +54,7 @@ namespace Astrum.Json.Gacha
 
     public class GachaResult
     {
-        public Card card { get; set; }
+        public CardStock card { get; set; }
         public Stock stock { get; set; }
         public GachaInfo gacha { get; set; }
 
