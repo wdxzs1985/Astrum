@@ -88,6 +88,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Json\Gacha.cs" />
+    <Compile Include="Json\Training.cs" />
     <Compile Include="UI\Convert.cs" />
     <Compile Include="UI\GachaListView.xaml.cs">
       <DependentUpon>GachaListView.xaml</DependentUpon>
