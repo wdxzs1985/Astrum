@@ -652,11 +652,21 @@ namespace Astrum
             if (client.ViewModel.IsTrainingEnable)
             {
                 client.ViewModel.IsTrainingEnable = false;
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        client.StartGacha();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                });
             }
             else
             {
                 client.ViewModel.IsTrainingEnable = true;
-
                 await Task.Run(() =>
                 {
                     try
