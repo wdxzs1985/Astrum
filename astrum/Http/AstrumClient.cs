@@ -1224,8 +1224,13 @@ namespace Astrum.Http
                 if (item.enable.status)
                 {
                     var key = "ticket".Equals(item.price.type) ? item.price._id : item.price.type;
-                    item.stock = stockMap[key];
-                    gachaList.Add(item);
+                    
+                    if(!"coin".Equals(key))
+                    {
+                        item.stock = stockMap[key];
+                        gachaList.Add(item);
+                    }
+
                 }
             }
         }
