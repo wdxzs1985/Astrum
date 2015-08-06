@@ -8,37 +8,36 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              x:Name="gachaListView">
-    <Grid>
-        <ItemsControl Name="Root">
-            <ItemsControl.Template>
-                <ControlTemplate TargetType="{x:Type ItemsControl}">
-                    <ScrollViewer Background="{StaticResource Background}">
-                        <ItemsPresenter Margin="16,16,0,16"/>
-                    </ScrollViewer>
-                </ControlTemplate>
-            </ItemsControl.Template>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Vertical" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Grid Margin="0,0,0,0" >
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="24" />
-                            <RowDefinition Height="64" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Label Content="{Binding name}" Grid.Row="0" Grid.Column="0"></Label>
-                        <Label Content="{Binding stock, FallbackValue=999}" 
+    <ItemsControl Name="Root">
+        <ItemsControl.Template>
+            <ControlTemplate TargetType="{x:Type ItemsControl}">
+                <ScrollViewer Background="{StaticResource Background}">
+                    <ItemsPresenter Margin="16,16,0,16"/>
+                </ScrollViewer>
+            </ControlTemplate>
+        </ItemsControl.Template>
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <StackPanel Orientation="Vertical" />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <Grid Margin="0,0,0,0" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="24" />
+                        <RowDefinition Height="64" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="{Binding name}" Grid.Row="0" Grid.Column="0"></Label>
+                    <Label Content="{Binding stock, FallbackValue=999}" 
                            Grid.Row="0" Grid.Column="1"
                            HorizontalContentAlignment="Right">
-                        </Label>
-                        <Button Name="GachaButton" Content="{Binding price.value}" 
+                    </Label>
+                    <Button Name="GachaButton" Content="{Binding price.value}" 
                                 ContentStringFormat="一回 {0} 個"
                                 Background="{StaticResource Cyan_500}"
                                 Foreground="White"
@@ -47,7 +46,7 @@
                                 Style="{StaticResource FlatButton}"
                                 Tag="{Binding _id}"
                                 Click="GachaButton_Click"></Button>
-                        <Button Name="GachaSequenceButton" 
+                    <Button Name="GachaSequenceButton" 
                                 Content="{Binding sequence.value}" 
                                 ContentStringFormat=" {0} 回連続で引く"
                                 Background="{StaticResource Cyan_500}"
@@ -58,9 +57,8 @@
                                 IsEnabled="{Binding sequence.status}"
                                 Tag="{Binding _id}"
                                 Click="GachaSequenceButton_Click"></Button>
-                    </Grid>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </Grid>
+                </Grid>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
 </UserControl>

@@ -13,6 +13,7 @@ using Astrum.Json;
 using System.Drawing;
 using System.Windows.Forms;
 using Astrum.UI;
+using Astrum.Json.Card;
 
 namespace Astrum
 {
@@ -544,6 +545,8 @@ namespace Astrum
             if (client != null && client.ViewModel.IsLogin)
             {
                 client.ViewModel.IsReady = false;
+                client.ViewModel.IsTrainingEnable = false;
+                client.ViewModel.IsTrainingBaseEnable = false;
                 Tabs.IsEnabled = false;
                 client.ViewModel.IsTrainingEnable = false;
 
@@ -624,6 +627,8 @@ namespace Astrum
         
         private async void GachaListView_Gacha(object sender, RoutedEventArgs e)
         {
+            GachaPanel.IsEnabled = false;
+
             await Task.Run(() =>
             {
                 try
@@ -634,15 +639,290 @@ namespace Astrum
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
-                    Console.WriteLine(ex.StackTrace);
+                }
+            });
+
+            GachaPanel.IsEnabled = true;
+        }
+
+        private async void TrainingButton_Click(object sender, RoutedEventArgs e)
+        {
+            TrainingPanel.IsEnabled = false;
+            client.ViewModel.IsTrainingBaseEnable = false;
+
+            if (client.ViewModel.IsTrainingEnable)
+            {
+                client.ViewModel.IsTrainingEnable = false;
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        client.StartGacha();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                });
+            }
+            else
+            {
+                client.ViewModel.IsTrainingEnable = true;
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        client.StartTraining();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                });
+                TrainingPanel.IsEnabled = true;
+            }
+        }
+        
+        private async void ExecuteRaiseNormal_Click(object sender, RoutedEventArgs e)
+        {
+            TrainingPanel.IsEnabled = false;
+
+            await Task.Run(() =>
+            {
+                try
+                {
+                    var result = client.ExecuteRaiseNormal();
+                    if (result)
+                    {
+                        client.ViewModel.History = "Success";
+                    }
+                    else
+                    {
+                        client.ViewModel.History = "No Card";
+                    }
+                    client.StartTraining();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            });
+
+            TrainingPanel.IsEnabled = true;
+        }
+
+        private async void ExecuteRaiseRare_Click(object sender, RoutedEventArgs e)
+        {
+            TrainingPanel.IsEnabled = false;
+
+            await Task.Run(() =>
+            {
+                try
+                {
+                    var result = client.ExecuteRaiseRare();
+                    if (result)
+                    {
+                        client.ViewModel.History = "Success";
+                    }
+                    else
+                    {
+                        client.ViewModel.History = "No Card";
+                    }
+                    client.StartTraining();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            });
+
+            TrainingPanel.IsEnabled = true;
+        }
+
+        private async void TraningChangeBase_Click(object sender, RoutedEventArgs e)
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    client.TrainingBase();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            });
+            
+        }
+
+        private async void TrainingBase_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(e.AddedItems.Count > 0)
+            {
+                var baseId = ((CardInfo)TrainingBase.SelectedItem)._id;
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        client.StartTraining(baseId);
+                        client.ViewModel.IsTrainingBaseEnable = false;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                });
+            }
+        }
+
+        private async void UseStrengthStatueBronze_Click(object sender, RoutedEventArgs e)
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    var itemId = AstrumClient.INSTANT_STRENGTH_STATUE_BRONZE;
+                    var quantity = client.ViewModel.StrengthStatueBronzeAvailable;
+                    var result =client.ExecuteRaiseItem(itemId, quantity);
+                    if (result)
+                    {
+                        client.ViewModel.History = "Success";
+                    }
+                    client.StartTraining();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
                 }
             });
         }
 
-        private void TrainingButton_Click(object sender, RoutedEventArgs e)
+        private async void UseStrengthStatueSilver_Click(object sender, RoutedEventArgs e)
         {
-            client.ViewModel.IsTrainingEnable = true;
+            await Task.Run(() =>
+            {
+                try
+                {
+                    var itemId = AstrumClient.INSTANT_STRENGTH_STATUE_SILVER;
+                    var quantity = client.ViewModel.StrengthStatueSilverAvailable;
+                    var result = client.ExecuteRaiseItem(itemId, quantity);
+                    if (result)
+                    {
+                        client.ViewModel.History = "Success";
+                    }
+                    client.StartTraining();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            });
+        }
 
+        private async void UseStrengthStatueGold_Click(object sender, RoutedEventArgs e)
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    var itemId = AstrumClient.INSTANT_STRENGTH_STATUE_GOLD;
+                    var quantity = client.ViewModel.StrengthStatueGoldAvailable;
+                    var result = client.ExecuteRaiseItem(itemId, quantity);
+                    if (result)
+                    {
+                        client.ViewModel.History = "Success";
+                    }
+                    client.StartTraining();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            });
+        }
+
+        private async void UseAbilityBookBronze_Click(object sender, RoutedEventArgs e)
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    var itemId = AstrumClient.INSTANT_ABILITY_BOOK_BRONZE;
+                    var quantity = client.ViewModel.AbilityBookBronzeAvailable;
+                    var result = client.ExecuteRaiseItem(itemId, quantity);
+                    if (result)
+                    {
+                        client.ViewModel.History = "Success";
+                    }
+                    client.StartTraining();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            });
+        }
+
+        private async void UseAbilityBookSilver_Click(object sender, RoutedEventArgs e)
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    var itemId = AstrumClient.INSTANT_ABILITY_BOOK_SILVER;
+                    var quantity = client.ViewModel.AbilityBookSilverAvailable;
+                    var result = client.ExecuteRaiseItem(itemId, quantity);
+                    if (result)
+                    {
+                        client.ViewModel.History = "Success";
+                    }
+                    client.StartTraining();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            });
+        }
+
+        private async void UseAbilityBookGold_Click(object sender, RoutedEventArgs e)
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    var itemId = AstrumClient.INSTANT_ABILITY_BOOK_GOLD;
+                    var quantity = client.ViewModel.AbilityBookGoldAvailable;
+                    var result = client.ExecuteRaiseItem(itemId, quantity);
+                    if (result)
+                    {
+                        client.ViewModel.History = "Success";
+                    }
+                    client.StartTraining();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            });
+        }
+
+        private async void GiftBox_Click(object sender, RoutedEventArgs e)
+        {
+            TrainingPanel.IsEnabled = false;
+            await Task.Run(() =>
+            {                
+                try
+                {
+                    client.Gift();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            });
+
+            TrainingPanel.IsEnabled = true;
         }
     }
 }

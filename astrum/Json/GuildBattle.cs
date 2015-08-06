@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Astrum.Json.Card;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -121,7 +122,7 @@ namespace Astrum.Json.GuildBattle
         public bool isDefault { get; set; }
         public bool infinity { get; set; }
         public bool availableStun { get; set; }
-        public Card card { get; set; }
+        public CardInfo card { get; set; }
     }
 
     public class CmdStatus

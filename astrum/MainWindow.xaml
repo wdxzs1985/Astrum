@@ -307,45 +307,171 @@
             <Grid Name="GachaPanel" Margin="0,144,0,240" 
                   Background="{StaticResource Background}"
                   Visibility="{Binding IsGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <UI:GachaListView GachaList="{Binding GachaList}" Gacha="GachaListView_Gacha"/>
+                <UI:GachaListView GachaList="{Binding GachaList}" Gacha="GachaListView_Gacha" d:IsLocked="True" d:IsHidden="True"/>
 
-                <Grid Visibility="{Binding IsTrainingEnable, Converter={StaticResource BooleanToVisibilityConverter}}"
-                      Background="{StaticResource Cyan_50}">
+                <Grid Name="TrainingPanel" Margin="0,0,0,0"
+                      Visibility="{Binding IsTrainingEnable, Converter={StaticResource BooleanToVisibilityConverter}}"
+                      Background="{StaticResource Background}">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="0"/>
                         <RowDefinition Height="96"/>
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
-                    <Grid Grid.Row="0" Margin="16,16,16,16">
+                    <Grid Grid.Row="1" Margin="16,16,16,16">
                         <Grid.RowDefinitions>
                             <RowDefinition />
                             <RowDefinition />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="64"/>
+                            <ColumnDefinition Width="64"/>
                             <ColumnDefinition />
+                            <ColumnDefinition Width="64"/>
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <Image Source="Images/ic_account_circle_white_48dp.png" 
-                               VerticalAlignment="Center" HorizontalAlignment="Left"
-                               Grid.RowSpan="2"></Image>
-                        <Label Content="Name" 
-                               Grid.Row="0" Grid.Column="1" 
-                               HorizontalAlignment="Center" VerticalAlignment="Center"
-                               Width="100"></Label>
-                        <ProgressBar Name="Level"
-                                     Grid.Row="1" Grid.Column="1"
-                                     HorizontalAlignment="Center"
-                                     VerticalAlignment="Center"
-                                     Width="100" Height="8"></ProgressBar>
-                        <ProgressBar Name="Skill"
+                        <Button Name="TraningChangeBase"
+                                Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
+                                VerticalAlignment="Center" HorizontalAlignment="Left"
+                                Width="48" Height="48" Style="{StaticResource FloatButton}"
+                                Click="TraningChangeBase_Click">
+                            <Image Source="Images/ic_swap_horiz_white_48dp.png"></Image>
+                        </Button>
+                        <Label Content="{Binding TrainingBase}" 
+                               Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4"
+                               HorizontalAlignment="Left" Margin="0,0,0,0"
+                               VerticalAlignment="Center"></Label>
+                        <Label Content="{Binding TrainingBaseLevel, FallbackValue=60}" 
+                               ContentStringFormat="Lv {0}/60"
+                               Grid.Row="1" Grid.Column="1"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"></Label>
+                        <ProgressBar Name="TrainingBaseExp" 
+                                     Value="{Binding TrainingBaseExpGrowth, FallbackValue=50}"
                                      Grid.Row="1" Grid.Column="2"
-                                     HorizontalAlignment="Center"
+                               HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     Width="100" Height="8"
+                                     ></ProgressBar>
+                        <Label Content="{Binding TrainingBaseAbilityLevel, FallbackValue=20}" 
+                               ContentStringFormat="Lv {0}/20"
+                               Grid.Row="1" Grid.Column="3"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"></Label>
+                        <ProgressBar Name="TrainingBaseAbility"
+                                     Value="{Binding TrainingBaseAbilityGrowth, FallbackValue=50}"
+                                     Grid.Row="1" Grid.Column="4"
+                               HorizontalAlignment="Center"
                                      VerticalAlignment="Center"
                                      Width="100" Height="8"></ProgressBar>
                     </Grid>
 
+                    <Grid Grid.Row="2" Margin="16,0,16,16">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Button Name="ExecuteRaiseNormal" Content="特訓 (N)" 
+                                Grid.Column="0" Grid.Row="0"
+                                Margin="0,0,8,8"
+                                Style="{StaticResource FlatButton}"
+                                Background="{StaticResource Cyan_500}" Foreground="White"
+                                Click="ExecuteRaiseNormal_Click"></Button>
+
+                        <Button Name="ExecuteRaiseRare" Content="特訓 (R)" 
+                                Grid.Column="1" Grid.Row="0"
+                                Margin="8,0,8,8"
+                                Style="{StaticResource FlatButton}"
+                                Background="{StaticResource Cyan_500}" Foreground="White"
+                                Click="ExecuteRaiseRare_Click"></Button>
+
+                        <Button Name="GiftBox" Content="礼物盒" 
+                        	Grid.Column="2" Grid.Row="0"
+                        	Margin="8,0,0,8"
+                        	Style="{StaticResource FlatButton}"
+                        	Background="{StaticResource Cyan_500}" Foreground="White"
+                        	Click="GiftBox_Click"/>
+
+                        <Button Name="UseStrengthStatueBronze" 
+                                Content="{Binding StrengthStatueBronzeAvailable}" 
+                                ContentStringFormat="強化像(銅) x {0}"
+                                Grid.Column="0" Grid.Row="1"
+                                Margin="0,0,8,8"
+                                Style="{StaticResource FlatButton}"
+                                Background="{StaticResource Cyan_500}" Foreground="White"
+                                Click="UseStrengthStatueBronze_Click"
+                                IsEnabled="{Binding StrengthStatueBronzeAvailable, Converter={StaticResource IntToIsEnabledConverter}}"></Button>
+
+                        <Button Name="UseStrengthStatueSilver"
+                                Content="{Binding StrengthStatueSilverAvailable}" 
+                                ContentStringFormat="強化像(銀) x {0}"
+                                Grid.Column="1" Grid.Row="1"
+                                Margin="8,0,8,8"
+                                Style="{StaticResource FlatButton}"
+                                Background="{StaticResource Cyan_500}" Foreground="White"
+                                Click="UseStrengthStatueSilver_Click"
+                                IsEnabled="{Binding StrengthStatueSilverAvailable, Converter={StaticResource IntToIsEnabledConverter}}"></Button>
+
+                        <Button Name="UseStrengthStatueGold"
+                                Content="{Binding StrengthStatueGoldAvailable}" 
+                                ContentStringFormat="強化像(金) x {0}"
+                                Grid.Column="2" Grid.Row="1"
+                                Margin="8,0,0,8"
+                                Style="{StaticResource FlatButton}"
+                                Background="{StaticResource Cyan_500}" Foreground="White"
+                                Click="UseStrengthStatueGold_Click"
+                                IsEnabled="{Binding StrengthStatueGoldAvailable, Converter={StaticResource IntToIsEnabledConverter}}"></Button>
+
+                        <Button Name="UseAbilityBookBronze"
+                                Content="{Binding AbilityBookBronzeAvailable}" 
+                                ContentStringFormat="技能書(銅) x {0}"
+                                Grid.Column="0" Grid.Row="2"
+                                Margin="0,0,8,8"
+                                Style="{StaticResource FlatButton}"
+                                Background="{StaticResource Cyan_500}" Foreground="White"
+                                Click="UseAbilityBookBronze_Click"
+                                IsEnabled="{Binding AbilityBookBronzeAvailable, Converter={StaticResource IntToIsEnabledConverter}}"></Button>
+
+                        <Button Name="UseAbilityBookSilver"
+                                Content="{Binding AbilityBookSilverAvailable}" 
+                                ContentStringFormat="技能書(銀) x {0}"
+                                Grid.Column="1" Grid.Row="2"
+                                Margin="8,0,8,8"
+                                Style="{StaticResource FlatButton}"
+                                Background="{StaticResource Cyan_500}" Foreground="White"
+                                Click="UseAbilityBookSilver_Click"
+                                IsEnabled="{Binding AbilityBookSilverAvailable, Converter={StaticResource IntToIsEnabledConverter}}"></Button>
+
+                        <Button Name="UseAbilityBookGold"
+                                Content="{Binding AbilityBookGoldAvailable}" 
+                                ContentStringFormat="技能書(金) x {0}"
+                                Grid.Column="2" Grid.Row="2"
+                                Margin="8,0,0,8"
+                                Style="{StaticResource FlatButton}"
+                                Background="{StaticResource Cyan_500}" Foreground="White"
+                                Click="UseAbilityBookGold_Click"
+                                IsEnabled="{Binding AbilityBookGoldAvailable, Converter={StaticResource IntToIsEnabledConverter}}"></Button>
+
+                    </Grid>
                 </Grid>
+
+                <ListBox Name="TrainingBase" Background="{StaticResource Background}"
+                         ItemsSource="{Binding TrainingBaseList}"
+                         Visibility="{Binding IsTrainingBaseEnable, Converter={StaticResource BooleanToVisibilityConverter}}"
+                         SelectionChanged="TrainingBase_SelectionChanged"
+                         SelectionMode="Single" d:IsLocked="True" d:IsHidden="True">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Label Content="{Binding DisplayName}" ></Label>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </Grid>
 
             <Grid Name="Tabs" VerticalAlignment="Top"
@@ -377,7 +503,7 @@
                              Checked="GachaButton_Checked" d:IsLocked="True"/>
             </Grid>
             <Grid x:Name="StatusArea" VerticalAlignment="Top" Background="{StaticResource Cyan_500}"
-                  Height="96" Margin="0,0,0,0" d:IsLocked="True">
+                  Height="96" Margin="0,0,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
@@ -403,7 +529,7 @@
                                  Foreground="{Binding StaminaProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
                 </Grid>
 
-                <Grid Grid.Row="0" Grid.Column="1" d:IsLocked="True">
+                <Grid Grid.Row="0" Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="2*"/>
@@ -416,8 +542,7 @@
                                  Grid.Column="1" Height="8" Width="100"
                                  Value="{Binding ExpProgress, FallbackValue=50, Mode=OneWay, TargetNullValue=0}" 
                                  Minimum="0" Maximum="100" 
-                                 ToolTip="{Binding Exp}" 
-                                 Foreground="{Binding ExpProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
+                                 ToolTip="{Binding Exp}" />
                 </Grid>
 
                 <Grid Grid.Row="1" Grid.Column="0" d:IsLocked="True">
@@ -499,7 +624,7 @@ Height="8" Width="100"
 
             <Grid Margin="0,0,16,208" Width="64" Height="64"
                   HorizontalAlignment="Right" VerticalAlignment="Bottom" 
-                  Visibility="{Binding IsReady, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True" d:IsHidden="True" >
+                  Visibility="{Binding IsReady, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True" >
                 <Button x:Name="StartButton"
                         Content="Start"
                         Click="StartButton_Click"
