@@ -15,6 +15,7 @@ using Astrum.Json.Event;
 using Astrum.Json.GuildBattle;
 using Astrum.Json.Item;
 using Astrum.Json.Gift;
+using Astrum.Json.Gacha;
 
 namespace Astrum.Http
 {
@@ -50,7 +51,8 @@ namespace Astrum.Http
         public const string RESCUE = "rescue";
 
 
-        public const int MIN_STOCK = 9999;
+        public const int DEFAULT_STOCK = 999;
+        public const int DEFAULT_KEEP_STAMINA = 100;
 
         public const int EASY_BOSS_HP = 2000000;
 
@@ -61,8 +63,9 @@ namespace Astrum.Http
             ViewModel.IsQuestEnable = true;
             ViewModel.IsGuildBattleEnable = false;
 
-            ViewModel.MinStaminaStock = MIN_STOCK;
-            ViewModel.MinBpStock = MIN_STOCK;
+            ViewModel.MinStaminaStock = DEFAULT_STOCK;
+            ViewModel.MinBpStock = DEFAULT_STOCK;
+            ViewModel.KeepStamina = DEFAULT_KEEP_STAMINA;
         }
 
         public ViewModel ViewModel { get; set; }
@@ -194,22 +197,18 @@ namespace Astrum.Http
             if (response.Headers.Get("X-Group") != null)
             {
                 xGroup = response.Headers.Get("X-Group");
-                //Console.WriteLine("  X-Group: {0}", xGroup);
             }
             if (response.Headers.Get("X-Rtoken") != null)
             {
                 xRtoken = response.Headers.Get("X-Rtoken");
-                //Console.WriteLine(" X-Rtoken: {0}", xRtoken);
             }
             if (response.Headers.Get("X-Utoken") != null)
             {
                 xUtoken = response.Headers.Get("X-Utoken");
-                //Console.WriteLine(" X-Utoken: {0}", xUtoken);
             }
             if (response.Headers.Get("X-Version") != null)
             {
                 xVersion = response.Headers.Get("X-Version");
-                //Console.WriteLine("X-Version: {0}", xVersion);
             }
         }
 
@@ -236,12 +235,14 @@ namespace Astrum.Http
             this.GetXHR("http://astrum.amebagames.com/_/access?p=" + path);
         }
 
-        public void StartQuest()
+        public bool StartQuest()
         {
             this.Mypage();
             this.Gift();
             this.Item();
             this.EventStatus();
+
+            return ViewModel.IsQuestEnable;
         }
 
         public void Mypage()
@@ -449,7 +450,7 @@ namespace Astrum.Http
 
                     if (ViewModel.IsStaminaEmpty)
                     {
-                        bool staminaGreaterThanKeep = ViewModel.StaminaValue >= ViewModel.MaxKeepStamina;
+                        bool staminaGreaterThanKeep = ViewModel.StaminaValue >= ViewModel.KeepStamina;
                         bool staminaGreaterThanExp = ViewModel.StaminaValue >= (ViewModel.ExpMax - ViewModel.ExpValue);
                         bool isBpFull = ViewModel.BpValue >= BP_FULL;
                         bool isFever = ViewModel.Fever;
@@ -926,11 +927,8 @@ namespace Astrum.Http
         }
 
 
-        public void StartGuildBattle()
+        public bool StartGuildBattle()
         {
-            this.Mypage();
-            this.Item();
-
             Schedule schedule = FindSchedule();
             if (schedule != null)
             {
@@ -943,10 +941,12 @@ namespace Astrum.Http
                 }
 
                 GuildBattleChat();
+                return ViewModel.IsGuildBattleEnable;
             } else
             {
                 ViewModel.GuildBattleId = null;
                 ViewModel.History = "没有工会战";
+                return false;
             }
         }
 
@@ -1175,6 +1175,89 @@ namespace Astrum.Http
             return stage;
         }
 
+
+        public bool StartGacha()
+        {
+            initGachaList();
+            ViewModel.History = "";
+            return true;
+        }
+        
+        private void initGachaList()
+        {
+            var gachaList = new List<GachaInfo>();
+            var stockMap = new Dictionary<string, int>();
+
+            initGachaType(gachaList, stockMap, "normal");
+            initGachaType(gachaList, stockMap, "raid");
+            initGachaType(gachaList, stockMap, "platinum");
+
+            ViewModel.GachaList = gachaList;
+        }
+
+        private void initGachaType(List<GachaInfo> gachaList, Dictionary<string, int> stockMap, string type)
+        {
+            var gacha = GachaListInfo(type);
+            stockMap["coin"] = gacha.stock.coin;
+            stockMap["gacha"] = gacha.stock.gacha;
+
+            if (gacha.stock.ticket != null)
+            {
+                foreach (var key in gacha.stock.ticket.Keys)
+                {
+                    stockMap[key] = gacha.stock.ticket[key];
+                }
+            }
+
+            foreach (var item in gacha.list)
+            {
+                if (item.enable.status)
+                {
+                    var key = "ticket".Equals(item.price.type) ? item.price._id : item.price.type;
+                    item.stock = stockMap[key];
+                    gachaList.Add(item);
+                }
+            }
+        }
+        
+
+        public void Gacha(string gachaId, bool sequence)
+        {
+            var result = GachaResult(gachaId, sequence);
+
+            PrintGachaResult(result);
+            UpdataGachaResult(result);
+
+            initGachaList();
+        }
+
+        private GachaList GachaListInfo(string type)
+        {
+            var result = GetXHR("http://astrum.amebagames.com/_/gacha?type=" + type);
+            return JsonConvert.DeserializeObject<GachaList>(result);
+        }
+
+        private GachaResult GachaResult(string _id, bool sequence)
+        {
+            var values = new Dictionary<string, string>
+                {
+                   { "_id", _id }
+                };
+
+            if (sequence)
+            {
+                values.Add("sequence", "true");
+            }
+
+            var result = PostXHR("http://astrum.amebagames.com/_/gacha", values);
+            return JsonConvert.DeserializeObject<GachaResult>(result);
+        }
+
+        public void StartTraining()
+        {
+            //GetXHR("http://astrum.amebagames.com/_/training");
+        }
+
         private void PrintMypage(MypageInfo mypage)
         {
             string history = "";
@@ -1235,6 +1318,45 @@ namespace Astrum.Http
         }
 
 
+        private void PrintGachaResult(GachaResult result)
+        {
+            string history = "";
+            foreach (var item in result.list)
+            {
+                
+                if ("item".Equals(item.type))
+                {
+                    history += String.Format("{0} x {1}", item.name, item.value) + Environment.NewLine;
+                }
+                else if ("card".Equals(item.type))
+                {
+                    string rare = "";
+                    switch (item.rare)
+                    {
+                        case 4:
+                            rare = "[SSR]";
+                            break;
+
+                        case 3:
+                            rare = "[ SR]";
+                            break;
+
+                        case 2:
+                            rare = "[  R]";
+                            break;
+
+                        default:
+                            rare = "[  N]";
+                            break;
+                    }
+
+                    history += String.Format("{0} {1} x {2}", rare, item.name, item.value) + Environment.NewLine;
+                }
+            }
+            ViewModel.History = history;
+        }
+
+
         private void UpdateMypageView(MypageInfo mypage)
         {
             ViewModel.Name = mypage.status.name;
@@ -1252,6 +1374,9 @@ namespace Astrum.Http
 
             ViewModel.TpValue = mypage.status.tp_value;
             ViewModel.TpMax = mypage.status.tp_max;
+
+            ViewModel.CardQuantity = mypage.status.card_quantity;
+            ViewModel.CardMax = mypage.status.card_max;
         }
 
         private void UpdateStageView(StageInfo stage)
@@ -1278,8 +1403,7 @@ namespace Astrum.Http
                     var raidInfo = stage.status.furyraid;
                     ViewModel.Fever = raidInfo.fever.progress == 100;
                 }
-
-
+                
                 if (stage.status.limitedraid != null && stage.status.limitedraid.fever != null)
                 {
                     var raidInfo = stage.status.limitedraid;
@@ -1341,6 +1465,12 @@ namespace Astrum.Http
             {
                 ViewModel.BpValue = battleInfo.bpValue;
             }
+        }
+
+        private void UpdataGachaResult(GachaResult result)
+        {
+            ViewModel.CardQuantity = result.card.value;
+            ViewModel.CardMax = result.card.max;
         }
     }
 }

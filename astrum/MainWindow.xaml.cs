@@ -1,27 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Net;
 using System.IO;
-using System.Collections;
-using System.Windows.Forms;
-using System.Drawing;
 
 using Newtonsoft.Json;
 using Astrum.Http;
-using System.Threading;
 using Astrum.Json;
+using System.Drawing;
+using System.Windows.Forms;
+using Astrum.UI;
 
 namespace Astrum
 {
@@ -46,58 +37,56 @@ namespace Astrum
         }
 
         private void InitialTray()
-        {            
-
+        {
             //设置托盘的各个属性
             notifyIcon = new NotifyIcon();
-            notifyIcon.BalloonTipText = "少女外出中...";
             notifyIcon.Text = client.ViewModel.WindowTitle;
-            notifyIcon.Icon = new System.Drawing.Icon("../../Images/Astrum.ico");
+
+            notifyIcon.Icon = new Icon("./Astrum.ico");
             notifyIcon.Visible = false;
-            notifyIcon.ShowBalloonTip(2000);
-            notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(notifyIcon_MouseClick);
-
-            //关于选项
-            System.Windows.Forms.MenuItem stop = new System.Windows.Forms.MenuItem("停止");
-
-            //退出菜单项
-            System.Windows.Forms.MenuItem exit = new System.Windows.Forms.MenuItem("退出");
-            exit.Click += new EventHandler(exit_Click);
-
-            //关联托盘控件
-            System.Windows.Forms.MenuItem[] childen = new System.Windows.Forms.MenuItem[] { stop, exit };
-            notifyIcon.ContextMenu = new System.Windows.Forms.ContextMenu(childen);
-
+            notifyIcon.MouseClick += NotifyIcon_MouseClick;
+            
+            notifyIcon.ContextMenuStrip = new ContextMenuStrip();
+            //ToolStripMenuItem stopItem = new ToolStripMenuItem("停止", null, StopItem_Click);
+            ToolStripMenuItem exitItem = new ToolStripMenuItem("退出", null, ExitItem_Click);
+            //notifyIcon.ContextMenuStrip.Items.Add(stopItem);
+            notifyIcon.ContextMenuStrip.Items.Add(exitItem);
+            
             //窗体状态改变时候触发
-            this.StateChanged += new EventHandler(SysTray_StateChanged);
+            this.StateChanged += MainWindow_StateChanged;
         }
 
-        private void notifyIcon_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void NotifyIcon_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            //鼠标左键单击
             if (e.Button == MouseButtons.Left)
             {
-                if (this.Visibility == Visibility.Hidden)
-                {
-                    this.Visibility = Visibility.Visible;                    
-                    notifyIcon.Visible = false;                    
-                }
-                
+                this.WindowState = WindowState.Normal;
             }
         }
 
-        private void SysTray_StateChanged(object sender, EventArgs e)
+        private void StopItem_Click(object sender, EventArgs e)
+        {
+            client.ViewModel.IsRunning = false;
+        }
+
+        private void ExitItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void MainWindow_StateChanged(object sender, EventArgs e)
         {
             if (this.WindowState == WindowState.Minimized)
             {
-                this.Visibility = Visibility.Hidden;
                 notifyIcon.Visible = true;
+                ShowInTaskbar = false;
+                notifyIcon.ShowBalloonTip(1000, client.ViewModel.WindowTitle, "少女隐身中...", ToolTipIcon.None);
             }
-        }
-
-        private void exit_Click(object sender, EventArgs e)
-        {
-            this.Close();           
+            else
+            {
+                notifyIcon.Visible = false;
+                this.ShowInTaskbar = true;
+            }
         }
 
         private void initLoginPanel()
@@ -109,7 +98,8 @@ namespace Astrum
             StatusPanel.Visibility = Visibility.Hidden;
             LoginButton.Content = "登陆";
             LoginButton.IsEnabled = true;
-            LoginUserComboBox.IsEnabled = true;
+            //LoginUserComboBox.IsEnabled = true;
+            UserSelector.IsEnabled = true;
 
             LoadUserList();
         }
@@ -123,7 +113,8 @@ namespace Astrum
             Console.WriteLine("login start");
             LoginButton.Content = "少女祈祷中";
             LoginButton.IsEnabled = false;
-            LoginUserComboBox.IsEnabled = false;
+            //LoginUserComboBox.IsEnabled = false;
+            UserSelector.IsEnabled = false;
 
             var username = UsernameBox.Text;
             var password = PasswordBox.Password;
@@ -154,37 +145,55 @@ namespace Astrum
 
                 LoginPanel.Visibility = Visibility.Hidden;
                 StatusPanel.Visibility = Visibility.Visible;
-                await Task.Run(() =>
-                {
-                    if (client.ViewModel.IsQuestEnable)
-                    {
-                        client.StartQuest();
-                        client.ViewModel.IsReady = true;
-                    }
-                    else if (client.ViewModel.IsGuildBattleEnable)
-                    {
-                        client.StartGuildBattle();
-                        client.ViewModel.IsReady = true;
-                    }
-                });
+                Tabs.IsEnabled = false;
 
-                if(client.ViewModel.IsReady)
+                try
                 {
+                    await Task.Run(() =>
+                    {
+                        if (client.ViewModel.IsQuestEnable)
+                        {
+                            var result = client.StartQuest();
+                            client.ViewModel.IsReady = result;
+                            return result;
+                        }
+                        else if (client.ViewModel.IsGuildBattleEnable)
+                        {
+                            var result = client.StartGuildBattle();
+                            client.ViewModel.IsReady = result;
+                            return result;
+                        }
+                        else if (client.ViewModel.IsGachaEnable)
+                        {
+                            var result = client.StartGacha();
+                            return result;
+                        }
+                        return false;
+                    });
 
                     nowUser = new LoginUser { username = username, password = password };
                     //save user
                     SaveUserList();
-
-                    return;
+                }
+                catch (Exception ex)
+                {
+                    initLoginPanel();
+                    Console.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    Tabs.IsEnabled = true;
                 }
             }
-            initLoginPanel();
-            MessageBoxResult result = System.Windows.MessageBox.Show("登入失败");
+            else
+            {
+                initLoginPanel();
+                MessageBoxResult result = System.Windows.MessageBox.Show("登入失败");
+            }
         }
 
         private async void LoadUserList()
         {
-            int index = 0;
             List<LoginUser> loginUserList = await Task.Run(() =>
             {
                 loginUserList = new List<LoginUser>();
@@ -223,7 +232,7 @@ namespace Astrum
             });
 
             client.ViewModel.LoginUserList = loginUserList;
-            LoginUserComboBox.SelectedIndex = index;
+            UserSelector.SelectedIndex = 0;
         }
 
         private async void SaveUserList()
@@ -235,6 +244,7 @@ namespace Astrum
                 nowUser.name = client.ViewModel.Name;
                 nowUser.minstaminastock = client.ViewModel.MinStaminaStock;
                 nowUser.minbpstock = client.ViewModel.MinBpStock;
+                nowUser.keepstamina = client.ViewModel.KeepStamina;
 
                 userList.Insert(0, nowUser);
 
@@ -275,8 +285,9 @@ namespace Astrum
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
             StartButton.IsEnabled = false;
-            QuestButton.IsEnabled = false;
-            GuildBattleButton.IsEnabled = false;
+            Tabs.IsEnabled = false;
+            //QuestButton.IsEnabled = false;
+            //GuildBattleButton.IsEnabled = false;
 
 
             if (client.ViewModel.IsRunning == false)
@@ -314,20 +325,23 @@ namespace Astrum
                     catch (Exception ex)
                     {
                         Console.WriteLine(ex.Message);
-                        client.ViewModel.IsRunning = false;
-                        client.ViewModel.IsReady = false;
                         return false;
                     }
                     return true;
                 });
 
-                StartButton.Content = "Start";
-                StartButton.IsEnabled = true;
-                QuestButton.IsEnabled = true;
-                GuildBattleButton.IsEnabled = true;
-
-                if (!result)
+                if(result)
                 {
+                    StartButton.Content = "Start";
+                    StartButton.IsEnabled = true;
+                    Tabs.IsEnabled = true;
+                    //QuestButton.IsEnabled = true;
+                    //GuildBattleButton.IsEnabled = true;
+                }
+                else
+                {
+                    client.ViewModel.IsRunning = false;
+                    client.ViewModel.IsReady = false;
                     initLoginPanel();
                 }
             }
@@ -340,9 +354,10 @@ namespace Astrum
 
 
 
-        private void LoginUserComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+
+        private void UserSelector_UserChanged(object sender, RoutedEventArgs e)
         {
-            LoginUser user = (LoginUser)LoginUserComboBox.SelectedItem;
+            LoginUser user = UserSelector.SelectedUser;
 
             if (user != null)
             {
@@ -351,6 +366,7 @@ namespace Astrum
 
                 client.ViewModel.MinStaminaStock = user.minstaminastock;
                 client.ViewModel.MinBpStock = user.minbpstock;
+                client.ViewModel.KeepStamina = user.keepstamina;
 
                 if (user.username != null)
                 {
@@ -384,9 +400,16 @@ namespace Astrum
         {
             await Task.Run(() =>
             {
-                if (client.ViewModel.StaminaHalfStock > 0)
+                try
                 {
-                    client.UseItem(AstrumClient.ITEM_STAMINA, AstrumClient.INSTANT_HALF_STAMINA, 1);
+                    if (client.ViewModel.StaminaHalfStock > 0)
+                    {
+                        client.UseItem(AstrumClient.ITEM_STAMINA, AstrumClient.INSTANT_HALF_STAMINA, 1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
                 }
             });
         }
@@ -395,9 +418,16 @@ namespace Astrum
         {
             await Task.Run(() =>
             {
-                if (client.ViewModel.StaminaStock > 0)
+                try
                 {
-                    client.UseItem(AstrumClient.ITEM_STAMINA, AstrumClient.INSTANT_STAMINA, 1);
+                    if (client.ViewModel.StaminaStock > 0)
+                    {
+                        client.UseItem(AstrumClient.ITEM_STAMINA, AstrumClient.INSTANT_STAMINA, 1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
                 }
             });
         }
@@ -406,9 +436,16 @@ namespace Astrum
         {
             await Task.Run(() =>
             {
-                if (client.ViewModel.BpMiniStock > 0)
+                try
                 {
-                    client.UseItem(AstrumClient.ITEM_BP, AstrumClient.INSTANT_MINI_BP, 1);
+                    if (client.ViewModel.BpMiniStock > 0)
+                    {
+                        client.UseItem(AstrumClient.ITEM_BP, AstrumClient.INSTANT_MINI_BP, 1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
                 }
             });
         }
@@ -417,9 +454,16 @@ namespace Astrum
         {
             await Task.Run(() =>
             {
-                if (client.ViewModel.BpStock > 0)
+                try
                 {
-                    client.UseItem(AstrumClient.ITEM_BP, AstrumClient.INSTANT_BP, 1);
+                    if (client.ViewModel.BpStock > 0)
+                    {
+                        client.UseItem(AstrumClient.ITEM_BP, AstrumClient.INSTANT_BP, 1);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
                 }
             });
         }
@@ -429,12 +473,34 @@ namespace Astrum
             if (client != null && client.ViewModel.IsLogin)
             {
                 client.ViewModel.IsReady = false;
-                await Task.Run(() =>
-                {
-                    client.StartQuest();
-                });
+                Tabs.IsEnabled = false;
 
-                client.ViewModel.IsReady = true;
+                try
+                {
+                    var result = await Task.Run(() =>
+                    {
+                        return client.StartQuest();
+                    });
+
+                    if (result)
+                    {
+                        client.ViewModel.IsReady = true;
+                    }
+                    else
+                    {
+                        client.ViewModel.IsRunning = false;
+                        client.ViewModel.IsReady = false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    initLoginPanel();
+                    Console.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    Tabs.IsEnabled = true;
+                }
             }
         }
 
@@ -443,14 +509,58 @@ namespace Astrum
             if (client != null && client.ViewModel.IsLogin)
             {
                 client.ViewModel.IsReady = false;
-                await Task.Run(() =>
-                {
-                    client.StartGuildBattle();
-                });
+                Tabs.IsEnabled = false;
 
-                if (client.ViewModel.GuildBattleId !=null)
+                try
                 {
-                    client.ViewModel.IsReady = true;
+                    var result = await Task.Run(() =>
+                    {
+                        return client.StartGuildBattle();
+                    });
+                    if (result)
+                    {
+                        client.ViewModel.IsReady = true;
+                    }
+                    else
+                    {
+                        client.ViewModel.IsRunning = false;
+                        client.ViewModel.IsReady = false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    initLoginPanel();
+                    Console.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    Tabs.IsEnabled = true;
+                }
+            }
+        }
+
+        private async void GachaButton_Checked(object sender, RoutedEventArgs e)
+        {
+            if (client != null && client.ViewModel.IsLogin)
+            {
+                client.ViewModel.IsReady = false;
+                Tabs.IsEnabled = false;
+
+                try
+                {
+                    var result = await Task.Run(() =>
+                    {
+                        return client.StartGacha();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    initLoginPanel();
+                    Console.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    Tabs.IsEnabled = true;
                 }
             }
         }
@@ -461,7 +571,14 @@ namespace Astrum
             {
                 await Task.Run(() =>
                 {
-                    client.GuildBattleTpNormal();
+                    try
+                    {
+                        client.GuildBattleTpNormal();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
                 });
                 
             }
@@ -473,7 +590,14 @@ namespace Astrum
             {
                 await Task.Run(() =>
                 {
-                    client.GuildBattleTpChat();
+                    try
+                    {
+                        client.GuildBattleTpChat();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
                 });
 
             }
@@ -485,10 +609,39 @@ namespace Astrum
             {
                 await Task.Run(() =>
                 {
-                    client.GuildBattleTpRoulette();
+                    try
+                    {
+                        client.GuildBattleTpRoulette();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
                 });
-
             }
+        }
+        
+        private async void GachaListView_Gacha(object sender, RoutedEventArgs e)
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    var ge = (GachaEventArgs)e;
+                    client.Gacha(ge.GachaId, ge.Sequence);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Console.WriteLine(ex.StackTrace);
+                }
+            });
+        }
+
+        private void TrainingButton_Click(object sender, RoutedEventArgs e)
+        {
+            client.ViewModel.IsTrainingEnable = true;
+
         }
     }
 }

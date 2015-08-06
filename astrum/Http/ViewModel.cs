@@ -1,4 +1,5 @@
 ﻿using Astrum.Json;
+using Astrum.Json.Gacha;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -32,6 +33,20 @@ namespace Astrum.Http
             {
                 _login_user_list = value;
                 NotifyPropertyChanged("LoginUserList");
+            }
+        }
+
+        private List<GachaInfo> _gacha_list;
+        public List<GachaInfo> GachaList
+        {
+            get
+            {
+                return _gacha_list;
+            }
+            set
+            {
+                _gacha_list = value;
+                NotifyPropertyChanged("GachaList");
             }
         }
 
@@ -185,6 +200,8 @@ namespace Astrum.Http
 
         private bool _quest_enable;
         private bool _guild_battle_enable;
+        private bool _gacha_enable;
+        private bool _training_enable;
 
         public bool IsQuestEnable
         {
@@ -212,6 +229,32 @@ namespace Astrum.Http
             }
         }
 
+        public bool IsGachaEnable
+        {
+            get
+            {
+                return _gacha_enable;
+            }
+            set
+            {
+                _gacha_enable = value;
+                NotifyPropertyChanged("IsGachaEnable");
+            }
+        }
+
+        public bool IsTrainingEnable
+        {
+            get
+            {
+                return _training_enable;
+            }
+            set
+            {
+                _training_enable = value;
+                NotifyPropertyChanged("IsTrainingEnable");
+            }
+        }
+
         private string _name;
         private int _level;
         private long _exp_value;
@@ -223,6 +266,8 @@ namespace Astrum.Http
         private int _bp_max;
         private int _tp_value;
         private int _tp_max;
+        private int _card_quantity;
+        private int _card_max;
 
         public string Name
         {
@@ -429,6 +474,7 @@ namespace Astrum.Http
                 NotifyPropertyChanged("TpProgress");
             }
         }
+
         public int TpMax
         {
             get
@@ -462,11 +508,53 @@ namespace Astrum.Http
             }
         }
 
-        public long gacha { get; set; }
-        public long lilu { get; set; }
-        public int card_quantity { get; set; }
-        public int card_max { get; set; }
-        
+        public int CardQuantity
+        {
+            get
+            {
+                return _card_quantity;
+            }
+            set
+            {
+                _card_quantity = value;
+                NotifyPropertyChanged("Card");
+                NotifyPropertyChanged("CardQuantity");
+                NotifyPropertyChanged("CardProgress");
+            }
+        }
+
+        public int CardMax
+        {
+            get
+            {
+                return _card_max;
+            }
+            set
+            {
+                _card_max = value;
+                NotifyPropertyChanged("Card");
+                NotifyPropertyChanged("CardMax");
+                NotifyPropertyChanged("CardProgress");
+            }
+        }
+
+        public int CardProgress
+        {
+            get
+            {
+                if (_card_max == 0)
+                {
+                    return 0;
+                }
+                double max = (double)_card_max;
+                double val = (double)_card_quantity;
+
+                double rate = val / max;
+
+                return (int)(rate * 100);
+            }
+        }
+
         public string Exp
         {
             get
@@ -498,6 +586,15 @@ namespace Astrum.Http
                 return _tp_value + " / " + _tp_max;
             }
         }
+
+        public string Card
+        {
+            get
+            {
+                return _card_quantity + " / " + _card_max;
+            }
+        }
+
 
 
         public bool IsFuryRaidEnable { get; set; }
@@ -561,17 +658,17 @@ namespace Astrum.Http
 
         public bool IsStaminaEmpty { get; set; }
 
-        private int _maxKeepStamina = 100;
-        public int MaxKeepStamina
+        private int _keepStamina = 100;
+        public int KeepStamina
         {
             get
             {
-                return _maxKeepStamina;
+                return _keepStamina;
             }
             set
             {
-                _maxKeepStamina = value;
-                NotifyPropertyChanged("MaxKeepStamina");
+                _keepStamina = value;
+                NotifyPropertyChanged("KeepStamina");
             }
         }
 
@@ -654,5 +751,6 @@ namespace Astrum.Http
                 return BpStock > 0 && IsReady;
             }
         }
+        
     }
 }

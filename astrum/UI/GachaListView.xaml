@@ -1,0 +1,66 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Astrum.UI"
+             xmlns:Gacha="clr-namespace:Astrum.Json.Gacha" x:Class="Astrum.UI.GachaListView"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             x:Name="gachaListView">
+    <Grid>
+        <ItemsControl Name="Root">
+            <ItemsControl.Template>
+                <ControlTemplate TargetType="{x:Type ItemsControl}">
+                    <ScrollViewer Background="{StaticResource Background}">
+                        <ItemsPresenter Margin="16,16,0,16"/>
+                    </ScrollViewer>
+                </ControlTemplate>
+            </ItemsControl.Template>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="0,0,0,0" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="24" />
+                            <RowDefinition Height="64" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="{Binding name}" Grid.Row="0" Grid.Column="0"></Label>
+                        <Label Content="{Binding stock, FallbackValue=999}" 
+                           Grid.Row="0" Grid.Column="1"
+                           HorizontalContentAlignment="Right">
+                        </Label>
+                        <Button Name="GachaButton" Content="{Binding price.value}" 
+                                ContentStringFormat="一回 {0} 個"
+                                Background="{StaticResource Cyan_500}"
+                                Foreground="White"
+                                Margin="0,8,8,8" 
+                                Grid.Row="1" Grid.Column="0"
+                                Style="{StaticResource FlatButton}"
+                                Tag="{Binding _id}"
+                                Click="GachaButton_Click"></Button>
+                        <Button Name="GachaSequenceButton" 
+                                Content="{Binding sequence.value}" 
+                                ContentStringFormat=" {0} 回連続で引く"
+                                Background="{StaticResource Cyan_500}"
+                                Foreground="White"
+                                Margin="8,8,0,8" 
+                                Grid.Row="1" Grid.Column="1"
+                                Style="{StaticResource FlatButton}"
+                                IsEnabled="{Binding sequence.status}"
+                                Tag="{Binding _id}"
+                                Click="GachaSequenceButton_Click"></Button>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</UserControl>
