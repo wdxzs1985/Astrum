@@ -905,5 +905,23 @@ namespace Astrum
                 }
             });
         }
+
+        private async void GiftBox_Click(object sender, RoutedEventArgs e)
+        {
+            TrainingPanel.IsEnabled = false;
+            await Task.Run(() =>
+            {                
+                try
+                {
+                    client.Gift();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            });
+
+            TrainingPanel.IsEnabled = true;
+        }
     }
 }

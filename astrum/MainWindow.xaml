@@ -318,7 +318,7 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
-                    <Grid Grid.Row="1" Margin="16,16,16,16" d:IsLocked="True">
+                    <Grid Grid.Row="1" Margin="16,16,16,16">
                         <Grid.RowDefinitions>
                             <RowDefinition />
                             <RowDefinition />
@@ -391,6 +391,13 @@
                                 Background="{StaticResource Cyan_500}" Foreground="White"
                                 Click="ExecuteRaiseRare_Click"></Button>
 
+                        <Button Name="GiftBox" Content="礼物盒" 
+                        	Grid.Column="2" Grid.Row="0"
+                        	Margin="8,0,0,8"
+                        	Style="{StaticResource FlatButton}"
+                        	Background="{StaticResource Cyan_500}" Foreground="White"
+                        	Click="GiftBox_Click"/>
+
                         <Button Name="UseStrengthStatueBronze" 
                                 Content="{Binding StrengthStatueBronzeAvailable}" 
                                 ContentStringFormat="強化像(銅) x {0}"
@@ -458,7 +465,7 @@
                          ItemsSource="{Binding TrainingBaseList}"
                          Visibility="{Binding IsTrainingBaseEnable, Converter={StaticResource BooleanToVisibilityConverter}}"
                          SelectionChanged="TrainingBase_SelectionChanged"
-                         SelectionMode="Single" d:IsLocked="True">
+                         SelectionMode="Single" d:IsLocked="True" d:IsHidden="True">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Label Content="{Binding DisplayName}" ></Label>
@@ -617,7 +624,7 @@ Height="8" Width="100"
 
             <Grid Margin="0,0,16,208" Width="64" Height="64"
                   HorizontalAlignment="Right" VerticalAlignment="Bottom" 
-                  Visibility="{Binding IsReady, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True" d:IsHidden="True" >
+                  Visibility="{Binding IsReady, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True" >
                 <Button x:Name="StartButton"
                         Content="Start"
                         Click="StartButton_Click"
