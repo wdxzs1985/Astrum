@@ -1224,8 +1224,13 @@ namespace Astrum.Http
                 if (item.enable.status)
                 {
                     var key = "ticket".Equals(item.price.type) ? item.price._id : item.price.type;
-                    item.stock = stockMap[key];
-                    gachaList.Add(item);
+                    
+                    if(!"coin".Equals(key))
+                    {
+                        item.stock = stockMap[key];
+                        gachaList.Add(item);
+                    }
+
                 }
             }
         }
@@ -1284,7 +1289,20 @@ namespace Astrum.Http
             ViewModel.TrainingBaseAbilityGrowth = raiseInfo.@base.growth.ability;
             
             RaiseInfo raiseItemInfo = RaiseItem(ViewModel.TrainingBaseId);
-            foreach(var item in raiseItemInfo.items.ability)
+            ViewModel.AbilityBookGoldStock = 0;
+            ViewModel.AbilityBookGoldAvailable = 0;
+            ViewModel.AbilityBookSilverStock = 0;
+            ViewModel.AbilityBookSilverAvailable = 0;
+            ViewModel.AbilityBookBronzeStock = 0;
+            ViewModel.AbilityBookBronzeAvailable = 0;
+            ViewModel.StrengthStatueGoldStock = 0;
+            ViewModel.StrengthStatueGoldAvailable = 0;
+            ViewModel.StrengthStatueSilverStock = 0;
+            ViewModel.StrengthStatueSilverAvailable = 0;
+            ViewModel.StrengthStatueBronzeStock = 0;
+            ViewModel.StrengthStatueBronzeAvailable = 0;
+
+            foreach (var item in raiseItemInfo.items.ability)
             {
                 switch (item._id)
                 {
