@@ -495,16 +495,8 @@ namespace Astrum.Http
                             return;
                         }
                     }
-                    //forward
-
-                    if (ViewModel.StaminaValue > ViewModel.KeepStamina)
-                    {
-                        stage = ForwardStage(areaId);  
-                    }
-                    else
-                    {
-                        ViewModel.IsStaminaEmpty = true;
-                    }                                                          
+                    //forward                   
+                    stage = ForwardStage(areaId);                                                                               
                 }
 
             }
