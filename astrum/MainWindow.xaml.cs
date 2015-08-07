@@ -82,6 +82,7 @@ namespace Astrum
                 notifyIcon.Visible = true;
                 ShowInTaskbar = false;
                 notifyIcon.ShowBalloonTip(1000, client.ViewModel.WindowTitle, "少女隐身中...", ToolTipIcon.None);
+                notifyIcon.Text = client.ViewModel.WindowTitle;
             }
             else
             {
@@ -146,7 +147,7 @@ namespace Astrum
 
                 LoginPanel.Visibility = Visibility.Hidden;
                 StatusPanel.Visibility = Visibility.Visible;
-                Tabs.IsEnabled = false;
+                Tabs.IsEnabled = false;                
 
                 try
                 {
