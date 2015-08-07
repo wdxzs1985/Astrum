@@ -61,7 +61,9 @@ namespace Astrum
         {
             if (e.Button == MouseButtons.Left)
             {
-                this.WindowState = WindowState.Normal;
+                notifyIcon.Visible = false;
+                this.Show();
+                this.WindowState = WindowState.Normal;                
             }
         }
 
@@ -80,15 +82,10 @@ namespace Astrum
             if (this.WindowState == WindowState.Minimized)
             {
                 notifyIcon.Visible = true;
-                ShowInTaskbar = false;
+                this.Hide();
                 notifyIcon.ShowBalloonTip(1000, client.ViewModel.WindowTitle, "少女隐身中...", ToolTipIcon.None);
                 notifyIcon.Text = client.ViewModel.WindowTitle;
-            }
-            else
-            {
-                notifyIcon.Visible = false;
-                this.ShowInTaskbar = true;
-            }
+            }            
         }
 
         private void initLoginPanel()
@@ -345,6 +342,9 @@ namespace Astrum
                     client.ViewModel.IsRunning = false;
                     client.ViewModel.IsReady = false;
                     initLoginPanel();
+                    notifyIcon.Visible = false;
+                    this.Show();
+                    this.WindowState = WindowState.Normal;                    
                 }
             }
             else
