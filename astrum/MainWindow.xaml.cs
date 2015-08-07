@@ -908,12 +908,14 @@ namespace Astrum
 
         private async void GiftBox_Click(object sender, RoutedEventArgs e)
         {
-            TrainingPanel.IsEnabled = false;
+            GiftBox.IsEnabled = false;
+
             await Task.Run(() =>
             {                
                 try
                 {
-                    client.Gift();
+                    client.Gift(1);
+                    client.Gift(0);
                 }
                 catch (Exception ex)
                 {
@@ -921,7 +923,7 @@ namespace Astrum
                 }
             });
 
-            TrainingPanel.IsEnabled = true;
+            GiftBox.IsEnabled = true;
         }
     }
 }

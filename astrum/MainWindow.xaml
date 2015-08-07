@@ -458,7 +458,7 @@
                          ItemsSource="{Binding TrainingBaseList}"
                          Visibility="{Binding IsTrainingBaseEnable, Converter={StaticResource BooleanToVisibilityConverter}}"
                          SelectionChanged="TrainingBase_SelectionChanged"
-                         SelectionMode="Single" d:IsLocked="True" d:IsHidden="True">
+                         SelectionMode="Single" d:IsHidden="True" BorderBrush="{x:Null}" Foreground="{x:Null}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Label Content="{Binding DisplayName}" ></Label>
@@ -496,7 +496,7 @@
                              Checked="GachaButton_Checked" d:IsLocked="True"/>
             </Grid>
             <Grid x:Name="StatusArea" VerticalAlignment="Top" Background="{StaticResource Cyan_500}"
-                  Height="96" Margin="0,0,0,0" d:IsLocked="True">
+                  Height="96" Margin="0,0,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
@@ -594,13 +594,11 @@
                            VerticalAlignment="Center"
                            HorizontalContentAlignment="Right"
                            Grid.Column="0"/>
-                    <ProgressBar x:Name="CardProgress" 
-                                 Grid.Column="1" 
-Height="8" Width="100"
-                                 Value="{Binding CardProgress, FallbackValue=50, Mode=OneWay, TargetNullValue=0}" 
-                                 Minimum="0" Maximum="100"  
-                                 ToolTip="{Binding Card}" 
-                                 Foreground="{Binding CardProgress, Converter={StaticResource ProgressBarInverseForegoundConvert}}"/>
+                    <Label Grid.Column="1" 
+                           VerticalAlignment="Center"
+                           HorizontalContentAlignment="Left"
+                            Content="{Binding Card}" 
+                            Foreground="White"/>
 
                     <Button Name="TrainingButton" 
                             Grid.Column="0" Grid.ColumnSpan="2" 

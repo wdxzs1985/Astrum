@@ -29,7 +29,27 @@ namespace Astrum.Json.GuildBattle
         public string _id { get; set; }
         public User user { get; set; }
         public User opponent { get; set; }
+
+        public string name { get; set; }
+        public long point { get; set; }
+
+        public Combo combo { get; set; }
     }
+
+    public class Combo
+    {
+        public ComboInfo attack { get; set; }
+        public ComboInfo special { get; set; }
+        public ComboInfo remote { get; set; }
+        public ComboInfo yell { get; set; }
+    }
+
+    public class ComboInfo
+    {
+        public User user { get; set; }
+        public int count { get; set; }
+    }
+
 
     public class User
     {
@@ -92,6 +112,7 @@ namespace Astrum.Json.GuildBattle
         public SkillCounter burst { get; set; }
         public SkillCounter remote { get; set; }
         public SkillCounter yell { get; set; }
+        
     }
 
 
@@ -109,6 +130,8 @@ namespace Astrum.Json.GuildBattle
         public List<Cmd> cmd { get; set; }
         public SkillCounter counter { get; set; }
         public GuildBattleStatus status { get; set; }
+
+        public string commandResult { get; set; }
     }
 
     public class Cmd
@@ -128,6 +151,36 @@ namespace Astrum.Json.GuildBattle
     public class CmdStatus
     {
         public bool available { get; set; }
+    }
+
+
+    public class CmdResult
+    {
+        public string commandResult { get; set; }
+        public int order { get; set; }
+        public Cmd cmd { get; set; }
+        public SkillCounter counter { get; set; }
+        public Battlestate battlestate { get; set; }
+        public bool levelup { get; set; }
+        public History history { get; set; }
+        //public List<object> activeUsers { get; set; }
+    }
+
+    public class History
+    {
+        //public Cmd2 cmd { get; set; }
+        //public Ability2 ability { get; set; }
+        //public From2 from { get; set; }
+        //public To2 to { get; set; }
+        //public List<Lucky> lucky { get; set; }
+        public int exp { get; set; }
+        public int combo { get; set; }
+    }
+
+    public class Battlestate
+    {
+        public List<Guild> guilds { get; set; }
+        public GuildBattleStatus status { get; set; }
     }
 
     public class TpInfo
