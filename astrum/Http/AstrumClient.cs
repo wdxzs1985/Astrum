@@ -42,7 +42,7 @@ namespace Astrum.Http
         public const string INSTANT_STAMINA = "instant-stamina_potion";
         public const string INSTANT_BP = "instant-bp_ether";
         public const string INSTANT_MINI_BP = "instant-mini_bp_ether";
-        
+
         public const string INSTANT_ABILITY_BOOK_GOLD = "instant-ability_book_gold";
         public const string INSTANT_ABILITY_BOOK_SILVER = "instant-ability_book_silver";
         public const string INSTANT_ABILITY_BOOK_BRONZE = "instant-ability_book_bronze";
@@ -123,7 +123,7 @@ namespace Astrum.Http
 
         protected string GetXHR(string url)
         {
-            lock(this)
+            lock (this)
             {
                 Console.WriteLine("[GET ] " + url);
 
@@ -247,7 +247,7 @@ namespace Astrum.Http
         public bool StartQuest()
         {
             this.Mypage();
-            this.Gift();
+            this.Gift(1);
             this.Item();
             this.EventStatus();
 
@@ -301,32 +301,49 @@ namespace Astrum.Http
             Delay(DELAY_SHORT);
         }
 
-        public void Gift()
+        public void Gift(int limited)
         {
-            while (true)
+            var hasGift = true;
+            while (hasGift)
             {
-                var result = GetXHR("http://astrum.amebagames.com/_/gift?page=1&size=10&type=all&limited=1");
-                GiftInfo giftInfo = JsonConvert.DeserializeObject<GiftInfo>(result);
-
-                Access("gift");
-                Delay(DELAY_SHORT);
-
+                var giftInfo = CheckGift(limited);
                 if (giftInfo.total > 0)
                 {
-                    var values = new Dictionary<string, object>
-                    {
-                       { "auto", "1" },
-                       { "limited", "1" },
-                       { "type", "all" }
-                    };
-                    PostXHR("http://astrum.amebagames.com/_/gift", values);
-                    Delay(DELAY_SHORT);                    
+                    ReceiveGift(limited);
                 }
                 else
                 {
-                    return;
+                    hasGift = false;
                 }
             }
+        }
+
+        private GiftInfo CheckGift(int limited)
+        {
+            var url = string.Format("http://astrum.amebagames.com/_/gift?page=1&size=10&type=all&limited={0}", limited);
+            var result = GetXHR(url);
+            var giftInfo = JsonConvert.DeserializeObject<GiftInfo>(result);
+
+            Access("gift");
+            Delay(DELAY_SHORT);
+
+            return giftInfo;
+        }
+
+        private void ReceiveGift(int limited)
+        {
+            var values = new Dictionary<string, object>
+                    {
+                       { "auto", "1" },
+                       { "limited", limited },
+                       { "type", "all" }
+                    };
+            var result = PostXHR("http://astrum.amebagames.com/_/gift", values);
+            var giftResult = JsonConvert.DeserializeObject<GiftResult>(result);
+
+            PrintGiftResult(giftResult);
+
+            Delay(DELAY_SHORT);
         }
 
         public void Item()
@@ -976,15 +993,6 @@ namespace Astrum.Http
                 var cmd = cmdInfo.cmd.Find(item => ablility.Equals(item._id));
                 if (cmd != null)
                 {
-                    if ("attack".Equals(type))
-                    {
-                        ViewModel.History = ("正在前排攻击");
-                    }
-                    else if ("yell".Equals(type))
-                    {
-                        ViewModel.History = ("正在后排应援");
-                    }
-
                     GuildBattleCmd(battleId, ablility, type);
                 }
             }
@@ -1012,6 +1020,10 @@ namespace Astrum.Http
         {
             var result = GetXHR("http://astrum.amebagames.com/_/guildbattle?_id=" + battleId);
             GuildBattleInfo battleInfo = JsonConvert.DeserializeObject<GuildBattleInfo>(result);
+
+
+            PrintGuildBattleInfo(battleInfo);
+            UpdateGuildBattleStatus(battleInfo.status);
 
             this.Delay(DELAY_SHORT);
 
@@ -1044,6 +1056,9 @@ namespace Astrum.Http
             var result = GetXHR("http://astrum.amebagames.com/_/guildbattle/cmd?_id=" + battleId + "&type=" + type);
             GuildBattleCmdInfo cmdInfo = JsonConvert.DeserializeObject<GuildBattleCmdInfo>(result);
 
+            //PrintCmdInfo(cmdInfo);
+            UpdateGuildBattleStatus(cmdInfo.status);
+
             this.Delay(DELAY_SHORT);
 
             return cmdInfo;
@@ -1058,7 +1073,16 @@ namespace Astrum.Http
                 { "abilityId", abilityId },
                 { "cmd", cmd }
             };
-            PostXHR("http://astrum.amebagames.com/_/guildbattle/cmd", values);
+            string result = PostXHR("http://astrum.amebagames.com/_/guildbattle/cmd", values);
+            var cmdResult = JsonConvert.DeserializeObject<CmdResult>(result);
+
+
+            if ("success".Equals(cmdResult.commandResult))
+            {
+                PrintGuildBattleCmdResult(cmdResult);
+                UpdateGuildBattleStatus(cmdResult.battlestate.status);
+            }
+
 
             this.Delay(DELAY_LONG);
         }
@@ -1275,7 +1299,7 @@ namespace Astrum.Http
 
         public void StartTraining(string baseId)
         {
-            RaiseInfo raiseInfo = RaiseSearch(baseId, 1, true);
+            RaiseInfo raiseInfo = RaiseSearch(baseId, 1);
 
             ViewModel.CardQuantity = raiseInfo.card.value;
             ViewModel.CardMax = raiseInfo.card.max;
@@ -1340,7 +1364,7 @@ namespace Astrum.Http
             }
 
         }
-        private RaiseInfo RaiseSearch(string baseId, int rare, bool level1)
+        private RaiseInfo RaiseSearch(string baseId, int rare)
         {
             var page = 1;
             var size = 20;
@@ -1355,7 +1379,7 @@ namespace Astrum.Http
             //var target = "total";
             var sort = "desc";
 
-            var url = string.Format("http://astrum.amebagames.com/_/raise?page={0}&size={1}&base={2}&target={3}&sort={4}&rare={5}&level1={6}", page, size, Uri.EscapeDataString(baseId), target, sort, rare, level1);
+            var url = string.Format("http://astrum.amebagames.com/_/raise?page={0}&size={1}&base={2}&target={3}&sort={4}&rare={5}&level1=true", page, size, Uri.EscapeDataString(baseId), target, sort, rare);
 
             var result = GetXHR(url);
 
@@ -1375,7 +1399,7 @@ namespace Astrum.Http
         public bool ExecuteRaiseNormal()
         {
             var baseId = ViewModel.TrainingBaseId;
-            RaiseInfo raiseInfo = RaiseSearch(baseId, 1, true);
+            RaiseInfo raiseInfo = RaiseSearch(baseId, 1);
             var type = "card";
 
             if(raiseInfo.total > 0)
@@ -1395,7 +1419,7 @@ namespace Astrum.Http
         public bool ExecuteRaiseRare()
         {
             var baseId = ViewModel.TrainingBaseId;
-            RaiseInfo raiseInfo = RaiseSearch(baseId, 2, true);
+            RaiseInfo raiseInfo = RaiseSearch(baseId, 2);
             var type = "card";
 
             if (raiseInfo.total > 0)
@@ -1425,19 +1449,6 @@ namespace Astrum.Http
             return true;
         }
 
-        public RaiseExecuteInfo ExecuteRaiseRecommend()
-        {
-            var baseId = ViewModel.TrainingBaseId;
-            var type = "card";
-            var recommend = true;
-
-            var url = string.Format("http://astrum.amebagames.com/_/raise/execute?base={0}&type=card&recommend=true", Uri.EscapeDataString(baseId), type, recommend);
-
-            var result = GetXHR(url);
-
-            return JsonConvert.DeserializeObject<RaiseExecuteInfo>(result);
-        }
-
         public void ExecuteRaise(string baseId, object materials,string type)
         {
             var values = new Dictionary<string, object>
@@ -1454,8 +1465,11 @@ namespace Astrum.Http
         {
             var page = 1;
             var size = 150;
+            
+            var target = "level";
+            var sort = "desc";
 
-            var url = string.Format("http://astrum.amebagames.com/_/raise/base?page={0}&size={1}", page, size);
+            var url = string.Format("http://astrum.amebagames.com/_/raise/base?page={0}&size={1}&target={2}&sort={3}&level1=false&inParty=false", page, size, target, sort);
 
             var result = GetXHR(url);
 
@@ -1470,7 +1484,6 @@ namespace Astrum.Http
             {
                 ViewModel.IsTrainingBaseEnable = false;
             }
-
         }
 
 
@@ -1482,6 +1495,21 @@ namespace Astrum.Http
             history += String.Format("    ATK: {0},  DF: {1}", mypage.status.atk, mypage.status.df) + Environment.NewLine;
             history += String.Format("    MAT: {0}, MDF: {1}", mypage.status.mat, mypage.status.mdf) + Environment.NewLine;
             history += String.Format("  Guild: {0}, Rank: {1}", mypage.guild.name, mypage.guild.rank) + Environment.NewLine;
+
+            ViewModel.History = history;
+        }
+
+
+
+        private void PrintGiftResult(GiftResult giftResult)
+        {
+            string history = "";
+            history += String.Format("获得道具: {0}", giftResult.item) + Environment.NewLine;
+            if(giftResult.enhance != null)
+            {
+                history += String.Format("强化像: {0}", giftResult.enhance.strength) + Environment.NewLine;
+                history += String.Format("开花结晶: {0}", giftResult.enhance.limitbreak) + Environment.NewLine;
+            }
 
             ViewModel.History = history;
         }
@@ -1533,6 +1561,33 @@ namespace Astrum.Http
             }
         }
 
+
+        private void PrintGuildBattleInfo(GuildBattleInfo battleInfo)
+        {
+            string history = "";
+
+            foreach(var guild in battleInfo.guilds)
+            {
+                history += guild.name + Environment.NewLine;
+                history += String.Format(" attack: {0}", guild.combo.attack.count) + Environment.NewLine;
+                history += String.Format(" remote: {0}", guild.combo.remote.count) + Environment.NewLine;
+                history += String.Format("special: {0}", guild.combo.special.count) + Environment.NewLine;
+                history += String.Format("   yell: {0}", guild.combo.yell.count) + Environment.NewLine;
+                history += Environment.NewLine;
+            }
+            ViewModel.History = history;
+        }
+
+        private void PrintGuildBattleCmdResult(CmdResult result)
+        {
+            var status = result.battlestate.status;
+
+            string history = "";
+            
+            history += String.Format("{0} (Combo {1})", result.cmd.name, result.history.combo) + Environment.NewLine;
+
+            ViewModel.History = history;
+        }
 
         private void PrintGachaResult(GachaResult result)
         {
@@ -1682,6 +1737,17 @@ namespace Astrum.Http
                 ViewModel.BpValue = battleInfo.bpValue;
             }
         }
+
+
+
+        private void UpdateGuildBattleStatus(GuildBattleStatus status)
+        {
+
+            ViewModel.TpValue = status.tp.value;
+            ViewModel.TpMax = status.tp.max;
+
+        }
+
 
         private void UpdataGachaResult(GachaResult result)
         {

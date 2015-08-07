@@ -6,12 +6,25 @@ using System.Threading.Tasks;
 
 namespace Astrum.Json.Gift
 {
-    class GiftInfo
+    public class GiftInfo
     {
         public int total { get; set; }
         public int maxpage { get; set; }
         public int page { get; set; }
         public int size { get; set; }
         public int restInBox { get; set; }
+    }
+
+    public class Enhance
+    {
+        public int strength { get; set; }
+        public int limitbreak { get; set; }
+    }
+
+    public class GiftResult
+    {
+        public int total { get; set; }
+        public int item { get; set; }
+        public Enhance enhance { get; set; }
     }
 }
