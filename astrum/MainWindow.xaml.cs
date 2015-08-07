@@ -547,8 +547,7 @@ namespace Astrum
                 client.ViewModel.IsReady = false;
                 client.ViewModel.IsTrainingEnable = false;
                 client.ViewModel.IsTrainingBaseEnable = false;
-                Tabs.IsEnabled = false;
-                client.ViewModel.IsTrainingEnable = false;
+                Tabs.IsEnabled = false;                
 
                 try
                 {
