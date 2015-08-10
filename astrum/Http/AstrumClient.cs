@@ -476,7 +476,7 @@ namespace Astrum.Http
 
                     if (ViewModel.IsStaminaEmpty)
                     {
-                        bool staminaGreaterThanKeep = ViewModel.StaminaValue >= ViewModel.KeepStamina;
+                        bool staminaGreaterThanKeep = ViewModel.StaminaValue > ViewModel.KeepStamina;
                         bool staminaGreaterThanExp = ViewModel.StaminaValue >= (ViewModel.ExpMax - ViewModel.ExpValue);
                         bool isBpFull = ViewModel.BpValue >= BP_FULL;
                         bool isFever = ViewModel.Fever;
