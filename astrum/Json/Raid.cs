@@ -76,7 +76,9 @@ namespace Astrum.Json.Raid
 
         public RaidBattleList rescue { get; set; }
 
-        public string eventId { get; set; }
+        public RaidBattleInfo rare { get; set; }
+
+        public string eventId { get; set; }        
 
         public Fever fever { get; set; }
     }

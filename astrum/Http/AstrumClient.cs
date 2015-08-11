@@ -513,7 +513,7 @@ namespace Astrum.Http
                         }
                     }
                     //forward
-                    stage = ForwardStage(areaId);
+                    stage = ForwardStage(areaId);                    
                 }
 
             }
@@ -722,10 +722,22 @@ namespace Astrum.Http
             {
                 foreach (var battleInfo in raidInfo.find.list)
                 {
-                    var loop = battleInfo.isNew || (ViewModel.CanFullAttackForEvent);
-                    while (loop)
+                    if (ViewModel.Fever)
                     {
-                        loop = FuryRaidBattle(battleInfo._id);
+                        var loop = battleInfo.rare == 4;
+                        while (loop)
+                        {
+                            loop = FuryRaidBattle(battleInfo._id);
+                        }
+                        
+                    }
+                    else
+                    { 
+                       var loop = battleInfo.isNew || (ViewModel.CanFullAttackForEvent);
+                       while (loop)
+                       {
+                           loop = FuryRaidBattle(battleInfo._id);
+                       }
                     }
                 }
             }
@@ -778,15 +790,22 @@ namespace Astrum.Http
                     if (RESCUE.Equals(battleInfo.type))
                     {
                         attackType = RESCUE;
+                        FuryRaidBattleAttack(battleInfo._id, attackType);
+                        return true;
                     }
 
                     FuryRaidBattleAttack(battleInfo._id, attackType);
                     return true;
+                                        
                 }
 
                 if (battleInfo.rescue.use)
                 {
-                    FuryRaidBattleRescue(battleInfo._id);
+                    if(battleInfo.rare < 4)
+                    {
+                        FuryRaidBattleRescue(battleInfo._id);
+                    }
+                    
                 }
 
                 if (FIND.Equals(battleInfo.type))
@@ -795,21 +814,35 @@ namespace Astrum.Http
 
                     var attackType = hp > EASY_BOSS_HP ? FULL : NORMAL;
                     var needBp = hp > EASY_BOSS_HP ? BP_FULL : BP_NORMAL;
-
+                    int quantity = needBp - ViewModel.BpValue;
                     if (ViewModel.Fever)
                     {
-                        int quantity = needBp - ViewModel.BpValue;
+                        
+                        if(battleInfo.rare == 4)
+                        {
+                           if (quantity > 0 && quantity <= ViewModel.CanUseBpQuantity)
+                           {
+                               UseItem(ITEM_BP, INSTANT_MINI_BP, quantity);
+                           }
+                           if (ViewModel.BpValue >= needBp)
+                           {
+                            FuryRaidBattleAttack(battleInfo._id, attackType);
+                            return false;
+                           }
+                        }
+                    }
+                    else if(battleInfo.rare == 4)
+                    {                        
                         if (quantity > 0 && quantity <= ViewModel.CanUseBpQuantity)
                         {
                             UseItem(ITEM_BP, INSTANT_MINI_BP, quantity);
                         }
-                    }
-
-                    if (ViewModel.BpValue >= needBp)
-                    {
-                        FuryRaidBattleAttack(battleInfo._id, attackType);
-                        return true;
-                    }
+                        if (ViewModel.BpValue >= needBp)
+                        {
+                            FuryRaidBattleAttack(battleInfo._id, attackType);
+                            return false;
+                        }
+                    }                                                                             
                 }
             }
             else
@@ -1669,11 +1702,7 @@ namespace Astrum.Http
                 ViewModel.TpValue = stage.status.tp.value;
                 ViewModel.TpMax = stage.status.tp.max;
 
-                if (stage.status.furyraid != null && stage.status.furyraid.fever != null)
-                {
-                    var raidInfo = stage.status.furyraid;
-                    ViewModel.Fever = raidInfo.fever.progress == 100;
-                }
+               
                 
                 if (stage.status.limitedraid != null && stage.status.limitedraid.fever != null)
                 {
