@@ -452,7 +452,7 @@ namespace Astrum.Http
                         }
                     }
 
-                    if (stage.status.raid != null)
+                    if (stage.status.raid != null && ViewModel.Fever != true)
                     {
                         ViewModel.IsFuryRaid = false;
                         ViewModel.IsLimitedRaid = false;
