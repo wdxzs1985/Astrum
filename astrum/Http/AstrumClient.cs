@@ -481,7 +481,7 @@ namespace Astrum.Http
                         bool isBpFull = ViewModel.BpValue >= BP_FULL;
                         bool isFever = ViewModel.Fever;
 
-                        if (staminaGreaterThanKeep || staminaGreaterThanExp || isBpFull || isFever)
+                        if (staminaGreaterThanKeep || staminaGreaterThanExp || isFever)
                         {
                             ViewModel.IsStaminaEmpty = false;
                         }
@@ -489,6 +489,11 @@ namespace Astrum.Http
                         {
                             return;
                         }
+                    }
+                    else
+                    {
+                        //forward
+                        stage = ForwardStage(areaId);
                     }
 
                     if (stage.staminaEmpty)
@@ -511,9 +516,7 @@ namespace Astrum.Http
                             ViewModel.IsStaminaEmpty = true;
                             return;
                         }
-                    }
-                    //forward
-                    stage = ForwardStage(areaId);                    
+                    }                                                            
                 }
 
             }
