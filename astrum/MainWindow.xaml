@@ -20,7 +20,7 @@
 
     <Grid Background="{StaticResource Cyan_500}" 
           VerticalAlignment="Center" HorizontalAlignment="Center"
-          Height="732" Width="412"  Effect="{StaticResource DropShadowEffect}">
+          Height="732" Width="412"  Effect="{StaticResource DropShadowEffect}" d:IsLocked="True">
 
         <Grid x:Name="LoginPanel"
               HorizontalAlignment="Center" 
@@ -68,7 +68,7 @@
                     Background="Transparent" Foreground="White" d:IsLocked="True"/>
 
         </Grid>
-        <Grid x:Name="StatusPanel" Visibility="Visible" Margin="0,32,0,0" Background="{StaticResource Background}" d:IsLocked="True">
+        <Grid x:Name="StatusPanel" Visibility="Visible" Margin="0,32,0,0" Background="{StaticResource Background}">
             <Grid x:Name="QuestPanel" Margin="16,144,16,240"
             	Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True">
                 <Grid.ColumnDefinitions>
@@ -306,7 +306,7 @@
 
             <Grid Name="GachaPanel" Margin="0,144,0,240" 
                   Background="{StaticResource Background}"
-                  Visibility="{Binding IsGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsHidden="True">
+                  Visibility="{Binding IsGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsHidden="True" d:IsLocked="True">
                 <UI:GachaListView GachaList="{Binding GachaList}" Gacha="GachaListView_Gacha" d:IsLocked="True" d:IsHidden="True"/>
 
                 <Grid Name="TrainingPanel" Margin="0,0,0,0"
@@ -555,17 +555,24 @@
                                  Foreground="{Binding BpProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
                 </Grid>
                 <Grid Grid.Row="1" Grid.Column="1"
-            		Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsHidden="True" d:IsLocked="True">
+            		Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
-                    <Label Content="Fever" 
+                    <Label Content="Fever" Height="28" Width="45"
                            Background="{StaticResource Pink_A200}" Foreground="White"
                            Visibility="{Binding Fever, Converter={StaticResource BooleanToVisibilityConverter}}"
                            HorizontalContentAlignment="Center"
                            VerticalAlignment="Center"
-                           Grid.Column="1" Width="100"/>
+                           Grid.Column="0" Margin="23,10,0,10"/>
+                    <ProgressBar x:Name="FeverProgress"
+                                 Grid.Column="1" Height="8" Width="100"
+                                 Minimum="0" Maximum="100"
+                                 Value="{Binding FeverProgress,FallbackValue=50,Mode=OneWay,TargetNullValue=0}"
+                                 ToolTip="{Binding FeverProgress}"
+                                 Foreground="{Binding FeverProgress,Converter={StaticResource ProgressBarForegoundConvert}}"
+                                 />
                 </Grid>
                 <Grid Grid.Row="1" Grid.Column="1"
             		Visibility="{Binding IsGuildBattleEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True" d:IsHidden="True">
@@ -585,7 +592,7 @@
                                  Foreground="{Binding TpProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
                 </Grid>
                 <Grid Grid.Row="1" Grid.Column="1"
-            		Visibility="{Binding IsGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+            		Visibility="{Binding IsGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsHidden="True">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="2*"/>

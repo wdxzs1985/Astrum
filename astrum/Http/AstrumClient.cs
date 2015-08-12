@@ -28,7 +28,7 @@ namespace Astrum.Http
         public const string PUT = "PUT";
 
         public const int INTERTAL = 100;
-        public const int SECOND = 10 * INTERTAL;
+        public const int SECOND = 8 * INTERTAL;
         public const int MINUTE = 30 * SECOND;
 
         public const int DELAY_LONG = SECOND;
@@ -422,6 +422,23 @@ namespace Astrum.Http
                     {
                         ViewModel.IsFuryRaid = true;
 
+                        if(ViewModel.Fever)
+                        {
+                            int i;
+                            for(i = 0; i < 4; i++)
+                            {
+                                if (stage.staminaEmpty)
+                                {
+                                    var item = stage.items.Find(e => INSTANT_HALF_STAMINA.Equals(e._id));
+                                    if (stage.items != null && item.stock > ViewModel.MinStaminaStock)
+                                    {
+                                        UseItem(ITEM_STAMINA, INSTANT_HALF_STAMINA, 1);
+                                    }
+                                }                                    
+                                stage = ForwardStage(areaId);
+                            }
+                        }
+
                         if (stage.status.furyraid.find != null)
                         {
                             if (stage.status.furyraid.find.isNew || ViewModel.CanFullAttackForEvent)
@@ -736,7 +753,7 @@ namespace Astrum.Http
                     }
                     else
                     { 
-                       var loop = battleInfo.isNew || (ViewModel.CanFullAttackForEvent);
+                       var loop = battleInfo.isNew;
                        while (loop)
                        {
                            loop = FuryRaidBattle(battleInfo._id);
@@ -767,6 +784,7 @@ namespace Astrum.Http
             FuryRaidInfo raidInfo = JsonConvert.DeserializeObject<FuryRaidInfo>(result);
 
             ViewModel.Fever = raidInfo.fever.progress == 100;
+            ViewModel.FeverValue = raidInfo.fever.progress;
 
             Delay(DELAY_SHORT);
         }
@@ -844,6 +862,14 @@ namespace Astrum.Http
                         {
                             FuryRaidBattleAttack(battleInfo._id, attackType);
                             return false;
+                        }
+                    }
+                    else if(battleInfo.rare == 3)
+                    {
+                        if(ViewModel.BpValue ==6)
+                        {
+                            FuryRaidBattleAttack(battleInfo._id, NORMAL);
+                            return true;
                         }
                     }                                                                             
                 }
@@ -1683,7 +1709,7 @@ namespace Astrum.Http
             ViewModel.TpMax = mypage.status.tp_max;
 
             ViewModel.CardQuantity = mypage.status.card_quantity;
-            ViewModel.CardMax = mypage.status.card_max;
+            ViewModel.CardMax = mypage.status.card_max;            
         }
 
         private void UpdateStageView(StageInfo stage)
@@ -1705,7 +1731,11 @@ namespace Astrum.Http
                 ViewModel.TpValue = stage.status.tp.value;
                 ViewModel.TpMax = stage.status.tp.max;
 
-               
+                if(stage.status.furyraid != null && stage.status.furyraid.fever != null )
+                {
+                    var raidInfo = stage.status.furyraid;
+                    ViewModel.FeverValue = raidInfo.fever.progress;
+                }
                 
                 if (stage.status.limitedraid != null && stage.status.limitedraid.fever != null)
                 {

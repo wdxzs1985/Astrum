@@ -672,6 +672,32 @@ namespace Astrum.Http
                 NotifyPropertyChanged("Fever");
             }
         }
+        private int _fevervalue;
+        public int FeverValue
+        {
+            get
+            {
+                return _fevervalue;
+            }
+            set
+            {
+                _fevervalue = value;                
+                NotifyPropertyChanged("FeverProgress");
+            }
+        }
+
+        public int FeverProgress
+        {
+            get
+            {                
+                double max = 100;
+                double val = (double)_fevervalue;
+
+                double rate = val / max;
+
+                return (int)(rate * 100);
+            }
+        }
 
         public bool IsStaminaEmpty { get; set; }
 
@@ -684,7 +710,7 @@ namespace Astrum.Http
             }
             set
             {
-                _keepStamina = value;
+                _keepStamina = value;                
                 NotifyPropertyChanged("KeepStamina");
             }
         }
