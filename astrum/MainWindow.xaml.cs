@@ -285,13 +285,16 @@ namespace Astrum
         {
             StartButton.IsEnabled = false;
             Tabs.IsEnabled = false;
-            SaveUserList();
+            nowUser.minstaminastock = client.ViewModel.MinStaminaStock;
+            nowUser.minbpstock = client.ViewModel.MinBpStock;
+            nowUser.keepstamina = client.ViewModel.KeepStamina;
             //QuestButton.IsEnabled = false;
             //GuildBattleButton.IsEnabled = false;
 
 
             if (client.ViewModel.IsRunning == false)
-            {                
+            {
+                SaveUserList();
                 StartButton.Content = "Stop";
                 StartButton.IsEnabled = true;
 
