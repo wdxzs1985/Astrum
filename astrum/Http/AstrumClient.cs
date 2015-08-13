@@ -427,12 +427,24 @@ namespace Astrum.Http
                             int i;
                             for(i = 0; i < 4; i++)
                             {
+                                if (stage.isBossStage)
+                                {
+                                    AreaBossBattle(areaId);
+                                    break;
+                                }
+                                else if (stage.stageClear && stage.nextStage.isBossStage)
+                                {
+                                    stage = ForwardStage(areaId);
+                                    AreaBossBattle(areaId);
+                                    break;
+                                }
                                 if (stage.staminaEmpty)
                                 {
                                     var item = stage.items.Find(e => INSTANT_HALF_STAMINA.Equals(e._id));
                                     if (stage.items != null && item.stock > ViewModel.MinStaminaStock)
                                     {
                                         UseItem(ITEM_STAMINA, INSTANT_HALF_STAMINA, 1);
+                                        Delay(DELAY_SHORT);                                        
                                     }
                                 }                                    
                                 stage = ForwardStage(areaId);
