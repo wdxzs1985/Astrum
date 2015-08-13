@@ -21,6 +21,7 @@ namespace Astrum.Json.Stage
         public bool staminaEmpty { get; set; }
         public bool stageClear { get; set; }
         public bool isBossStage { get; set; }
+        public RaidBattleInfo furyraid { get; set; }
 
         public Status status { get; set; }
 
