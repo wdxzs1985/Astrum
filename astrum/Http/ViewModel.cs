@@ -220,6 +220,21 @@ namespace Astrum.Http
             }
         }
 
+        private string _chapterid;
+        public string ChapterId
+        {
+            get
+            {
+               return _chapterid;
+            }
+            set
+            {
+                _chapterid = value;
+                NotifyPropertyChanged("ChapterId");
+            }
+        }
+        
+
         public bool IsGuildBattleEnable
         {
             get

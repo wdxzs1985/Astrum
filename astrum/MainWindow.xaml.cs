@@ -314,7 +314,7 @@ namespace Astrum
                                 client.StartQuest();
                                 client.Quest();
                                 
-                                client.CountDown(client.ViewModel.Fever ? AstrumClient.SECOND * 10 : AstrumClient.MINUTE);
+                                client.CountDown(client.ViewModel.Fever ? AstrumClient.SECOND * 5 : AstrumClient.MINUTE);
 
                             }
                             else if (client.ViewModel.IsGuildBattleEnable)

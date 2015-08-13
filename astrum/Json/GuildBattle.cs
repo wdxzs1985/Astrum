@@ -14,7 +14,7 @@ namespace Astrum.Json.GuildBattle
         public bool available { get; set; }
         public List<Schedule> schedule { get; set; }
     }
-
+    
     public class Schedule
     {
         public string _id { get; set; }
@@ -80,6 +80,9 @@ namespace Astrum.Json.GuildBattle
         public int point { get; set; }
         public Total total { get; set; }
         public Counter counter { get; set; }
+        public bool isEmpty { get; set; }
+        public bool isGvrMainTerm { get; set; }
+        public bool status { get; set; }
     }
 
     public class Hp
