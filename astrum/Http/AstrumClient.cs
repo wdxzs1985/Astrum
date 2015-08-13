@@ -429,16 +429,14 @@ namespace Astrum.Http
                             {
                                 if (stage.isBossStage)
                                 {
-                                    AreaBossBattle(areaId);
-                                    break;
+                                    AreaBossBattle(areaId);                                    
                                 }
                                 else if (stage.stageClear && stage.nextStage.isBossStage)
                                 {
                                     stage = ForwardStage(areaId);
-                                    AreaBossBattle(areaId);
-                                    break;
+                                    AreaBossBattle(areaId);                                    
                                 }
-                                if (stage.staminaEmpty)
+                                if (ViewModel.StaminaValue < 5)
                                 {
                                     var item = stage.items.Find(e => INSTANT_HALF_STAMINA.Equals(e._id));
                                     if (stage.items != null && item.stock > ViewModel.MinStaminaStock)
@@ -458,7 +456,7 @@ namespace Astrum.Http
                                 FuryRaid();
                             }
                         }
-                        if (stage.status.furyraid.rescue != null)
+                        else if (stage.status.furyraid.rescue != null)
                         {
                             if (stage.status.furyraid.rescue.isNew || ViewModel.CanFullAttack)
                             {
@@ -493,7 +491,7 @@ namespace Astrum.Http
                                 Raid();
                             }
                         }
-                        if (stage.status.raid.rescue != null)
+                        else if (stage.status.raid.rescue != null)
                         {
                             if (stage.status.raid.rescue.isNew || ViewModel.CanFullAttack)
                             {
@@ -878,7 +876,15 @@ namespace Astrum.Http
                     }
                     else if(battleInfo.rare == 3)
                     {
-                        if(ViewModel.BpValue ==6)
+                        if(ViewModel.BpValue >3 && ViewModel.FeverValue < 90)
+                        {
+                            FuryRaidBattleAttack(battleInfo._id, attackType);
+                            return true;
+                        }
+                    }
+                    else if(battleInfo.rare <3)
+                    {
+                        if(ViewModel.BpValue >= needBp && ViewModel.FeverValue < 90)
                         {
                             FuryRaidBattleAttack(battleInfo._id, NORMAL);
                             return true;
