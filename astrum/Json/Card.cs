@@ -16,7 +16,9 @@ namespace Astrum.Json.Card
         public string name { get; set; }
         public int rare { get; set; }
         public int level { get; set; }
+        public int maxLevel { get; set; }
         public int abilityLevel { get; set; }
+        public int maxAbilityLevel { get; set; }
         public int evolution { get; set; }
         public Md5 md5 { get; set; }
         public Growth growth { get; set; }

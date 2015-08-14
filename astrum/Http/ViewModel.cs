@@ -775,7 +775,9 @@ namespace Astrum.Http
         private string _training_base_id;
         private string _training_base_name;
         private int _training_base_level;
+        private int _training_base_max_level;
         private int _training_base_ability_level;
+        private int _training_base_max_ability_level;
         private int _training_base_rare;
         private int _training_base_exp_growth;
         private int _training_base_ability_growth;
@@ -863,6 +865,19 @@ namespace Astrum.Http
             }
         }
 
+        public int TrainingBaseMaxLevel
+        {
+            get
+            {
+                return _training_base_max_level;
+            }
+            set
+            {
+                _training_base_max_level = value;
+                NotifyPropertyChanged("TrainingBaseMaxLevel");
+            }
+        }
+
         public int TrainingBaseAbilityLevel
         {
             get
@@ -873,6 +888,19 @@ namespace Astrum.Http
             {
                 _training_base_ability_level = value;
                 NotifyPropertyChanged("TrainingBaseAbilityLevel");
+            }
+        }
+
+        public int TrainingBaseMaxAbilityLevel
+        {
+            get
+            {
+                return _training_base_max_ability_level;
+            }
+            set
+            {
+                _training_base_max_ability_level = value;
+                NotifyPropertyChanged("TrainingBaseMaxAbilityLevel");
             }
         }
 

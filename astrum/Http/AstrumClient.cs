@@ -1345,7 +1345,9 @@ namespace Astrum.Http
             ViewModel.TrainingBaseRare = raiseInfo.@base.rare;
             ViewModel.TrainingBaseName = raiseInfo.@base.name;
             ViewModel.TrainingBaseLevel = raiseInfo.@base.level;
+            ViewModel.TrainingBaseMaxLevel = raiseInfo.@base.maxLevel;
             ViewModel.TrainingBaseAbilityLevel = raiseInfo.@base.abilityLevel;
+            ViewModel.TrainingBaseMaxAbilityLevel = raiseInfo.@base.maxAbilityLevel;
             ViewModel.TrainingBaseExpGrowth = raiseInfo.@base.growth.exp;
             ViewModel.TrainingBaseAbilityGrowth = raiseInfo.@base.growth.ability;
             
@@ -1363,57 +1365,59 @@ namespace Astrum.Http
             ViewModel.StrengthStatueBronzeStock = 0;
             ViewModel.StrengthStatueBronzeAvailable = 0;
 
-            foreach (var item in raiseItemInfo.items.ability)
-            {
-                switch (item._id)
-                {
-                    case INSTANT_ABILITY_BOOK_GOLD:
-                        ViewModel.AbilityBookGoldStock = item.stock;
-                        ViewModel.AbilityBookGoldAvailable = item.available;
-                        break;
-                    case INSTANT_ABILITY_BOOK_SILVER:
-                        ViewModel.AbilityBookSilverStock = item.stock;
-                        ViewModel.AbilityBookSilverAvailable = item.available;
-                        break;
-                    case INSTANT_ABILITY_BOOK_BRONZE:
-                        ViewModel.AbilityBookBronzeStock = item.stock;
-                        ViewModel.AbilityBookBronzeAvailable = item.available;
-                        break;
-                }
-            }
-            foreach (var item in raiseItemInfo.items.exp)
-            {
-                switch (item._id)
-                {
-                    case INSTANT_STRENGTH_STATUE_GOLD:
-                        ViewModel.StrengthStatueGoldStock = item.stock;
-                        ViewModel.StrengthStatueGoldAvailable = item.available;
-                        break;
-                    case INSTANT_STRENGTH_STATUE_SILVER:
-                        ViewModel.StrengthStatueSilverStock = item.stock;
-                        ViewModel.StrengthStatueSilverAvailable = item.available;
-                        break;
-                    case INSTANT_STRENGTH_STATUE_BRONZE:
-                        ViewModel.StrengthStatueBronzeStock = item.stock;
-                        ViewModel.StrengthStatueBronzeAvailable = item.available;
-                        break;
-                }
-            }
 
+            if (raiseInfo.items != null)
+            {
+                if (raiseInfo.items.ability != null)
+                {
+                    foreach (var item in raiseItemInfo.items.ability)
+                    {
+                        switch (item._id)
+                        {
+                            case INSTANT_ABILITY_BOOK_GOLD:
+                                ViewModel.AbilityBookGoldStock = item.stock;
+                                ViewModel.AbilityBookGoldAvailable = item.available;
+                                break;
+                            case INSTANT_ABILITY_BOOK_SILVER:
+                                ViewModel.AbilityBookSilverStock = item.stock;
+                                ViewModel.AbilityBookSilverAvailable = item.available;
+                                break;
+                            case INSTANT_ABILITY_BOOK_BRONZE:
+                                ViewModel.AbilityBookBronzeStock = item.stock;
+                                ViewModel.AbilityBookBronzeAvailable = item.available;
+                                break;
+                        }
+                    }
+                }
+
+                if (raiseInfo.items.exp != null)
+                {
+                    foreach (var item in raiseItemInfo.items.exp)
+                    {
+                        switch (item._id)
+                        {
+                            case INSTANT_STRENGTH_STATUE_GOLD:
+                                ViewModel.StrengthStatueGoldStock = item.stock;
+                                ViewModel.StrengthStatueGoldAvailable = item.available;
+                                break;
+                            case INSTANT_STRENGTH_STATUE_SILVER:
+                                ViewModel.StrengthStatueSilverStock = item.stock;
+                                ViewModel.StrengthStatueSilverAvailable = item.available;
+                                break;
+                            case INSTANT_STRENGTH_STATUE_BRONZE:
+                                ViewModel.StrengthStatueBronzeStock = item.stock;
+                                ViewModel.StrengthStatueBronzeAvailable = item.available;
+                                break;
+                        }
+                    }
+                }
+            }
         }
         private RaiseInfo RaiseSearch(string baseId, int rare)
         {
             var page = 1;
             var size = 20;
             var target = "time";
-            //var target = "cost";
-            //var target = "rare";
-            //var target = "level";
-            //var target = "atk";
-            //var target = "df";
-            //var target = "mat";
-            //var target = "mdf";
-            //var target = "total";
             var sort = "desc";
 
             var url = string.Format("http://astrum.amebagames.com/_/raise?page={0}&size={1}&base={2}&target={3}&sort={4}&rare={5}&level1=true", page, size, Uri.EscapeDataString(baseId), target, sort, rare);
@@ -1625,8 +1629,7 @@ namespace Astrum.Http
                         break;
                 }
 
-                history += String.Format("{0}出现了", rare) + Environment.NewLine;
-                history += String.Format("{0} (L{1})", battleInfo.name, battleInfo.level) + Environment.NewLine;
+                history += String.Format("{0}({1} L{2})出现了", rare, battleInfo.name, battleInfo.level) + Environment.NewLine;
                 history += String.Format("血量: {0} / {1}", battleInfo.hp - battleInfo.totalDamage, battleInfo.hp) + Environment.NewLine;
                 ViewModel.History = history;
             }
