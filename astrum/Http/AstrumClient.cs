@@ -531,8 +531,8 @@ namespace Astrum.Http
                             return;
                         }
                     }
-                    //forward
-                    stage = ForwardStage(areaId);
+                    //forward                   
+                    stage = ForwardStage(areaId);                                                                               
                 }
 
             }
