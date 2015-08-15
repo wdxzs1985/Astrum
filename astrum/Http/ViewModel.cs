@@ -65,7 +65,7 @@ namespace Astrum.Http
                 _running = value;
                 NotifyPropertyChanged("IsRunning");
                 //NotifyPropertyChanged("CanUseStaminaHalf");
-               // NotifyPropertyChanged("CanUseStamina");
+                // NotifyPropertyChanged("CanUseStamina");
                 //NotifyPropertyChanged("CanUseBpMini");
                 //NotifyPropertyChanged("CanUseBp");
 
@@ -91,7 +91,8 @@ namespace Astrum.Http
         {
             get
             {
-                if(Name != null) {
+                if (Name != null)
+                {
                     return String.Format("プリコネ [{0} (Lv {1})]", Name, Level);
                 }
                 return "プリンセスコネクト";
@@ -326,7 +327,7 @@ namespace Astrum.Http
                 {
                     return 0;
                 }
-                
+
             }
             set
             {
@@ -375,8 +376,8 @@ namespace Astrum.Http
                 {
                     return 0;
                 }
-                double expMax = (double) (_exp_max - _exp_min);
-                double expVal = (double) (_exp_value - _exp_min);
+                double expMax = (double)(_exp_max - _exp_min);
+                double expVal = (double)(_exp_value - _exp_min);
 
                 double rate = expVal / expMax;
 
@@ -785,7 +786,7 @@ namespace Astrum.Http
         private int _training_base_ability_growth;
 
         private List<CardInfo> _training_base_list;
-        
+
         public string TrainingBaseId
         {
             get

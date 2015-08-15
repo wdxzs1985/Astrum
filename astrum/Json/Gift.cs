@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Astrum.Json.Gift
 {
-    public class GiftInfo
+    class GiftInfo
     {
         public int total { get; set; }
         public int maxpage { get; set; }
