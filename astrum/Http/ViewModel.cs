@@ -1,6 +1,7 @@
 ﻿using Astrum.Json;
 using Astrum.Json.Card;
 using Astrum.Json.Gacha;
+using Astrum.Json.Raid;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -617,6 +618,7 @@ namespace Astrum.Http
         public bool IsFuryRaidEnable { get; set; }
         public string FuryRaidEventId { get; set; }
         public bool IsFuryRaid { get; set; }
+        //public List<RaidBattleInfo> FuryRaidFindList { get; set; }
 
         public bool IsLimitedRaidEnable { get; set; }
         public string LimitedRaidEventId { get; set; }
