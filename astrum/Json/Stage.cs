@@ -21,12 +21,26 @@ namespace Astrum.Json.Stage
         public bool staminaEmpty { get; set; }
         public bool stageClear { get; set; }
         public bool isBossStage { get; set; }
+        public Furyraid furyraid { get; set; }
 
         public Status status { get; set; }
 
         public NextStage nextStage { get; set; }
 
         public List<ItemInfo> items { get; set; }
+    }
+
+    public class Furyraid
+    {
+        public string _id { get; set; }
+        public string eventId { get; set; }
+        public bool isRefind { get; set; }
+        public int level { get; set; }
+        public string raidId { get; set; }
+        public int rare { get; set; }
+        public int rate { get; set; }
+        public int total { get; set; }
+        public string type { get; set; }
     }
 
     public class Stamina

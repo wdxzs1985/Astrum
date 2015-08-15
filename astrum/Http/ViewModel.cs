@@ -632,6 +632,7 @@ namespace Astrum.Http
         public bool IsFuryRaidEnable { get; set; }
         public string FuryRaidEventId { get; set; }
         public bool IsFuryRaid { get; set; }
+        public bool FuryRaidFull { get; set; }
 
         public bool IsLimitedRaidEnable { get; set; }
         public string LimitedRaidEventId { get; set; }
