@@ -742,6 +742,7 @@ namespace Astrum.Http
         {
             FuryRaidInfo raidInfo = FuryRaidInfo();
             ViewModel.Fever = raidInfo.fever.progress == 100;
+            ViewModel.FeverProgress = raidInfo.fever.progress;
 
             raidInfo = FuryRaidBoss();
             if (raidInfo.find != null)
