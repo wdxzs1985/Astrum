@@ -408,16 +408,23 @@ namespace Astrum.Http
                 {
                     AreaBossBattle(areaId);
                     break;
-                }
+                }                
                 else if (stage.stageClear && stage.nextStage.isBossStage)
                 {
+                    if (stage.furyraid != null)
+                    {
+                        if (stage.furyraid.rare == 4)
+                        {
+                            ViewModel.IsFuryRaid = true;
+                        }
+                    }
                     stage = ForwardStage(areaId);
                     AreaBossBattle(areaId);
                     break;
                 }
                 else
                 {
-                    ViewModel.IsFuryRaid = false;
+                    //ViewModel.IsFuryRaid = false;
                     ViewModel.IsLimitedRaid = false;
 
                     if (ViewModel.IsFuryRaidEnable)
