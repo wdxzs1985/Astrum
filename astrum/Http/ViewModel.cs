@@ -690,6 +690,20 @@ namespace Astrum.Http
             }
         }
 
+        private bool _isbossfull;
+        public bool isBossFull
+        {
+            get
+            {
+                return _isbossfull;
+            }
+            set
+            {
+                _isbossfull = value;
+                NotifyPropertyChanged("isBossFull");
+            }
+        }
+
         public bool IsStaminaEmpty { get; set; }
 
         private int _keepStamina = 100;

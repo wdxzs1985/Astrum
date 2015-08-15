@@ -536,8 +536,8 @@ namespace Astrum.Http
                             return;
                         }
                     }
-                    //forward                   
-                    stage = ForwardStage(areaId);
+                    //forward                    
+                    stage = ForwardStage(areaId);                  
                 }
 
             }
@@ -743,10 +743,12 @@ namespace Astrum.Http
             FuryRaidInfo raidInfo = FuryRaidInfo();
             ViewModel.Fever = raidInfo.fever.progress == 100;
             ViewModel.FeverProgress = raidInfo.fever.progress;
-
+                        
             raidInfo = FuryRaidBoss();
+            
             if (raidInfo.find != null)
             {
+                //ViewModel.isBossFull = raidInfo.find.list.Count >= 3 ? true : false;
                 //ViewModel.FuryRaidFindList = raidInfo.find.list;
                 foreach (var battleInfo in raidInfo.find.list)
                 {
@@ -1617,6 +1619,9 @@ namespace Astrum.Http
 
                 string rare = "";
 
+                string type = "";
+                type = battleInfo.type == "find" ? "发现" : "救援";
+
                 switch(battleInfo.rare)
                 {
                     case 1:
@@ -1638,6 +1643,7 @@ namespace Astrum.Http
 
                 history += String.Format("{0}({1} L{2})出现了", rare, battleInfo.name, battleInfo.level) + Environment.NewLine;
                 history += String.Format("血量: {0} / {1}", battleInfo.hp - battleInfo.totalDamage, battleInfo.hp) + Environment.NewLine;
+                history += String.Format("类型：{0}", type) + Environment.NewLine;
                 ViewModel.History = history;
             }
         }
