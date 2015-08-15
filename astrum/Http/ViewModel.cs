@@ -1,6 +1,7 @@
 ﻿using Astrum.Json;
 using Astrum.Json.Card;
 using Astrum.Json.Gacha;
+using Astrum.Json.Raid;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -219,21 +220,6 @@ namespace Astrum.Http
                 NotifyPropertyChanged("IsQuestEnable");
             }
         }
-
-        private string _chapterid;
-        public string ChapterId
-        {
-            get
-            {
-               return _chapterid;
-            }
-            set
-            {
-                _chapterid = value;
-                NotifyPropertyChanged("ChapterId");
-            }
-        }
-        
 
         public bool IsGuildBattleEnable
         {
@@ -632,7 +618,7 @@ namespace Astrum.Http
         public bool IsFuryRaidEnable { get; set; }
         public string FuryRaidEventId { get; set; }
         public bool IsFuryRaid { get; set; }
-        public bool FuryRaidFull { get; set; }
+        //public List<RaidBattleInfo> FuryRaidFindList { get; set; }
 
         public bool IsLimitedRaidEnable { get; set; }
         public string LimitedRaidEventId { get; set; }
@@ -688,32 +674,6 @@ namespace Astrum.Http
                 NotifyPropertyChanged("Fever");
             }
         }
-        private int _fevervalue;
-        public int FeverValue
-        {
-            get
-            {
-                return _fevervalue;
-            }
-            set
-            {
-                _fevervalue = value;                
-                NotifyPropertyChanged("FeverProgress");
-            }
-        }
-
-        public int FeverProgress
-        {
-            get
-            {                
-                double max = 100;
-                double val = (double)_fevervalue;
-
-                double rate = val / max;
-
-                return (int)(rate * 100);
-            }
-        }
 
         public bool IsStaminaEmpty { get; set; }
 
@@ -726,7 +686,7 @@ namespace Astrum.Http
             }
             set
             {
-                _keepStamina = value;                
+                _keepStamina = value;
                 NotifyPropertyChanged("KeepStamina");
             }
         }
@@ -817,7 +777,9 @@ namespace Astrum.Http
         private string _training_base_id;
         private string _training_base_name;
         private int _training_base_level;
+        private int _training_base_max_level;
         private int _training_base_ability_level;
+        private int _training_base_max_ability_level;
         private int _training_base_rare;
         private int _training_base_exp_growth;
         private int _training_base_ability_growth;
@@ -905,6 +867,19 @@ namespace Astrum.Http
             }
         }
 
+        public int TrainingBaseMaxLevel
+        {
+            get
+            {
+                return _training_base_max_level;
+            }
+            set
+            {
+                _training_base_max_level = value;
+                NotifyPropertyChanged("TrainingBaseMaxLevel");
+            }
+        }
+
         public int TrainingBaseAbilityLevel
         {
             get
@@ -915,6 +890,19 @@ namespace Astrum.Http
             {
                 _training_base_ability_level = value;
                 NotifyPropertyChanged("TrainingBaseAbilityLevel");
+            }
+        }
+
+        public int TrainingBaseMaxAbilityLevel
+        {
+            get
+            {
+                return _training_base_max_ability_level;
+            }
+            set
+            {
+                _training_base_max_ability_level = value;
+                NotifyPropertyChanged("TrainingBaseMaxAbilityLevel");
             }
         }
 

@@ -331,15 +331,11 @@ namespace Astrum
                     return true;
                 });
 
-                if(result)
-                {
-                    StartButton.Content = "Start";
-                    StartButton.IsEnabled = true;
-                    Tabs.IsEnabled = true;
-                    //QuestButton.IsEnabled = true;
-                    //GuildBattleButton.IsEnabled = true;
-                }
-                else
+                StartButton.Content = "Start";
+                StartButton.IsEnabled = true;
+                Tabs.IsEnabled = true;
+
+                if (!result)
                 {
                     client.ViewModel.IsRunning = false;
                     client.ViewModel.IsReady = false;
@@ -550,7 +546,7 @@ namespace Astrum
                 client.ViewModel.IsReady = false;
                 client.ViewModel.IsTrainingEnable = false;
                 client.ViewModel.IsTrainingBaseEnable = false;
-                Tabs.IsEnabled = false;
+                Tabs.IsEnabled = false;                
 
                 try
                 {

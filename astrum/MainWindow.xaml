@@ -341,11 +341,20 @@
                                Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4"
                                HorizontalAlignment="Left" Margin="0,0,0,0"
                                VerticalAlignment="Center"></Label>
-                        <Label Content="{Binding TrainingBaseLevel, FallbackValue=60}" 
-                               ContentStringFormat="Lv {0}/60"
-                               Grid.Row="1" Grid.Column="1"
+                        <Label Grid.Row="1" Grid.Column="1"
                                HorizontalAlignment="Center"
-                               VerticalAlignment="Center"></Label>
+                               VerticalAlignment="Center">
+                            <Label.Content>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}Lv {0}/{1}">
+                                            <Binding Path="TrainingBaseLevel" />
+                                            <Binding Path="TrainingBaseMaxLevel" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Label.Content>
+                        </Label>
                         <ProgressBar Name="TrainingBaseExp" 
                                      Value="{Binding TrainingBaseExpGrowth, FallbackValue=50}"
                                      Grid.Row="1" Grid.Column="2"
@@ -353,11 +362,20 @@
                                      VerticalAlignment="Center"
                                      Width="100" Height="8"
                                      ></ProgressBar>
-                        <Label Content="{Binding TrainingBaseAbilityLevel, FallbackValue=20}" 
-                               ContentStringFormat="Lv {0}/20"
-                               Grid.Row="1" Grid.Column="3"
+                        <Label Grid.Row="1" Grid.Column="3"
                                HorizontalAlignment="Center"
-                               VerticalAlignment="Center"></Label>
+                               VerticalAlignment="Center">
+                            <Label.Content>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}Lv {0}/{1}">
+                                            <Binding Path="TrainingBaseAbilityLevel" />
+                                            <Binding Path="TrainingBaseMaxAbilityLevel" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Label.Content>
+                        </Label>
                         <ProgressBar Name="TrainingBaseAbility"
                                      Value="{Binding TrainingBaseAbilityGrowth, FallbackValue=50}"
                                      Grid.Row="1" Grid.Column="4"
