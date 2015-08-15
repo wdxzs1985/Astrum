@@ -1549,7 +1549,8 @@ namespace Astrum.Http
         private void PrintGiftResult(GiftResult giftResult)
         {
             string history = "";
-            if (giftResult.item > 0)
+
+            if(giftResult.item > 0)
             {
                 history += String.Format("　获得道具：{0}", giftResult.item) + Environment.NewLine;
             }
@@ -1614,7 +1615,8 @@ namespace Astrum.Http
                 string history = "";
 
                 string rare = "";
-                switch (battleInfo.rare)
+
+                switch(battleInfo.rare)
                 {
                     case 1:
                         rare = "初级魔星兽";
