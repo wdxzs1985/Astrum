@@ -537,14 +537,14 @@ namespace Astrum.Http
                 while (ViewModel.Fever)
                 {
                     if (stage.isBossStage)
-                    {                        
+                    {
                         break;
                     }
                     else if (stage.stageClear)
-                    {                        
+                    {
                         break;
                     }
-                    else if(stage.nextStage.isBossStage)
+                    else if (stage.nextStage.isBossStage)
                     {
                         break;
                     }
@@ -561,9 +561,26 @@ namespace Astrum.Http
                             break;
                         }
                     }
+<<<<<<< HEAD
                     //forward                   
                     stage = ForwardStage(areaId);                                                                               
                 }                
+=======
+                    stage = ForwardStage(areaId);
+                    FuryRaidFever();
+                }
+                    
+                    
+                if (ViewModel.FuryRaidFull == false)
+                {
+                    //forward                        
+                    stage = ForwardStage(areaId);
+                }
+                else
+                {
+                    return;
+                }
+>>>>>>> origin/master
             }
         }
 
