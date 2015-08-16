@@ -32,7 +32,7 @@ namespace Astrum.Http
         public const int MINUTE = 30 * SECOND;
 
         public const int DELAY_LONG = SECOND;
-        public const int DELAY_SHORT = SECOND * 4 / 5;
+        public const int DELAY_SHORT = INTERTAL * 5;
         public const int NO_DELAY = 0;
 
         public const string ITEM_STAMINA = "stamina";
@@ -50,6 +50,7 @@ namespace Astrum.Http
         public const string INSTANT_STRENGTH_STATUE_SILVER = "instant-strength_statue_silver";
         public const string INSTANT_STRENGTH_STATUE_BRONZE = "instant-strength_statue_bronze";
 
+        public const string INSTANT_PLATINUM_GACHA_POINT = "instant-platinum_gacha_point";
         public const string INSTANT_RARE_RAID_MEDAL = "instant-rare_raid_medal";
         public const string INSTANT_RAID_MEDAL = "instant-raid_medal";
 
@@ -250,9 +251,7 @@ namespace Astrum.Http
         public bool StartQuest()
         {
             this.Mypage();
-            this.Gift(1);
             this.Item();
-            this.EventStatus();
 
             return ViewModel.IsQuestEnable;
         }
@@ -373,20 +372,32 @@ namespace Astrum.Http
             {
                 if (@event.status)
                 {
-                    if ("furyraid".Equals(@event.type))
+                    switch(@event.type)
                     {
-                        ViewModel.IsFuryRaidEnable = true;
-                        ViewModel.FuryRaidEventId = @event._id;
+                        case "furyraid":
+                            ViewModel.IsFuryRaidEnable = true;
+                            ViewModel.FuryRaidEventId = @event._id;
 
-                        //FuryRaidFever();
-                    }
-                    else if ("limitedraid".Equals(@event.type))
-                    {
-                        ViewModel.IsLimitedRaidEnable = true;
-                        ViewModel.LimitedRaidEventId = @event._id;
+                            ViewModel.IsFuryRaid = true;
+                            FuryRaid();
+                            break;
+                        case "limitedraid":
+                            ViewModel.IsLimitedRaidEnable = true;
+                            ViewModel.LimitedRaidEventId = @event._id;
+                            
+                            ViewModel.IsLimitedRaid = true;
 
-                        //LimitedRaidInfo();
+                            LimitedRaid();
+                            break;
+                        case "raid":
+                            if(!ViewModel.Fever)
+                            {
+                                ViewModel.IsFuryRaid = false;
+                                ViewModel.IsLimitedRaid = false;
 
+                                Raid();
+                            }
+                            break;
                     }
                 }
             }
@@ -394,7 +405,6 @@ namespace Astrum.Http
 
         public void Quest()
         {
-
             Access("stage");
 
             //var areaId = "chapter1-1";
@@ -407,13 +417,13 @@ namespace Astrum.Http
                 if (stage.isBossStage)
                 {
                     AreaBossBattle(areaId);
-                    break;
+                    return;
                 }
                 else if (stage.stageClear && stage.nextStage.isBossStage)
                 {
                     stage = ForwardStage(areaId);
                     AreaBossBattle(areaId);
-                    break;
+                    return;
                 }
                 else
                 {
@@ -422,24 +432,27 @@ namespace Astrum.Http
 
                     if (ViewModel.IsFuryRaidEnable)
                     {
+                        ViewModel.IsFuryRaid = true;
+
                         if (stage.furyraid != null)
                         {
                             if (ViewModel.Fever)
                             {
                                 if (stage.furyraid.rare == 4)
                                 {
-                                    ViewModel.IsFuryRaid = true;
+                                    ViewModel.CanFuryRaid = true;
                                 }
                             }
                             else
                             {
-                                ViewModel.IsFuryRaid = true;
+                                ViewModel.CanFuryRaid = true;
                             }
                         }
-                        else if (ViewModel.IsFuryRaid)
+                        else if (ViewModel.CanFuryRaid)
                         {
                             FuryRaid();
-                            ViewModel.IsFuryRaid = false;
+                            ViewModel.CanFuryRaid = false;
+                            return;
                         }
                         else if (!ViewModel.Fever)
                         {
@@ -447,18 +460,17 @@ namespace Astrum.Http
                             {
                                 if (stage.status.furyraid.find.isNew || ViewModel.CanFullAttack)
                                 {
-                                    ViewModel.IsFuryRaid = true;
                                     FuryRaid();
-                                    ViewModel.IsFuryRaid = false;
+                                    return;
                                 }
                             }
                             if (stage.status.furyraid.rescue != null)
                             {
                                 if (stage.status.furyraid.rescue.isNew)
                                 {
-                                    ViewModel.IsFuryRaid = true;
                                     FuryRaid();
-                                    ViewModel.IsFuryRaid = false;
+                                    return;
+
                                 }
                             }
                         }
@@ -466,26 +478,31 @@ namespace Astrum.Http
 
                     if (ViewModel.IsLimitedRaidEnable)
                     {
+                        ViewModel.IsLimitedRaid = true;
 
                         var limitedRaidId = stage.status.limitedraid._id;
                         if (limitedRaidId != null)
                         {
                             if (ViewModel.CanFullAttackForEvent)
                             {
-                                ViewModel.IsLimitedRaid = true;
                                 LimitedRaid();
-                                ViewModel.IsLimitedRaid = false;
+                                return;
                             }
                         }
                     }
 
                     if (stage.status.raid != null && !ViewModel.Fever)
                     {
+
+                        ViewModel.IsFuryRaid = false;
+                        ViewModel.IsLimitedRaid = false;
+
                         if (stage.status.raid.find != null)
                         {
                             if (stage.status.raid.find.isNew || ViewModel.CanFullAttack)
                             {
                                 Raid();
+                                return;
                             }
                         }
                         if (stage.status.raid.rescue != null)
@@ -493,6 +510,7 @@ namespace Astrum.Http
                             if (stage.status.raid.rescue.isNew || ViewModel.CanFullAttack)
                             {
                                 Raid();
+                                return;
                             }
                         }
                     }
@@ -523,6 +541,7 @@ namespace Astrum.Http
                             if (item.stock > ViewModel.MinStaminaStock && ViewModel.Fever)
                             {
                                 UseItem(ITEM_STAMINA, INSTANT_HALF_STAMINA, 1);
+                                return;
                             }
                             else
                             {
@@ -758,6 +777,7 @@ namespace Astrum.Http
                         {
                             loop = FuryRaidBattle(battleInfo._id);
                         }
+                        
                     }
                     else
                     {
@@ -1020,7 +1040,7 @@ namespace Astrum.Http
         {
             var battleId = ViewModel.GuildBattleId;
 
-            while (ViewModel.TpValue >= 10)
+            while (ViewModel.TpValue >= 10 && ViewModel.IsQuestEnable)
             {
                 GuildBattleInfo battleInfo = GuildBattle(battleId);
                 ViewModel.TpValue = battleInfo.status.tp.value;
@@ -1570,6 +1590,10 @@ namespace Astrum.Http
 
             if (giftResult.gacha != null)
             {
+                if (giftResult.gacha.ContainsKey(INSTANT_PLATINUM_GACHA_POINT))
+                {
+                    history += String.Format("　　　　钻：{0}", giftResult.gacha[INSTANT_PLATINUM_GACHA_POINT].value) + Environment.NewLine;
+                }
                 if (giftResult.gacha.ContainsKey(INSTANT_RARE_RAID_MEDAL))
                 {
                     history += String.Format("稀有魔星币：{0}", giftResult.gacha[INSTANT_RARE_RAID_MEDAL].value) + Environment.NewLine;

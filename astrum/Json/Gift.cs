@@ -27,10 +27,10 @@ namespace Astrum.Json.Gift
         public int item { get; set; }
         public int lilu { get; set; }
         public Enhance enhance { get; set; }
-        public Dictionary<string, InstantRaidMedal> gacha { get; set; }
+        public Dictionary<string, Instant> gacha { get; set; }
     }
     
-    public class InstantRaidMedal
+    public class Instant
     {
         public int value { get; set; }
         public string type { get; set; }

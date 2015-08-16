@@ -289,8 +289,7 @@ namespace Astrum
             Tabs.IsEnabled = false;
             //QuestButton.IsEnabled = false;
             //GuildBattleButton.IsEnabled = false;
-
-
+            
             if (client.ViewModel.IsRunning == false)
             {
                 SaveUserList();
@@ -312,9 +311,14 @@ namespace Astrum
                             if (client.ViewModel.IsQuestEnable)
                             {
                                 client.StartQuest();
+                                client.Gift(1);
+                                client.EventStatus();
                                 client.Quest();
-                                
-                                client.CountDown(client.ViewModel.Fever ? AstrumClient.SECOND * 10 : AstrumClient.MINUTE);
+
+                                if(client.ViewModel.IsStaminaEmpty)
+                                {
+                                    client.CountDown(AstrumClient.SECOND * 30);
+                                }
 
                             }
                             else if (client.ViewModel.IsGuildBattleEnable)
