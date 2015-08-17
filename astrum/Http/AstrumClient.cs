@@ -568,7 +568,7 @@ namespace Astrum.Http
             var stage = JsonConvert.DeserializeObject<StageInfo>(result);
 
             PrintStageInfo(stage);
-            //UpdateStageView(stage);
+            UpdateStageView(stage.initial);
             Delay(DELAY_SHORT);
 
             return stage;
@@ -1789,8 +1789,6 @@ namespace Astrum.Http
                 {
                     ViewModel.Fever = stage.status.limitedraid != null && stage.status.limitedraid.fever != null;
                 }
-
-
             }
         }
 

@@ -25,6 +25,8 @@ namespace Astrum.Json.Stage
 
         public Status status { get; set; }
 
+        public StageInfo initial { get; set; }
+
         public NextStage nextStage { get; set; }
 
         public List<ItemInfo> items { get; set; }
