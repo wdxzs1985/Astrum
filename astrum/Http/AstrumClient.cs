@@ -568,7 +568,7 @@ namespace Astrum.Http
             var stage = JsonConvert.DeserializeObject<StageInfo>(result);
 
             PrintStageInfo(stage);
-            UpdateStageView(stage);
+            //UpdateStageView(stage);
             Delay(DELAY_SHORT);
 
             return stage;
@@ -636,7 +636,6 @@ namespace Astrum.Http
 
         public void Raid()
         {
-
             GetXHR("http://astrum.amebagames.com/_/event/raid");
             Access("event_raid");
             Delay(DELAY_SHORT);
@@ -659,7 +658,7 @@ namespace Astrum.Http
             {
                 foreach (var battleInfo in raidInfo.rescue.list)
                 {
-                    var loop = battleInfo.isNew;
+                    var loop = battleInfo.isNew || ViewModel.CanFullAttack;
                     while (loop)
                     {
                         loop = RaidBattle(battleInfo._id);
@@ -1530,7 +1529,7 @@ namespace Astrum.Http
             var page = 1;
             var size = 150;
             
-            var target = "level";
+            var target = "rare";
             var sort = "desc";
 
             var url = string.Format("http://astrum.amebagames.com/_/raise/base?page={0}&size={1}&target={2}&sort={3}&level1=false&inParty=false", page, size, target, sort);
