@@ -26,6 +26,7 @@ namespace Astrum.Json.Gift
         public int total { get; set; }
         public int item { get; set; }
         public int lilu { get; set; }
+        public int card { get; set; }
         public Enhance enhance { get; set; }
         public Dictionary<string, Instant> gacha { get; set; }
     }

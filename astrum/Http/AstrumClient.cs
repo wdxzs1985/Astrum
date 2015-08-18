@@ -1546,21 +1546,25 @@ namespace Astrum.Http
             string history = "";
             if(giftResult.item > 0)
             {
-                history += String.Format("　获得道具：{0}", giftResult.item) + Environment.NewLine;
+                history += String.Format("　　　获得道具：{0}", giftResult.item) + Environment.NewLine;
             }
             if (giftResult.lilu > 0)
             {
-                history += String.Format("　获得ルピ：{0}", giftResult.lilu) + Environment.NewLine;
+                history += String.Format("　　　获得ルピ：{0}", giftResult.lilu) + Environment.NewLine;
+            }
+            if (giftResult.card > 0)
+            {
+                history += String.Format("　　　获得少女：{0}", giftResult.card) + Environment.NewLine;
             }
             if (giftResult.enhance != null)
             {
                 if (giftResult.enhance.strength > 0)
                 {
-                    history += String.Format("　　强化像：{0}", giftResult.enhance.strength) + Environment.NewLine;
+                    history += String.Format("　　获得强化像：{0}", giftResult.enhance.strength) + Environment.NewLine;
                 }
                 if (giftResult.enhance.limitbreak > 0)
                 {
-                    history += String.Format("　开花结晶：{0}", giftResult.enhance.limitbreak) + Environment.NewLine;
+                    history += String.Format("　获得开花结晶：{0}", giftResult.enhance.limitbreak) + Environment.NewLine;
                 }
             }
 
@@ -1568,15 +1572,18 @@ namespace Astrum.Http
             {
                 if (giftResult.gacha.ContainsKey(INSTANT_PLATINUM_GACHA_POINT))
                 {
-                    history += String.Format("　　　　钻：{0}", giftResult.gacha[INSTANT_PLATINUM_GACHA_POINT].value) + Environment.NewLine;
+                    var value = giftResult.gacha[INSTANT_PLATINUM_GACHA_POINT].value;
+                    history += String.Format("　　　获得星钻：{0}", value) + Environment.NewLine;
                 }
                 if (giftResult.gacha.ContainsKey(INSTANT_RARE_RAID_MEDAL))
                 {
-                    history += String.Format("稀有魔星币：{0}", giftResult.gacha[INSTANT_RARE_RAID_MEDAL].value) + Environment.NewLine;
+                    var value = giftResult.gacha[INSTANT_RARE_RAID_MEDAL].value;
+                    history += String.Format("获得稀有魔星币：{0}", value) + Environment.NewLine;
                 }
                 if (giftResult.gacha.ContainsKey(INSTANT_RAID_MEDAL))
                 {
-                    history += String.Format("　　魔星币：{0}", giftResult.gacha[INSTANT_RAID_MEDAL].value) + Environment.NewLine;
+                    var value = giftResult.gacha[INSTANT_RAID_MEDAL].value;
+                    history += String.Format("　　获得魔星币：{0}", value) + Environment.NewLine;
                 }
             }
 
