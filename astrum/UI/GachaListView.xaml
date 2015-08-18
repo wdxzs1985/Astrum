@@ -23,7 +23,7 @@
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <Grid Margin="0,0,0,0" >
+                <Grid Margin="0,0,0,0" IsEnabled="{Binding enable.status}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="24" />
                         <RowDefinition Height="64" />

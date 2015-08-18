@@ -436,14 +436,7 @@ namespace Astrum.Http
 
                         if (stage.furyraid != null)
                         {
-                            if (ViewModel.Fever)
-                            {
-                                if (stage.furyraid.rare == 4)
-                                {
-                                    ViewModel.CanFuryRaid = true;
-                                }
-                            }
-                            else
+                            if (stage.furyraid.rare == 4)
                             {
                                 ViewModel.CanFuryRaid = true;
                             }
@@ -490,7 +483,7 @@ namespace Astrum.Http
                             }
                         }
                     }
-
+                    
                     if (stage.status.raid != null && !ViewModel.Fever)
                     {
 
@@ -767,25 +760,13 @@ namespace Astrum.Http
                 //ViewModel.FuryRaidFindList = raidInfo.find.list;
                 foreach (var battleInfo in raidInfo.find.list)
                 {
-                    bool isRare4 = battleInfo.rare == 4;
+                    bool loop = battleInfo.rare == 4 || (!ViewModel.Fever && (battleInfo.isNew || ViewModel.CanFullAttack));
+                    
+                    while (loop)
+                    {
+                        loop = FuryRaidBattle(battleInfo._id);
+                    }
 
-                    if (ViewModel.Fever)
-                    {
-                        var loop = isRare4;
-                        while (loop)
-                        {
-                            loop = FuryRaidBattle(battleInfo._id);
-                        }
-                        
-                    }
-                    else
-                    {
-                        var loop = battleInfo.isNew || (ViewModel.CanFullAttack) || isRare4;
-                        while (loop)
-                        {
-                            loop = FuryRaidBattle(battleInfo._id);
-                        }
-                    }
                 }
             }
 
@@ -793,7 +774,7 @@ namespace Astrum.Http
             {
                 foreach (var battleInfo in raidInfo.rescue.list)
                 {
-                    var loop = battleInfo.isNew;
+                    var loop = battleInfo.isNew && !ViewModel.Fever;
                     while (loop)
                     {
                         loop = FuryRaidBattle(battleInfo._id);
@@ -1304,8 +1285,6 @@ namespace Astrum.Http
 
             foreach (var item in gacha.list)
             {
-                if (item.enable.status)
-                {
                     var key = "ticket".Equals(item.price.type) ? item.price._id : item.price.type;
                     
                     if(!"coin".Equals(key))
@@ -1313,8 +1292,6 @@ namespace Astrum.Http
                         item.stock = stockMap[key];
                         gachaList.Add(item);
                     }
-
-                }
             }
         }
         

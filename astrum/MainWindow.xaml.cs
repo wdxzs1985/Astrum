@@ -79,8 +79,9 @@ namespace Astrum
         {
             if (this.WindowState == WindowState.Minimized)
             {
-                notifyIcon.Visible = true;
                 ShowInTaskbar = false;
+                notifyIcon.Text = client.ViewModel.WindowTitle;
+                notifyIcon.Visible = true;
                 notifyIcon.ShowBalloonTip(1000, client.ViewModel.WindowTitle, "少女隐身中...", ToolTipIcon.None);
             }
             else
@@ -94,7 +95,9 @@ namespace Astrum
         {
             this.UsernameBox.Text = "";
             this.PasswordBox.Password = "";
-            
+
+            this.WindowState = WindowState.Normal;
+
             LoginPanel.Visibility = Visibility.Visible;
             StatusPanel.Visibility = Visibility.Hidden;
             LoginButton.Content = "登陆";

@@ -307,7 +307,7 @@
             <Grid Name="GachaPanel" Margin="0,144,0,240" 
                   Background="{StaticResource Background}"
                   Visibility="{Binding IsGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <UI:GachaListView GachaList="{Binding GachaList}" Gacha="GachaListView_Gacha" d:IsLocked="True" d:IsHidden="True"/>
+                <UI:GachaListView GachaList="{Binding GachaList}" Gacha="GachaListView_Gacha" d:IsHidden="True"/>
 
                 <Grid Name="TrainingPanel" Margin="0,0,0,0"
                       Visibility="{Binding IsTrainingEnable, Converter={StaticResource BooleanToVisibilityConverter}}"
