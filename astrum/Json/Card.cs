@@ -67,7 +67,18 @@ namespace Astrum.Json.Card
                         rare = "[???]";
                         break;
                 }
-                return string.Format("{0}{1} (Lv {2})", rare, name, level);
+
+                string evo = "";
+                switch (this.evolution)
+                {
+                    case 1:
+                        evo = "觉醒";
+                        break;
+                    default:
+                        break;
+                }
+
+                return string.Format("{0}{1} (Lv {2} {3})", rare, name, level, evo);
             }
         }
     }
