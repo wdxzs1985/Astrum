@@ -1020,7 +1020,7 @@ namespace Astrum.Http
         {
             var battleId = ViewModel.GuildBattleId;
 
-            while (ViewModel.TpValue >= 10 && ViewModel.IsQuestEnable)
+            while (ViewModel.TpValue >= 10 && ViewModel.IsRunning)
             {
                 GuildBattleInfo battleInfo = GuildBattle(battleId);
                 ViewModel.TpValue = battleInfo.status.tp.value;
