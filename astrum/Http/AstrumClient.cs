@@ -1365,9 +1365,9 @@ namespace Astrum.Http
             ViewModel.StrengthStatueBronzeAvailable = 0;
 
 
-            if (raiseInfo.items != null)
+            if (raiseItemInfo.items != null)
             {
-                if (raiseInfo.items.ability != null)
+                if (raiseItemInfo.items.ability != null)
                 {
                     foreach (var item in raiseItemInfo.items.ability)
                     {
@@ -1389,7 +1389,7 @@ namespace Astrum.Http
                     }
                 }
 
-                if (raiseInfo.items.exp != null)
+                if (raiseItemInfo.items.exp != null)
                 {
                     foreach (var item in raiseItemInfo.items.exp)
                     {
