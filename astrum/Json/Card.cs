@@ -72,13 +72,20 @@ namespace Astrum.Json.Card
                 switch (this.evolution)
                 {
                     case 1:
-                        evo = "觉醒";
+                        evo = " 觉醒";
                         break;
                     default:
                         break;
                 }
 
-                return string.Format("{0}{1} (Lv {2} {3})", rare, name, level, evo);
+
+                string inParty = "";
+                if (this.inParty)
+                {
+                        inParty = " 编成中";
+                }
+
+                return string.Format("{0}{1} (Lv {2}{3}{4})", rare, name, level, evo, inParty);
             }
         }
     }
