@@ -18,6 +18,7 @@ using Astrum.Json.Gift;
 using Astrum.Json.Gacha;
 using Astrum.Json;
 using Astrum.Json.Card;
+using Astrum.Json.Breeding;
 
 namespace Astrum.Http
 {
@@ -456,37 +457,55 @@ namespace Astrum.Http
             var responseString = GetXHR("http://astrum.amebagames.com/_/event/status");
             var eventStatus = JsonConvert.DeserializeObject<EventStatus>(responseString);
 
-            foreach (var @event in eventStatus.list)
+
+            ViewModel.IsFuryRaidEnable = false;
+            ViewModel.IsFuryRaid = false;
+            ViewModel.FuryRaidEventId = null;
+
+            ViewModel.IsLimitedRaidEnable = false;
+            ViewModel.IsLimitedRaid = false;
+            ViewModel.LimitedRaidEventId = null;
+
+            ViewModel.IsBreedingEnable = false;
+            ViewModel.IsBreedingRaid = false;
+            ViewModel.BreedingEventId = null;
+
+            foreach (var @event in eventStatus.list.Where(ev => ev.status))
             {
-                if (@event.status)
+                switch(@event.type)
                 {
-                    switch(@event.type)
-                    {
-                        case "furyraid":
-                            ViewModel.IsFuryRaidEnable = true;
-                            ViewModel.FuryRaidEventId = @event._id;
+                    case "furyraid":
+                        ViewModel.IsFuryRaidEnable = true;
+                        ViewModel.FuryRaidEventId = @event._id;
 
-                            ViewModel.IsFuryRaid = true;
-                            FuryRaid();
-                            break;
-                        case "limitedraid":
-                            ViewModel.IsLimitedRaidEnable = true;
-                            ViewModel.LimitedRaidEventId = @event._id;
+                        ViewModel.IsFuryRaid = true;
+                        FuryRaid();
+                        break;
+                    case "limitedraid":
+                        ViewModel.IsLimitedRaidEnable = true;
+                        ViewModel.LimitedRaidEventId = @event._id;
                             
-                            ViewModel.IsLimitedRaid = true;
+                        ViewModel.IsLimitedRaid = true;
 
-                            LimitedRaid();
-                            break;
-                        case "raid":
-                            if(!ViewModel.Fever)
-                            {
-                                ViewModel.IsFuryRaid = false;
-                                ViewModel.IsLimitedRaid = false;
+                        LimitedRaid();
+                        break;
+                    case "raid":
+                        if(!ViewModel.Fever)
+                        {
+                            ViewModel.IsFuryRaid = false;
+                            ViewModel.IsLimitedRaid = false;
+                            ViewModel.IsBreedingRaid = false;
 
-                                Raid();
-                            }
-                            break;
-                    }
+                            Raid();
+                        }
+                        break;
+                    case "breeding":
+
+                        ViewModel.IsBreedingEnable = true;
+                        ViewModel.BreedingEventId = @event._id;
+                        ViewModel.IsBreedingRaid = true;
+                        
+                        break;
                 }
             }
         }
@@ -1614,6 +1633,246 @@ namespace Astrum.Http
                 ViewModel.IsTrainingBaseEnable = false;
             }
         }
+        
+        public void Breeding()
+        {
+            Access("breeding");
+
+            var breedingInfo = BreedingInfo();
+
+            if(breedingInfo.target != null)
+            {
+                BreedingRaid(breedingInfo.target._id);
+                return;
+            }
+            
+            var stage = EnterBreedingStage();
+            var areaId = stage._id;
+
+            while (ViewModel.IsRunning)
+            {
+
+                if (stage.isBossStage)
+                {
+                    BreedingAreaBossBattle(areaId);
+                    return;
+                }
+                else if (stage.stageClear && stage.nextStage.isBossStage)
+                {
+                    stage = ForwardBreedingStage(areaId);
+                    BreedingAreaBossBattle(areaId);
+                    return;
+                }
+                else
+                {
+                    ViewModel.IsBreedingRaid = false;
+
+                    var breedingRaidId = stage.status.breeding._id;
+                    if (breedingRaidId != null)
+                    {
+                        ViewModel.IsBreedingRaid = true;
+                        if (ViewModel.CanFullAttackForEvent)
+                        {
+                            BreedingRaid(breedingRaidId);
+                            return;
+                        }
+                    }
+
+                    if (ViewModel.IsStaminaEmpty)
+                    {
+                        bool staminaGreaterThanKeep = ViewModel.StaminaValue >= ViewModel.KeepStamina;
+                        bool staminaGreaterThanExp = ViewModel.StaminaValue >= (ViewModel.ExpMax - ViewModel.ExpValue);
+                        bool isBpFull = ViewModel.BpValue >= BP_FULL;
+                        bool isFever = ViewModel.Fever;
+
+                        if (staminaGreaterThanKeep || staminaGreaterThanExp || isBpFull || isFever)
+                        {
+                            ViewModel.IsStaminaEmpty = false;
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+
+                    if (stage.staminaEmpty)
+                    {
+                        if (stage.items != null && ViewModel.ExpMax - ViewModel.ExpValue > 100)
+                        {
+                            var item = stage.items.Find(e => INSTANT_HALF_STAMINA.Equals(e._id));
+                            if (item.stock > ViewModel.MinStaminaStock && ViewModel.Fever)
+                            {
+                                UseItem(ITEM_STAMINA, INSTANT_HALF_STAMINA, 1);
+                                return;
+                            }
+                            else
+                            {
+                                ViewModel.IsStaminaEmpty = true;
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            ViewModel.IsStaminaEmpty = true;
+                            return;
+                        }
+                    }
+                    //forward                   
+                    stage = ForwardBreedingStage(areaId);
+                }
+            }
+        }
+
+        private BreedingInfo BreedingInfo()
+        {
+            var url = string.Format("http://astrum.amebagames.com/_/event/breeding?_id={0}", Uri.EscapeDataString(ViewModel.BreedingEventId));
+
+            var result = GetXHR(url);
+
+            var info = JsonConvert.DeserializeObject<BreedingInfo>(result);
+
+            PrintBreedingInfo(info);
+
+            Delay(DELAY_LONG);
+            return info;
+        }
+
+        public StageInfo EnterBreedingStage()
+        {
+            MapInfo map = BreedingMap();
+
+            var areaId = map.list[0]._id;
+
+            var url = string.Format("http://astrum.amebagames.com/_/breeding/stage?areaId={0}&eventId={1}", areaId, Uri.EscapeDataString(ViewModel.BreedingEventId));
+            var result = GetXHR(url);
+
+            var stage = JsonConvert.DeserializeObject<StageInfo>(result);
+
+            PrintStageInfo(stage);
+            UpdateStageView(stage.initial);
+            Delay(DELAY_SHORT);
+
+            return stage;
+        }
+
+
+        private StageInfo ForwardBreedingStage(string areaId)
+        {
+            var values = new Dictionary<string, object>
+                {
+                   { "areaId", areaId },
+                   { "eventId", ViewModel.BreedingEventId }
+                };
+            var result = PostXHR("http://astrum.amebagames.com/_/breeding/stage", values);
+            var stage = JsonConvert.DeserializeObject<StageInfo>(result);
+
+            PrintStageInfo(stage);
+            UpdateStageView(stage);
+            Delay(DELAY_SHORT);
+
+            return stage;
+        }
+
+        private MapInfo BreedingMap()
+        {
+            var url = string.Format("http://astrum.amebagames.com/_/event/map?eventId={0}", Uri.EscapeDataString(ViewModel.BreedingEventId));
+            var result = GetXHR(url);
+
+            return JsonConvert.DeserializeObject<MapInfo>(result);
+        }
+
+        private void BreedingRaid(string raidId)
+        {
+            var loop = ViewModel.CanFullAttackForEvent;
+            while (loop)
+            {
+                loop = BreedingRaidBattle(raidId);
+            }
+        }
+
+        public bool BreedingRaidBattle(string raidId)
+        {
+            var battleInfo = BreedingRaidBattleInfo(raidId);
+
+            if (battleInfo.isPlaying)
+            {
+                var hp = battleInfo.hp - battleInfo.totalDamage;
+
+                var attackType = hp > EASY_BOSS_HP ? FULL : NORMAL;
+                var needBp = hp > EASY_BOSS_HP ? BP_FULL : BP_NORMAL;
+
+                if (ViewModel.Fever)
+                {
+                    int quantity = needBp - ViewModel.BpValue;
+                    if (quantity > 0 && quantity <= ViewModel.CanUseBpQuantity)
+                    {
+                        UseItem(ITEM_BP, INSTANT_MINI_BP, quantity);
+                    }
+                }
+
+                if (ViewModel.BpValue >= needBp)
+                {
+                    BreedingRaidBattleAttack(battleInfo._id, attackType);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private RaidBattleInfo BreedingRaidBattleInfo(string raidId)
+        {
+            var result = GetXHR("http://astrum.amebagames.com/_/breeding/battle?_id=" + Uri.EscapeDataString(raidId));
+            var battleInfo = JsonConvert.DeserializeObject<RaidBattleInfo>(result);
+
+            PrintRaidBattleInfo(battleInfo);
+
+            UpdateBpAfterRaidBattle(battleInfo);
+
+            Delay(DELAY_SHORT);
+
+            return battleInfo;
+        }
+
+
+        private void BreedingRaidBattleAttack(string raidId, string attackType)
+        {
+            var values = new Dictionary<string, object>
+            {
+                { "_id", raidId },
+                { "attackType", attackType }
+            };
+            //first
+            var battleResult = PostXHR("http://astrum.amebagames.com/_/breeding/battle", values);
+            var battleResultInfo = JsonConvert.DeserializeObject<BossBattleResultInfo>(battleResult);
+
+            PrintBossBattleResult(battleResultInfo);
+            Delay(DELAY_LONG);
+
+        }
+
+
+        public void BreedingAreaBossBattle(string areaId)
+        {
+            var url = string.Format("http://astrum.amebagames.com/_/event/areaboss/battle?areaId={0}&eventId=", areaId, Uri.EscapeDataString(ViewModel.BreedingEventId));
+            var result = GetXHR(url);
+            AreaBossInfo boss = JsonConvert.DeserializeObject<AreaBossInfo>(result);
+            PrintAreaBossInfo(boss);
+
+            Access("areaboss");
+
+            Delay(DELAY_SHORT);
+
+            var values = new Dictionary<string, object>
+            {
+                { "areaId", areaId },
+                { "eventId", ViewModel.BreedingEventId }
+            };
+            var battleResult = PostXHR("http://astrum.amebagames.com/_/event/areaboss/battle", values);
+            var battleResultInfo = JsonConvert.DeserializeObject<BossBattleResultInfo>(battleResult);
+
+            PrintBossBattleResult(battleResultInfo);
+            Delay(DELAY_LONG);
+        }
 
 
         private void PrintMypage(MypageInfo mypage)
@@ -1811,6 +2070,28 @@ namespace Astrum.Http
             ViewModel.History = history;
         }
 
+        private void PrintBreedingInfo(BreedingInfo info)
+        {
+            string history = "";
+            history += info.name + Environment.NewLine;
+            history += String.Format("{0} : {1}", info.breedingPointName, info.breedingPoint) + Environment.NewLine;
+            history += String.Format("{0} : {1}", "交换pt", info.exchangePoint) + Environment.NewLine;
+
+
+            history += String.Format("个人讨伐{0}, 还差{1}次获得{2}", info.totalRewards.user.total, info.totalRewards.user.next.requirement, info.totalRewards.user.next.name) + Environment.NewLine;
+            history += String.Format("工会讨伐{0}, 还差{1}次获得{2}", info.totalRewards.guild.total, info.totalRewards.guild.next.requirement, info.totalRewards.guild.next.name) + Environment.NewLine;
+
+            //partner
+            foreach(var partner in info.partners)
+            {
+                history += String.Format("{0}", partner.card.DisplayName) + Environment.NewLine;
+                history += String.Format("絆Lv {0}/{1}", partner.breedingLevel, partner.maxBreedingLevel) + Environment.NewLine;
+                history += String.Format("絆Lv {0}:{1}", partner.nextBreedReward.title, partner.nextBreedReward.description) + Environment.NewLine;
+            }
+
+            ViewModel.History = history;
+        }
+
 
         private void UpdateMypageView(MypageInfo mypage)
         {
@@ -1855,12 +2136,17 @@ namespace Astrum.Http
 
                 if (ViewModel.IsFuryRaidEnable)
                 {
-                    ViewModel.Fever = stage.status.furyraid != null && stage.status.furyraid.fever != null;
+                    ViewModel.Fever = stage.status.furyraid != null && stage.status.furyraid.fever != null && stage.status.breeding.fever.effect != 0;
                 }
                 
                 if (ViewModel.IsLimitedRaidEnable)
                 {
-                    ViewModel.Fever = stage.status.limitedraid != null && stage.status.limitedraid.fever != null;
+                    ViewModel.Fever = stage.status.limitedraid != null && stage.status.limitedraid.fever != null && stage.status.breeding.fever.effect != 0;
+                }
+
+                if (ViewModel.IsBreedingEnable)
+                {
+                    ViewModel.Fever = stage.status.breeding != null && stage.status.breeding.fever != null && stage.status.breeding.fever.effect != 0;
                 }
             }
         }

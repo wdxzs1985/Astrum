@@ -625,11 +625,15 @@ namespace Astrum.Http
         public string LimitedRaidEventId { get; set; }
         public bool IsLimitedRaid { get; set; }
 
+        public bool IsBreedingEnable { get; set; }
+        public string BreedingEventId { get; set; }
+        public bool IsBreedingRaid { get; set; }
+
         public bool CanAttack
         {
             get
             {
-                return (IsFuryRaidEnable == IsFuryRaid) && (IsLimitedRaidEnable == IsLimitedRaid);
+                return (IsFuryRaidEnable == IsFuryRaid) && (IsLimitedRaidEnable == IsLimitedRaid) && (IsBreedingEnable == IsBreedingRaid);
             }
         }
 

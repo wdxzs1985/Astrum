@@ -320,7 +320,6 @@ namespace Astrum
                 {
                     try
                     {
-
                         while (client.ViewModel.IsRunning)
                         {
                             Console.WriteLine("Start Loop");
@@ -329,7 +328,16 @@ namespace Astrum
                                 client.StartQuest();
                                 client.Gift(1);
                                 client.EventStatus();
-                                client.Quest();
+
+                                if(client.ViewModel.IsBreedingEnable)
+                                {
+                                    client.Breeding();
+                                }
+                                else
+                                {
+                                    client.Quest();
+                                }
+
 
                                 if(client.ViewModel.IsStaminaEmpty)
                                 {
