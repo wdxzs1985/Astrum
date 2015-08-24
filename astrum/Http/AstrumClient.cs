@@ -1959,7 +1959,8 @@ namespace Astrum.Http
                 string history = "";
 
                 string rare = "";
-                switch(battleInfo.rare)
+                string type = battleInfo.type == "find" ? "发现" : "救援";
+                switch (battleInfo.rare)
                 {
                     case 1:
                         rare = "初级魔星兽";
@@ -1980,6 +1981,7 @@ namespace Astrum.Http
 
                 history += String.Format("{0}({1} L{2})出现了", rare, battleInfo.name, battleInfo.level) + Environment.NewLine;
                 history += String.Format("血量: {0} / {1}", battleInfo.hp - battleInfo.totalDamage, battleInfo.hp) + Environment.NewLine;
+                history += String.Format("类型:{0}", type) + Environment.NewLine;
                 ViewModel.History = history;
             }
         }
