@@ -55,6 +55,7 @@ namespace Astrum.Http
         }
 
         public bool IsLogin { get; set; }
+        public string Leader { get; set; }
 
         private bool _running;
         public bool IsRunning

@@ -155,6 +155,18 @@ namespace Astrum
                 {
                     await Task.Run(() =>
                     {
+                        client.Profile();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+                try
+                {
+                    await Task.Run(() =>
+                    {
                         if (client.ViewModel.IsQuestEnable)
                         {
                             var result = client.StartQuest();
@@ -249,6 +261,7 @@ namespace Astrum
                 nowUser.minstaminastock = client.ViewModel.MinStaminaStock;
                 nowUser.minbpstock = client.ViewModel.MinBpStock;
                 nowUser.keepstamina = client.ViewModel.KeepStamina;
+                nowUser.leader = client.ViewModel.Leader;
 
                 userList.Insert(0, nowUser);
 
@@ -371,6 +384,7 @@ namespace Astrum
                 client.ViewModel.MinStaminaStock = user.minstaminastock;
                 client.ViewModel.MinBpStock = user.minbpstock;
                 client.ViewModel.KeepStamina = user.keepstamina;
+                client.ViewModel.Leader = user.leader;
 
                 if (user.username != null)
                 {

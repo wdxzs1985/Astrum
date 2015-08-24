@@ -285,6 +285,50 @@ namespace Astrum.Http
 
         }
 
+        public void Profile()
+        {
+            var result = GetXHR("http://astrum.amebagames.com/_/profile");
+            var profile = JsonConvert.DeserializeObject<ProfileInfo>(result);
+
+            //http://aos.a4c.jp/paris/p/stat/a/20150822145616/s/card/cool/human/shortsword/to/tomi_kuka_ssrare_gacha010/thumb/10/1b693d38e55a5008c90a5213febd66b0-thumb-10_10.png
+
+            Console.WriteLine(profile.user.leader._id);
+            Console.WriteLine(profile.user.leader.md5.image);
+
+            var id = profile.user.leader._id;
+            Console.WriteLine(id);
+
+            var indexOfAt = id.IndexOf("@");
+            id = id.Remove(indexOfAt);
+            Console.WriteLine(id);
+
+            var parts = id.Split('-');
+
+            var type = parts[0];
+            var race = parts[1];
+            var weapon = parts[2];
+            var code = parts[3];
+            var prefix = code.Substring(0, 2);
+
+            var md5 = profile.user.leader.md5.sd;
+
+            var thumbUrl = String.Format("http://aos.a4c.jp/paris/p/stat/a/{0}/s/animation/sd/chara/{1}/{2}/{3}/{4}/{5}/static_standby/3/{6}-static_standby-3_{7}.png", this.xVersion, type, race, weapon, prefix, code, md5, 20);
+
+            Console.WriteLine(thumbUrl);
+
+            var dirname = "cache";
+            if (!Directory.Exists(dirname))
+            {
+                Directory.CreateDirectory(dirname);
+            }
+
+            var filename = String.Format("{0}-avatar.png", md5);
+            var pathString = System.IO.Path.Combine(dirname, filename);
+            this.DownloadBinary(thumbUrl, pathString);
+
+            ViewModel.Leader = md5;
+        }
+
         private void LoginBonusBasic()
         {
             GetXHR("http://astrum.amebagames.com/_/loginbonus");

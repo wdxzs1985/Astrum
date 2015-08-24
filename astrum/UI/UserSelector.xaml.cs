@@ -47,6 +47,30 @@ namespace Astrum.UI
             UserSelector self = (UserSelector)obj;
             self.User.Content = self.SelectedUserName;
 
+            if(self.SelectedUserLeader != null && self.SelectedUserLeader != "")
+            {
+                var path = String.Format("./cache/{0}-avatar.png", self.SelectedUser.leader);
+
+                if(System.IO.File.Exists(path))
+                {
+                    BitmapImage src = new BitmapImage();
+                    src.BeginInit();
+                    src.UriSource = new Uri(path, UriKind.Relative);
+                    src.CacheOption = BitmapCacheOption.OnLoad;
+                    src.EndInit();
+                    self.Avatar.Source = src;
+                    self.Avatar.Stretch = Stretch.Uniform;
+                }
+                else
+                {
+                    self.Avatar.Source = self._accountImage;
+                }
+            }
+            else
+            {
+                self.Avatar.Source = self._accountImage;
+            }
+
             self.DecreaseIndexButton.IsEnabled = !self.IsFirst;
             self.IncreaseIndexButton.IsEnabled = !self.IsLast;
 
@@ -68,9 +92,13 @@ namespace Astrum.UI
             RaiseEvent(newEventArgs);
         }
 
+        private ImageSource _accountImage = null;
+
         public UserSelector()
         {
             InitializeComponent();
+
+            _accountImage = Avatar.Source;
         }
         
         public List<LoginUser> UserList
@@ -120,6 +148,19 @@ namespace Astrum.UI
                     return "";
                 }
                 return UserList[SelectedIndex].name;
+            }
+        }
+
+
+        public string SelectedUserLeader
+        {
+            get
+            {
+                if (IsEmpty)
+                {
+                    return "";
+                }
+                return UserList[SelectedIndex].leader;
             }
         }
 
