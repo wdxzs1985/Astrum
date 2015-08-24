@@ -61,9 +61,7 @@ namespace Astrum
         {
             if (e.Button == MouseButtons.Left)
             {
-                notifyIcon.Visible = false;
-                this.Show();
-                this.WindowState = WindowState.Normal;                
+                this.WindowState = WindowState.Normal;
             }
         }
 
@@ -81,18 +79,25 @@ namespace Astrum
         {
             if (this.WindowState == WindowState.Minimized)
             {
-                notifyIcon.Visible = true;
-                this.Hide();
-                notifyIcon.ShowBalloonTip(1000, client.ViewModel.WindowTitle, "少女隐身中...", ToolTipIcon.None);
+                ShowInTaskbar = false;
                 notifyIcon.Text = client.ViewModel.WindowTitle;
-            }            
+                notifyIcon.Visible = true;
+                notifyIcon.ShowBalloonTip(1000, client.ViewModel.WindowTitle, "少女隐身中...", ToolTipIcon.None);
+            }
+            else
+            {
+                notifyIcon.Visible = false;
+                this.ShowInTaskbar = true;
+            }
         }
 
         private void initLoginPanel()
         {
             this.UsernameBox.Text = "";
             this.PasswordBox.Password = "";
-            
+
+            this.WindowState = WindowState.Normal;
+
             LoginPanel.Visibility = Visibility.Visible;
             StatusPanel.Visibility = Visibility.Hidden;
             LoginButton.Content = "登陆";
@@ -144,7 +149,19 @@ namespace Astrum
 
                 LoginPanel.Visibility = Visibility.Hidden;
                 StatusPanel.Visibility = Visibility.Visible;
-                Tabs.IsEnabled = false;                
+                Tabs.IsEnabled = false;
+
+                try
+                {
+                    await Task.Run(() =>
+                    {
+                        client.Profile();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
 
                 try
                 {
@@ -244,6 +261,7 @@ namespace Astrum
                 nowUser.minstaminastock = client.ViewModel.MinStaminaStock;
                 nowUser.minbpstock = client.ViewModel.MinBpStock;
                 nowUser.keepstamina = client.ViewModel.KeepStamina;
+                nowUser.leader = client.ViewModel.Leader;
 
                 userList.Insert(0, nowUser);
 
@@ -285,16 +303,13 @@ namespace Astrum
         {
             StartButton.IsEnabled = false;
             Tabs.IsEnabled = false;
-            nowUser.minstaminastock = client.ViewModel.MinStaminaStock;
-            nowUser.minbpstock = client.ViewModel.MinBpStock;
-            nowUser.keepstamina = client.ViewModel.KeepStamina;
             //QuestButton.IsEnabled = false;
             //GuildBattleButton.IsEnabled = false;
-
-
+            
             if (client.ViewModel.IsRunning == false)
             {
                 SaveUserList();
+
                 StartButton.Content = "Stop";
                 StartButton.IsEnabled = true;
 
@@ -312,9 +327,14 @@ namespace Astrum
                             if (client.ViewModel.IsQuestEnable)
                             {
                                 client.StartQuest();
+                                client.Gift(1);
+                                client.EventStatus();
                                 client.Quest();
-                                
-                                client.CountDown(client.ViewModel.Fever ? AstrumClient.SECOND * 3 : AstrumClient.MINUTE);
+
+                                if(client.ViewModel.IsStaminaEmpty)
+                                {
+                                    client.CountDown(AstrumClient.SECOND * 30);
+                                }
 
                             }
                             else if (client.ViewModel.IsGuildBattleEnable)
@@ -340,9 +360,6 @@ namespace Astrum
                     client.ViewModel.IsRunning = false;
                     client.ViewModel.IsReady = false;
                     initLoginPanel();
-                    notifyIcon.Visible = false;
-                    this.Show();
-                    this.WindowState = WindowState.Normal;                    
                 }
             }
             else
@@ -367,6 +384,7 @@ namespace Astrum
                 client.ViewModel.MinStaminaStock = user.minstaminastock;
                 client.ViewModel.MinBpStock = user.minbpstock;
                 client.ViewModel.KeepStamina = user.keepstamina;
+                client.ViewModel.Leader = user.leader;
 
                 if (user.username != null)
                 {
@@ -510,7 +528,6 @@ namespace Astrum
             {
                 client.ViewModel.IsReady = false;
                 Tabs.IsEnabled = false;
-                client.ViewModel.IsTrainingEnable = false;
 
                 try
                 {
@@ -547,7 +564,6 @@ namespace Astrum
                 client.ViewModel.IsReady = false;
                 client.ViewModel.IsTrainingEnable = false;
                 client.ViewModel.IsTrainingBaseEnable = false;
-
                 Tabs.IsEnabled = false;                
 
                 try
@@ -680,6 +696,22 @@ namespace Astrum
                     }
                 });
                 TrainingPanel.IsEnabled = true;
+
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        return client.DownloadCardThumb(client.ViewModel.TrainingBase);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        return false;
+                    }
+                });
+                
+                var path = String.Format("./cache/{0}-thumb.png", client.ViewModel.TrainingBase.md5.image);
+                ImageHelper.LoadImage(path, TraningBaseImage, "Images/ic_portrait_black_48dp.png");
             }
         }
         
@@ -772,6 +804,22 @@ namespace Astrum
                         Console.WriteLine(ex.Message);
                     }
                 });
+
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        return client.DownloadCardThumb(client.ViewModel.TrainingBase);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        return false;
+                    }
+                });
+
+                var path = String.Format("./cache/{0}-thumb.png", client.ViewModel.TrainingBase.md5.image);
+                ImageHelper.LoadImage(path, TraningBaseImage, "Images/ic_portrait_black_48dp.png");
             }
         }
 
@@ -925,6 +973,11 @@ namespace Astrum
             });
 
             GiftBox.IsEnabled = true;
+        }
+
+        public void LoadImage(string path)
+        {
+
         }
     }
 }

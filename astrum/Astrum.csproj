@@ -68,6 +68,12 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="PresentationFramework.Aero2" />
+    <Reference Include="PresentationFramework.AeroLite" />
+    <Reference Include="PresentationFramework.Classic" />
+    <Reference Include="PresentationFramework.Luna" />
+    <Reference Include="PresentationFramework.Royale" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -92,6 +98,7 @@
     <Compile Include="UI\GachaListView.xaml.cs">
       <DependentUpon>GachaListView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\ImageHelper.cs" />
     <Compile Include="UI\UserSelector.xaml.cs">
       <DependentUpon>UserSelector.xaml</DependentUpon>
     </Compile>
@@ -177,9 +184,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\UserIcon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\instant-bp_ether.png" />
     <Resource Include="Images\instant-half_stamina_potion.png" />
     <Resource Include="Images\instant-mini_bp_ether.png" />
@@ -187,8 +191,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\ic_account_circle_white_48dp.png" />
-    <Resource Include="Images\ic_clear_white_18dp.png" />
-    <Resource Include="Images\ic_remove_white_18dp.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\username.png" />
@@ -202,11 +204,19 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\ic_keyboard_arrow_left_white_48dp.png" />
-    <Resource Include="Images\ic_keyboard_arrow_right_white_48dp.png" />
+    <Resource Include="Images\ic_chevron_left_white_48dp.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\ic_swap_horiz_white_48dp.png" />
+    <Resource Include="Images\ic_chevron_right_white_48dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ic_close_white_24dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ic_expand_more_white_24dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ic_portrait_black_48dp.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />

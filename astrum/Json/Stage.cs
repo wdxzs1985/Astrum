@@ -21,11 +21,15 @@ namespace Astrum.Json.Stage
         public bool staminaEmpty { get; set; }
         public bool stageClear { get; set; }
         public bool isBossStage { get; set; }
+
+        public RaidBattleInfo raid { get; set; }
         public RaidBattleInfo furyraid { get; set; }
+        public RaidBattleInfo limitedraid { get; set; }
 
         public Status status { get; set; }
 
-        public NextStage nextStage { get; set; }
+        public StageInfo initial { get; set; }
+        public StageInfo nextStage { get; set; }
 
         public List<ItemInfo> items { get; set; }
     }
@@ -82,16 +86,7 @@ namespace Astrum.Json.Stage
 
         public Fever fever { get; set; }
     }
-
-    public class NextStage
-    {
-        public int progress { get; set; }
-
-        public bool isBossStage { get; set; }
-
-        public int stage { get; set; }
-    }
-
+    
     public class AreaBossInfo
     {
         public string _id { get; set; }

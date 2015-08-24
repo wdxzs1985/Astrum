@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Astrum.Json.Card;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Astrum.Json.Raid;
-using Astrum.Json.Card;
 
 namespace Astrum.Json.Mypage
 {
@@ -50,22 +49,13 @@ namespace Astrum.Json.Mypage
         public string _id { get; set; }
     }
 
-
-    public class Link
-    {
-        public Quest quest { get; set; }
-        //public RaidBattleInfo raid { get; set; }
-    }
-
-
-
     public class MypageInfo
     {
         public Status status { get; set; }
         public long total { get; set; }
-        public List<CardInfo> cardList { get; set; }
+        //public List<CardInfo> cardList { get; set; }
         public Guild guild { get; set; }
-        public Link link { get; set; }
+        //public Link link { get; set; }
 
         public LoginBonusInfo loginBonus { get; set; }
     }
@@ -76,4 +66,26 @@ namespace Astrum.Json.Mypage
         public bool @event { get; set; }
         public bool longLogin { get; set; }
     }
+
+    public class ProfileInfo
+    {
+        public string _id { get; set; }
+        public User user { get; set; }
+        //public List<AppealDeck> appealDeck { get; set; }
+        public bool isMe { get; set; }
+        //public Invite invite { get; set; }
+    }
+
+    public class User
+    {
+        public string _id { get; set; }
+        public string name { get; set; }
+        public string message { get; set; }
+        public long accessTime { get; set; }
+        public int level { get; set; }
+        public int total { get; set; }
+        public Guild guild { get; set; }
+        public CardInfo leader { get; set; }
+    }
+    
 }

@@ -55,6 +55,7 @@ namespace Astrum.Http
         }
 
         public bool IsLogin { get; set; }
+        public string Leader { get; set; }
 
         private bool _running;
         public bool IsRunning
@@ -65,7 +66,7 @@ namespace Astrum.Http
                 _running = value;
                 NotifyPropertyChanged("IsRunning");
                 //NotifyPropertyChanged("CanUseStaminaHalf");
-                // NotifyPropertyChanged("CanUseStamina");
+               // NotifyPropertyChanged("CanUseStamina");
                 //NotifyPropertyChanged("CanUseBpMini");
                 //NotifyPropertyChanged("CanUseBp");
 
@@ -91,8 +92,7 @@ namespace Astrum.Http
         {
             get
             {
-                if (Name != null)
-                {
+                if(Name != null) {
                     return String.Format("プリコネ [{0} (Lv {1})]", Name, Level);
                 }
                 return "プリンセスコネクト";
@@ -327,7 +327,7 @@ namespace Astrum.Http
                 {
                     return 0;
                 }
-
+                
             }
             set
             {
@@ -376,8 +376,8 @@ namespace Astrum.Http
                 {
                     return 0;
                 }
-                double expMax = (double)(_exp_max - _exp_min);
-                double expVal = (double)(_exp_value - _exp_min);
+                double expMax = (double) (_exp_max - _exp_min);
+                double expVal = (double) (_exp_value - _exp_min);
 
                 double rate = expVal / expMax;
 
@@ -619,7 +619,7 @@ namespace Astrum.Http
         public bool IsFuryRaidEnable { get; set; }
         public string FuryRaidEventId { get; set; }
         public bool IsFuryRaid { get; set; }
-        //public List<RaidBattleInfo> FuryRaidFindList { get; set; }
+        public bool CanFuryRaid { get; set; }
 
         public bool IsLimitedRaidEnable { get; set; }
         public string LimitedRaidEventId { get; set; }
@@ -673,34 +673,6 @@ namespace Astrum.Http
             {
                 _fever = value;
                 NotifyPropertyChanged("Fever");
-            }
-        }
-
-        private int _feverprogress;
-        public int FeverProgress
-        {
-            get
-            {
-                return _feverprogress;
-            }
-            set
-            {
-                _feverprogress = value;
-                NotifyPropertyChanged("FeverProgress");
-            }
-        }
-
-        private bool _isbossfull;
-        public bool isBossFull
-        {
-            get
-            {
-                return _isbossfull;
-            }
-            set
-            {
-                _isbossfull = value;
-                NotifyPropertyChanged("isBossFull");
             }
         }
 
@@ -814,6 +786,8 @@ namespace Astrum.Http
         private int _training_base_ability_growth;
 
         private List<CardInfo> _training_base_list;
+        
+        public CardInfo TrainingBase { get; set; }
 
         public string TrainingBaseId
         {
@@ -828,7 +802,7 @@ namespace Astrum.Http
             }
         }
 
-        public string TrainingBase
+        public string TrainingBaseDisplayName
         {
             get
             {
@@ -865,7 +839,7 @@ namespace Astrum.Http
             {
                 _training_base_name = value;
                 NotifyPropertyChanged("TrainingBaseName");
-                NotifyPropertyChanged("TrainingBase");
+                NotifyPropertyChanged("TrainingBaseDisplayName");
             }
         }
 
@@ -879,7 +853,7 @@ namespace Astrum.Http
             {
                 _training_base_rare = value;
                 NotifyPropertyChanged("TrainingBaseRare");
-                NotifyPropertyChanged("TrainingBase");
+                NotifyPropertyChanged("TrainingBaseDisplayName");
             }
         }
 

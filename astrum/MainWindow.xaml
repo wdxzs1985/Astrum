@@ -20,7 +20,7 @@
 
     <Grid Background="{StaticResource Cyan_500}" 
           VerticalAlignment="Center" HorizontalAlignment="Center"
-          Height="732" Width="412"  Effect="{StaticResource DropShadowEffect}" d:IsLocked="True">
+          Height="732" Width="412"  Effect="{StaticResource DropShadowEffect}">
 
         <Grid x:Name="LoginPanel"
               HorizontalAlignment="Center" 
@@ -70,12 +70,12 @@
         </Grid>
         <Grid x:Name="StatusPanel" Visibility="Visible" Margin="0,32,0,0" Background="{StaticResource Background}">
             <Grid x:Name="QuestPanel" Margin="16,144,16,240"
-            	Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True">
+            	Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsHidden="True" d:IsLocked="True">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="4*"/>
                     <ColumnDefinition Width="6*"/>
                 </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0" Height="96" VerticalAlignment="Top" Margin="0,16,0,0" d:IsLocked="True">
+                <Grid Grid.Column="0" Height="96" VerticalAlignment="Top" Margin="0,16,0,0">
                     <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition />
@@ -222,7 +222,7 @@
                                  Background="{x:Null}" Foreground="{StaticResource SecondaryText}"/>
                         <Slider Value="{Binding KeepStamina}" 
                                 Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
-                                Minimum="0" Maximum="250" 
+                                Minimum="0" Maximum="200" 
                                 LargeChange="100" SmallChange="1" />
                     </Grid>
                 </Grid>
@@ -306,8 +306,8 @@
 
             <Grid Name="GachaPanel" Margin="0,144,0,240" 
                   Background="{StaticResource Background}"
-                  Visibility="{Binding IsGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsHidden="True" d:IsLocked="True">
-                <UI:GachaListView GachaList="{Binding GachaList}" Gacha="GachaListView_Gacha" d:IsLocked="True" d:IsHidden="True"/>
+                  Visibility="{Binding IsGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <UI:GachaListView GachaList="{Binding GachaList}" Gacha="GachaListView_Gacha" d:IsHidden="True"/>
 
                 <Grid Name="TrainingPanel" Margin="0,0,0,0"
                       Visibility="{Binding IsTrainingEnable, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -333,11 +333,11 @@
                         <Button Name="TraningChangeBase"
                                 Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
                                 VerticalAlignment="Center" HorizontalAlignment="Left"
-                                Width="48" Height="48" Style="{StaticResource FloatButton}"
+                                Width="48" Height="48" Style="{StaticResource IconButton}"
                                 Click="TraningChangeBase_Click">
-                            <Image Source="Images/ic_swap_horiz_white_48dp.png"></Image>
+                            <Image Name="TraningBaseImage" Source="Images/ic_portrait_black_48dp.png"></Image>
                         </Button>
-                        <Label Content="{Binding TrainingBase}" 
+                        <Label Content="{Binding TrainingBaseDisplayName}" 
                                Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4"
                                HorizontalAlignment="Left" Margin="0,0,0,0"
                                VerticalAlignment="Center"></Label>
@@ -476,10 +476,16 @@
                          ItemsSource="{Binding TrainingBaseList}"
                          Visibility="{Binding IsTrainingBaseEnable, Converter={StaticResource BooleanToVisibilityConverter}}"
                          SelectionChanged="TrainingBase_SelectionChanged"
-                         SelectionMode="Single" d:IsHidden="True" BorderBrush="{x:Null}" Foreground="{x:Null}">
+                         SelectionMode="Single" BorderBrush="{x:Null}" Foreground="{x:Null}" d:IsHidden="True">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Label Content="{Binding DisplayName}" ></Label>
+                            <Grid>
+                                <TextBlock 
+                                           Margin="8,8,8,8"
+                                           Text="{Binding DisplayName}" 
+                                           Foreground="{StaticResource PrimaryText}" 
+                                           TextWrapping="WrapWithOverflow"></TextBlock>
+                            </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
@@ -573,24 +579,17 @@
                                  Foreground="{Binding BpProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
                 </Grid>
                 <Grid Grid.Row="1" Grid.Column="1"
-            		Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True">
+            		Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsHidden="True" d:IsLocked="True">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
-                    <Label Content="Fever" Height="28" Width="45"
+                    <Label Content="Fever" 
                            Background="{StaticResource Pink_A200}" Foreground="White"
                            Visibility="{Binding Fever, Converter={StaticResource BooleanToVisibilityConverter}}"
                            HorizontalContentAlignment="Center"
                            VerticalAlignment="Center"
-                           Grid.Column="0" Margin="23,10,0,10"/>
-                    <ProgressBar x:Name="FeverProgress"
-                                 Grid.Column="1" Height="8" Width="100"
-                                 Minimum="0" Maximum="100"
-                                 Value="{Binding FeverProgress,FallbackValue=50,Mode=OneWay,TargetNullValue=0}"
-                                 ToolTip="{Binding FeverProgress}"
-                                 Foreground="{Binding FeverProgress,Converter={StaticResource ProgressBarForegoundConvert}}"
-                                 />
+                           Grid.Column="1" Width="100"/>
                 </Grid>
                 <Grid Grid.Row="1" Grid.Column="1"
             		Visibility="{Binding IsGuildBattleEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True" d:IsHidden="True">
@@ -610,7 +609,7 @@
                                  Foreground="{Binding TpProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
                 </Grid>
                 <Grid Grid.Row="1" Grid.Column="1"
-            		Visibility="{Binding IsGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsHidden="True">
+            		Visibility="{Binding IsGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="2*"/>
@@ -658,7 +657,7 @@
 
             </Grid>
         </Grid>
-        <Grid x:Name="StatusBar" Margin="0,0,0,0" Height="32" VerticalAlignment="Top" Background="{DynamicResource StatusBar_Dark}" d:IsLocked="True">
+        <Grid x:Name="StatusBar" Margin="0,0,0,0" Height="32" VerticalAlignment="Top" Background="{DynamicResource StatusBar_Dark}">
             <Label Margin="0,0,64,0" 
                    VerticalAlignment="Center" FontSize="12"
         		Content="{Binding WindowTitle, FallbackValue=プリコネ}" 
@@ -668,14 +667,20 @@
         		Width="32" Height="32" Margin="0,0,32,0"
         		VerticalAlignment="Center" HorizontalAlignment="Right"
                     Background="Transparent">
-                <Image Source="Images/ic_remove_white_18dp.png" Stretch="None"></Image>
+                <Image Source="Images/ic_expand_more_white_24dp.png"
+                       Stretch="UniformToFill" 
+                       Width="24" Height="24"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
             </Button>
 
             <Button x:Name="CloseBtn" Style="{StaticResource FlatButton}" Click="CloseWindow" 
         		Width="32" Height="32" Margin="0,0,0,0"
         		VerticalAlignment="Center" HorizontalAlignment="Right"
                     Background="Transparent">
-                <Image Source="Images/ic_clear_white_18dp.png" Stretch="None"></Image>
+                <Image Source="Images/ic_close_white_24dp.png" 
+                       Stretch="UniformToFill" 
+                       Width="24" Height="24"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
             </Button>
         </Grid>
     </Grid>
