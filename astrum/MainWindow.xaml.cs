@@ -696,6 +696,22 @@ namespace Astrum
                     }
                 });
                 TrainingPanel.IsEnabled = true;
+
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        return client.DownloadCardThumb(client.ViewModel.TrainingBase);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        return false;
+                    }
+                });
+                
+                var path = String.Format("./cache/{0}-thumb.png", client.ViewModel.TrainingBase.md5.image);
+                ImageHelper.LoadImage(path, TraningBaseImage, "Images/ic_portrait_black_48dp.png");
             }
         }
         
@@ -788,6 +804,22 @@ namespace Astrum
                         Console.WriteLine(ex.Message);
                     }
                 });
+
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        return client.DownloadCardThumb(client.ViewModel.TrainingBase);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        return false;
+                    }
+                });
+
+                var path = String.Format("./cache/{0}-thumb.png", client.ViewModel.TrainingBase.md5.image);
+                ImageHelper.LoadImage(path, TraningBaseImage, "Images/ic_portrait_black_48dp.png");
             }
         }
 
@@ -941,6 +973,11 @@ namespace Astrum
             });
 
             GiftBox.IsEnabled = true;
+        }
+
+        public void LoadImage(string path)
+        {
+
         }
     }
 }

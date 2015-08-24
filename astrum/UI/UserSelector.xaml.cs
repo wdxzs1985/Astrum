@@ -51,20 +51,7 @@ namespace Astrum.UI
             {
                 var path = String.Format("./cache/{0}-avatar.png", self.SelectedUser.leader);
 
-                if(System.IO.File.Exists(path))
-                {
-                    BitmapImage src = new BitmapImage();
-                    src.BeginInit();
-                    src.UriSource = new Uri(path, UriKind.Relative);
-                    src.CacheOption = BitmapCacheOption.OnLoad;
-                    src.EndInit();
-                    self.Avatar.Source = src;
-                    self.Avatar.Stretch = Stretch.Uniform;
-                }
-                else
-                {
-                    self.Avatar.Source = self._accountImage;
-                }
+                ImageHelper.LoadImage(path, self.Avatar, "Images/ic_account_circle_white_48dp.png");
             }
             else
             {

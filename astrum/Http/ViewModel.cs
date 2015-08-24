@@ -787,6 +787,8 @@ namespace Astrum.Http
 
         private List<CardInfo> _training_base_list;
         
+        public CardInfo TrainingBase { get; set; }
+
         public string TrainingBaseId
         {
             get
@@ -800,7 +802,7 @@ namespace Astrum.Http
             }
         }
 
-        public string TrainingBase
+        public string TrainingBaseDisplayName
         {
             get
             {
@@ -837,7 +839,7 @@ namespace Astrum.Http
             {
                 _training_base_name = value;
                 NotifyPropertyChanged("TrainingBaseName");
-                NotifyPropertyChanged("TrainingBase");
+                NotifyPropertyChanged("TrainingBaseDisplayName");
             }
         }
 
@@ -851,7 +853,7 @@ namespace Astrum.Http
             {
                 _training_base_rare = value;
                 NotifyPropertyChanged("TrainingBaseRare");
-                NotifyPropertyChanged("TrainingBase");
+                NotifyPropertyChanged("TrainingBaseDisplayName");
             }
         }
 

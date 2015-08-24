@@ -333,11 +333,11 @@
                         <Button Name="TraningChangeBase"
                                 Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
                                 VerticalAlignment="Center" HorizontalAlignment="Left"
-                                Width="48" Height="48" Style="{StaticResource FloatButton}"
+                                Width="48" Height="48" Style="{StaticResource IconButton}"
                                 Click="TraningChangeBase_Click">
-                            <Image Source="Images/ic_swap_horiz_white_48dp.png"></Image>
+                            <Image Name="TraningBaseImage" Source="Images/ic_portrait_black_48dp.png"></Image>
                         </Button>
-                        <Label Content="{Binding TrainingBase}" 
+                        <Label Content="{Binding TrainingBaseDisplayName}" 
                                Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4"
                                HorizontalAlignment="Left" Margin="0,0,0,0"
                                VerticalAlignment="Center"></Label>
@@ -476,10 +476,16 @@
                          ItemsSource="{Binding TrainingBaseList}"
                          Visibility="{Binding IsTrainingBaseEnable, Converter={StaticResource BooleanToVisibilityConverter}}"
                          SelectionChanged="TrainingBase_SelectionChanged"
-                         SelectionMode="Single" d:IsHidden="True" BorderBrush="{x:Null}" Foreground="{x:Null}">
+                         SelectionMode="Single" BorderBrush="{x:Null}" Foreground="{x:Null}" d:IsHidden="True">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Label Content="{Binding DisplayName}" ></Label>
+                            <Grid>
+                                <TextBlock 
+                                           Margin="8,8,8,8"
+                                           Text="{Binding DisplayName}" 
+                                           Foreground="{StaticResource PrimaryText}" 
+                                           TextWrapping="WrapWithOverflow"></TextBlock>
+                            </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
@@ -651,7 +657,7 @@
 
             </Grid>
         </Grid>
-        <Grid x:Name="StatusBar" Margin="0,0,0,0" Height="32" VerticalAlignment="Top" Background="{DynamicResource StatusBar_Dark}" d:IsLocked="True">
+        <Grid x:Name="StatusBar" Margin="0,0,0,0" Height="32" VerticalAlignment="Top" Background="{DynamicResource StatusBar_Dark}">
             <Label Margin="0,0,64,0" 
                    VerticalAlignment="Center" FontSize="12"
         		Content="{Binding WindowTitle, FallbackValue=プリコネ}" 
@@ -661,14 +667,14 @@
         		Width="32" Height="32" Margin="0,0,32,0"
         		VerticalAlignment="Center" HorizontalAlignment="Right"
                     Background="Transparent">
-                <Image Source="Images/ic_remove_white_18dp.png" Stretch="None"></Image>
+                <Image Source="Images/ic_expand_more_white_24dp.png" Stretch="None"></Image>
             </Button>
 
             <Button x:Name="CloseBtn" Style="{StaticResource FlatButton}" Click="CloseWindow" 
         		Width="32" Height="32" Margin="0,0,0,0"
         		VerticalAlignment="Center" HorizontalAlignment="Right"
                     Background="Transparent">
-                <Image Source="Images/ic_clear_white_18dp.png" Stretch="None"></Image>
+                <Image Source="Images/ic_close_white_24dp.png" Stretch="None"></Image>
             </Button>
         </Grid>
     </Grid>

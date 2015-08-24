@@ -133,7 +133,7 @@ namespace Astrum.Http
             return responseString;
         }
 
-        public string DownloadBinary(string url, string fileName)
+        public bool DownloadBinary(string url, string fileName)
         {
             var request = CreateRequest(url);
 
@@ -173,7 +173,7 @@ namespace Astrum.Http
             catch
             {
 
-                return null;
+                return false;
             }
             finally
             {
@@ -191,7 +191,7 @@ namespace Astrum.Http
                 }
             }
 
-            return fileName;
+            return true;
         } 
     }
 }

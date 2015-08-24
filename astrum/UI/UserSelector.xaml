@@ -44,7 +44,7 @@
         <RepeatButton x:Name="DecreaseIndexButton" Grid.Column="0" 
 			Click="DecreaseIndexButton_Click" 
 			IsEnabled="False" >
-            <Image Source="/Astrum;component/Images/ic_keyboard_arrow_left_white_48dp.png" />
+            <Image Source="/Astrum;component/Images/ic_chevron_left_white_48dp.png" />
         </RepeatButton>
         <Grid Grid.Column="1">
             <Image x:Name="Avatar" Source="/Astrum;component/Images/ic_account_circle_white_48dp.png"
@@ -58,7 +58,7 @@
         </Grid>
         <RepeatButton x:Name="IncreaseIndexButton" Grid.Column="2" 
 			Click="IncreaseIndexButton_Click">
-            <Image Source="/Astrum;component/Images/ic_keyboard_arrow_right_white_48dp.png"
+            <Image Source="/Astrum;component/Images/ic_chevron_right_white_48dp.png"
                    Stretch="Uniform" />
         </RepeatButton>
     </Grid>
