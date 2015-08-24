@@ -25,6 +25,7 @@ namespace Astrum.Json.Stage
         public RaidBattleInfo raid { get; set; }
         public RaidBattleInfo furyraid { get; set; }
         public RaidBattleInfo limitedraid { get; set; }
+        public RaidBattleInfo breeding { get; set; }
 
         public Status status { get; set; }
 
@@ -71,6 +72,7 @@ namespace Astrum.Json.Stage
         public StageRaidInfo raid { get; set; }
         public LimitedRaidInfo limitedraid { get; set; }
         public StageRaidInfo furyraid { get; set; }
+        public StageRaidInfo breeding { get; set; }
         public bool guild { get; set; }
     }
 
@@ -86,7 +88,7 @@ namespace Astrum.Json.Stage
 
         public Fever fever { get; set; }
     }
-    
+
     public class AreaBossInfo
     {
         public string _id { get; set; }
@@ -99,4 +101,27 @@ namespace Astrum.Json.Stage
         public bool isLastBoss { get; set; }
     }
 
+    public class MapInfo
+    {
+        public string _id { get; set; }
+        public string name { get; set; }
+        public List<AreaInfo> list { get; set; }
+    }
+
+
+    public class ZoneInfo
+    {
+        public string _id { get; set; }
+        public string name { get; set; }
+    }
+
+    public class AreaInfo{
+        public string _id { get; set; }
+        public string name { get; set; }
+        public bool isNew { get; set; }
+        public bool isClear { get; set; }
+        public int status { get; set; }
+        public int stock { get; set; }
+        public int order { get; set; }
+    }
 }
