@@ -88,6 +88,8 @@ namespace Astrum.Json.Raid
         public int effect { get; set; }
 
         public object gachaTicket { get; set; }
+
+        public object breedingPoint { get; set; }
     }
 
     

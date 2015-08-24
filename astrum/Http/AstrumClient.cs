@@ -52,6 +52,7 @@ namespace Astrum.Http
         public const string INSTANT_STRENGTH_STATUE_BRONZE = "instant-strength_statue_bronze";
 
         public const string INSTANT_PLATINUM_GACHA_POINT = "instant-platinum_gacha_point";
+        public const string INSTANT_PLATINUM_GACHA_TICKET = "instant-platinum_gacha_ticket";
         public const string INSTANT_RARE_RAID_MEDAL = "instant-rare_raid_medal";
         public const string INSTANT_RAID_MEDAL = "instant-raid_medal";
 
@@ -456,20 +457,7 @@ namespace Astrum.Http
         {
             var responseString = GetXHR("http://astrum.amebagames.com/_/event/status");
             var eventStatus = JsonConvert.DeserializeObject<EventStatus>(responseString);
-
-
-            ViewModel.IsFuryRaidEnable = false;
-            ViewModel.IsFuryRaid = false;
-            ViewModel.FuryRaidEventId = null;
-
-            ViewModel.IsLimitedRaidEnable = false;
-            ViewModel.IsLimitedRaid = false;
-            ViewModel.LimitedRaidEventId = null;
-
-            ViewModel.IsBreedingEnable = false;
-            ViewModel.IsBreedingRaid = false;
-            ViewModel.BreedingEventId = null;
-
+            
             foreach (var @event in eventStatus.list.Where(ev => ev.status))
             {
                 switch(@event.type)
@@ -477,20 +465,18 @@ namespace Astrum.Http
                     case "furyraid":
                         ViewModel.IsFuryRaidEnable = true;
                         ViewModel.FuryRaidEventId = @event._id;
-
                         ViewModel.IsFuryRaid = true;
                         FuryRaid();
                         break;
                     case "limitedraid":
                         ViewModel.IsLimitedRaidEnable = true;
                         ViewModel.LimitedRaidEventId = @event._id;
-                            
                         ViewModel.IsLimitedRaid = true;
 
                         LimitedRaid();
                         break;
                     case "raid":
-                        if(!ViewModel.Fever)
+                        if (!ViewModel.Fever)
                         {
                             ViewModel.IsFuryRaid = false;
                             ViewModel.IsLimitedRaid = false;
@@ -1923,6 +1909,11 @@ namespace Astrum.Http
                     var value = giftResult.gacha[INSTANT_PLATINUM_GACHA_POINT].value;
                     history += String.Format("　　　获得星钻：{0}", value) + Environment.NewLine;
                 }
+                if (giftResult.gacha.ContainsKey(INSTANT_PLATINUM_GACHA_TICKET))
+                {
+                    var value = giftResult.gacha[INSTANT_PLATINUM_GACHA_TICKET].value;
+                    history += String.Format("　　　获得星钻：{0}", value) + Environment.NewLine;
+                }
                 if (giftResult.gacha.ContainsKey(INSTANT_RARE_RAID_MEDAL))
                 {
                     var value = giftResult.gacha[INSTANT_RARE_RAID_MEDAL].value;
@@ -2136,17 +2127,17 @@ namespace Astrum.Http
 
                 if (ViewModel.IsFuryRaidEnable)
                 {
-                    ViewModel.Fever = stage.status.furyraid != null && stage.status.furyraid.fever != null && stage.status.breeding.fever.effect != 0;
+                    ViewModel.Fever = stage.status.furyraid != null && stage.status.furyraid.fever != null;
                 }
                 
                 if (ViewModel.IsLimitedRaidEnable)
                 {
-                    ViewModel.Fever = stage.status.limitedraid != null && stage.status.limitedraid.fever != null && stage.status.breeding.fever.effect != 0;
+                    ViewModel.Fever = stage.status.limitedraid != null && stage.status.limitedraid.fever != null;
                 }
 
                 if (ViewModel.IsBreedingEnable)
                 {
-                    ViewModel.Fever = stage.status.breeding != null && stage.status.breeding.fever != null && stage.status.breeding.fever.effect != 0;
+                    ViewModel.Fever = stage.status.breeding != null && stage.status.breeding.fever != null && stage.status.breeding.fever.breedingPoint != null;
                 }
             }
         }
