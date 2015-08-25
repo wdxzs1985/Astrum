@@ -1626,12 +1626,6 @@ namespace Astrum.Http
 
             var breedingInfo = BreedingInfo();
 
-            if(breedingInfo.target != null)
-            {
-                BreedingRaid(breedingInfo.target._id);
-                return;
-            }
-            
             var stage = EnterBreedingStage();
             var areaId = stage._id;
 
