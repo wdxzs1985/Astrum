@@ -326,7 +326,7 @@ namespace Astrum
                             if (client.ViewModel.IsQuestEnable)
                             {
                                 client.StartQuest();
-                                client.Gift(1);
+                                client.Gift();
                                 client.EventStatus();
 
                                 if(client.ViewModel.IsBreedingEnable)
@@ -971,8 +971,7 @@ namespace Astrum
             {                
                 try
                 {
-                    client.Gift(1);
-                    client.Gift(0);
+                    client.Gift();
                 }
                 catch (Exception ex)
                 {

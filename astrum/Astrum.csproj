@@ -93,6 +93,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Handler\BreedingHandler.cs" />
+    <Compile Include="Handler\FuryRaidHandler.cs" />
+    <Compile Include="Handler\GachaHandler.cs" />
+    <Compile Include="Handler\GiftHandler.cs" />
+    <Compile Include="Handler\GuildBattleHandler.cs" />
+    <Compile Include="Handler\InfoPrinter.cs" />
+    <Compile Include="Handler\InfoUpdater.cs" />
+    <Compile Include="Handler\ItemHandler.cs" />
+    <Compile Include="Handler\LimitedRaidHandler.cs" />
+    <Compile Include="Handler\MypageHandler.cs" />
+    <Compile Include="Handler\QuestHandler.cs" />
+    <Compile Include="Handler\RaidHandler.cs" />
+    <Compile Include="Handler\TraningHandler.cs" />
     <Compile Include="Json\Breeding.cs" />
     <Compile Include="Json\Gacha.cs" />
     <Compile Include="UI\Convert.cs" />
