@@ -20,7 +20,8 @@ namespace Astrum.Handler
 
         public void Run()
         {
-            foreach(var limited in new int[0, 1, 2])
+            int[] types = {0,1,2 };
+            foreach (var limited in types)
             {
                 var hasGift = true;
                 while (hasGift)
@@ -36,7 +37,6 @@ namespace Astrum.Handler
                     }
                 }
             }
-
         }
 
         private GiftInfo CheckGift(int limited)
