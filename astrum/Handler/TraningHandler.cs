@@ -158,9 +158,10 @@ namespace Astrum.Handler
                                   select card._id;
 
                     ExecuteSell(cardIds);
+                    return true;
                 }
             }
-            return true;
+            return false;
         }
 
         private CardSearchInfo SellSearch()
