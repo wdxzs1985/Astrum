@@ -45,8 +45,6 @@ namespace Astrum.Handler
                 }
                 else
                 {
-                    _client.ViewModel.IsBreedingRaid = false;
-                    
                     var breedingRaidId = stage.status.breeding._id;
                     if (breedingRaidId != null)
                     {
@@ -57,13 +55,21 @@ namespace Astrum.Handler
                             return;
                         }
                     }
+                    else
+                    {
+                        _client.ViewModel.IsBreedingRaid = false;
+                    }
 
                     bool isBpFull = _client.ViewModel.BpValue >= AstrumClient.BP_FULL;
                     bool isFever = _client.ViewModel.Fever;
 
-                    if(!isBpFull && !isFever)
+                    if (!isBpFull && !isFever && _client.ViewModel.IsBreedingRaid)
                     {
                         _client.ViewModel.IsStaminaEmpty = true;
+                    }
+                    else
+                    {
+                        _client.ViewModel.IsStaminaEmpty = false;
                     }
 
                     if (_client.ViewModel.IsStaminaEmpty)
@@ -125,8 +131,9 @@ namespace Astrum.Handler
 
         public StageInfo EnterBreedingStage()
         {
-            MapInfo map = BreedingMap();
-            var areaId = map.list[0]._id;
+            var areaId = "breeding0001-1";
+            //MapInfo map = BreedingMap();
+            //var areaId = map.list[0]._id;
 
             var url = string.Format("http://astrum.amebagames.com/_/breeding/stage?areaId={0}&eventId={1}", areaId, Uri.EscapeDataString(_client.ViewModel.BreedingEventId));
             var result = _client.GetXHR(url);
