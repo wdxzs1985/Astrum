@@ -103,8 +103,8 @@ namespace Astrum.Handler
                 {
                     var hp = battleInfo.hp - battleInfo.totalDamage;
 
-                    var attackType = hp > AstrumClient.EASY_BOSS_HP ? AstrumClient.FULL : AstrumClient.NORMAL;
-                    var needBp = hp > AstrumClient.EASY_BOSS_HP ? AstrumClient.BP_FULL : AstrumClient.BP_NORMAL;
+                    var attackType = hp > AstrumClient.EASY_BOSS_HP*2 ? AstrumClient.FULL : AstrumClient.NORMAL;
+                    var needBp = hp > AstrumClient.EASY_BOSS_HP*2 ? AstrumClient.BP_FULL : AstrumClient.BP_NORMAL;
 
                     if (battleInfo.rare == 4)
                     {
