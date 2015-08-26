@@ -45,7 +45,7 @@ namespace Astrum.Handler
             }
             if (giftResult.practice > 0)
             {
-                history += String.Format("　　　获得：{0}", giftResult.practice) + Environment.NewLine;
+                history += String.Format("　　获得摸擬戦：{0}", giftResult.practice) + Environment.NewLine;
             }
             if (giftResult.enhance != null)
             {
