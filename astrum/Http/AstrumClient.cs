@@ -20,6 +20,7 @@ using Astrum.Json;
 using Astrum.Json.Card;
 using Astrum.Json.Breeding;
 using Astrum.Handler;
+using System.Windows;
 
 namespace Astrum.Http
 {
@@ -285,8 +286,6 @@ namespace Astrum.Http
 
         public bool DownloadUserAvatar(CardInfo card)
         {
-            var url = buildSdUrl(card);
-
             var dirname = "cache";
             if (!Directory.Exists(dirname))
             {
@@ -301,7 +300,8 @@ namespace Astrum.Http
             {
                 return true;
             }
-            
+
+            var url = buildSdUrl(card);
             return this.DownloadBinary(url, pathString);
         }
 
@@ -489,5 +489,35 @@ namespace Astrum.Http
         {
             _trainingHandler.TrainingBase();
         }
+
+        #region Event
+
+        public event EventHandler<NotificationEventArgs> OnNotification;
+
+        public virtual void RaiseNotificationEvent(string message, int duration)
+        {
+            RaiseNotificationEvent(new NotificationEventArgs()
+            {
+                Message = message,
+                Duration = duration
+            });
+        }
+
+        public virtual void RaiseNotificationEvent(NotificationEventArgs e)
+        {
+            EventHandler<NotificationEventArgs> handler = OnNotification;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        public class NotificationEventArgs : EventArgs
+        {
+            public string Message { get; set; }
+            public int Duration { get; set; }
+        }
+
+        #endregion
     }
 }

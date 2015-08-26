@@ -57,7 +57,7 @@ namespace Astrum.Handler
 
                 viewModel.TpValue = stage.status.tp.value;
                 viewModel.TpMax = stage.status.tp.max;
-
+                
                 if (viewModel.IsFuryRaidEnable)
                 {
                     viewModel.Fever = stage.status.furyraid != null && stage.status.furyraid.fever != null;

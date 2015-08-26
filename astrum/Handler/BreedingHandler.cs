@@ -32,7 +32,6 @@ namespace Astrum.Handler
 
             while (_client.ViewModel.IsRunning)
             {
-
                 if (stage.isBossStage)
                 {
                     BreedingAreaBossBattle(areaId);
@@ -47,7 +46,7 @@ namespace Astrum.Handler
                 else
                 {
                     _client.ViewModel.IsBreedingRaid = false;
-
+                    
                     var breedingRaidId = stage.status.breeding._id;
                     if (breedingRaidId != null)
                     {
@@ -108,9 +107,7 @@ namespace Astrum.Handler
         private BreedingInfo BreedingInfo()
         {
             var url = string.Format("http://astrum.amebagames.com/_/event/breeding?_id={0}", Uri.EscapeDataString(_client.ViewModel.BreedingEventId));
-
             var result = _client.GetXHR(url);
-
             var info = JsonConvert.DeserializeObject<BreedingInfo>(result);
 
             InfoPrinter.PrintBreedingInfo(info, _client.ViewModel);
@@ -122,7 +119,6 @@ namespace Astrum.Handler
         public StageInfo EnterBreedingStage()
         {
             MapInfo map = BreedingMap();
-
             var areaId = map.list[0]._id;
 
             var url = string.Format("http://astrum.amebagames.com/_/breeding/stage?areaId={0}&eventId={1}", areaId, Uri.EscapeDataString(_client.ViewModel.BreedingEventId));
@@ -132,8 +128,8 @@ namespace Astrum.Handler
 
             InfoPrinter.PrintStageInfo(stage, _client.ViewModel);
             InfoUpdater.UpdateStageView(stage.initial, _client.ViewModel);
+            
             _client.DelayShort();
-
             return stage;
         }
 
@@ -149,9 +145,15 @@ namespace Astrum.Handler
             var stage = JsonConvert.DeserializeObject<StageInfo>(result);
 
             InfoPrinter.PrintStageInfo(stage, _client.ViewModel);
-            InfoUpdater.UpdateStageView(stage, _client.ViewModel);
-            _client.DelayShort();
 
+            var feverBefore = _client.ViewModel.Fever;
+            InfoUpdater.UpdateStageView(stage, _client.ViewModel);
+            if(_client.ViewModel.Fever && feverBefore != _client.ViewModel.Fever)
+            {
+                _client.RaiseNotificationEvent("Fever start", AstrumClient.DELAY_LONG);
+            }
+
+            _client.DelayShort();
             return stage;
         }
 
@@ -210,7 +212,6 @@ namespace Astrum.Handler
             InfoUpdater.UpdateBpAfterRaidBattle(battleInfo, _client.ViewModel);
 
             _client.DelayShort();
-
             return battleInfo;
         }
 
@@ -233,14 +234,12 @@ namespace Astrum.Handler
 
         public void BreedingAreaBossBattle(string areaId)
         {
-            var url = string.Format("http://astrum.amebagames.com/_/event/areaboss/battle?areaId={0}&eventId=", areaId, Uri.EscapeDataString(_client.ViewModel.BreedingEventId));
+            var url = string.Format("http://astrum.amebagames.com/_/event/areaboss/battle?areaId={0}&eventId={1}", areaId, Uri.EscapeDataString(_client.ViewModel.BreedingEventId));
             var result = _client.GetXHR(url);
             AreaBossInfo boss = JsonConvert.DeserializeObject<AreaBossInfo>(result);
-            InfoPrinter.PrintAreaBossInfo(boss, _client.ViewModel);
 
             _client.Access("areaboss");
-
-            _client.DelayShort();
+            InfoPrinter.PrintAreaBossInfo(boss, _client.ViewModel);
 
             var values = new Dictionary<string, object>
             {

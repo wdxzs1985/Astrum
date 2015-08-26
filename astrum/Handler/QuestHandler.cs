@@ -96,11 +96,10 @@ namespace Astrum.Handler
 
                     if (viewModel.IsLimitedRaidEnable)
                     {
-                        viewModel.IsLimitedRaid = true;
-
                         var limitedRaidId = stage.status.limitedraid._id;
                         if (limitedRaidId != null)
                         {
+                            viewModel.IsLimitedRaid = true;
                             if (viewModel.CanFullAttackForEvent)
                             {
                                 _client.LimitedRaid();
@@ -114,6 +113,7 @@ namespace Astrum.Handler
 
                         viewModel.IsFuryRaid = false;
                         viewModel.IsLimitedRaid = false;
+                        viewModel.IsBreedingRaid = false;
 
                         if (stage.status.raid.find != null)
                         {
@@ -228,7 +228,7 @@ namespace Astrum.Handler
 
             InfoPrinter.PrintBossBattleResult(battleResultInfo, _client.ViewModel);
 
-            _client.DelayShort();
+            _client.DelayLong();
         }
     }
 }

@@ -135,11 +135,9 @@ namespace Astrum.Handler
             var battleInfo = JsonConvert.DeserializeObject<RaidBattleInfo>(result);
 
             InfoPrinter.PrintRaidBattleInfo(battleInfo, _client.ViewModel);
-
             InfoUpdater.UpdateBpAfterRaidBattle(battleInfo, _client.ViewModel);
 
             _client.DelayShort();
-
             return battleInfo;
         }
 
@@ -155,8 +153,7 @@ namespace Astrum.Handler
             var battleResultInfo = JsonConvert.DeserializeObject<BossBattleResultInfo>(battleResult);
 
             InfoPrinter.PrintBossBattleResult(battleResultInfo, _client.ViewModel);
-            _client.DelayShort();
-
+            _client.DelayLong();
         }
 
         private void FuryRaidBattleRescue(string raidId)

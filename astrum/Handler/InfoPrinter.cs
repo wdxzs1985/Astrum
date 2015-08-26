@@ -43,11 +43,19 @@ namespace Astrum.Handler
             {
                 history += String.Format("　　　获得少女：{0}", giftResult.card) + Environment.NewLine;
             }
+            if (giftResult.practice > 0)
+            {
+                history += String.Format("　　　获得：{0}", giftResult.practice) + Environment.NewLine;
+            }
             if (giftResult.enhance != null)
             {
                 if (giftResult.enhance.strength > 0)
                 {
                     history += String.Format("　　获得强化像：{0}", giftResult.enhance.strength) + Environment.NewLine;
+                }
+                if (giftResult.enhance.ability > 0)
+                {
+                    history += String.Format("　　获得技能書：{0}", giftResult.enhance.ability) + Environment.NewLine;
                 }
                 if (giftResult.enhance.limitbreak > 0)
                 {
@@ -65,7 +73,7 @@ namespace Astrum.Handler
                 if (giftResult.gacha.ContainsKey(AstrumClient.INSTANT_PLATINUM_GACHA_TICKET))
                 {
                     var value = giftResult.gacha[AstrumClient.INSTANT_PLATINUM_GACHA_TICKET].value;
-                    history += String.Format("　　　获得星钻：{0}", value) + Environment.NewLine;
+                    history += String.Format("　获得非洲护照：{0}", value) + Environment.NewLine;
                 }
                 if (giftResult.gacha.ContainsKey(AstrumClient.INSTANT_RARE_RAID_MEDAL))
                 {

@@ -22,24 +22,24 @@
           VerticalAlignment="Center" HorizontalAlignment="Center"
           Height="732" Width="412"  Effect="{StaticResource DropShadowEffect}">
 
-        <Grid x:Name="LoginPanel"
+        <StackPanel Orientation="Vertical" 
+                    x:Name="LoginPanel"
               HorizontalAlignment="Center" 
               VerticalAlignment="Center"
-              d:Locked="True" d:Hidden="True" d:IsHidden="True" d:IsLocked="True">
+              d:Locked="True" d:Hidden="True">
 
             <UI:UserSelector x:Name="UserSelector" 
-                             Width="160" Height="160"
+                             Width="160" Height="200"
                              VerticalAlignment="Top"
                              HorizontalAlignment="Center"
                              SelectedIndex="0"
                              UserList="{Binding LoginUserList}"
-                             UserChanged="UserSelector_UserChanged" d:IsLocked="True">
-            </UI:UserSelector>
+                             UserChanged="UserSelector_UserChanged"/>
 
             <TextBox x:Name="UsernameBox" 
                      HorizontalAlignment="Center" VerticalAlignment="Top" 
                      VerticalContentAlignment="Center"
-                     Width="275" Height="34" Padding="36,0,0,0" Margin="0,170,0,0" 
+                     Width="275" Height="34" Padding="36,0,0,0" Margin="8"
                      BorderBrush="{x:Null}" 
                      TabIndex="1" d:IsLocked="True">
                 <TextBox.Background>
@@ -49,7 +49,8 @@
             <PasswordBox x:Name="PasswordBox" 
                          HorizontalAlignment="Center" VerticalAlignment="Top"
                          VerticalContentAlignment="Center"
-                         Width="275" Height="34" Margin="0,220,0,0" Padding="36,0,0,0" 
+                         Width="275" Height="34" 
+                         Padding="36,0,0,0"  Margin="8"
                          BorderBrush="{x:Null}"  
                          TabIndex="2" d:IsLocked="True" >
                 <PasswordBox.Background>
@@ -58,8 +59,7 @@
             </PasswordBox>
 
             <Button x:Name="LoginButton"
-                               Height="48"
-                               Margin="0,270,0,0" 
+                               Height="48" Margin="8"
                                VerticalAlignment="Top"
                                TabIndex="3"
                                Click="LoginButton_Click"
@@ -67,8 +67,8 @@
                     Style="{StaticResource FlatButton}"
                     Background="Transparent" Foreground="White" d:IsLocked="True"/>
 
-        </Grid>
-        <Grid x:Name="StatusPanel" Visibility="Visible" Margin="0,32,0,0" Background="{StaticResource Background}">
+        </StackPanel>
+        <Grid x:Name="StatusPanel" Visibility="Visible" Margin="0,32,0,0" Background="{StaticResource Background}" d:IsLocked="True" d:IsHidden="True">
             <Grid x:Name="QuestPanel" Margin="16,144,16,240"
             	Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsHidden="True" d:IsLocked="True">
                 <Grid.ColumnDefinitions>

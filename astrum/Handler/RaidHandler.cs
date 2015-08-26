@@ -47,11 +47,7 @@ namespace Astrum.Handler
 
         public RaidInfo RaidInfo()
         {
-            _client.GetXHR("http://astrum.amebagames.com/_/event/raid");
-            _client.Access("event_raid");
-            _client.DelayShort();
-
-           var result = _client.GetXHR("http://astrum.amebagames.com/_/raid");
+            var result = _client.GetXHR("http://astrum.amebagames.com/_/raid");
             var raidInfo = JsonConvert.DeserializeObject<RaidInfo>(result);
             _client.DelayShort();
 
@@ -122,7 +118,7 @@ namespace Astrum.Handler
             var battleResultInfo = JsonConvert.DeserializeObject<BossBattleResultInfo>(battleResult);
 
             InfoPrinter.PrintBossBattleResult(battleResultInfo, _client.ViewModel);
-            _client.DelayShort();
+            _client.DelayLong();
         }
 
         private void RaidBattleRescue(string raidId)
@@ -133,14 +129,12 @@ namespace Astrum.Handler
             };
             _client.PostXHR("http://astrum.amebagames.com/_/raid/battlerescue", values);
             _client.DelayShort();
-
         }
 
         private void RaidBattleResult(string raidId)
         {
             var result = _client.GetXHR("http://astrum.amebagames.com/_/raid/battleresult?_id=" + Uri.EscapeDataString(raidId));
             //RaidBattleInfo battleInfo = JsonConvert.DeserializeObject<RaidBattleInfo>(result);
-            _client.DelayShort();
 
             _client.GetXHR("http://astrum.amebagames.com/_/raid/summary");
             _client.DelayShort();

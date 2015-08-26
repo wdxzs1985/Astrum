@@ -30,6 +30,7 @@ namespace Astrum
             InitializeComponent();
 
             client = new AstrumClient();
+            client.OnNotification += OnNotification;
 
             this.DataContext = client.ViewModel;
             InitialTray();
@@ -55,6 +56,14 @@ namespace Astrum
             
             //窗体状态改变时候触发
             this.StateChanged += MainWindow_StateChanged;
+        }
+
+        public void OnNotification(object sender, AstrumClient.NotificationEventArgs e)
+        {
+            if (notifyIcon.Visible)
+            {
+                notifyIcon.ShowBalloonTip(e.Duration, client.ViewModel.WindowTitle, e.Message, ToolTipIcon.None);
+            }
         }
 
         private void NotifyIcon_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
