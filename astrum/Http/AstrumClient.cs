@@ -481,6 +481,13 @@ namespace Astrum.Http
            return _trainingHandler.ExecuteRaiseRare();
         }
 
+
+        public bool ExecuteSellNormal()
+        {
+            return _trainingHandler.ExecuteSellNormal();
+        }
+
+
         public bool ExecuteRaiseItem(string itemId, int quantity)
         {
             return _trainingHandler.ExecuteRaiseItem(itemId, quantity);
@@ -518,7 +525,6 @@ namespace Astrum.Http
             public string Message { get; set; }
             public int Duration { get; set; }
         }
-
         #endregion
     }
 }

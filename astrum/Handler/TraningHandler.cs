@@ -142,6 +142,51 @@ namespace Astrum.Handler
             }
         }
 
+        public bool ExecuteSellNormal()
+        {
+            //GET
+            //http://astrum.amebagames.com/_/card/catalog?page=1&size=20&type=sell
+            var search = SellSearch();
+
+            if (search.total > 0)
+            {
+                var sellList = search.list.Where(card => card.rare == 1);
+
+                if(sellList.Count() > 0)
+                {
+                    var cardIds = from card in sellList
+                                  select card._id;
+
+                    ExecuteSell(cardIds);
+                }
+            }
+            return true;
+        }
+
+        private CardSearchInfo SellSearch()
+        {
+            var page = 1;
+            var size = 20;
+            var target = "rare";
+
+            var url = string.Format("http://astrum.amebagames.com/_/card/catalog?page={0}&size={1}&type=sell&uppersr=false&target={2}&sort=asc&atr=all&display=lilu", page, size, target);
+
+            var result = _client.GetXHR(url);
+
+            return JsonConvert.DeserializeObject<CardSearchInfo>(result);
+        }
+
+
+        public void ExecuteSell(object cardIds)
+        {
+            var values = new Dictionary<string, object>
+                {
+                   { "cardIds", cardIds }
+                };
+
+            _client.PostXHR("http://astrum.amebagames.com/_/card/sell", values);
+        }
+
 
         public bool ExecuteRaiseItem(string itemId, int quantity)
         {

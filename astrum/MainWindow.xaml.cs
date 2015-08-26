@@ -788,6 +788,34 @@ namespace Astrum
             TrainingPanel.IsEnabled = true;
         }
 
+        private async void ExecuteSellNormal_Click(object sender, RoutedEventArgs e)
+        {
+            TrainingPanel.IsEnabled = false;
+
+            await Task.Run(() =>
+            {
+                try
+                {
+                    var result = client.ExecuteSellNormal();
+                    if (result)
+                    {
+                        client.ViewModel.History = "Success";
+                    }
+                    else
+                    {
+                        client.ViewModel.History = "No Card";
+                    }
+                    client.StartTraining();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            });
+
+            TrainingPanel.IsEnabled = true;
+        }
+
         private async void TraningChangeBase_Click(object sender, RoutedEventArgs e)
         {
             await Task.Run(() =>
@@ -989,11 +1017,6 @@ namespace Astrum
             });
 
             GiftBox.IsEnabled = true;
-        }
-
-        public void LoadImage(string path)
-        {
-
         }
     }
 }
