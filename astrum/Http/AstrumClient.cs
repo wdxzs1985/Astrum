@@ -378,6 +378,7 @@ namespace Astrum.Http
         public void Gift()
         {
             _giftHandler.Run();
+            _itemHandler.Run();
         }
 
         public bool StartQuest()
