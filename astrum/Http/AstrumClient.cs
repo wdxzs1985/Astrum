@@ -70,7 +70,7 @@ namespace Astrum.Http
         public const int DEFAULT_STOCK = 999;
         public const int DEFAULT_KEEP_STAMINA = 100;
 
-        public const int EASY_BOSS_HP = 1400000;
+        public const int EASY_BOSS_HP = 1500000;
 
         public ViewModel ViewModel { get; set; }
         private QuestHandler _questHandler;

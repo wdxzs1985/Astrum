@@ -123,7 +123,7 @@ namespace Astrum.Handler
         {
             MapInfo map = BreedingMap();
 
-            var areaId = map.list[0]._id;
+            var areaId = "breeding0001-1";
 
             var url = string.Format("http://astrum.amebagames.com/_/breeding/stage?areaId={0}&eventId={1}", areaId, Uri.EscapeDataString(_client.ViewModel.BreedingEventId));
             var result = _client.GetXHR(url);

@@ -61,6 +61,7 @@ namespace Astrum
         {
             if (e.Button == MouseButtons.Left)
             {
+                this.Show();
                 this.WindowState = WindowState.Normal;
             }
         }
@@ -79,15 +80,14 @@ namespace Astrum
         {
             if (this.WindowState == WindowState.Minimized)
             {
-                ShowInTaskbar = false;
+                this.Hide();
                 notifyIcon.Text = client.ViewModel.WindowTitle;
                 notifyIcon.Visible = true;
                 notifyIcon.ShowBalloonTip(1000, client.ViewModel.WindowTitle, "少女隐身中...", ToolTipIcon.None);
             }
             else
             {
-                notifyIcon.Visible = false;
-                this.ShowInTaskbar = true;
+                notifyIcon.Visible = false;                
             }
         }
 
