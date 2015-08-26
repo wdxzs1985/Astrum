@@ -26,11 +26,13 @@ namespace Astrum.Json.Card
         public int cost { get; set; }        
         public long exp { get; set; }        
         public string race { get; set; }
+
         public Growth growth { get; set; }
         public Voice voice { get; set; }
         public int limitbreak { get; set; }
         public long time { get; set; }
         public bool isMaxLevel { get; set; }
+
         public long abilityExp { get; set; }      
         public Ability ability { get; set; }
         public bool isMaxAbilitLevel { get; set; }
@@ -149,6 +151,7 @@ namespace Astrum.Json.Card
         public string atr { get; set; }
         public string cmd { get; set; }
         public int tp { get; set; }
+
         //public Limit limit { get; set; }
         public string description { get; set; }
         public bool unique { get; set; }

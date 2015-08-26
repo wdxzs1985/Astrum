@@ -120,6 +120,7 @@ namespace Astrum.Handler
                 string history = "";
 
                 string rare = "";
+                string type = battleInfo.type == "find" ? "发现" : "救援";
                 switch (battleInfo.rare)
                 {
                     case 1:
