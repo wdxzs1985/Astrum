@@ -115,12 +115,11 @@ namespace Astrum.Handler
 
         public static void PrintRaidBattleInfo(RaidBattleInfo battleInfo, ViewModel viewModel)
         {
-            if (battleInfo.isPlaying)
+            if (battleInfo.isPlaying || battleInfo.isWin || battleInfo.isLose)
             {
                 string history = "";
 
                 string rare = "";
-                string type = battleInfo.type == "find" ? "发现" : "救援";
                 switch (battleInfo.rare)
                 {
                     case 1:
@@ -142,7 +141,17 @@ namespace Astrum.Handler
                 
                 history += String.Format("{0}({1} L{2})出现了", rare, battleInfo.name, battleInfo.level) + Environment.NewLine;
                 history += String.Format("血量: {0} / {1}", battleInfo.hp - battleInfo.totalDamage, battleInfo.hp) + Environment.NewLine;
-                history += String.Format("类型:{0}", type) + Environment.NewLine;
+                
+                switch (battleInfo.type)
+                {
+                    case AstrumClient.FIND:
+                        history += "类型:发现" + Environment.NewLine;
+                        break;
+                    case AstrumClient.RESCUE:
+                        history += "类型:救援" + Environment.NewLine;
+                        break;
+                }
+
                 viewModel.History = history;
             }
         }
