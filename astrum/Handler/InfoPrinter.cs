@@ -139,8 +139,11 @@ namespace Astrum.Handler
                         break;
                 }
 
+                string type = battleInfo.type == "find" ? "发现" : "救援";
+
                 history += String.Format("{0}({1} L{2})出现了", rare, battleInfo.name, battleInfo.level) + Environment.NewLine;
                 history += String.Format("血量: {0} / {1}", battleInfo.hp - battleInfo.totalDamage, battleInfo.hp) + Environment.NewLine;
+                history += String.Format("类型:{0}", type) + Environment.NewLine;
                 viewModel.History = history;
             }
         }
@@ -230,8 +233,8 @@ namespace Astrum.Handler
             history += String.Format("{0} : {1}", "交换pt", info.exchangePoint) + Environment.NewLine;
 
 
-            history += String.Format("个人讨伐{0}, 还差{1}次获得{2}", info.totalRewards.user.total, info.totalRewards.user.next.requirement, info.totalRewards.user.next.name) + Environment.NewLine;
-            history += String.Format("工会讨伐{0}, 还差{1}次获得{2}", info.totalRewards.guild.total, info.totalRewards.guild.next.requirement, info.totalRewards.guild.next.name) + Environment.NewLine;
+            history += String.Format("个人讨伐{0}, 还差{1}次获得{2}", info.totalRewards.user.total, info.totalRewards.user.next.requirement - info.totalRewards.user.total, info.totalRewards.user.next.name) + Environment.NewLine;
+            history += String.Format("工会讨伐{0}, 还差{1}次获得{2}", info.totalRewards.guild.total, info.totalRewards.guild.next.requirement - info.totalRewards.guild.total, info.totalRewards.guild.next.name) + Environment.NewLine;
 
             //partner
             foreach (var partner in info.partners)
