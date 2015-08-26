@@ -122,9 +122,10 @@ namespace Astrum.Handler
 
         public static void UpdateBpAfterRaidBattle(RaidBattleInfo battleInfo, ViewModel viewModel)
         {
-            if (battleInfo.isPlaying)
+            if (battleInfo.bpMax > 0)
             {
                 viewModel.BpValue = battleInfo.bpValue;
+                viewModel.BpMax = battleInfo.bpMax;
             }
         }
 
