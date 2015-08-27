@@ -203,9 +203,15 @@ namespace Astrum.Handler
             var stage = JsonConvert.DeserializeObject<StageInfo>(result);
 
             InfoPrinter.PrintStageInfo(stage, _client.ViewModel);
-            InfoUpdater.UpdateStageView(stage, _client.ViewModel);
-            _client.DelayShort();
 
+            var feverBefore = _client.ViewModel.Fever;
+            InfoUpdater.UpdateStageView(stage, _client.ViewModel);
+            if (_client.ViewModel.Fever && feverBefore != _client.ViewModel.Fever)
+            {
+                _client.RaiseNotificationEvent("Fever start", AstrumClient.SECOND * 60);
+            }
+
+            _client.DelayShort();
             return stage;
         }
         

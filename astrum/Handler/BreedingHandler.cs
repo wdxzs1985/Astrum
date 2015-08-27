@@ -40,6 +40,7 @@ namespace Astrum.Handler
                 else if (stage.stageClear && stage.nextStage.isBossStage)
                 {
                     stage = ForwardBreedingStage(areaId);
+                    _client.RaiseNotificationEvent("area boss", AstrumClient.DELAY_LONG);
                     BreedingAreaBossBattle(areaId);
                     return;
                 }
@@ -63,7 +64,7 @@ namespace Astrum.Handler
                     bool isBpFull = _client.ViewModel.BpValue >= AstrumClient.BP_FULL;
                     bool isFever = _client.ViewModel.Fever;
 
-                    if (!isBpFull && !isFever && _client.ViewModel.IsBreedingRaid)
+                    if (!isBpFull && !isFever)
                     {
                         _client.ViewModel.IsStaminaEmpty = true;
                     }
@@ -164,7 +165,7 @@ namespace Astrum.Handler
             InfoUpdater.UpdateStageView(stage, _client.ViewModel);
             if(_client.ViewModel.Fever && feverBefore != _client.ViewModel.Fever)
             {
-                _client.RaiseNotificationEvent("Fever start", AstrumClient.DELAY_LONG);
+                _client.RaiseNotificationEvent("Fever start", AstrumClient.SECOND * 60);
             }
 
             _client.DelayShort();
