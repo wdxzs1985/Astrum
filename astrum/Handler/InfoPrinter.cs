@@ -43,11 +43,19 @@ namespace Astrum.Handler
             {
                 history += String.Format("　　　获得少女：{0}", giftResult.card) + Environment.NewLine;
             }
+            if (giftResult.practice > 0)
+            {
+                history += String.Format("　　获得摸擬戦：{0}", giftResult.practice) + Environment.NewLine;
+            }
             if (giftResult.enhance != null)
             {
                 if (giftResult.enhance.strength > 0)
                 {
                     history += String.Format("　　获得强化像：{0}", giftResult.enhance.strength) + Environment.NewLine;
+                }
+                if (giftResult.enhance.ability > 0)
+                {
+                    history += String.Format("　　获得技能書：{0}", giftResult.enhance.ability) + Environment.NewLine;
                 }
                 if (giftResult.enhance.limitbreak > 0)
                 {
@@ -65,7 +73,7 @@ namespace Astrum.Handler
                 if (giftResult.gacha.ContainsKey(AstrumClient.INSTANT_PLATINUM_GACHA_TICKET))
                 {
                     var value = giftResult.gacha[AstrumClient.INSTANT_PLATINUM_GACHA_TICKET].value;
-                    history += String.Format("　　　获得星钻：{0}", value) + Environment.NewLine;
+                    history += String.Format("　获得非洲护照：{0}", value) + Environment.NewLine;
                 }
                 if (giftResult.gacha.ContainsKey(AstrumClient.INSTANT_RARE_RAID_MEDAL))
                 {
@@ -107,12 +115,11 @@ namespace Astrum.Handler
 
         public static void PrintRaidBattleInfo(RaidBattleInfo battleInfo, ViewModel viewModel)
         {
-            if (battleInfo.isPlaying)
+            if (battleInfo.isPlaying || battleInfo.isWin || battleInfo.isLose)
             {
                 string history = "";
 
                 string rare = "";
-                string type = battleInfo.type == "find" ? "发现" : "救援";
                 switch (battleInfo.rare)
                 {
                     case 1:
@@ -131,21 +138,62 @@ namespace Astrum.Handler
                         rare = "魔星兽";
                         break;
                 }
-
+                
                 history += String.Format("{0}({1} L{2})出现了", rare, battleInfo.name, battleInfo.level) + Environment.NewLine;
                 history += String.Format("血量: {0} / {1}", battleInfo.hp - battleInfo.totalDamage, battleInfo.hp) + Environment.NewLine;
-                history += String.Format("类型:{0}", type) + Environment.NewLine;
+                
+                switch (battleInfo.type)
+                {
+                    case AstrumClient.FIND:
+                        history += "类型:发现" + Environment.NewLine;
+                        break;
+                    case AstrumClient.RESCUE:
+                        history += "类型:救援" + Environment.NewLine;
+                        break;
+                }
+
                 viewModel.History = history;
             }
         }
 
         public static void PrintBossBattleResult(BossBattleResultInfo resultInfo, ViewModel viewModel)
         {
-            if (resultInfo.result != null)
+            string history = "";
+
+            if (!resultInfo.isEnd)
             {
-                string history = "";
-                history += String.Format("战斗结束：{0}", resultInfo.result.resultType) + Environment.NewLine;
+                string resultType = "";
+                switch (resultInfo.result.resultType)
+                {
+                    case "draw":
+                        resultType = "平局";
+                        break;
+                    case "win":
+                        resultType = "勝利";
+                        break;
+                    case "lose":
+                        resultType = "失敗";
+                        break;
+                }
+
+                history += String.Format("战斗结束：{0}", resultType) + Environment.NewLine;
                 history += String.Format("BOSS血量：{0} / {1}", resultInfo.result.afterBoss.hp, resultInfo.result.afterBoss.maxHp) + Environment.NewLine;
+
+                var damage = resultInfo.init.boss.hp - resultInfo.result.afterBoss.hp;
+                var atkSum = resultInfo.result.afterDeck.Sum(deck => deck.Value.atk);
+
+
+                if (AstrumClient.FULL.Equals(resultInfo.init.bpType))
+                {
+                    history += String.Format("全力傷害：{0}", atkSum * 5) + Environment.NewLine;
+                    history += String.Format("実際傷害：{0}", damage) + Environment.NewLine;
+                }
+                else
+                {
+                    history += String.Format("　　傷害：{0}", atkSum * 5) + Environment.NewLine;
+                    history += String.Format("実際傷害：{0}", damage) + Environment.NewLine;
+                }
+
                 viewModel.History = history;
             }
         }
@@ -224,8 +272,8 @@ namespace Astrum.Handler
             history += String.Format("{0} : {1}", "交换pt", info.exchangePoint) + Environment.NewLine;
 
 
-            history += String.Format("个人讨伐{0}, 还差{1}次获得{2}", info.totalRewards.user.total, info.totalRewards.user.next.requirement, info.totalRewards.user.next.name) + Environment.NewLine;
-            history += String.Format("工会讨伐{0}, 还差{1}次获得{2}", info.totalRewards.guild.total, info.totalRewards.guild.next.requirement, info.totalRewards.guild.next.name) + Environment.NewLine;
+            history += String.Format("个人讨伐{0}, 还差{1}次获得{2}", info.totalRewards.user.total, info.totalRewards.user.next.requirement - info.totalRewards.user.total, info.totalRewards.user.next.name) + Environment.NewLine;
+            history += String.Format("工会讨伐{0}, 还差{1}次获得{2}", info.totalRewards.guild.total, info.totalRewards.guild.next.requirement - info.totalRewards.guild.total, info.totalRewards.guild.next.name) + Environment.NewLine;
 
             //partner
             foreach (var partner in info.partners)

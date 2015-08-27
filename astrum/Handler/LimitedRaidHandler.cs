@@ -51,9 +51,10 @@ namespace Astrum.Handler
             if (battleInfo.isPlaying)
             {
                 var hp = battleInfo.hp - battleInfo.totalDamage;
+                bool useFullAttack = hp > _client.ViewModel.EasyBossDamage;
 
-                var attackType = hp > AstrumClient.EASY_BOSS_HP ? AstrumClient.FULL : AstrumClient.NORMAL;
-                var needBp = hp > AstrumClient.EASY_BOSS_HP ? AstrumClient.BP_FULL : AstrumClient.BP_NORMAL;
+                var attackType = useFullAttack ? AstrumClient.FULL : AstrumClient.NORMAL;
+                var needBp = useFullAttack ? AstrumClient.BP_FULL : AstrumClient.BP_NORMAL;
 
                 if (_client.ViewModel.Fever)
                 {
@@ -79,7 +80,6 @@ namespace Astrum.Handler
             var battleInfo = JsonConvert.DeserializeObject<RaidBattleInfo>(result);
 
             InfoPrinter.PrintRaidBattleInfo(battleInfo, _client.ViewModel);
-
             InfoUpdater.UpdateBpAfterRaidBattle(battleInfo, _client.ViewModel);
 
             _client.DelayShort();
@@ -100,8 +100,9 @@ namespace Astrum.Handler
             var battleResultInfo = JsonConvert.DeserializeObject<BossBattleResultInfo>(battleResult);
 
             InfoPrinter.PrintBossBattleResult(battleResultInfo, _client.ViewModel);
-            _client.DelayShort();
+            InfoUpdater.UpdateBattleDamage(battleResultInfo, _client.ViewModel);
 
+            _client.DelayLong();
         }
     }
 }

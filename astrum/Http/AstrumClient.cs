@@ -20,6 +20,7 @@ using Astrum.Json;
 using Astrum.Json.Card;
 using Astrum.Json.Breeding;
 using Astrum.Handler;
+using System.Windows;
 
 namespace Astrum.Http
 {
@@ -70,7 +71,7 @@ namespace Astrum.Http
         public const int DEFAULT_STOCK = 999;
         public const int DEFAULT_KEEP_STAMINA = 100;
 
-        public const int EASY_BOSS_HP = 1500000;
+        public const int DEFAULT_BASE_DAMAGE = 1500000;
 
         public ViewModel ViewModel { get; set; }
         private QuestHandler _questHandler;
@@ -113,6 +114,8 @@ namespace Astrum.Http
             ViewModel.MinStaminaStock = DEFAULT_STOCK;
             ViewModel.MinBpStock = DEFAULT_STOCK;
             ViewModel.KeepStamina = DEFAULT_KEEP_STAMINA;
+
+            ViewModel.BaseDamage = DEFAULT_BASE_DAMAGE;
         }
         
         public void Delay(int time)
@@ -285,8 +288,6 @@ namespace Astrum.Http
 
         public bool DownloadUserAvatar(CardInfo card)
         {
-            var url = buildSdUrl(card);
-
             var dirname = "cache";
             if (!Directory.Exists(dirname))
             {
@@ -301,7 +302,8 @@ namespace Astrum.Http
             {
                 return true;
             }
-            
+
+            var url = buildSdUrl(card);
             return this.DownloadBinary(url, pathString);
         }
 
@@ -378,6 +380,7 @@ namespace Astrum.Http
         public void Gift()
         {
             _giftHandler.Run();
+            _itemHandler.Run();
         }
 
         public bool StartQuest()
@@ -480,6 +483,13 @@ namespace Astrum.Http
            return _trainingHandler.ExecuteRaiseRare();
         }
 
+
+        public bool ExecuteSellNormal()
+        {
+            return _trainingHandler.ExecuteSellNormal();
+        }
+
+
         public bool ExecuteRaiseItem(string itemId, int quantity)
         {
             return _trainingHandler.ExecuteRaiseItem(itemId, quantity);
@@ -489,5 +499,34 @@ namespace Astrum.Http
         {
             _trainingHandler.TrainingBase();
         }
+
+        #region Event
+
+        public event EventHandler<NotificationEventArgs> OnNotification;
+
+        public virtual void RaiseNotificationEvent(string message, int duration)
+        {
+            RaiseNotificationEvent(new NotificationEventArgs()
+            {
+                Message = message,
+                Duration = duration
+            });
+        }
+
+        public virtual void RaiseNotificationEvent(NotificationEventArgs e)
+        {
+            EventHandler<NotificationEventArgs> handler = OnNotification;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        public class NotificationEventArgs : EventArgs
+        {
+            public string Message { get; set; }
+            public int Duration { get; set; }
+        }
+        #endregion
     }
 }

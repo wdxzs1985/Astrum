@@ -20,7 +20,8 @@ namespace Astrum.Handler
 
         public void Run()
         {
-            int[] types = {0,1,2 };
+            //int[] types = { 0, 1, 2 };
+            int[] types = { 1, 0 };
             foreach (var limited in types)
             {
                 var hasGift = true;

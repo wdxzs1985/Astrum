@@ -23,12 +23,13 @@ namespace Astrum.Handler
             var responseString = _client.GetXHR("http://astrum.amebagames.com/_/item");
             var itemList = JsonConvert.DeserializeObject<ItemList>(responseString);
 
+            _client.Access("item");
+
             foreach (var item in itemList.list)
             {
                 InfoUpdater.UpdateItemStock(item, _client.ViewModel);
             }
 
-            _client.Access("item");
         }
 
         public void UseItem(string type, string itemId, int value)
@@ -48,8 +49,6 @@ namespace Astrum.Handler
                 var useItemResult = JsonConvert.DeserializeObject<UseItemResult>(result);
 
                 InfoUpdater.UpdateItemStock(useItemResult, _client.ViewModel);
-
-                _client.DelayShort();
             }
         }
     }

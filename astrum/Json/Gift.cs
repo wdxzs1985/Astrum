@@ -19,6 +19,7 @@ namespace Astrum.Json.Gift
     {
         public int strength { get; set; }
         public int limitbreak { get; set; }
+        public int ability { get; set; }
     }
 
     public class GiftResult
@@ -29,6 +30,7 @@ namespace Astrum.Json.Gift
         public int card { get; set; }
         public Enhance enhance { get; set; }
         public Dictionary<string, Instant> gacha { get; set; }
+        public int practice { get; set; }
     }
     
     public class Instant

@@ -30,6 +30,7 @@ namespace Astrum
             InitializeComponent();
 
             client = new AstrumClient();
+            client.OnNotification += OnNotification;
 
             this.DataContext = client.ViewModel;
             InitialTray();
@@ -55,6 +56,14 @@ namespace Astrum
             
             //窗体状态改变时候触发
             this.StateChanged += MainWindow_StateChanged;
+        }
+
+        public void OnNotification(object sender, AstrumClient.NotificationEventArgs e)
+        {
+            if (notifyIcon.Visible)
+            {
+                notifyIcon.ShowBalloonTip(e.Duration, client.ViewModel.WindowTitle, e.Message, ToolTipIcon.None);
+            }
         }
 
         private void NotifyIcon_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
@@ -779,6 +788,34 @@ namespace Astrum
             TrainingPanel.IsEnabled = true;
         }
 
+        private async void ExecuteSellNormal_Click(object sender, RoutedEventArgs e)
+        {
+            TrainingPanel.IsEnabled = false;
+
+            await Task.Run(() =>
+            {
+                try
+                {
+                    var result = client.ExecuteSellNormal();
+                    if (result)
+                    {
+                        client.ViewModel.History = "Success";
+                    }
+                    else
+                    {
+                        client.ViewModel.History = "No Card";
+                    }
+                    client.StartTraining();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            });
+
+            TrainingPanel.IsEnabled = true;
+        }
+
         private async void TraningChangeBase_Click(object sender, RoutedEventArgs e)
         {
             await Task.Run(() =>
@@ -980,11 +1017,6 @@ namespace Astrum
             });
 
             GiftBox.IsEnabled = true;
-        }
-
-        public void LoadImage(string path)
-        {
-
         }
     }
 }

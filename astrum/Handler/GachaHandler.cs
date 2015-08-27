@@ -32,16 +32,17 @@ namespace Astrum.Handler
             var gachaList = new List<GachaInfo>();
             var stockMap = new Dictionary<string, int>();
 
-            initGachaType(gachaList, stockMap, "normal");
-            initGachaType(gachaList, stockMap, "raid");
-            initGachaType(gachaList, stockMap, "platinum");
+
+            initGachaType(gachaList, stockMap, "normal", null);
+            initGachaType(gachaList, stockMap, "raid", null);
+            initGachaType(gachaList, stockMap, "platinum", "other");
 
             _client.ViewModel.GachaList = gachaList;
         }
         
-        private void initGachaType(List<GachaInfo> gachaList, Dictionary<string, int> stockMap, string type)
+        private void initGachaType(List<GachaInfo> gachaList, Dictionary<string, int> stockMap, string type, string subType)
         {
-            var gacha = GachaListInfo(type);
+            var gacha = GachaListInfo(type, subType);
             stockMap["coin"] = gacha.stock.coin;
             stockMap["gacha"] = gacha.stock.gacha;
 
@@ -65,9 +66,16 @@ namespace Astrum.Handler
             }
         }
         
-        private GachaList GachaListInfo(string type)
+        private GachaList GachaListInfo(string type,string subType)
         {
-            var result = _client.GetXHR("http://astrum.amebagames.com/_/gacha?type=" + type);
+            var url = "http://astrum.amebagames.com/_/gacha?type=" + type;
+
+            if(subType != null)
+            {
+                url += "&subType=" + subType;
+            }
+            
+            var result = _client.GetXHR(url);
             return JsonConvert.DeserializeObject<GachaList>(result);
         }
 

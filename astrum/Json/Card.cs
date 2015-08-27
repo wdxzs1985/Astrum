@@ -98,16 +98,20 @@ namespace Astrum.Json.Card
         public string sd { get; set; }
         public string voice { get; set; }
     }
-    
-    public class RaiseInfo
+
+    public class CardSearchInfo
     {
-        public CardStock card { get; set; }
-        public CardInfo @base { get; set; }
         public int total { get; set; }
         public int maxpage { get; set; }
         public int page { get; set; }
         public int size { get; set; }
-        public List<CardInfo> list { get; set; }        
+        public List<CardInfo> list { get; set; }
+    }
+
+    public class RaiseInfo : CardSearchInfo
+    {
+        public CardStock card { get; set; }
+        public CardInfo @base { get; set; }       
         public Items items { get; set; }
     }
 
@@ -163,5 +167,4 @@ namespace Astrum.Json.Card
     {
         public int count { get; set; }
     }
-
 }

@@ -57,7 +57,7 @@ namespace Astrum.Handler
 
                 viewModel.TpValue = stage.status.tp.value;
                 viewModel.TpMax = stage.status.tp.max;
-
+                
                 if (viewModel.IsFuryRaidEnable)
                 {
                     viewModel.Fever = stage.status.furyraid != null && stage.status.furyraid.fever != null;
@@ -122,9 +122,26 @@ namespace Astrum.Handler
 
         public static void UpdateBpAfterRaidBattle(RaidBattleInfo battleInfo, ViewModel viewModel)
         {
-            if (battleInfo.isPlaying)
+            if (battleInfo.isPlaying || battleInfo.isWin || battleInfo.isLose)
             {
                 viewModel.BpValue = battleInfo.bpValue;
+                viewModel.BpMax = battleInfo.bpMax;
+            }
+        }
+
+        public static void UpdateBattleDamage(BossBattleResultInfo resultInfo, ViewModel viewModel)
+        {
+            if (!resultInfo.isEnd)
+            {
+                var atkSum = resultInfo.result.afterDeck.Sum(deck => deck.Value.atk);
+                if (AstrumClient.FULL.Equals(resultInfo.init.bpType))
+                {
+                    viewModel.BaseDamage = atkSum;
+                }
+                else
+                {
+                    viewModel.BaseDamage = atkSum * 5;
+                }
             }
         }
 

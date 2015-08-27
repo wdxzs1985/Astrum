@@ -32,7 +32,6 @@ namespace Astrum.Handler
 
             while (_client.ViewModel.IsRunning)
             {
-
                 if (stage.isBossStage)
                 {
                     BreedingAreaBossBattle(areaId);
@@ -41,13 +40,12 @@ namespace Astrum.Handler
                 else if (stage.stageClear && stage.nextStage.isBossStage)
                 {
                     stage = ForwardBreedingStage(areaId);
+                    _client.RaiseNotificationEvent("area boss", AstrumClient.DELAY_LONG);
                     BreedingAreaBossBattle(areaId);
                     return;
                 }
                 else
                 {
-                    _client.ViewModel.IsBreedingRaid = false;
-
                     var breedingRaidId = stage.status.breeding._id;
                     if (breedingRaidId != null)
                     {
@@ -58,15 +56,29 @@ namespace Astrum.Handler
                             return;
                         }
                     }
+                    else
+                    {
+                        _client.ViewModel.IsBreedingRaid = false;
+                    }
+
+                    bool isBpFull = _client.ViewModel.BpValue >= AstrumClient.BP_FULL;
+                    bool isFever = _client.ViewModel.Fever;
+
+                    if (!isBpFull && !isFever)
+                    {
+                        _client.ViewModel.IsStaminaEmpty = true;
+                    }
+                    else
+                    {
+                        _client.ViewModel.IsStaminaEmpty = false;
+                    }
 
                     if (_client.ViewModel.IsStaminaEmpty)
                     {
                         bool staminaGreaterThanKeep = _client.ViewModel.StaminaValue >= _client.ViewModel.KeepStamina;
                         bool staminaGreaterThanExp = _client.ViewModel.StaminaValue >= (_client.ViewModel.ExpMax - _client.ViewModel.ExpValue);
-                        bool isBpFull = _client.ViewModel.BpValue >= AstrumClient.BP_FULL;
-                        bool isFever = _client.ViewModel.Fever;
 
-                        if (staminaGreaterThanKeep || staminaGreaterThanExp || isBpFull || isFever)
+                        if (staminaGreaterThanKeep || staminaGreaterThanExp)
                         {
                             _client.ViewModel.IsStaminaEmpty = false;
                         }
@@ -75,6 +87,7 @@ namespace Astrum.Handler
                             return;
                         }
                     }
+
 
                     if (stage.staminaEmpty)
                     {
@@ -108,9 +121,7 @@ namespace Astrum.Handler
         private BreedingInfo BreedingInfo()
         {
             var url = string.Format("http://astrum.amebagames.com/_/event/breeding?_id={0}", Uri.EscapeDataString(_client.ViewModel.BreedingEventId));
-
             var result = _client.GetXHR(url);
-
             var info = JsonConvert.DeserializeObject<BreedingInfo>(result);
 
             InfoPrinter.PrintBreedingInfo(info, _client.ViewModel);
@@ -121,9 +132,9 @@ namespace Astrum.Handler
 
         public StageInfo EnterBreedingStage()
         {
-            MapInfo map = BreedingMap();
-
             var areaId = "breeding0001-1";
+            //MapInfo map = BreedingMap();
+            //var areaId = map.list[0]._id;
 
             var url = string.Format("http://astrum.amebagames.com/_/breeding/stage?areaId={0}&eventId={1}", areaId, Uri.EscapeDataString(_client.ViewModel.BreedingEventId));
             var result = _client.GetXHR(url);
@@ -132,8 +143,8 @@ namespace Astrum.Handler
 
             InfoPrinter.PrintStageInfo(stage, _client.ViewModel);
             InfoUpdater.UpdateStageView(stage.initial, _client.ViewModel);
+            
             _client.DelayShort();
-
             return stage;
         }
 
@@ -149,9 +160,15 @@ namespace Astrum.Handler
             var stage = JsonConvert.DeserializeObject<StageInfo>(result);
 
             InfoPrinter.PrintStageInfo(stage, _client.ViewModel);
-            InfoUpdater.UpdateStageView(stage, _client.ViewModel);
-            _client.DelayShort();
 
+            var feverBefore = _client.ViewModel.Fever;
+            InfoUpdater.UpdateStageView(stage, _client.ViewModel);
+            if(_client.ViewModel.Fever && feverBefore != _client.ViewModel.Fever)
+            {
+                _client.RaiseNotificationEvent("Fever start", AstrumClient.SECOND * 60);
+            }
+
+            _client.DelayShort();
             return stage;
         }
 
@@ -179,9 +196,10 @@ namespace Astrum.Handler
             if (battleInfo.isPlaying)
             {
                 var hp = battleInfo.hp - battleInfo.totalDamage;
+                bool useFullAttack = hp > _client.ViewModel.EasyBossDamage;
 
-                var attackType = hp > AstrumClient.EASY_BOSS_HP*2 ? AstrumClient.FULL : AstrumClient.NORMAL;
-                var needBp = hp > AstrumClient.EASY_BOSS_HP*2 ? AstrumClient.BP_FULL : AstrumClient.BP_NORMAL;
+                var attackType = useFullAttack ? AstrumClient.FULL : AstrumClient.NORMAL;
+                var needBp = useFullAttack ? AstrumClient.BP_FULL : AstrumClient.BP_NORMAL;
 
                 if (_client.ViewModel.Fever)
                 {
@@ -210,7 +228,6 @@ namespace Astrum.Handler
             InfoUpdater.UpdateBpAfterRaidBattle(battleInfo, _client.ViewModel);
 
             _client.DelayShort();
-
             return battleInfo;
         }
 
@@ -227,20 +244,20 @@ namespace Astrum.Handler
             var battleResultInfo = JsonConvert.DeserializeObject<BossBattleResultInfo>(battleResult);
 
             InfoPrinter.PrintBossBattleResult(battleResultInfo, _client.ViewModel);
+            InfoUpdater.UpdateBattleDamage(battleResultInfo, _client.ViewModel);
+
             _client.DelayLong();
         }
 
 
         public void BreedingAreaBossBattle(string areaId)
         {
-            var url = string.Format("http://astrum.amebagames.com/_/event/areaboss/battle?areaId={0}&eventId=", areaId, Uri.EscapeDataString(_client.ViewModel.BreedingEventId));
+            var url = string.Format("http://astrum.amebagames.com/_/event/areaboss/battle?areaId={0}&eventId={1}", areaId, Uri.EscapeDataString(_client.ViewModel.BreedingEventId));
             var result = _client.GetXHR(url);
             AreaBossInfo boss = JsonConvert.DeserializeObject<AreaBossInfo>(result);
-            InfoPrinter.PrintAreaBossInfo(boss, _client.ViewModel);
 
             _client.Access("areaboss");
-
-            _client.DelayShort();
+            InfoPrinter.PrintAreaBossInfo(boss, _client.ViewModel);
 
             var values = new Dictionary<string, object>
             {

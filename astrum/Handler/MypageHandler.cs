@@ -84,35 +84,48 @@ namespace Astrum.Handler
                 {
                     case "furyraid":
                         _client.ViewModel.IsFuryRaidEnable = true;
+                        _client.ViewModel.IsLimitedRaidEnable = false;
+                        _client.ViewModel.IsBreedingEnable = false;
                         _client.ViewModel.FuryRaidEventId = @event._id;
-                        _client.ViewModel.IsFuryRaid = true;
-                        _client.FuryRaid();
                         break;
                     case "limitedraid":
+                        _client.ViewModel.IsFuryRaidEnable = false;
                         _client.ViewModel.IsLimitedRaidEnable = true;
+                        _client.ViewModel.IsBreedingEnable = false;
                         _client.ViewModel.LimitedRaidEventId = @event._id;
-                        _client.ViewModel.IsLimitedRaid = true;
-
-                        _client.LimitedRaid();
-                        break;
-                    case "raid":
-                        if (!_client.ViewModel.Fever)
-                        {
-                            _client.ViewModel.IsFuryRaid = false;
-                            _client.ViewModel.IsLimitedRaid = false;
-                            _client.ViewModel.IsBreedingRaid = false;
-
-                            _client.Raid();
-                        }
                         break;
                     case "breeding":
-
+                        _client.ViewModel.IsFuryRaidEnable = false;
+                        _client.ViewModel.IsLimitedRaidEnable = false;
                         _client.ViewModel.IsBreedingEnable = true;
                         _client.ViewModel.BreedingEventId = @event._id;
-                        _client.ViewModel.IsBreedingRaid = true;
-
+                        break;
+                    case "raid":
                         break;
                 }
+            }
+
+            if(_client.ViewModel.IsFuryRaidEnable)
+            {
+                _client.ViewModel.IsFuryRaid = true;
+                _client.FuryRaid();
+            }
+            else if (_client.ViewModel.IsLimitedRaidEnable)
+            {
+                _client.ViewModel.IsLimitedRaid = true;
+                _client.LimitedRaid();
+            }
+            else if(_client.ViewModel.IsBreedingEnable)
+            {
+                //
+            }
+
+            if (!_client.ViewModel.Fever)
+            {
+                _client.ViewModel.IsFuryRaid = false;
+                _client.ViewModel.IsLimitedRaid = false;
+                _client.ViewModel.IsBreedingRaid = false;
+                _client.Raid();
             }
         }
     }

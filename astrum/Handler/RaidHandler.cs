@@ -47,11 +47,7 @@ namespace Astrum.Handler
 
         public RaidInfo RaidInfo()
         {
-            _client.GetXHR("http://astrum.amebagames.com/_/event/raid");
-            _client.Access("event_raid");
-            _client.DelayShort();
-
-           var result = _client.GetXHR("http://astrum.amebagames.com/_/raid");
+            var result = _client.GetXHR("http://astrum.amebagames.com/_/raid");
             var raidInfo = JsonConvert.DeserializeObject<RaidInfo>(result);
             _client.DelayShort();
 
@@ -79,8 +75,10 @@ namespace Astrum.Handler
                 if (_client.ViewModel.CanAttack)
                 {
                     var hp = battleInfo.hp - battleInfo.totalDamage;
-                    var attackType = hp > AstrumClient.EASY_BOSS_HP ? AstrumClient.FULL : AstrumClient.NORMAL;
-                    var needBp = hp > AstrumClient.EASY_BOSS_HP ? AstrumClient.BP_FULL : AstrumClient.BP_NORMAL;
+                    bool useFullAttack = hp > _client.ViewModel.EasyBossDamage;
+
+                    var attackType = useFullAttack ? AstrumClient.FULL : AstrumClient.NORMAL;
+                    var needBp = useFullAttack ? AstrumClient.BP_FULL : AstrumClient.BP_NORMAL;
 
                     if (_client.ViewModel.BpValue >= needBp)
                     {
@@ -122,7 +120,9 @@ namespace Astrum.Handler
             var battleResultInfo = JsonConvert.DeserializeObject<BossBattleResultInfo>(battleResult);
 
             InfoPrinter.PrintBossBattleResult(battleResultInfo, _client.ViewModel);
-            _client.DelayShort();
+            InfoUpdater.UpdateBattleDamage(battleResultInfo, _client.ViewModel);
+
+            _client.DelayLong();
         }
 
         private void RaidBattleRescue(string raidId)
@@ -133,14 +133,12 @@ namespace Astrum.Handler
             };
             _client.PostXHR("http://astrum.amebagames.com/_/raid/battlerescue", values);
             _client.DelayShort();
-
         }
 
         private void RaidBattleResult(string raidId)
         {
             var result = _client.GetXHR("http://astrum.amebagames.com/_/raid/battleresult?_id=" + Uri.EscapeDataString(raidId));
             //RaidBattleInfo battleInfo = JsonConvert.DeserializeObject<RaidBattleInfo>(result);
-            _client.DelayShort();
 
             _client.GetXHR("http://astrum.amebagames.com/_/raid/summary");
             _client.DelayShort();

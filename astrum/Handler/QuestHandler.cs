@@ -96,11 +96,10 @@ namespace Astrum.Handler
 
                     if (viewModel.IsLimitedRaidEnable)
                     {
-                        viewModel.IsLimitedRaid = true;
-
                         var limitedRaidId = stage.status.limitedraid._id;
                         if (limitedRaidId != null)
                         {
+                            viewModel.IsLimitedRaid = true;
                             if (viewModel.CanFullAttackForEvent)
                             {
                                 _client.LimitedRaid();
@@ -114,6 +113,7 @@ namespace Astrum.Handler
 
                         viewModel.IsFuryRaid = false;
                         viewModel.IsLimitedRaid = false;
+                        viewModel.IsBreedingRaid = false;
 
                         if (stage.status.raid.find != null)
                         {
@@ -203,9 +203,15 @@ namespace Astrum.Handler
             var stage = JsonConvert.DeserializeObject<StageInfo>(result);
 
             InfoPrinter.PrintStageInfo(stage, _client.ViewModel);
-            InfoUpdater.UpdateStageView(stage, _client.ViewModel);
-            _client.DelayShort();
 
+            var feverBefore = _client.ViewModel.Fever;
+            InfoUpdater.UpdateStageView(stage, _client.ViewModel);
+            if (_client.ViewModel.Fever && feverBefore != _client.ViewModel.Fever)
+            {
+                _client.RaiseNotificationEvent("Fever start", AstrumClient.SECOND * 60);
+            }
+
+            _client.DelayShort();
             return stage;
         }
         
@@ -228,7 +234,7 @@ namespace Astrum.Handler
 
             InfoPrinter.PrintBossBattleResult(battleResultInfo, _client.ViewModel);
 
-            _client.DelayShort();
+            _client.DelayLong();
         }
     }
 }

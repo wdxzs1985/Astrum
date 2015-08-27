@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Astrum.Json.Card;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -54,16 +55,28 @@ namespace Astrum.Json.Raid
 
     public class BossBattleResultInfo
     {
+        public Init init { get; set; }
         public Result result { get; set; }
+
+        public bool isEnd { get; set; }
+    }
+
+    public class Init
+    {
+        public DeckInfo boss { get; set; }
+        public string bpType { get; set; }
+        public List<DeckInfo> cards { get; set; }
     }
 
     public class Result
     {
-        public BossInfo afterBoss { get; set; }
+        public DeckInfo afterBoss { get; set; }
+        public Dictionary<string, DeckInfo> afterDeck { get; set; }
+
         public string resultType { get; set; }
     }
 
-    public class BossInfo
+    public class DeckInfo
     {
         public int maxHp { get; set; }
         public int hp { get; set; }

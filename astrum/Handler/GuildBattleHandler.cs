@@ -95,7 +95,6 @@ namespace Astrum.Handler
             InfoUpdater.UpdateGuildBattleStatus(battleInfo.status, _client.ViewModel);
 
             _client.DelayShort();
-
             return battleInfo;
         }
 
@@ -164,11 +163,11 @@ namespace Astrum.Handler
             var result = _client.GetXHR("http://astrum.amebagames.com/_/guildbattle/tp?_id=" + Uri.EscapeDataString(battleId));
             TpInfo tpInfo = JsonConvert.DeserializeObject<TpInfo>(result);
 
-            _client.DelayShort();
-
             _client.ViewModel.IsTpNormalAvailable = tpInfo.normal.available;
             _client.ViewModel.IsTpChatAvailable = tpInfo.chat.available;
             _client.ViewModel.IsTpRouletteAvailable = tpInfo.roulette.available;
+
+            _client.DelayShort();
 
             return tpInfo;
         }
@@ -185,7 +184,6 @@ namespace Astrum.Handler
 
             _client.ViewModel.History = "回复TP";
             _client.ViewModel.IsTpNormalAvailable = false;
-            
         }
 
         public void GuildBattleTpChat()
@@ -199,7 +197,6 @@ namespace Astrum.Handler
 
             _client.ViewModel.History = "回复TP";
             _client.ViewModel.IsTpChatAvailable = false;
-            
         }
 
         public void GuildBattleTpRoulette()
@@ -210,8 +207,7 @@ namespace Astrum.Handler
             
             int targetPosition = roulette.order.IndexOf(80);
             int position = roulette.initialPosition - targetPosition;
-
-
+            
             var values = new Dictionary<string, object>
             {
                 { "_id", battleId },
@@ -221,7 +217,6 @@ namespace Astrum.Handler
 
             _client.ViewModel.History = "回复TP";
             _client.ViewModel.IsTpRouletteAvailable = false;
-            
         }
 
         private void TpQuest()
