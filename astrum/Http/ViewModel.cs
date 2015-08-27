@@ -696,6 +696,36 @@ namespace Astrum.Http
             }
         }
 
+        private int _baseDamage;
+        public int BaseDamage
+        {
+            get
+            {
+                return _baseDamage;
+            }
+            set
+            {
+                if(_baseDamage != 0)
+                {
+                    _baseDamage = (_baseDamage + value) / 2;
+                }
+                else
+                {
+                    _baseDamage = value;
+                }
+                
+                NotifyPropertyChanged("BaseDamage");
+                NotifyPropertyChanged("EasyBossDamage");
+            }
+        }
+
+        public int EasyBossDamage
+        {
+            get
+            {
+                return _baseDamage * 2;
+            }
+        }
 
         public string GuildBattleId { get; set; }
 

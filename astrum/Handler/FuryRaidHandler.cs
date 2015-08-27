@@ -102,9 +102,10 @@ namespace Astrum.Handler
                 if (AstrumClient.FIND.Equals(battleInfo.type))
                 {
                     var hp = battleInfo.hp - battleInfo.totalDamage;
+                    bool useFullAttack = hp > _client.ViewModel.EasyBossDamage;
 
-                    var attackType = hp > AstrumClient.EASY_BOSS_HP ? AstrumClient.FULL : AstrumClient.NORMAL;
-                    var needBp = hp > AstrumClient.EASY_BOSS_HP ? AstrumClient.BP_FULL : AstrumClient.BP_NORMAL;
+                    var attackType = useFullAttack ? AstrumClient.FULL : AstrumClient.NORMAL;
+                    var needBp = useFullAttack ? AstrumClient.BP_FULL : AstrumClient.BP_NORMAL;
 
                     if (battleInfo.rare == 4)
                     {
@@ -153,6 +154,8 @@ namespace Astrum.Handler
             var battleResultInfo = JsonConvert.DeserializeObject<BossBattleResultInfo>(battleResult);
 
             InfoPrinter.PrintBossBattleResult(battleResultInfo, _client.ViewModel);
+            InfoUpdater.UpdateBattleDamage(battleResultInfo, _client.ViewModel);
+
             _client.DelayLong();
         }
 

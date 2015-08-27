@@ -129,6 +129,19 @@ namespace Astrum.Handler
             }
         }
 
+        public static void UpdateBattleDamage(BossBattleResultInfo resultInfo, ViewModel viewModel)
+        {
+            var atkSum = resultInfo.result.afterDeck.Sum(deck => deck.Value.atk);
+            if (AstrumClient.FULL.Equals(resultInfo.init.bpType))
+            {
+                viewModel.BaseDamage = atkSum;
+            }
+            else
+            {
+                viewModel.BaseDamage = atkSum * 5;
+            }
+        }
+
 
 
         public static void UpdateGuildBattleStatus(GuildBattleStatus status, ViewModel viewModel)

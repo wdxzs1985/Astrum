@@ -71,7 +71,7 @@ namespace Astrum.Http
         public const int DEFAULT_STOCK = 999;
         public const int DEFAULT_KEEP_STAMINA = 100;
 
-        public const int EASY_BOSS_HP = 2000000;
+        public const int DEFAULT_BASE_DAMAGE = 1500000;
 
         public ViewModel ViewModel { get; set; }
         private QuestHandler _questHandler;
@@ -114,6 +114,8 @@ namespace Astrum.Http
             ViewModel.MinStaminaStock = DEFAULT_STOCK;
             ViewModel.MinBpStock = DEFAULT_STOCK;
             ViewModel.KeepStamina = DEFAULT_KEEP_STAMINA;
+
+            ViewModel.BaseDamage = DEFAULT_BASE_DAMAGE;
         }
         
         public void Delay(int time)

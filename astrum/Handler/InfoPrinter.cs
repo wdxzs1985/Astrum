@@ -158,13 +158,41 @@ namespace Astrum.Handler
 
         public static void PrintBossBattleResult(BossBattleResultInfo resultInfo, ViewModel viewModel)
         {
-            if (resultInfo.result != null)
+            string history = "";
+
+            string resultType = "";
+            switch (resultInfo.result.resultType)
             {
-                string history = "";
-                history += String.Format("战斗结束：{0}", resultInfo.result.resultType) + Environment.NewLine;
-                history += String.Format("BOSS血量：{0} / {1}", resultInfo.result.afterBoss.hp, resultInfo.result.afterBoss.maxHp) + Environment.NewLine;
-                viewModel.History = history;
+                case "draw":
+                    resultType = "平局";
+                    break;
+                case "win":
+                    resultType = "勝利";
+                    break;
+                case "lose":
+                    resultType = "失敗";
+                    break;
             }
+
+            history += String.Format("战斗结束：{0}", resultType) + Environment.NewLine;
+            history += String.Format("BOSS血量：{0} / {1}", resultInfo.result.afterBoss.hp, resultInfo.result.afterBoss.maxHp) + Environment.NewLine;
+            
+            var damage = resultInfo.init.boss.hp - resultInfo.result.afterBoss.hp;
+            var atkSum = resultInfo.result.afterDeck.Sum(deck => deck.Value.atk);
+
+
+            if (AstrumClient.FULL.Equals(resultInfo.init.bpType))
+            {
+                history += String.Format("全力傷害：{0}", atkSum * 5) + Environment.NewLine;
+                history += String.Format("実際傷害：{0}", damage) + Environment.NewLine;
+            }
+            else
+            {
+                history += String.Format("　　傷害：{0}", atkSum * 5) + Environment.NewLine;
+                history += String.Format("実際傷害：{0}", damage) + Environment.NewLine;
+            }
+
+            viewModel.History = history;
         }
 
 
