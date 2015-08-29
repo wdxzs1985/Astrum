@@ -280,7 +280,10 @@ namespace Astrum.Handler
             {
                 history += String.Format("{0}", partner.card.DisplayName) + Environment.NewLine;
                 history += String.Format("絆Lv {0}/{1}", partner.breedingLevel, partner.maxBreedingLevel) + Environment.NewLine;
-                history += String.Format("絆Lv {0}:{1}", partner.nextBreedReward.title, partner.nextBreedReward.description) + Environment.NewLine;
+                if (partner.nextBreedReward != null)
+                {
+                    history += String.Format("絆Lv {0}:{1}", partner.nextBreedReward.title, partner.nextBreedReward.description) + Environment.NewLine;
+                }
             }
 
             viewModel.History = history;
