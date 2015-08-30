@@ -71,7 +71,7 @@ namespace Astrum.Http
         public const int DEFAULT_STOCK = 999;
         public const int DEFAULT_KEEP_STAMINA = 100;
 
-        public const int DEFAULT_BASE_DAMAGE = 1500000;
+        public const int DEFAULT_BASE_DAMAGE = 2000000;
 
         public ViewModel ViewModel { get; set; }
         private QuestHandler _questHandler;
