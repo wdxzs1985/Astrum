@@ -337,10 +337,15 @@ namespace Astrum
                                 client.StartQuest();
                                 client.Gift();
                                 client.EventStatus();
+                                client.CheckExtraMap();
 
                                 if(client.ViewModel.IsBreedingEnable)
                                 {
                                     client.Breeding();
+                                }
+                                else if(client.ViewModel.IsSpecialAreaEnable)
+                                {
+                                    client.SpecialArea();
                                 }
                                 else
                                 {
@@ -377,6 +382,9 @@ namespace Astrum
                     client.ViewModel.IsRunning = false;
                     client.ViewModel.IsReady = false;
                     initLoginPanel();
+                    this.Show();
+                    notifyIcon.Visible = false;
+                    this.WindowState = WindowState.Normal;
                 }
             }
             else
