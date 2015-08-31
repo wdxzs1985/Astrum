@@ -85,6 +85,7 @@ namespace Astrum.Http
         private ItemHandler _itemHandler;
         private GachaHandler _gachaHandler;
         private TraningHandler _trainingHandler;
+        private SpecialAreaHandler _specialAreaHandler;
 
         private string xGroup = "a";
         private string xRtoken = "undefined";
@@ -107,9 +108,11 @@ namespace Astrum.Http
             _itemHandler = new ItemHandler(this);
             _gachaHandler = new GachaHandler(this);
             _trainingHandler = new TraningHandler(this);
+            _specialAreaHandler = new SpecialAreaHandler(this);
 
             ViewModel.IsQuestEnable = true;
             ViewModel.IsGuildBattleEnable = false;
+            ViewModel.IsSpecialAreaEnable = false;
 
             ViewModel.MinStaminaStock = DEFAULT_STOCK;
             ViewModel.MinBpStock = DEFAULT_STOCK;
@@ -388,7 +391,6 @@ namespace Astrum.Http
             return _questHandler.Start();
         }
 
-
         public void Quest()
         {
             this._questHandler.Run();
@@ -404,7 +406,6 @@ namespace Astrum.Http
         {
             _furyRaidHandler.Run();
         }
-
 
         public void LimitedRaid()
         {
@@ -498,6 +499,16 @@ namespace Astrum.Http
         public void TrainingBase()
         {
             _trainingHandler.TrainingBase();
+        }
+
+        public void CheckExtraMap()
+        {
+            _specialAreaHandler.CheckExtraMap();
+        }
+
+        public void SpecialArea()
+        {
+            _specialAreaHandler.Run();
         }
 
         #region Event

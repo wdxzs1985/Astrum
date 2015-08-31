@@ -614,7 +614,7 @@ namespace Astrum.Http
             }
         }
 
-
+        public bool IsSpecialAreaEnable { get; set; }
 
         public bool IsFuryRaidEnable { get; set; }
         public string FuryRaidEventId { get; set; }
