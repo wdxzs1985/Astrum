@@ -256,8 +256,7 @@ namespace Astrum
                 return loginUserList;
             });
 
-            client.ViewModel.LoginUserList = loginUserList;
-            UserSelector.SelectedIndex = 0;
+            updateUserList(loginUserList);
         }
 
         private async void SaveUserList()
@@ -273,8 +272,7 @@ namespace Astrum
                 nowUser.leader = client.ViewModel.Leader;
 
                 userList.Insert(0, nowUser);
-
-                client.ViewModel.LoginUserList = userList;
+                //updateUserList(userList);
 
                 FileStream fs = null;
                 StreamWriter sw = null;
@@ -308,6 +306,12 @@ namespace Astrum
             });
         }
 
+        private void updateUserList(List<LoginUser> loginUserList)
+        {
+            client.ViewModel.LoginUserList = loginUserList;
+            UserSelector.SelectedIndex = 0;
+        }
+
         private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
             StartButton.IsEnabled = false;
@@ -337,19 +341,25 @@ namespace Astrum
                                 client.StartQuest();
                                 client.Gift();
                                 client.EventStatus();
-                                client.CheckExtraMap();
 
                                 if(client.ViewModel.IsBreedingEnable)
                                 {
                                     client.Breeding();
                                 }
-                                else if(client.ViewModel.IsSpecialAreaEnable)
-                                {
-                                    client.SpecialArea();
-                                }
                                 else
                                 {
-                                    client.Quest();
+                                    if (client.ViewModel.IsSpecialAreaEnable)
+                                    {
+                                        client.CheckExtraMap();
+                                    }
+
+                                    if (client.ViewModel.IsSpecialAreaEnable)
+                                    {
+                                        client.SpecialArea();
+                                    } else
+                                    {
+                                        client.Quest();
+                                    }
                                 }
 
 

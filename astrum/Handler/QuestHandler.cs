@@ -12,7 +12,7 @@ namespace Astrum.Handler
 {
     public class QuestHandler
     {
-        private AstrumClient _client = null;
+        protected AstrumClient _client = null;
 
         public QuestHandler(AstrumClient client)
         {
@@ -181,7 +181,7 @@ namespace Astrum.Handler
         }
 
 
-        private StageInfo EnterStage()
+        protected virtual StageInfo EnterStage()
         {
             var result = _client.GetXHR("http://astrum.amebagames.com/_/stage");
             var stage = JsonConvert.DeserializeObject<StageInfo>(result);
@@ -193,7 +193,7 @@ namespace Astrum.Handler
             return stage;
         }
         
-        private StageInfo ForwardStage(string areaId)
+        protected virtual StageInfo ForwardStage(string areaId)
         {
             var values = new Dictionary<string, object>
                 {
@@ -214,8 +214,8 @@ namespace Astrum.Handler
             _client.DelayShort();
             return stage;
         }
-        
-        public void AreaBossBattle(string areaId)
+
+        protected virtual void AreaBossBattle(string areaId)
         {
             var result = _client.GetXHR("http://astrum.amebagames.com/_/areaboss/battle?_id=" + areaId);
             AreaBossInfo boss = JsonConvert.DeserializeObject<AreaBossInfo>(result);

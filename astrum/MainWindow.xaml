@@ -81,10 +81,17 @@
                 </Grid.ColumnDefinitions>
 
                 <Grid Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
                     <Label Content="{Binding BaseDamage}" 
                            ContentStringFormat="基本傷害：{0}"
+                           Grid.Column="0"
                            VerticalAlignment="Center"></Label>
-                    
+                    <CheckBox Grid.Column="1" VerticalAlignment="Center"
+                              Content="ExtraMap"
+                              IsChecked="{Binding IsSpecialAreaEnable}"/>
                 </Grid>
                 
                 <Grid Grid.Column="0" Grid.Row="1" Height="96" VerticalAlignment="Top" Margin="0,0,0,0">

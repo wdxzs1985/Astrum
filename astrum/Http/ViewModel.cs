@@ -208,6 +208,7 @@ namespace Astrum.Http
         private bool _gacha_enable;
         private bool _training_enable;
         private bool _training_base_enable;
+        private bool _special_area_enable;
 
         public bool IsQuestEnable
         {
@@ -273,6 +274,20 @@ namespace Astrum.Http
                 NotifyPropertyChanged("IsTrainingBaseEnable");
             }
         }
+
+
+        public bool IsSpecialAreaEnable
+        {
+            get { return _special_area_enable; }
+            set
+            {
+                _special_area_enable = value;
+                NotifyPropertyChanged("IsSpecialAreaEnable");
+            }
+        }
+
+        public bool CanSpecialArea { get; set; }
+
 
         private string _name;
         private int _level;
@@ -613,8 +628,6 @@ namespace Astrum.Http
                 return _card_quantity + " / " + _card_max;
             }
         }
-
-        public bool IsSpecialAreaEnable { get; set; }
 
         public bool IsFuryRaidEnable { get; set; }
         public string FuryRaidEventId { get; set; }
