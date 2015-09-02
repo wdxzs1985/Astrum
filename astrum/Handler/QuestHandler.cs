@@ -186,7 +186,7 @@ namespace Astrum.Handler
             var result = _client.GetXHR("http://astrum.amebagames.com/_/stage");
             var stage = JsonConvert.DeserializeObject<StageInfo>(result);
 
-            InfoPrinter.PrintStageInfo(stage.initial, _client.ViewModel);
+            InfoPrinter.PrintStageInfo(stage, _client.ViewModel);
             InfoUpdater.UpdateStageView(stage.initial, _client.ViewModel);
             _client.DelayShort();
 

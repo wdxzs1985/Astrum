@@ -22,10 +22,9 @@ namespace Astrum.Handler
 
         public void CheckExtraMap()
         {
-            MapInfo maps = ExtraMap();
-            AreaInfo area = maps.list.Find(a => (a.isNew || a.order == 1) && a.stock > 0);
+            AreaInfo area = FindArea();
 
-            if(area == null)
+            if (area == null)
             {
                 _client.ViewModel.IsSpecialAreaEnable = false;
             }
@@ -42,20 +41,14 @@ namespace Astrum.Handler
 
         protected override StageInfo EnterStage()
         {
-            MapInfo maps = ExtraMap();
-            AreaInfo area = maps.list.Find(a => (a.isNew || a.order == 1) && a.stock > 0);
+            AreaInfo area = FindArea();
 
             var areaId = area._id;
             if (area.status == 1)
             {
-                var values = new Dictionary<string, object>
-                {
-                   { "areaId", areaId },
-                   { "zoneId", "special_chapter1" }
-                };
-                _client.PostXHR("http://astrum.amebagames.com/_/stage/open", values);
+                OpenStage(area);
             }
-            
+
             var url = string.Format("http://astrum.amebagames.com/_/stage?areaId={0}",areaId);
             var result = _client.GetXHR(url);
 
@@ -66,6 +59,24 @@ namespace Astrum.Handler
 
             _client.DelayShort();
             return stage;
+        }
+
+        private AreaInfo FindArea()
+        {
+            MapInfo maps = ExtraMap();
+            AreaInfo area = maps.list.Find(a => (a.isNew || a.order == 1) && (a.stock > 0 || a.status == 1));
+
+            return area;
+        }
+
+        private void OpenStage(AreaInfo area)
+        {
+            var values = new Dictionary<string, object>
+            {
+                { "areaId", area._id },
+                { "zoneId", "special_chapter1" }
+            };
+            _client.PostXHR("http://astrum.amebagames.com/_/stage/open", values);
         }
     }
 }
