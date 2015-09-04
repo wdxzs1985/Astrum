@@ -64,7 +64,7 @@ namespace Astrum.Handler
         private AreaInfo FindArea()
         {
             MapInfo maps = ExtraMap();
-            AreaInfo area = maps.list.Find(a => (a.isNew || a.order == 1) && (a.stock > 0 || a.status == 1));
+            AreaInfo area = maps.list.Find(a => (a.isNew || a.order == 1) && ((a.stock > 0 && a.status == 1) || a.status == 0));
 
             return area;
         }
