@@ -87,7 +87,7 @@ namespace Astrum.Json.Card
                         inParty = " 编成中";
                 }
 
-                return string.Format("{0}{1} (Lv {2}{3}{4})", rare, name, level, evo, inParty);
+                return string.Format("{0}{1} (Lv {2}({3}){4}{5})", rare, name, level, abilityLevel, evo, inParty);
             }
         }
     }
