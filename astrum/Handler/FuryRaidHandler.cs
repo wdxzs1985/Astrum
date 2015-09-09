@@ -22,7 +22,8 @@ namespace Astrum.Handler
         public void Run()
         {
             FuryRaidInfo raidInfo = FuryRaidInfo();
-            _client.ViewModel.Fever = raidInfo.fever.progress == 100;
+            _client.ViewModel.FeverProgress = raidInfo.fever.progress;
+            //_client.ViewModel.Fever = raidInfo.fever.progress == 100;
 
             raidInfo = FuryRaidBoss();
             if (raidInfo.find != null)

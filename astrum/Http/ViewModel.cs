@@ -679,6 +679,34 @@ namespace Astrum.Http
             }
         }
 
+        public bool showFeverProgress
+        {
+            get
+            {
+                return IsFuryRaidEnable && !Fever;
+            }
+        }
+
+        private int _feverProgress;
+        public int FeverProgress
+        {
+            get
+            {
+                return _feverProgress;
+            }
+            set
+            {
+                _feverProgress = value;
+                NotifyPropertyChanged("FeverProgress");
+                NotifyPropertyChanged("showFeverProgress");
+
+                if (_feverProgress == 100)
+                {
+                    Fever = true;
+                }
+            }
+        }
+
         private bool _fever;
         public bool Fever
         {
@@ -690,6 +718,7 @@ namespace Astrum.Http
             {
                 _fever = value;
                 NotifyPropertyChanged("Fever");
+                NotifyPropertyChanged("showFeverProgress");
             }
         }
 

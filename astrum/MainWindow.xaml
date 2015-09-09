@@ -70,7 +70,7 @@
         </VirtualizingStackPanel>
         <Grid x:Name="StatusPanel" Visibility="Visible" Margin="0,32,0,0" Background="{StaticResource Background}">
             <Grid x:Name="QuestPanel" Margin="16,144,16,240"
-            	Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+            	Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True" d:IsHidden="True">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="48"/>
                     <RowDefinition/>
@@ -547,7 +547,7 @@
                              Checked="GachaButton_Checked" d:IsLocked="True"/>
             </Grid>
             <Grid x:Name="StatusArea" VerticalAlignment="Top" Background="{StaticResource Cyan_500}"
-                  Height="96" Margin="0,0,0,0" d:IsLocked="True">
+                  Height="96" Margin="0,0,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
@@ -573,7 +573,7 @@
                                  Foreground="{Binding StaminaProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
                 </Grid>
 
-                <Grid Grid.Row="0" Grid.Column="1">
+                <Grid Grid.Row="0" Grid.Column="1" d:IsLocked="True">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="2*"/>
@@ -606,7 +606,7 @@
                                  Foreground="{Binding BpProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
                 </Grid>
                 <Grid Grid.Row="1" Grid.Column="1"
-            		Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsHidden="True" d:IsLocked="True">
+            		Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="2*"/>
@@ -616,7 +616,23 @@
                            Visibility="{Binding Fever, Converter={StaticResource BooleanToVisibilityConverter}}"
                            HorizontalContentAlignment="Center"
                            VerticalAlignment="Center"
-                           Grid.Column="1" Width="100"/>
+                           Grid.Column="1" Width="100" d:IsHidden="True"/>
+
+                    <Label Content="Fever" Grid.Column="0"
+                           Foreground="White" 
+                           VerticalAlignment="Center"
+                           HorizontalContentAlignment="Right"
+                           Visibility="{Binding showFeverProgress, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        
+                    </Label>
+                    <ProgressBar Name="FeverProgress" 
+                                 Grid.Column="1" Height="8" Width="100"
+                                 Minimum="0" Maximum="100" 
+                                 Value="{Binding FeverProgress, FallbackValue=50, Mode=OneWay, TargetNullValue=0}" 
+                                 ToolTip="{Binding FeverProgress}" 
+                                 Visibility="{Binding showFeverProgress, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        
+                    </ProgressBar>
                 </Grid>
                 <Grid Grid.Row="1" Grid.Column="1"
             		Visibility="{Binding IsGuildBattleEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True" d:IsHidden="True">
@@ -636,7 +652,7 @@
                                  Foreground="{Binding TpProgress, Converter={StaticResource ProgressBarForegoundConvert}}"/>
                 </Grid>
                 <Grid Grid.Row="1" Grid.Column="1"
-            		Visibility="{Binding IsGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+            		Visibility="{Binding IsGachaEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True" d:IsHidden="True">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="2*"/>
