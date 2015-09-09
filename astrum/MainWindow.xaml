@@ -622,7 +622,7 @@
                            Foreground="White" 
                            VerticalAlignment="Center"
                            HorizontalContentAlignment="Right"
-                           Visibility="{Binding showFeverProgress, Converter={StaticResource BooleanToVisibilityConverter}}">
+                           Visibility="{Binding ShowFeverProgress, Converter={StaticResource BooleanToVisibilityConverter}}">
                         
                     </Label>
                     <ProgressBar Name="FeverProgress" 
@@ -630,7 +630,7 @@
                                  Minimum="0" Maximum="100" 
                                  Value="{Binding FeverProgress, FallbackValue=50, Mode=OneWay, TargetNullValue=0}" 
                                  ToolTip="{Binding FeverProgress}" 
-                                 Visibility="{Binding showFeverProgress, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                 Visibility="{Binding ShowFeverProgress, Converter={StaticResource BooleanToVisibilityConverter}}">
                         
                     </ProgressBar>
                 </Grid>

@@ -679,7 +679,7 @@ namespace Astrum.Http
             }
         }
 
-        public bool showFeverProgress
+        public bool ShowFeverProgress
         {
             get
             {
@@ -718,7 +718,7 @@ namespace Astrum.Http
             {
                 _fever = value;
                 NotifyPropertyChanged("Fever");
-                NotifyPropertyChanged("showFeverProgress");
+                NotifyPropertyChanged("ShowFeverProgress");
             }
         }
 
