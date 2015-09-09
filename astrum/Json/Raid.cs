@@ -100,7 +100,7 @@ namespace Astrum.Json.Raid
     {
         public int progress { get; set; }
 
-        public int effect { get; set; }
+        public double effect { get; set; }
 
         public object gachaTicket { get; set; }
 
