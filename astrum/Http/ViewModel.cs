@@ -632,7 +632,6 @@ namespace Astrum.Http
         public bool IsFuryRaidEnable { get; set; }
         public string FuryRaidEventId { get; set; }
         public bool IsFuryRaid { get; set; }
-        public bool CanFuryRaid { get; set; }
 
         public bool IsLimitedRaidEnable { get; set; }
         public string LimitedRaidEventId { get; set; }
@@ -679,6 +678,34 @@ namespace Astrum.Http
             }
         }
 
+        public bool ShowFeverProgress
+        {
+            get
+            {
+                return IsFuryRaidEnable && !Fever;
+            }
+        }
+
+        private int _feverProgress;
+        public int FeverProgress
+        {
+            get
+            {
+                return _feverProgress;
+            }
+            set
+            {
+                _feverProgress = value;
+                NotifyPropertyChanged("FeverProgress");
+                NotifyPropertyChanged("showFeverProgress");
+
+                if (_feverProgress == 100)
+                {
+                    Fever = true;
+                }
+            }
+        }
+
         private bool _fever;
         public bool Fever
         {
@@ -690,6 +717,7 @@ namespace Astrum.Http
             {
                 _fever = value;
                 NotifyPropertyChanged("Fever");
+                NotifyPropertyChanged("ShowFeverProgress");
             }
         }
 

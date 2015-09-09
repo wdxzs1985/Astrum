@@ -60,7 +60,7 @@ namespace Astrum
 
         public void OnNotification(object sender, AstrumClient.NotificationEventArgs e)
         {
-            if (notifyIcon.Visible)
+            if (notifyIcon != null)
             {
                 notifyIcon.ShowBalloonTip(e.Duration, client.ViewModel.WindowTitle, e.Message, ToolTipIcon.None);
             }
@@ -85,6 +85,21 @@ namespace Astrum
             this.Close();
         }
 
+        public void DragWindow(object sender, MouseButtonEventArgs args)
+        {
+            this.DragMove();
+        }
+
+        public void CloseWindow(object sender, RoutedEventArgs args)
+        {
+            this.Close();
+        }
+
+        public void MiniWindow(object sender, RoutedEventArgs args)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
         private void MainWindow_StateChanged(object sender, EventArgs e)
         {
             if (this.WindowState == WindowState.Minimized)
@@ -96,7 +111,7 @@ namespace Astrum
             }
             else
             {
-                notifyIcon.Visible = false;                
+                notifyIcon.Visible = false;
             }
         }
 
@@ -433,21 +448,6 @@ namespace Astrum
                 }
             }
         }
-		
-		public void DragWindow(object sender,MouseButtonEventArgs args)
-		{
-			this.DragMove();
-		}
-		
-		public void CloseWindow(object sender,RoutedEventArgs args)
-		{
-			this.Close();
-		}
-		
-		public void MiniWindow(object sender,RoutedEventArgs args)
-		{
-			this.WindowState = WindowState.Minimized;
-		}
 
         private async void UseHalfStaminaButton_Click(object sender, RoutedEventArgs e)
         {
