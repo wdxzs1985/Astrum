@@ -63,6 +63,7 @@ namespace Astrum.Handler
                         {
                             if (stage.furyraid.rare == 4)
                             {
+                                _client.RaiseNotificationEvent("星兽王出现了！", AstrumClient.DELAY_LONG);
                                 viewModel.CanFuryRaid = true;
                             }
                         }
