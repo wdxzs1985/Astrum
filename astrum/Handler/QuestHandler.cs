@@ -46,7 +46,7 @@ namespace Astrum.Handler
                 }
                 else if (stage.stageClear && stage.nextStage.isBossStage)
                 {
-                    stage = ForwardStage(areaId);
+                    ForwardStage(areaId);
                     AreaBossBattle(areaId);
                     return;
                 }
@@ -64,14 +64,10 @@ namespace Astrum.Handler
                             if (stage.furyraid.rare == 4)
                             {
                                 _client.RaiseNotificationEvent("星兽王出现了！", AstrumClient.DELAY_LONG);
-                                viewModel.CanFuryRaid = true;
+                                ForwardStage(areaId);
+                                _client.FuryRaid();
+                                return;
                             }
-                        }
-                        else if (viewModel.CanFuryRaid)
-                        {
-                            _client.FuryRaid();
-                            viewModel.CanFuryRaid = false;
-                            return;
                         }
                         else if (!viewModel.Fever)
                         {
@@ -204,14 +200,8 @@ namespace Astrum.Handler
             var stage = JsonConvert.DeserializeObject<StageInfo>(result);
 
             InfoPrinter.PrintStageInfo(stage, _client.ViewModel);
-
-            var feverBefore = _client.ViewModel.Fever;
+            
             InfoUpdater.UpdateStageView(stage, _client.ViewModel);
-            if (_client.ViewModel.Fever && feverBefore != _client.ViewModel.Fever)
-            {
-                _client.RaiseNotificationEvent("Fever start", AstrumClient.SECOND * 60);
-            }
-
             _client.DelayShort();
             return stage;
         }

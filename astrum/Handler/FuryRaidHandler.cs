@@ -21,15 +21,14 @@ namespace Astrum.Handler
 
         public void Run()
         {
-            FuryRaidInfo raidInfo = FuryRaidInfo();
-            _client.ViewModel.FeverProgress = raidInfo.fever.progress;
+            FuryRaidInfo();
             //_client.ViewModel.Fever = raidInfo.fever.progress == 100;
 
-            raidInfo = FuryRaidBoss();
-            if (raidInfo.find != null)
+            FuryRaidInfo raidBoss = FuryRaidBoss();
+            if (raidBoss.find != null)
             {
                 //ViewModel.FuryRaidFindList = raidInfo.find.list;
-                foreach (var battleInfo in raidInfo.find.list)
+                foreach (var battleInfo in raidBoss.find.list)
                 {
                     bool loop = battleInfo.rare == 4 || (!_client.ViewModel.Fever && (battleInfo.isNew || _client.ViewModel.CanFullAttack));
 
@@ -41,9 +40,9 @@ namespace Astrum.Handler
                 }
             }
 
-            if (raidInfo.rescue != null)
+            if (raidBoss.rescue != null)
             {
-                foreach (var battleInfo in raidInfo.rescue.list)
+                foreach (var battleInfo in raidBoss.rescue.list)
                 {
                     var loop = battleInfo.isNew && !_client.ViewModel.Fever;
                     while (loop)
@@ -62,6 +61,7 @@ namespace Astrum.Handler
             var eventId = _client.ViewModel.FuryRaidEventId;
             string result = _client.GetXHR("http://astrum.amebagames.com/_/event/furyraid?_id=" + Uri.EscapeDataString(eventId));
             FuryRaidInfo raidInfo = JsonConvert.DeserializeObject<FuryRaidInfo>(result);
+            _client.ViewModel.FeverProgress = raidInfo.fever.progress;
 
             _client.DelayShort();
             return raidInfo;
