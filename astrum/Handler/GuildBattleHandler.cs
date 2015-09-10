@@ -92,6 +92,18 @@ namespace Astrum.Handler
             GuildBattleInfo battleInfo = JsonConvert.DeserializeObject<GuildBattleInfo>(result);
 
 
+            var guild1 = battleInfo.guilds[0];
+            _client.ViewModel.GuildName1 = guild1.name;
+            _client.ViewModel.GuildBattlePoint1 = guild1.point;
+            _client.ViewModel.GuildBattleAttackCombo1 = guild1.combo.attack.count;
+            _client.ViewModel.GuildBattleYellCombo1 = guild1.combo.yell.count;
+
+            var guild2 = battleInfo.guilds[1];
+            _client.ViewModel.GuildName2 = guild2.name;
+            _client.ViewModel.GuildBattlePoint2 = guild2.point;
+            _client.ViewModel.GuildBattleAttackCombo2 = guild2.combo.attack.count;
+            _client.ViewModel.GuildBattleYellCombo2 = guild2.combo.yell.count;
+
             InfoPrinter.PrintGuildBattleInfo(battleInfo, _client.ViewModel);
             InfoUpdater.UpdateGuildBattleStatus(battleInfo.status, _client.ViewModel);
 

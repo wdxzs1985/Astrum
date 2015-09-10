@@ -287,20 +287,16 @@
                         <ColumnDefinition  />
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0">
-                        <Label Content="Guild1"></Label>
-                        <Label Content="point"></Label>
-                        <Label Content="attack combo"></Label>
-                        <Label Content="special combo"></Label>
-                        <Label Content="remote combo"></Label>
-                        <Label Content="yell combo"></Label>
+                        <Label Content="{Binding GuildName1}"></Label>
+                        <Label Content="{Binding GuildBattlePoint1}" ContentStringFormat="得分：{0}"></Label>
+                        <Label Content="{Binding GuildBattleAttackCombo1}" ContentStringFormat="攻击：{0} Combo"></Label>
+                        <Label Content="{Binding GuildBattleYellCombo1}" ContentStringFormat="应援：{0} Combo"></Label>
                     </StackPanel>
                     <StackPanel Grid.Column="1">
-                        <Label Content="Guild2"></Label>
-                        <Label Content="point"></Label>
-                        <Label Content="attack combo"></Label>
-                        <Label Content="special combo"></Label>
-                        <Label Content="remote combo"></Label>
-                        <Label Content="yell combo"></Label>
+                        <Label Content="{Binding GuildName2}"></Label>
+                        <Label Content="{Binding GuildBattlePoint2}" ContentStringFormat="得分：{0}"></Label>
+                        <Label Content="{Binding GuildBattleAttackCombo2}" ContentStringFormat="攻击：{0} Combo"></Label>
+                        <Label Content="{Binding GuildBattleYellCombo2}" ContentStringFormat="应援：{0} Combo"></Label>
                     </StackPanel>
                 </Grid>
                 <Grid VerticalAlignment="Top" Grid.Row="1">

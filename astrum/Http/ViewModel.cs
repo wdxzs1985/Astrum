@@ -842,7 +842,95 @@ namespace Astrum.Http
             }
         }
 
+        #region GuildBattle
+
         public string GuildBattleId { get; set; }
+
+        private string _guildName1;
+        private long _guildBattlePoint1;
+        private int _guildBattleAttackCombo1;
+        private int _guildBattleYellCombo1;
+
+        private string _guildName2;
+        private long _guildBattlePoint2;
+        private int _guildBattleAttackCombo2;
+        private int _guildBattleYellCombo2;
+
+        public string GuildName1
+        {
+            get { return _guildName1; }
+            set
+            {
+                _guildName1 = value;
+                NotifyPropertyChanged("GuildName1");
+            }
+        }
+        public long GuildBattlePoint1
+        {
+            get { return _guildBattlePoint1; }
+            set
+            {
+                _guildBattlePoint1 = value;
+                NotifyPropertyChanged("GuildBattlePoint1");
+            }
+        }
+        public int GuildBattleAttackCombo1
+        {
+            get { return _guildBattleAttackCombo1; }
+            set
+            {
+                _guildBattleAttackCombo1 = value;
+                NotifyPropertyChanged("GuildBattleAttackCombo1");
+            }
+        }
+        public int GuildBattleYellCombo1
+        {
+            get { return _guildBattleYellCombo1; }
+            set
+            {
+                _guildBattleYellCombo1 = value;
+                NotifyPropertyChanged("GuildBattleYellCombo1");
+            }
+        }
+
+        public string GuildName2
+        {
+            get { return _guildName2; }
+            set
+            {
+                _guildName2 = value;
+                NotifyPropertyChanged("GuildName2");
+            }
+        }
+        public long GuildBattlePoint2
+        {
+            get { return _guildBattlePoint2; }
+            set
+            {
+                _guildBattlePoint2 = value;
+                NotifyPropertyChanged("GuildBattlePoint2");
+            }
+        }
+        public int GuildBattleAttackCombo2
+        {
+            get { return _guildBattleAttackCombo2; }
+            set
+            {
+                _guildBattleAttackCombo2 = value;
+                NotifyPropertyChanged("GuildBattleAttackCombo2");
+            }
+        }
+        public int GuildBattleYellCombo2
+        {
+            get { return _guildBattleYellCombo2; }
+            set
+            {
+                _guildBattleYellCombo2 = value;
+                NotifyPropertyChanged("GuildBattleYellCombo2");
+            }
+        }
+        #endregion
+
 
         private bool _tpNormalAvailable;
         private bool _tpChatAvailable;
