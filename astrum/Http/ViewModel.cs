@@ -629,7 +629,78 @@ namespace Astrum.Http
             }
         }
 
-        public bool IsFuryRaidEnable { get; set; }
+        #region Event
+
+        private string _eventName;
+        public string EventName
+        {
+            get
+            {
+                return _eventName;
+            }
+            set
+            {
+                _eventName = value;
+                NotifyPropertyChanged("EventName");
+            }
+        }
+
+        private int _ranking;
+        public int Ranking
+        {
+            get
+            {
+                return _ranking;
+            }
+            set
+            {
+                _ranking = value;
+                NotifyPropertyChanged("Ranking");
+            }
+        }
+
+        private int _point;
+        public int Point
+        {
+            get
+            {
+                return _point;
+            }
+            set
+            {
+                _point = value;
+                NotifyPropertyChanged("Point");
+            }
+        }
+
+        private int _eventKills;
+        public int EventKills
+        {
+            get
+            {
+                return _eventKills;
+            }
+            set
+            {
+                _eventKills = value;
+                NotifyPropertyChanged("EventKills");
+            }
+        }
+
+
+        private bool _isFuryRaidEnable;
+        public bool IsFuryRaidEnable
+        {
+            get
+            {
+                return _isFuryRaidEnable;
+            }
+            set
+            {
+                _isFuryRaidEnable = value;
+                NotifyPropertyChanged("IsFuryRaidEnable");
+            }
+        }
         public string FuryRaidEventId { get; set; }
         public bool IsFuryRaid { get; set; }
 
@@ -640,6 +711,9 @@ namespace Astrum.Http
         public bool IsBreedingEnable { get; set; }
         public string BreedingEventId { get; set; }
         public bool IsBreedingRaid { get; set; }
+
+
+        #endregion
 
         public bool CanAttack
         {
@@ -697,7 +771,7 @@ namespace Astrum.Http
             {
                 _feverProgress = value;
                 NotifyPropertyChanged("FeverProgress");
-                NotifyPropertyChanged("showFeverProgress");
+                NotifyPropertyChanged("ShowFeverProgress");
 
                 if (_feverProgress == 100)
                 {

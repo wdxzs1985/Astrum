@@ -61,10 +61,14 @@ namespace Astrum.Handler
 
             var eventId = _client.ViewModel.FuryRaidEventId;
             FuryRaidEventInfo eventInfo = FuryRaidEventInfo(eventId);
+            _client.ViewModel.EventName = eventInfo.name;
             _client.ViewModel.FeverProgress = eventInfo.fever.progress;
+            _client.ViewModel.EventKills = eventInfo.totalRewards.user.total;
             InfoPrinter.PrintFuryRaidInfo(eventInfo, _client.ViewModel);
 
             RankingInfo ranking = _client.Ranking(eventId);
+            _client.ViewModel.Ranking = ranking.ranking;
+            _client.ViewModel.Point = ranking.point;
             InfoPrinter.PrintRankingInfo(ranking, _client.ViewModel);
 
             _client.DelayShort();

@@ -24,8 +24,7 @@ namespace Astrum.Handler
         public void Run()
         {
             _client.Access("breeding");
-
-            var breedingInfo = BreedingInfo();
+            BreedingInfo();
 
             var stage = EnterBreedingStage();
             var areaId = stage._id;
@@ -63,15 +62,7 @@ namespace Astrum.Handler
 
                     bool isBpFull = _client.ViewModel.BpValue >= AstrumClient.BP_FULL;
                     bool isFever = _client.ViewModel.Fever;
-
-                    if (!isBpFull && !isFever)
-                    {
-                        _client.ViewModel.IsStaminaEmpty = true;
-                    }
-                    else
-                    {
-                        _client.ViewModel.IsStaminaEmpty = false;
-                    }
+                    _client.ViewModel.IsStaminaEmpty = !isBpFull && !isFever;
 
                     if (_client.ViewModel.IsStaminaEmpty)
                     {
@@ -118,7 +109,7 @@ namespace Astrum.Handler
         }
 
 
-        private BreedingEventInfo BreedingInfo()
+        private void BreedingInfo()
         {
             var url = string.Format("http://astrum.amebagames.com/_/event/breeding?_id={0}", Uri.EscapeDataString(_client.ViewModel.BreedingEventId));
             var result = _client.GetXHR(url);
@@ -127,7 +118,6 @@ namespace Astrum.Handler
             InfoPrinter.PrintBreedingEventInfo(info, _client.ViewModel);
 
             _client.DelayShort();
-            return info;
         }
 
         public StageInfo EnterBreedingStage()

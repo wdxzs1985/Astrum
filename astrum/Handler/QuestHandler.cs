@@ -131,15 +131,19 @@ namespace Astrum.Handler
                         }
                     }
 
+                    if (viewModel.IsLimitedRaidEnable)
+                    {
+                        bool isBpFull = viewModel.BpValue >= AstrumClient.BP_FULL;
+                        bool isFever = viewModel.Fever;
+                        _client.ViewModel.IsStaminaEmpty = !isBpFull && !isFever;
+                    }
 
                     if (viewModel.IsStaminaEmpty)
                     {
                         bool staminaGreaterThanKeep = viewModel.StaminaValue >= viewModel.KeepStamina;
                         bool staminaGreaterThanExp = viewModel.StaminaValue >= (viewModel.ExpMax - viewModel.ExpValue);
-                        bool isBpFull = viewModel.BpValue >= AstrumClient.BP_FULL;
-                        bool isFever = viewModel.Fever;
 
-                        if (staminaGreaterThanKeep || staminaGreaterThanExp || isBpFull || isFever)
+                        if (staminaGreaterThanKeep || staminaGreaterThanExp)
                         {
                             viewModel.IsStaminaEmpty = false;
                         }
