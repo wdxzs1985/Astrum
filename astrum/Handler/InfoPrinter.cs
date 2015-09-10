@@ -202,7 +202,7 @@ namespace Astrum.Handler
 
             foreach (var guild in battleInfo.guilds)
             {
-                history += guild.name + Environment.NewLine;
+                history += String.Format("{0}：{1}", guild.name, guild.point) + Environment.NewLine;
                 history += String.Format("普通攻击：{0}", guild.combo.attack.count) + Environment.NewLine;
                 history += String.Format("远程攻击：{0}", guild.combo.remote.count) + Environment.NewLine;
                 history += String.Format("必杀攻击：{0}", guild.combo.special.count) + Environment.NewLine;

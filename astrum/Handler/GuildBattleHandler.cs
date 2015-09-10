@@ -30,9 +30,10 @@ namespace Astrum.Handler
                 if (battleInfo.stamp.status)
                 {
                     GuildBattleStamp(_client.ViewModel.GuildBattleId);
+                    GuildBattleChat();
+                    GuildBattleTpInfo();
                 }
 
-                GuildBattleChat();
                 return _client.ViewModel.IsGuildBattleEnable;
             }
             else
