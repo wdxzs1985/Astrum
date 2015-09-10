@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Astrum.Json.Mypage;
 using Astrum.Json.Raid;
 using Astrum.Json.Item;
+using Astrum.Json.Event;
 
 namespace Astrum.Json.Stage
 {
@@ -70,7 +71,7 @@ namespace Astrum.Json.Stage
         public int lilu { get; set; }
         public int gacha { get; set; }
         public StageRaidInfo raid { get; set; }
-        public LimitedRaidInfo limitedraid { get; set; }
+        public LimitedRaidEventInfo limitedraid { get; set; }
         public StageRaidInfo furyraid { get; set; }
         public StageRaidInfo breeding { get; set; }
         public bool guild { get; set; }

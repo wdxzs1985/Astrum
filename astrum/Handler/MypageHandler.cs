@@ -128,5 +128,12 @@ namespace Astrum.Handler
                 _client.Raid();
             }
         }
+
+        public RankingInfo Ranking(string eventId)
+        {
+            var _id = Uri.EscapeDataString(eventId);
+            var responseString = _client.GetXHR("http://astrum.amebagames.com/_/me/ranking?_id=" + _id);
+            return JsonConvert.DeserializeObject<RankingInfo>(responseString);
+        }
     }
 }

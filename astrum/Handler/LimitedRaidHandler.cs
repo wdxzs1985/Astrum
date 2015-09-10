@@ -1,4 +1,5 @@
 ﻿using Astrum.Http;
+using Astrum.Json.Event;
 using Astrum.Json.Raid;
 using Newtonsoft.Json;
 using System;
@@ -32,11 +33,11 @@ namespace Astrum.Handler
         }
 
 
-        public LimitedRaidInfo LimitedRaidInfo()
+        public LimitedRaidEventInfo LimitedRaidInfo()
         {
             var eventId = _client.ViewModel.LimitedRaidEventId;
             string result = _client.GetXHR("http://astrum.amebagames.com/_/event/limitedraid?_id=" + Uri.EscapeDataString(eventId));
-            var raidInfo = JsonConvert.DeserializeObject<LimitedRaidInfo>(result);
+            var raidInfo = JsonConvert.DeserializeObject<LimitedRaidEventInfo>(result);
 
             _client.ViewModel.Fever = raidInfo.fever.gachaTicket != null;
 

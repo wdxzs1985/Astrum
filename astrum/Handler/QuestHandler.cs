@@ -63,7 +63,8 @@ namespace Astrum.Handler
                         {
                             if (stage.furyraid.rare == 4)
                             {
-                                _client.RaiseNotificationEvent("星兽王出现了！", AstrumClient.DELAY_LONG);
+                                var message = String.Format("Lv{0}星兽王出现了！", stage.furyraid.level);
+                                _client.RaiseNotificationEvent(message, AstrumClient.DELAY_LONG);
                                 ForwardStage(areaId);
                                 _client.FuryRaid();
                                 return;

@@ -1,26 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
 
 using System.Net;
 using System.IO;
-using Newtonsoft.Json;
-using Astrum.Json.Mypage;
-using Astrum.Json.Stage;
-using Astrum.Json.Raid;
-using Astrum.Json.Event;
-using Astrum.Json.GuildBattle;
-using Astrum.Json.Item;
-using Astrum.Json.Gift;
-using Astrum.Json.Gacha;
-using Astrum.Json;
 using Astrum.Json.Card;
-using Astrum.Json.Breeding;
 using Astrum.Handler;
-using System.Windows;
+using Astrum.Json.Event;
 
 namespace Astrum.Http
 {
@@ -35,6 +21,8 @@ namespace Astrum.Http
         public const int MINUTE = 30 * SECOND;
 
         public const int DELAY_LONG = SECOND;
+
+
         public const int DELAY_SHORT = INTERTAL * 5;
         public const int NO_DELAY = 0;
 
@@ -373,6 +361,11 @@ namespace Astrum.Http
         public void EventStatus()
         {
             _mypageHandler.EventStatus();
+        }
+
+        public RankingInfo Ranking(string eventId)
+        {
+            return _mypageHandler.Ranking(eventId);
         }
 
         public void Profile()

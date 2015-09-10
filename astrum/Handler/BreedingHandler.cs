@@ -1,5 +1,5 @@
 ﻿using Astrum.Http;
-using Astrum.Json.Breeding;
+using Astrum.Json.Event;
 using Astrum.Json.Raid;
 using Astrum.Json.Stage;
 using Newtonsoft.Json;
@@ -118,13 +118,13 @@ namespace Astrum.Handler
         }
 
 
-        private BreedingInfo BreedingInfo()
+        private BreedingEventInfo BreedingInfo()
         {
             var url = string.Format("http://astrum.amebagames.com/_/event/breeding?_id={0}", Uri.EscapeDataString(_client.ViewModel.BreedingEventId));
             var result = _client.GetXHR(url);
-            var info = JsonConvert.DeserializeObject<BreedingInfo>(result);
+            var info = JsonConvert.DeserializeObject<BreedingEventInfo>(result);
 
-            InfoPrinter.PrintBreedingInfo(info, _client.ViewModel);
+            InfoPrinter.PrintBreedingEventInfo(info, _client.ViewModel);
 
             _client.DelayShort();
             return info;

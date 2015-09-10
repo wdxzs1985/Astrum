@@ -1,5 +1,5 @@
 ﻿using Astrum.Http;
-using Astrum.Json.Breeding;
+using Astrum.Json.Event;
 using Astrum.Json.Gacha;
 using Astrum.Json.Gift;
 using Astrum.Json.GuildBattle;
@@ -90,6 +90,24 @@ namespace Astrum.Handler
             viewModel.History = history;
         }
 
+        internal static void PrintRankingInfo(RankingInfo ranking, ViewModel viewModel)
+        {
+            string history = viewModel.History;
+            history += String.Format("Point:{0} Ranking:{1}", ranking.point,ranking.ranking) + Environment.NewLine;
+            viewModel.History = history;
+        }
+
+        internal static void PrintFuryRaidInfo(FuryRaidEventInfo info, ViewModel viewModel)
+        {
+            string history = "";
+            history += info.name + Environment.NewLine;
+            history += String.Format("Fever：{0} %", info.fever.progress) + Environment.NewLine;
+
+            history += String.Format("个人讨伐{0}, 还差{1}次获得{2}", info.totalRewards.user.total, info.totalRewards.user.next.requirement - info.totalRewards.user.total, info.totalRewards.user.next.name) + Environment.NewLine;
+            
+            viewModel.History = history;
+        }
+
         public static void PrintStageInfo(StageInfo stage, ViewModel viewModel)
         {
             string history = "";
@@ -118,28 +136,7 @@ namespace Astrum.Handler
             if (battleInfo.isPlaying || battleInfo.isWin || battleInfo.isLose)
             {
                 string history = "";
-
-                string rare = "";
-                switch (battleInfo.rare)
-                {
-                    case 1:
-                        rare = "初级魔星兽";
-                        break;
-                    case 2:
-                        rare = "中级魔星兽";
-                        break;
-                    case 3:
-                        rare = "上级魔星兽";
-                        break;
-                    case 4:
-                        rare = "星兽王";
-                        break;
-                    default:
-                        rare = "魔星兽";
-                        break;
-                }
-                
-                history += String.Format("{0}({1} L{2})出现了", rare, battleInfo.name, battleInfo.level) + Environment.NewLine;
+                history += battleInfo.Boss + Environment.NewLine;
                 history += String.Format("血量: {0} / {1}", battleInfo.hp - battleInfo.totalDamage, battleInfo.hp) + Environment.NewLine;
                 
                 switch (battleInfo.type)
@@ -264,7 +261,7 @@ namespace Astrum.Handler
             viewModel.History = history;
         }
 
-        public static void PrintBreedingInfo(BreedingInfo info, ViewModel viewModel)
+        public static void PrintBreedingEventInfo(BreedingEventInfo info, ViewModel viewModel)
         {
             string history = "";
             history += info.name + Environment.NewLine;

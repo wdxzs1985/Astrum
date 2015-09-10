@@ -1,13 +1,7 @@
 ﻿using Astrum.Http;
-using Astrum.Json.Breeding;
-using Astrum.Json.Raid;
 using Astrum.Json.Stage;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Astrum.Handler
 {

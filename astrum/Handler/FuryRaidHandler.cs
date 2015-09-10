@@ -1,4 +1,5 @@
 ﻿using Astrum.Http;
+using Astrum.Json.Event;
 using Astrum.Json.Raid;
 using Newtonsoft.Json;
 using System;
@@ -21,8 +22,7 @@ namespace Astrum.Handler
 
         public void Run()
         {
-            FuryRaidInfo();
-            //_client.ViewModel.Fever = raidInfo.fever.progress == 100;
+            FuryRaidEvent();
 
             FuryRaidInfo raidBoss = FuryRaidBoss();
             if (raidBoss.find != null)
@@ -54,27 +54,36 @@ namespace Astrum.Handler
         }
 
 
-        public FuryRaidInfo FuryRaidInfo()
+
+        public void FuryRaidEvent()
         {
             _client.Access("furyraid");
 
             var eventId = _client.ViewModel.FuryRaidEventId;
-            string result = _client.GetXHR("http://astrum.amebagames.com/_/event/furyraid?_id=" + Uri.EscapeDataString(eventId));
-            FuryRaidInfo raidInfo = JsonConvert.DeserializeObject<FuryRaidInfo>(result);
-            _client.ViewModel.FeverProgress = raidInfo.fever.progress;
+            FuryRaidEventInfo eventInfo = FuryRaidEventInfo(eventId);
+            _client.ViewModel.FeverProgress = eventInfo.fever.progress;
+            InfoPrinter.PrintFuryRaidInfo(eventInfo, _client.ViewModel);
+
+            RankingInfo ranking = _client.Ranking(eventId);
+            InfoPrinter.PrintRankingInfo(ranking, _client.ViewModel);
 
             _client.DelayShort();
-            return raidInfo;
+        }
+
+        public FuryRaidEventInfo FuryRaidEventInfo(string eventId)
+        {
+            string result = _client.GetXHR("http://astrum.amebagames.com/_/event/furyraid?_id=" + Uri.EscapeDataString(eventId));
+            return JsonConvert.DeserializeObject<FuryRaidEventInfo>(result);
         }
 
         public FuryRaidInfo FuryRaidBoss()
         {
             var eventId = _client.ViewModel.FuryRaidEventId;
             string result = _client.GetXHR("http://astrum.amebagames.com/_/event/furyraid/bosses?_id=" + Uri.EscapeDataString(eventId));
-            FuryRaidInfo raidInfo = JsonConvert.DeserializeObject<FuryRaidInfo>(result);
-
+            FuryRaidInfo bossInfo = JsonConvert.DeserializeObject<FuryRaidInfo>(result);
+            
             _client.DelayShort();
-            return raidInfo;
+            return bossInfo;
         }
 
         public bool FuryRaidBattle(string raidId)

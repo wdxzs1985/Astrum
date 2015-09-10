@@ -46,6 +46,34 @@ namespace Astrum.Json.Raid
         public int joinNum { get; set; }
 
         public RescueInfo rescue { get; set; }
+
+        public string Boss
+        {
+            get
+            {
+                string type = "";
+                switch (this.rare)
+                {
+                    case 1:
+                        type = "初级魔星兽";
+                        break;
+                    case 2:
+                        type = "中级魔星兽";
+                        break;
+                    case 3:
+                        type = "上级魔星兽";
+                        break;
+                    case 4:
+                        type = "星兽王";
+                        break;
+                    default:
+                        type = "魔星兽";
+                        break;
+                }
+
+                return String.Format("{0}({1} L{2})出现了", type, name, level);
+            }
+        }
     }
 
     public class RescueInfo
@@ -89,35 +117,6 @@ namespace Astrum.Json.Raid
 
         public RaidBattleList rescue { get; set; }
 
-        public RaidBattleInfo rare { get; set; }
-
-        public string eventId { get; set; }        
-
-        public Fever fever { get; set; }
-    }
-
-    public class Fever
-    {
-        public int progress { get; set; }
-
-        public double effect { get; set; }
-
-        public object gachaTicket { get; set; }
-
-        public object breedingPoint { get; set; }
-    }
-
-    
-    public class LimitedRaidInfo
-    {
-        public string _id { get; set; }
-
         public string eventId { get; set; }
-
-        public Fever fever { get; set; }
-
-        public bool isNew { get; set; }
-
-        public RaidBattleInfo target { get; set; }
     }
 }

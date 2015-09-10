@@ -101,7 +101,6 @@
     <Compile Include="Handler\RaidHandler.cs" />
     <Compile Include="Handler\SpecialAreaHandler.cs" />
     <Compile Include="Handler\TraningHandler.cs" />
-    <Compile Include="Json\Breeding.cs" />
     <Compile Include="Json\Gacha.cs" />
     <Compile Include="UI\Convert.cs" />
     <Compile Include="UI\GachaListView.xaml.cs">
