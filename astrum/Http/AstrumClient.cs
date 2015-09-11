@@ -61,7 +61,7 @@ namespace Astrum.Http
 
         public const int DEFAULT_BASE_DAMAGE = 2000000;
 
-        public ViewModel ViewModel { get; set; }
+        public MainWindowViewModel ViewModel { get; set; }
         private QuestHandler _questHandler;
         private RaidHandler _raidHandler;
         private FuryRaidHandler _furyRaidHandler;
@@ -84,7 +84,9 @@ namespace Astrum.Http
 
         public AstrumClient()
         {
-            ViewModel = new ViewModel();
+            ViewModel = new MainWindowViewModel();
+            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+
             _questHandler = new QuestHandler(this);
             _raidHandler = new RaidHandler(this);
             _furyRaidHandler = new FuryRaidHandler(this);
@@ -108,7 +110,19 @@ namespace Astrum.Http
 
             ViewModel.BaseDamage = DEFAULT_BASE_DAMAGE;
         }
-        
+
+        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            var propertyName = e.PropertyName;
+            if ("Fever".Equals(propertyName) && ViewModel.Fever)
+            {
+                this.RaiseNotificationEvent("Fever start", DELAY_LONG);
+            }
+            //else if ("".Equals(propertyName))
+            //{
+            //}
+        }
+
         public void Delay(int time)
         {
             if (time > 0)

@@ -17,7 +17,7 @@ namespace Astrum.Handler
     public class InfoUpdater
     {
         
-        public static void UpdateMypageView(MypageInfo mypage, ViewModel viewModel)
+        public static void UpdateMypageView(MypageInfo mypage, MainWindowViewModel viewModel)
         {
             viewModel.Name = mypage.status.name;
             viewModel.Level = mypage.status.level;
@@ -39,7 +39,7 @@ namespace Astrum.Handler
             viewModel.CardMax = mypage.status.card_max;
         }
 
-        public static void UpdateStageView(StageInfo stage, ViewModel viewModel)
+        public static void UpdateStageView(StageInfo stage, MainWindowViewModel viewModel)
         {
             if (stage.status != null)
             {
@@ -75,7 +75,7 @@ namespace Astrum.Handler
             }
         }
 
-        public static void UpdateItemStock(ItemInfo item, ViewModel viewModel)
+        public static void UpdateItemStock(ItemInfo item, MainWindowViewModel viewModel)
         {
             if (AstrumClient.INSTANT_HALF_STAMINA.Equals(item._id))
             {
@@ -96,7 +96,7 @@ namespace Astrum.Handler
         }
 
 
-        public static void UpdateItemStock(UseItemResult item, ViewModel viewModel)
+        public static void UpdateItemStock(UseItemResult item, MainWindowViewModel viewModel)
         {
             if (AstrumClient.INSTANT_HALF_STAMINA.Equals(item._id))
             {
@@ -120,7 +120,7 @@ namespace Astrum.Handler
             }
         }
 
-        public static void UpdateBpAfterRaidBattle(RaidBattleInfo battleInfo, ViewModel viewModel)
+        public static void UpdateBpAfterRaidBattle(RaidBattleInfo battleInfo, MainWindowViewModel viewModel)
         {
             if (battleInfo.isPlaying || battleInfo.isWin || battleInfo.isLose)
             {
@@ -129,7 +129,7 @@ namespace Astrum.Handler
             }
         }
 
-        public static void UpdateBattleDamage(BossBattleResultInfo resultInfo, ViewModel viewModel)
+        public static void UpdateBattleDamage(BossBattleResultInfo resultInfo, MainWindowViewModel viewModel)
         {
             if (!resultInfo.isEnd)
             {
@@ -147,7 +147,7 @@ namespace Astrum.Handler
 
 
 
-        public static void UpdateGuildBattleStatus(GuildBattleStatus status, ViewModel viewModel)
+        public static void UpdateGuildBattleStatus(GuildBattleStatus status, MainWindowViewModel viewModel)
         {
 
             viewModel.TpValue = status.tp.value;
@@ -156,13 +156,13 @@ namespace Astrum.Handler
         }
 
 
-        public static void UpdataGachaResult(GachaResult result, ViewModel viewModel)
+        public static void UpdataGachaResult(GachaResult result, MainWindowViewModel viewModel)
         {
             viewModel.CardQuantity = result.card.value;
             viewModel.CardMax = result.card.max;
         }
 
-        public static void UpdateRaiseInfo(RaiseInfo raiseInfo,ViewModel viewModel)
+        public static void UpdateRaiseInfo(RaiseInfo raiseInfo,MainWindowViewModel viewModel)
         {
             viewModel.CardQuantity = raiseInfo.card.value;
             viewModel.CardMax = raiseInfo.card.max;
@@ -179,7 +179,7 @@ namespace Astrum.Handler
             viewModel.TrainingBaseAbilityGrowth = raiseInfo.@base.growth.ability;
         }
 
-        public static void UpdateRaiseItemInfo(RaiseInfo raiseItemInfo, ViewModel viewModel)
+        public static void UpdateRaiseItemInfo(RaiseInfo raiseItemInfo, MainWindowViewModel viewModel)
         {
             viewModel.AbilityBookGoldStock = 0;
             viewModel.AbilityBookGoldAvailable = 0;

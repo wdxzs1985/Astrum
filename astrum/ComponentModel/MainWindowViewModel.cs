@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Astrum.Http
 {
-    public class ViewModel : INotifyPropertyChanged
+    public class MainWindowViewModel : INotifyPropertyChanged
     {
         #region Interface
         public event PropertyChangedEventHandler PropertyChanged;
@@ -24,6 +24,7 @@ namespace Astrum.Http
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+
         #endregion
 
         private List<LoginUser> _login_user_list;

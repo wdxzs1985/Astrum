@@ -16,7 +16,7 @@ namespace Astrum.Handler
 {
     public class InfoPrinter
     {
-        public static void PrintMypage(MypageInfo mypage, ViewModel viewModel)
+        public static void PrintMypage(MypageInfo mypage, MainWindowViewModel viewModel)
         {
             string history = "";
             history += String.Format("　　角色：{0} (L{1})", mypage.status.name, mypage.status.level) + Environment.NewLine;
@@ -28,7 +28,7 @@ namespace Astrum.Handler
             viewModel.History = history;
         }
         
-        public static void PrintGiftResult(GiftResult giftResult, ViewModel viewModel)
+        public static void PrintGiftResult(GiftResult giftResult, MainWindowViewModel viewModel)
         {
             string history = "";
             if (giftResult.item > 0)
@@ -90,14 +90,14 @@ namespace Astrum.Handler
             viewModel.History = history;
         }
 
-        internal static void PrintRankingInfo(RankingInfo ranking, ViewModel viewModel)
+        internal static void PrintRankingInfo(RankingInfo ranking, MainWindowViewModel viewModel)
         {
             string history = viewModel.History;
             history += String.Format("Point:{0} Ranking:{1}", ranking.point,ranking.ranking) + Environment.NewLine;
             viewModel.History = history;
         }
 
-        internal static void PrintFuryRaidInfo(FuryRaidEventInfo info, ViewModel viewModel)
+        internal static void PrintFuryRaidInfo(FuryRaidEventInfo info, MainWindowViewModel viewModel)
         {
             string history = "";
             history += info.name + Environment.NewLine;
@@ -108,7 +108,7 @@ namespace Astrum.Handler
             viewModel.History = history;
         }
 
-        public static void PrintStageInfo(StageInfo stage, ViewModel viewModel)
+        public static void PrintStageInfo(StageInfo stage, MainWindowViewModel viewModel)
         {
             string history = "";
             history += String.Format("场景：{0}[{1}] ({2})", stage.name, stage.stage, stage.isBossStage ? "BOSS" : stage.progress + "%") + Environment.NewLine;
@@ -123,7 +123,7 @@ namespace Astrum.Handler
             viewModel.History = history;
         }
 
-        public static void PrintAreaBossInfo(AreaBossInfo boss, ViewModel viewModel)
+        public static void PrintAreaBossInfo(AreaBossInfo boss, MainWindowViewModel viewModel)
         {
             string history = "";
             history += String.Format("{0}的{1}出现了！", boss.areaName, boss.name) + Environment.NewLine;
@@ -131,7 +131,7 @@ namespace Astrum.Handler
             viewModel.History = history;
         }
 
-        public static void PrintRaidBattleInfo(RaidBattleInfo battleInfo, ViewModel viewModel)
+        public static void PrintRaidBattleInfo(RaidBattleInfo battleInfo, MainWindowViewModel viewModel)
         {
             if (battleInfo.isPlaying || battleInfo.isWin || battleInfo.isLose)
             {
@@ -153,7 +153,7 @@ namespace Astrum.Handler
             }
         }
 
-        public static void PrintBossBattleResult(BossBattleResultInfo resultInfo, ViewModel viewModel)
+        public static void PrintBossBattleResult(BossBattleResultInfo resultInfo, MainWindowViewModel viewModel)
         {
             string history = "";
 
@@ -196,7 +196,7 @@ namespace Astrum.Handler
         }
 
 
-        public static void PrintGuildBattleInfo(GuildBattleInfo battleInfo, ViewModel viewModel)
+        public static void PrintGuildBattleInfo(GuildBattleInfo battleInfo, MainWindowViewModel viewModel)
         {
             string history = "";
 
@@ -212,7 +212,7 @@ namespace Astrum.Handler
             viewModel.History = history;
         }
 
-        public static void PrintGuildBattleCmdResult(CmdResult result, ViewModel viewModel)
+        public static void PrintGuildBattleCmdResult(CmdResult result, MainWindowViewModel viewModel)
         {
             var status = result.battlestate.status;
 
@@ -223,7 +223,7 @@ namespace Astrum.Handler
             viewModel.History = history;
         }
 
-        public static void PrintGachaResult(GachaResult result, ViewModel viewModel)
+        public static void PrintGachaResult(GachaResult result, MainWindowViewModel viewModel)
         {
             string history = "";
             foreach (var item in result.list)
@@ -261,7 +261,7 @@ namespace Astrum.Handler
             viewModel.History = history;
         }
 
-        public static void PrintBreedingEventInfo(BreedingEventInfo info, ViewModel viewModel)
+        public static void PrintBreedingEventInfo(BreedingEventInfo info, MainWindowViewModel viewModel)
         {
             string history = "";
             history += info.name + Environment.NewLine;
