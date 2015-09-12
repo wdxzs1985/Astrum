@@ -102,8 +102,10 @@ namespace Astrum.Handler
             string history = "";
             history += info.name + Environment.NewLine;
             history += String.Format("Fever：{0} %", info.fever.progress) + Environment.NewLine;
-
-            history += String.Format("个人讨伐{0}, 还差{1}次获得{2}", info.totalRewards.user.total, info.totalRewards.user.next.requirement - info.totalRewards.user.total, info.totalRewards.user.next.name) + Environment.NewLine;
+            if (info.totalRewards.user.next != null)
+            {
+                history += String.Format("个人讨伐{0}, 还差{1}次获得{2}", info.totalRewards.user.total, info.totalRewards.user.next.requirement - info.totalRewards.user.total, info.totalRewards.user.next.name) + Environment.NewLine;
+            }
             
             viewModel.History = history;
         }
