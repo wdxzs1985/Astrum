@@ -49,9 +49,9 @@ namespace Astrum
             notifyIcon.MouseClick += NotifyIcon_MouseClick;
             
             notifyIcon.ContextMenuStrip = new ContextMenuStrip();
-            //ToolStripMenuItem stopItem = new ToolStripMenuItem("停止", null, StopItem_Click);
+            ToolStripMenuItem stopItem = new ToolStripMenuItem("停止", null, StopItem_Click);
             ToolStripMenuItem exitItem = new ToolStripMenuItem("退出", null, ExitItem_Click);
-            //notifyIcon.ContextMenuStrip.Items.Add(stopItem);
+            notifyIcon.ContextMenuStrip.Items.Add(stopItem);
             notifyIcon.ContextMenuStrip.Items.Add(exitItem);
             
             //窗体状态改变时候触发

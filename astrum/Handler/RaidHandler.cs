@@ -1,4 +1,5 @@
 ﻿using Astrum.Http;
+using Astrum.Json.Event;
 using Astrum.Json.Raid;
 using Newtonsoft.Json;
 using System;
@@ -20,6 +21,8 @@ namespace Astrum.Handler
 
         public void Run()
         {
+            RaidEventInfo();
+
             var raidInfo = RaidInfo();
 
             if (raidInfo.find != null)
@@ -44,6 +47,18 @@ namespace Astrum.Handler
                 }
             }
         }
+
+
+        public void RaidEventInfo()
+        {
+            var result = _client.GetXHR("http://astrum.amebagames.com/_/event/raid");
+            var raidInfo = JsonConvert.DeserializeObject<RaidEventInfo>(result);
+
+            _client.ViewModel.RaidKills = raidInfo.rewards.total;
+
+            _client.DelayShort();
+        }
+
 
         public RaidInfo RaidInfo()
         {

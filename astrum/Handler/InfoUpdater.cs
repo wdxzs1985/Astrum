@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Astrum.Json.Event;
 
 namespace Astrum.Handler
 {
@@ -73,6 +74,11 @@ namespace Astrum.Handler
                     viewModel.Fever = stage.status.breeding != null && stage.status.breeding.fever != null && stage.status.breeding.fever.breedingPoint != null;
                 }
             }
+        }
+
+        internal static void UpdateRaidEventInfo(RaidEventInfo raidInfo)
+        {
+            throw new NotImplementedException();
         }
 
         public static void UpdateItemStock(ItemInfo item, MainWindowViewModel viewModel)
@@ -156,7 +162,7 @@ namespace Astrum.Handler
         }
 
 
-        public static void UpdataGachaResult(GachaResult result, MainWindowViewModel viewModel)
+        public static void UpdateGachaResult(GachaResult result, MainWindowViewModel viewModel)
         {
             viewModel.CardQuantity = result.card.value;
             viewModel.CardMax = result.card.max;

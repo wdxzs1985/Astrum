@@ -70,7 +70,7 @@
         </VirtualizingStackPanel>
         <Grid x:Name="StatusPanel" Visibility="Visible" Margin="0,32,0,0" Background="{StaticResource Background}">
             <Grid x:Name="QuestPanel" Margin="16,144,16,240"
-            	Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True" d:IsHidden="True">
+            	Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition />
@@ -82,7 +82,7 @@
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" Margin="0,8,8,8">
+                    <Grid Grid.Row="0" Margin="0,8,8,8" d:IsLocked="True">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
@@ -98,15 +98,20 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
                         <Label Content="Raid"></Label>
+                        <Label Content="{Binding RaidKills, FallbackValue=999999}" 
+                               ContentStringFormat="Kills：{0}"
+                               Grid.Row="1"
+                               VerticalAlignment="Top"></Label>
                         <Label Content="{Binding BaseDamage, FallbackValue=999999}" 
                                ContentStringFormat="基本傷害：{0}"
-                               Grid.Row="1"
+                               Grid.Row="2"
                                VerticalAlignment="Top"></Label>
                     </Grid>
 
-                    <Grid Grid.Row="2" Margin="0,8,8,8" Visibility="{Binding IsFuryRaidEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Grid Grid.Row="2" Margin="0,8,8,8" Visibility="{Binding IsFuryRaidEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
@@ -126,7 +131,7 @@
                     </Grid>
                 </Grid>
                 
-                <Grid Grid.Column="1" Grid.Row="0" VerticalAlignment="Top" Margin="0,8,0,0">
+                <Grid Grid.Column="1" Grid.Row="0" VerticalAlignment="Top" Margin="0,8,0,0" d:IsLocked="True">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
@@ -276,7 +281,7 @@
             <Grid x:Name="GuildBattlePanel" 
             	Margin="16,144,16,240" VerticalAlignment="Top"
             	Background="{StaticResource Background}"
-            	Visibility="{Binding IsGuildBattleEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+            	Visibility="{Binding IsGuildBattleEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsHidden="True" d:IsLocked="True">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"></RowDefinition>
                     <RowDefinition Height="auto"></RowDefinition>

@@ -29,7 +29,15 @@ namespace Astrum.Json.Event
 
         public long end;
     }
-    
+
+    public class RaidEventInfo
+    {
+        public string _id { get; set; }
+
+        public Rewards rewards { get; set; }
+
+    }
+
     public class FuryRaidEventInfo
     {
         public string name { get; set; }

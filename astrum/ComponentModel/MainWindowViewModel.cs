@@ -674,6 +674,20 @@ namespace Astrum.Http
             }
         }
 
+        private int _raidKills;
+        public int RaidKills
+        {
+            get
+            {
+                return _raidKills;
+            }
+            set
+            {
+                _raidKills = value;
+                NotifyPropertyChanged("RaidKills");
+            }
+        }
+
         private int _eventKills;
         public int EventKills
         {
@@ -790,9 +804,12 @@ namespace Astrum.Http
             }
             set
             {
-                _fever = value;
-                NotifyPropertyChanged("Fever");
-                NotifyPropertyChanged("ShowFeverProgress");
+                if (_fever != value)
+                {
+                    _fever = value;
+                    NotifyPropertyChanged("Fever");
+                    NotifyPropertyChanged("ShowFeverProgress");
+                }
             }
         }
 

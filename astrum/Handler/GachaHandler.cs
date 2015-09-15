@@ -84,7 +84,7 @@ namespace Astrum.Handler
             var result = GachaResult(gachaId, sequence);
 
             InfoPrinter.PrintGachaResult(result, _client.ViewModel);
-            InfoUpdater.UpdataGachaResult(result, _client.ViewModel);
+            InfoUpdater.UpdateGachaResult(result, _client.ViewModel);
 
             initGachaList();
         }
