@@ -2,6 +2,7 @@
 using Astrum.Json.Card;
 using Astrum.Json.Gacha;
 using Astrum.Json.Raid;
+using Astrum.Json.Talk;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -289,7 +290,7 @@ namespace Astrum.Http
 
         public bool CanSpecialArea { get; set; }
 
-
+        #region status
         private string _name;
         private int _level;
         private long _exp_value;
@@ -629,6 +630,8 @@ namespace Astrum.Http
                 return _card_quantity + " / " + _card_max;
             }
         }
+
+        #endregion
 
         #region Event
 
@@ -1373,6 +1376,52 @@ namespace Astrum.Http
             {
                 _strength_statue_bronze_available = value;
                 NotifyPropertyChanged("StrengthStatueBronzeAvailable");
+            }
+        }
+
+        #endregion
+
+        #region talk
+
+        private bool _hasTalk;
+        public bool HasTalk
+        {
+            get
+            {
+                return _hasTalk && IsLogin;
+            }
+            set
+            {
+                _hasTalk = value;
+                NotifyPropertyChanged("HasTalk");
+            }
+        }
+
+        private bool _isTalkPanelEnable;
+        public bool IsTalkPanelEnable
+        {
+            get
+            {
+                return _isTalkPanelEnable;
+            }
+            set
+            {
+                _isTalkPanelEnable = value;
+                NotifyPropertyChanged("IsTalkPanelEnable");
+            }
+        }
+
+        private List<TalkInfo> _talk_list;
+        public List<TalkInfo> TalkList
+        {
+            get
+            {
+                return _talk_list;
+            }
+            set
+            {
+                _talk_list = value;
+                NotifyPropertyChanged("TalkList");
             }
         }
 

@@ -1036,5 +1036,35 @@ namespace Astrum
 
             GiftBox.IsEnabled = true;
         }
+
+        private async void TalkBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (client.ViewModel.IsTalkPanelEnable==false)
+            {
+                client.ViewModel.IsTalkPanelEnable = true;
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        client.TalkList();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                });
+
+            }
+            else
+            {
+                client.ViewModel.IsTalkPanelEnable = false;
+            }
+
+        }
+        
+        private void TalkItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

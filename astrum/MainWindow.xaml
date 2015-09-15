@@ -26,7 +26,7 @@
                     x:Name="LoginPanel"
               HorizontalAlignment="Center" 
               VerticalAlignment="Center"
-              d:Locked="True" d:Hidden="True" d:IsLocked="True">
+              d:Locked="True" d:Hidden="True" d:IsLocked="True" d:IsHidden="True">
 
             <UI:UserSelector x:Name="UserSelector" 
                              Width="160" Height="200"
@@ -68,7 +68,7 @@
                     Background="Transparent" Foreground="White" d:IsLocked="True"/>
 
         </VirtualizingStackPanel>
-        <Grid x:Name="StatusPanel" Visibility="Visible" Margin="0,32,0,0" Background="{StaticResource Background}">
+        <Grid x:Name="StatusPanel" Visibility="Visible" Margin="0,32,0,0" Background="{StaticResource Background}" d:IsLocked="True" d:IsHidden="True">
             <Grid x:Name="QuestPanel" Margin="16,144,16,240"
             	Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Grid.ColumnDefinitions>
@@ -753,12 +753,54 @@
 
             </Grid>
         </Grid>
+        <Grid Name="TalkPanel" Visibility="{Binding IsTalkPanelEnable, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0,32,0,0" Background="{StaticResource Cyan_50}">
+            <ItemsControl Name="TalkListView" ItemsSource="{Binding TalkList}">
+                <ItemsControl.Template>
+                    <ControlTemplate TargetType="{x:Type ItemsControl}">
+                        <ScrollViewer>
+                            <ItemsPresenter Margin="0,0,0,0"/>
+                        </ScrollViewer>
+                    </ControlTemplate>
+                </ItemsControl.Template>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel VirtualizingPanel.IsVirtualizing="True"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Name="TalkItem" Style="{StaticResource FlatButton}"
+                                    Background="Transparent" 
+                                    Click="TalkItem_Click"
+                                    Tag="{Binding}" Margin="2,0,0,2">
+                            <Grid>
+                                <Label Content="{Binding nickname}"></Label>
+                                <TextBlock Text="{Binding message}" ></TextBlock>
+                            </Grid>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+        
         <Grid x:Name="StatusBar" Margin="0,0,0,0" Height="32" VerticalAlignment="Top" Background="{DynamicResource StatusBar_Dark}">
             <Label Margin="0,0,64,0" 
                    VerticalAlignment="Center" FontSize="12"
         		Content="{Binding WindowTitle, FallbackValue=プリコネ}" 
         		Foreground="White"/>
 
+            <Button x:Name="TalkBtn" Style="{StaticResource FlatButton}" 
+                    Click="TalkBtn_Click" 
+        		Width="32" Height="32" Margin="0,0,64,0"
+        		VerticalAlignment="Center" HorizontalAlignment="Right"
+                    Background="{StaticResource Pink_A200}">
+                <!--Visibility="{Binding HasTalk, Converter={StaticResource BooleanToVisibilityConverter}}"-->
+                <Image Source="Images/ic_sms_white_24dp.png"
+                       Stretch="UniformToFill" 
+                       Width="24" Height="24"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
+            </Button>
+            
             <Button x:Name="MiniBtn" Style="{StaticResource FlatButton}" Click="MiniWindow" 
         		Width="32" Height="32" Margin="0,0,32,0"
         		VerticalAlignment="Center" HorizontalAlignment="Right"

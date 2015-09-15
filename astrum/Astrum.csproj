@@ -100,8 +100,10 @@
     <Compile Include="Handler\QuestHandler.cs" />
     <Compile Include="Handler\RaidHandler.cs" />
     <Compile Include="Handler\SpecialAreaHandler.cs" />
+    <Compile Include="Handler\TalkHandler.cs" />
     <Compile Include="Handler\TraningHandler.cs" />
     <Compile Include="Json\Gacha.cs" />
+    <Compile Include="Json\Talk.cs" />
     <Compile Include="UI\Convert.cs" />
     <Compile Include="UI\GachaListView.xaml.cs">
       <DependentUpon>GachaListView.xaml</DependentUpon>
@@ -226,7 +228,9 @@
   <ItemGroup>
     <Resource Include="Images\ic_portrait_black_48dp.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\ic_sms_white_24dp.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">

@@ -74,6 +74,7 @@ namespace Astrum.Http
         private GachaHandler _gachaHandler;
         private TraningHandler _trainingHandler;
         private SpecialAreaHandler _specialAreaHandler;
+        private TalkHandler _talkHandler;
 
         private string xGroup = "a";
         private string xRtoken = "undefined";
@@ -99,6 +100,7 @@ namespace Astrum.Http
             _gachaHandler = new GachaHandler(this);
             _trainingHandler = new TraningHandler(this);
             _specialAreaHandler = new SpecialAreaHandler(this);
+            _talkHandler = new TalkHandler(this);
 
             ViewModel.IsQuestEnable = true;
             ViewModel.IsGuildBattleEnable = false;
@@ -544,6 +546,11 @@ namespace Astrum.Http
         {
             public string Message { get; set; }
             public int Duration { get; set; }
+        }
+
+        internal void TalkList()
+        {
+            _talkHandler.Run();
         }
         #endregion
     }
