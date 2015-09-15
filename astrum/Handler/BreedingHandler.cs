@@ -39,7 +39,6 @@ namespace Astrum.Handler
                 else if (stage.stageClear && stage.nextStage.isBossStage)
                 {
                     stage = ForwardBreedingStage(areaId);
-                    _client.RaiseNotificationEvent("area boss", AstrumClient.DELAY_LONG);
                     BreedingAreaBossBattle(areaId);
                     return;
                 }
@@ -111,11 +110,18 @@ namespace Astrum.Handler
 
         private void BreedingInfo()
         {
-            var url = string.Format("http://astrum.amebagames.com/_/event/breeding?_id={0}", Uri.EscapeDataString(_client.ViewModel.BreedingEventId));
+            var eventId = _client.ViewModel.BreedingEventId;
+            var url = string.Format("http://astrum.amebagames.com/_/event/breeding?_id={0}", Uri.EscapeDataString(eventId));
             var result = _client.GetXHR(url);
             var info = JsonConvert.DeserializeObject<BreedingEventInfo>(result);
-
+            
             InfoPrinter.PrintBreedingEventInfo(info, _client.ViewModel);
+
+            _client.ViewModel.EventName = info.name;
+            _client.ViewModel.BreedingPointName = info.breedingPointName;
+            _client.ViewModel.BreedingPoint = info.breedingPoint;
+            _client.ViewModel.BreedingExchangePoint = info.exchangePoint;
+            _client.ViewModel.BreedingPartners = info.partners;
 
             _client.DelayShort();
         }

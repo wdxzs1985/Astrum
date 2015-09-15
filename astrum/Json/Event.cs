@@ -125,6 +125,7 @@ namespace Astrum.Json.Event
         public int maxBreedingLevel { get; set; }
         public CardInfo card { get; set; }
         public Next nextBreedReward { get; set; }
+        
     }
 
     public class RankingInfo

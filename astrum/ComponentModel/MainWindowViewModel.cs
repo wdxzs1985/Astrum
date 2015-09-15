@@ -1,5 +1,6 @@
 ﻿using Astrum.Json;
 using Astrum.Json.Card;
+using Astrum.Json.Event;
 using Astrum.Json.Gacha;
 using Astrum.Json.Raid;
 using Astrum.Json.Talk;
@@ -726,9 +727,75 @@ namespace Astrum.Http
         public string LimitedRaidEventId { get; set; }
         public bool IsLimitedRaid { get; set; }
 
-        public bool IsBreedingEnable { get; set; }
+        private bool _isBreedingEnable;
+        public bool IsBreedingEnable
+        {
+            get
+            {
+                return _isBreedingEnable;
+            }
+            set
+            {
+                _isBreedingEnable = value;
+                NotifyPropertyChanged("IsBreedingEnable");
+            }
+        }
         public string BreedingEventId { get; set; }
         public bool IsBreedingRaid { get; set; }
+
+        private string _breedingPointName;
+        private int _breedingPoint;
+        private int _breedingExchangePoint;
+        private List<Partner> _breedingPartners;
+        public string BreedingPointName
+        {
+            get
+            {
+                return _breedingPointName;
+            }
+            set
+            {
+                _breedingPointName = value;
+                NotifyPropertyChanged("BreedingPointName");
+            }
+        }
+        public int BreedingPoint
+        {
+            get
+            {
+                return _breedingPoint;
+            }
+            set
+            {
+                _breedingPoint = value;
+                NotifyPropertyChanged("BreedingPoint");
+            }
+        }
+        public int BreedingExchangePoint
+        {
+            get
+            {
+                return _breedingExchangePoint;
+            }
+            set
+            {
+                _breedingExchangePoint = value;
+                NotifyPropertyChanged("BreedingExchangePoint");
+            }
+        }
+        public List<Partner> BreedingPartners
+        {
+            get
+            {
+                return _breedingPartners;
+            }
+            set
+            {
+                _breedingPartners = value;
+                NotifyPropertyChanged("BreedingPartners");
+            }
+        }
+
 
 
         #endregion

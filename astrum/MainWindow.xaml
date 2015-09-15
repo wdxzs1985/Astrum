@@ -68,7 +68,7 @@
                     Background="Transparent" Foreground="White" d:IsLocked="True"/>
 
         </VirtualizingStackPanel>
-        <Grid x:Name="StatusPanel" Visibility="Visible" Margin="0,32,0,0" Background="{StaticResource Background}" d:IsLocked="True">
+        <Grid x:Name="StatusPanel" Visibility="Visible" Margin="0,32,0,0" Background="{StaticResource Background}">
             <Grid x:Name="QuestPanel" Margin="16,144,16,240"
             	Visibility="{Binding IsQuestEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Grid.ColumnDefinitions>
@@ -82,43 +82,51 @@
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" Margin="0,8,8,8" d:IsLocked="True">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                        </Grid.RowDefinitions>
-                        <Label Content="Stage"></Label>
-                        <CheckBox Grid.Row="1" 
+                    <Grid Grid.Row="0" Margin="0,8,0,0" d:IsLocked="True">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Stage" Padding="4,0,0,0"></TextBlock>
+                        <CheckBox Grid.Column="1" 
                               VerticalAlignment="Top"
                               Content="ExtraMap"
-                              IsChecked="{Binding IsSpecialAreaEnable}" Margin="8"/>
+                              IsChecked="{Binding IsSpecialAreaEnable}"/>
                     </Grid>
 
-                    <Grid Grid.Row="1" Margin="0,8,8,8">
+                    <Grid Grid.Row="1" Margin="0,8,0,0" d:IsLocked="True">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
-                        <Label Content="Raid"></Label>
-                        <Label Content="{Binding RaidKills, FallbackValue=999999}" 
-                               ContentStringFormat="Kills：{0}"
-                               Grid.Row="1"
-                               VerticalAlignment="Top"></Label>
-                        <Label Content="{Binding BaseDamage, FallbackValue=999999}" 
-                               ContentStringFormat="基本傷害：{0}"
-                               Grid.Row="2"
-                               VerticalAlignment="Top"></Label>
+                        <TextBlock Text="Raid" Padding="4,0,0,0"></TextBlock>
+                        <TextBlock Grid.Row="1" Padding="4,0,0,0">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="基本傷害：{0}">
+                                    <Binding Path="BaseDamage" FallbackValue="99999"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <TextBlock Grid.Row="2" Padding="4,0,0,0">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="Kills：{0}">
+                                    <Binding Path="RaidKills" FallbackValue="99999"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
                     </Grid>
 
-                    <Grid Grid.Row="2" Margin="0,8,8,8" Visibility="{Binding IsFuryRaidEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsLocked="True">
+                    <Grid Grid.Row="2" Margin="0,8,0,0" 
+                          Visibility="{Binding IsFuryRaidEnable, Converter={StaticResource BooleanToVisibilityConverter}}" d:IsHidden="True">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
-                        <Label Content="{Binding EventName, FallbackValue=EventName}"></Label>
+                        <TextBlock Text="{Binding EventName, FallbackValue=EventName}"
+                                   Padding="4"></TextBlock>
                         <Label Content="{Binding Ranking, FallbackValue=999}" 
                                ContentStringFormat="Ranking：{0}"
                                Grid.Row="1"></Label>
@@ -128,6 +136,56 @@
                         <Label Content="{Binding EventKills, FallbackValue=999999}" 
                                ContentStringFormat="Kills：{0}"
                                Grid.Row="3"></Label>
+                    </Grid>
+
+                    <Grid Grid.Row="2" VerticalAlignment="Top"
+                          Margin="0,8,0,8" Visibility="{Binding IsBreedingEnable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="{Binding EventName, FallbackValue=EventName}"
+                                   Padding="4,0,0,0"></TextBlock>
+                        <TextBlock Grid.Row="1" Padding="4,0,0,0">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0}：{1}">
+                                    <Binding Path="BreedingPointName" FallbackValue="PointName"/>
+                                    <Binding Path="BreedingPoint" FallbackValue="99999"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <TextBlock Grid.Row="2" Padding="4,0,0,0">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="交换pt：{0}">
+                                    <Binding Path="BreedingExchangePoint" FallbackValue="99999"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+
+                        <ItemsControl Grid.Row="3"  ItemsSource="{Binding BreedingPartners}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="auto"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="0" Padding="4,0,0,0" 
+                                                   Text="{Binding card.DisplayName}"></TextBlock>
+                                        <TextBlock Grid.Row="1" Padding="4,0,0,0">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}絆Lv{0}/{1}">
+                                                    <Binding Path="breedingLevel" FallbackValue="99999"/>
+                                                    <Binding Path="maxBreedingLevel" FallbackValue="99999"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </Grid>
                 </Grid>
                 
