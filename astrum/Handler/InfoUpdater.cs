@@ -20,6 +20,8 @@ namespace Astrum.Handler
         
         public static void UpdateMypageView(MypageInfo mypage, MainWindowViewModel viewModel)
         {
+            viewModel.HasTalk = mypage.talk;
+
             viewModel.Name = mypage.status.name;
             viewModel.Level = mypage.status.level;
 

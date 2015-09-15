@@ -82,7 +82,7 @@
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" Margin="0,8,0,0" d:IsLocked="True">
+                    <Grid Grid.Row="0" Margin="0,8,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition></ColumnDefinition>
                             <ColumnDefinition></ColumnDefinition>
@@ -94,7 +94,7 @@
                               IsChecked="{Binding IsSpecialAreaEnable}"/>
                     </Grid>
 
-                    <Grid Grid.Row="1" Margin="0,8,0,0" d:IsLocked="True">
+                    <Grid Grid.Row="1" Margin="0,8,0,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
@@ -127,15 +127,27 @@
                         </Grid.RowDefinitions>
                         <TextBlock Text="{Binding EventName, FallbackValue=EventName}"
                                    Padding="4"></TextBlock>
-                        <Label Content="{Binding Ranking, FallbackValue=999}" 
-                               ContentStringFormat="Ranking：{0}"
-                               Grid.Row="1"></Label>
-                        <Label Content="{Binding Point, FallbackValue=999999}" 
-                               ContentStringFormat="Pt：{0}"
-                               Grid.Row="2"></Label>
-                        <Label Content="{Binding EventKills, FallbackValue=999999}" 
-                               ContentStringFormat="Kills：{0}"
-                               Grid.Row="3"></Label>
+                        <TextBlock Grid.Row="1" Padding="4,0,0,0">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="Ranking：{0}">
+                                    <Binding Path="Ranking" FallbackValue="99999"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <TextBlock Grid.Row="2" Padding="4,0,0,0">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="Point：{0}">
+                                    <Binding Path="Point" FallbackValue="99999"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <TextBlock Grid.Row="3" Padding="4,0,0,0">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="Kills：{0}">
+                                    <Binding Path="EventKills" FallbackValue="99999"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
                     </Grid>
 
                     <Grid Grid.Row="2" VerticalAlignment="Top"
@@ -189,7 +201,7 @@
                     </Grid>
                 </Grid>
                 
-                <Grid Grid.Column="1" Grid.Row="0" VerticalAlignment="Top" Margin="0,8,0,0" d:IsLocked="True">
+                <Grid Grid.Column="1" Grid.Row="0" VerticalAlignment="Top" Margin="0,0,0,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>

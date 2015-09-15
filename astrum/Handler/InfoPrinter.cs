@@ -274,17 +274,6 @@ namespace Astrum.Handler
             history += String.Format("个人讨伐{0}, 还差{1}次获得{2}", info.totalRewards.user.total, info.totalRewards.user.next.requirement - info.totalRewards.user.total, info.totalRewards.user.next.name) + Environment.NewLine;
             history += String.Format("工会讨伐{0}, 还差{1}次获得{2}", info.totalRewards.guild.total, info.totalRewards.guild.next.requirement - info.totalRewards.guild.total, info.totalRewards.guild.next.name) + Environment.NewLine;
 
-            //partner
-            foreach (var partner in info.partners)
-            {
-                history += String.Format("{0}", partner.card.DisplayName) + Environment.NewLine;
-                history += String.Format("絆Lv {0}/{1}", partner.breedingLevel, partner.maxBreedingLevel) + Environment.NewLine;
-                if (partner.nextBreedReward != null)
-                {
-                    history += String.Format("絆Lv {0}:{1}", partner.nextBreedReward.title, partner.nextBreedReward.description) + Environment.NewLine;
-                }
-            }
-
             viewModel.History = history;
         }
 
