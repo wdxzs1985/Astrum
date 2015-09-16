@@ -117,6 +117,8 @@ namespace Astrum
 
         private void initLoginPanel()
         {
+            client.ViewModel.IsLogin = false;
+
             this.UsernameBox.Text = "";
             this.PasswordBox.Password = "";
 
