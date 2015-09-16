@@ -37,26 +37,31 @@
                            Grid.Row="0" Grid.Column="1"
                            HorizontalContentAlignment="Right">
                     </Label>
-                    <Button Name="GachaButton" Content="{Binding price.value}" 
-                                ContentStringFormat="一回 {0} 個"
+                    <Button Name="GachaButton" 
                                 Background="{StaticResource Cyan_500}"
-                                Foreground="White"
                                 Margin="0,8,8,8" 
                                 Grid.Row="1" Grid.Column="0"
                                 Style="{StaticResource FlatButton}"
                                 Tag="{Binding _id}"
-                                Click="GachaButton_Click"></Button>
+                                Click="GachaButton_Click">
+                        <Label Content="{Binding price.value}" 
+                               ContentStringFormat="一回 {0} 個"
+                               Foreground="White"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
+                    </Button>
                     <Button Name="GachaSequenceButton" 
-                                Content="{Binding sequence.value}" 
-                                ContentStringFormat=" {0} 回連続で引く"
                                 Background="{StaticResource Cyan_500}"
-                                Foreground="White"
                                 Margin="8,8,0,8" 
                                 Grid.Row="1" Grid.Column="1"
                                 Style="{StaticResource FlatButton}"
                                 IsEnabled="{Binding sequence.status}"
                                 Tag="{Binding _id}"
-                                Click="GachaSequenceButton_Click"></Button>
+                                Click="GachaSequenceButton_Click">
+                        <Label Content="{Binding sequence.value}" 
+                               ContentStringFormat=" {0} 回連続で引く"
+                               Foreground="White"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"></Label>
+                    </Button>
                 </Grid>
             </DataTemplate>
         </ItemsControl.ItemTemplate>

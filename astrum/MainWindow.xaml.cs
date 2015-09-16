@@ -124,7 +124,8 @@ namespace Astrum
 
             LoginPanel.Visibility = Visibility.Visible;
             StatusPanel.Visibility = Visibility.Hidden;
-            LoginButton.Content = "登陆";
+            //LoginButton.Content = "登陆";
+            client.ViewModel.LoginButtonContent = "登陆";
             LoginButton.IsEnabled = true;
             //LoginUserComboBox.IsEnabled = true;
             UserSelector.IsEnabled = true;
@@ -139,7 +140,8 @@ namespace Astrum
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             Console.WriteLine("login start");
-            LoginButton.Content = "少女祈祷中";
+            //LoginButton.Content = "少女祈祷中";
+            client.ViewModel.LoginButtonContent = "少女祈祷中";
             LoginButton.IsEnabled = false;
             //LoginUserComboBox.IsEnabled = false;
             UserSelector.IsEnabled = false;
@@ -847,43 +849,41 @@ namespace Astrum
                     Console.WriteLine(ex.Message);
                 }
             });
-            
+
         }
 
-        private async void TrainingBase_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void TrainingBaseItem_Click(object sender, RoutedEventArgs e)
         {
-            if(e.AddedItems.Count > 0)
+            var button = (System.Windows.Controls.Button)sender;
+            var baseId = (string)button.Tag;
+            await Task.Run(() =>
             {
-                var baseId = ((CardInfo)TrainingBase.SelectedItem)._id;
-                await Task.Run(() =>
+                try
                 {
-                    try
-                    {
-                        client.StartTraining(baseId);
-                        client.ViewModel.IsTrainingBaseEnable = false;
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-                });
-
-                await Task.Run(() =>
+                    client.StartTraining(baseId);
+                    client.ViewModel.IsTrainingBaseEnable = false;
+                }
+                catch (Exception ex)
                 {
-                    try
-                    {
-                        return client.DownloadCardThumb(client.ViewModel.TrainingBase);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                        return false;
-                    }
-                });
+                    Console.WriteLine(ex.Message);
+                }
+            });
 
-                var path = String.Format("./cache/{0}-thumb.png", client.ViewModel.TrainingBase.md5.image);
-                ImageHelper.LoadImage(path, TraningBaseImage, "Images/ic_portrait_black_48dp.png");
-            }
+            await Task.Run(() =>
+            {
+                try
+                {
+                    return client.DownloadCardThumb(client.ViewModel.TrainingBase);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return false;
+                }
+            });
+
+            var path = String.Format("./cache/{0}-thumb.png", client.ViewModel.TrainingBase.md5.image);
+            ImageHelper.LoadImage(path, TraningBaseImage, "Images/ic_portrait_black_48dp.png");
         }
 
         private async void UseStrengthStatueBronze_Click(object sender, RoutedEventArgs e)

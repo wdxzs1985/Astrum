@@ -32,7 +32,7 @@ namespace Astrum.Handler
             var info = JsonConvert.DeserializeObject<TalkListInfo>(result);
             
             _client.DelayShort();
-            return null;
+            return info;
         }
 
 

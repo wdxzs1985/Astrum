@@ -221,7 +221,7 @@ namespace Astrum.Handler
             string history = "";
 
             history += String.Format("{0} (Combo {1})", result.cmd.name, result.history.combo) + Environment.NewLine;
-
+            
             viewModel.History = history;
         }
 

@@ -57,7 +57,20 @@ namespace Astrum.Http
             }
         }
 
-        public bool IsLogin { get; set; }
+        private bool _isLogin;
+        public bool IsLogin
+        {
+            get
+            {
+                return _isLogin;
+            }
+            set
+            {
+                _isLogin = value;
+                NotifyPropertyChanged("IsLogin");
+            }
+        }
+
         public string Leader { get; set; }
 
         private bool _running;
@@ -99,6 +112,20 @@ namespace Astrum.Http
                     return String.Format("プリコネ [{0} (Lv {1})]", Name, Level);
                 }
                 return "プリンセスコネクト";
+            }
+        }
+
+        private string _loginButtonContent;
+        public string LoginButtonContent
+        {
+            get
+            {
+                return _loginButtonContent;
+            }
+            set
+            {
+                _loginButtonContent = value;
+                NotifyPropertyChanged("LoginButtonContent");
             }
         }
 
@@ -1455,7 +1482,7 @@ namespace Astrum.Http
         {
             get
             {
-                return _hasTalk && IsLogin;
+                return _hasTalk;
             }
             set
             {

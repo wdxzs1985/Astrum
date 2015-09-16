@@ -24,6 +24,28 @@ namespace Astrum.Json.Talk
         public string type { get; set; }
         public string message { get; set; }
         public List<Talker> group { get; set; }
+
+        public string TalkerName
+        {
+            get
+            {
+                var names = new StringBuilder();
+                foreach(var talker in group)
+                {
+                    names.Append(talker.name).Append(" ");
+                }
+
+                return names.ToString();
+            }
+        }
+
+        public bool HasUnread
+        {
+            get
+            {
+                return unread > 0;
+            }
+        }
     }
 
     public class Talker
