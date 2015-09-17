@@ -118,6 +118,7 @@ namespace Astrum
         private void initLoginPanel()
         {
             client.ViewModel.IsLogin = false;
+            client.ViewModel.IsTalkPanelEnable = false;
 
             this.UsernameBox.Text = "";
             this.PasswordBox.Password = "";
@@ -126,6 +127,7 @@ namespace Astrum
 
             LoginPanel.Visibility = Visibility.Visible;
             StatusPanel.Visibility = Visibility.Hidden;
+
             //LoginButton.Content = "登陆";
             client.ViewModel.LoginButtonContent = "登陆";
             LoginButton.IsEnabled = true;

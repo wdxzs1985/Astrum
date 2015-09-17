@@ -32,7 +32,7 @@ namespace Astrum.Json.Talk
                 var names = new StringBuilder();
                 foreach(var talker in group)
                 {
-                    names.Append(talker.name).Append(" ");
+                    names.Append(String.Format("{0}({1}) ", talker.nickName, talker.name));
                 }
 
                 return names.ToString();
