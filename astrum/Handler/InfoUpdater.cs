@@ -68,7 +68,7 @@ namespace Astrum.Handler
 
                 if (viewModel.IsLimitedRaidEnable)
                 {
-                    viewModel.Fever = stage.status.limitedraid != null && stage.status.limitedraid.fever != null;
+                    viewModel.Fever = stage.status.limitedraid != null && stage.status.limitedraid.fever != null && stage.status.limitedraid.fever.gachaTicket != null;
                 }
 
                 if (viewModel.IsBreedingEnable)
